@@ -13,7 +13,10 @@ if [[ "$(git -C "$verifier_dir" rev-parse HEAD)" != "$expected_revision" ]] ||
     exit 1
 fi
 args=("$vectors_dir")
-if [[ "${SPR_CORE_ALL:-}" == 1 ]]; then
+if [[ -n "${SPR_TEST_CIRCUIT:-}" ]]; then
+    (cd "$repo_dir" && go run ./cmd/spr-ceremony catalog --track core --circuit "$SPR_TEST_CIRCUIT") > "$tmp_dir/catalog.json"
+    args+=("$tmp_dir/catalog.json")
+elif [[ "${SPR_CORE_ALL:-}" == 1 ]]; then
     (cd "$repo_dir" && go run ./cmd/spr-ceremony catalog --track core) > "$tmp_dir/catalog.json"
     args+=("$tmp_dir/catalog.json")
 fi

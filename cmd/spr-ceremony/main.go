@@ -446,7 +446,15 @@ func run(args []string) error {
 			if *digest != s.ManifestArtifact.SHA256 {
 				return fmt.Errorf("--manifest-sha256 must match authenticated manifest")
 			}
-			if !s.Manifest.Phase1.InsecureTestSetup {
+			_, pinnedRef, e := s.Lifecycle()
+			if e != nil {
+				return e
+			}
+			s, e = s.Snapshot(pinnedRef)
+			if e != nil {
+				return e
+			}
+			if !s.Manifest.Phase1.InsecureTestSetup || *checkpoint != "" {
 				_, ref, e := s.Lifecycle()
 				if e != nil {
 					return e
@@ -489,7 +497,15 @@ func run(args []string) error {
 			if *digest != s.ManifestArtifact.SHA256 {
 				return fmt.Errorf("manifest digest mismatch")
 			}
-			if !s.Manifest.Phase1.InsecureTestSetup {
+			_, pinnedRef, e := s.Lifecycle()
+			if e != nil {
+				return e
+			}
+			s, e = s.Snapshot(pinnedRef)
+			if e != nil {
+				return e
+			}
+			if !s.Manifest.Phase1.InsecureTestSetup || *checkpoint != "" {
 				_, ref, e := s.Lifecycle()
 				if e != nil {
 					return e

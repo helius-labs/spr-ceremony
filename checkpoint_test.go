@@ -80,3 +80,63 @@ func TestCheckpointDetectsHistoryAndPlanRewrite(t *testing.T) {
 		})
 	}
 }
+
+// Simulate process failure after the remote commit but before local acceptance.
+type failAfterRemoteCommit struct{ BlobStore }
+
+func (f failAfterRemoteCommit) ConditionalPut(ctx context.Context, key string, ref Artifact, etag string) error {
+	if err := f.BlobStore.ConditionalPut(ctx, key, ref, etag); err != nil {
+		return err
+	}
+	return fmt.Errorf("injected coordinator crash after remote commit")
+}
+
+func TestRecoverCommittedContributionAndPinAuditSnapshot(t *testing.T) {
+	s := demoStore(t)
+	archive := testArchive{dir: t.TempDir()}
+	s.Remote = archive
+	initial, err := s.Sync(context.Background())
+	must(t, err)
+	pinned, err := s.Snapshot(initial)
+	must(t, err)
+	if _, err = pinned.Invite("http://localhost", "cannot-write", Core, time.Hour); err == nil {
+		t.Fatal("snapshot allowed a write")
+	}
+	i, err := s.Invite("http://localhost", "alice", Core, time.Hour)
+	must(t, err)
+	job := i.Jobs[0]
+	output := filepath.Join(t.TempDir(), "output")
+	must(t, Contribute(s.Object(job.Input), output, job.Circuit.Shape))
+	s.Remote = failAfterRemoteCommit{archive}
+	if _, err = s.Accept(i.Token, job.Circuit.Spec.ID, output); err == nil {
+		t.Fatal("crash returned acceptance")
+	}
+	local, err := s.State(job.Circuit.Spec.ID)
+	must(t, err)
+	if local.Head != job.Input {
+		t.Fatal("crash advanced local checkpoint")
+	}
+	remote, _, err := archive.ReadPointer(context.Background(), s.remoteKey("latest.json"))
+	must(t, err)
+	if remote == initial {
+		t.Fatal("remote was not committed before crash")
+	}
+	out := filepath.Join(t.TempDir(), "restored")
+	must(t, Restore(context.Background(), archive, out, s.ManifestArtifact, remote))
+	restored, err := Open(out)
+	must(t, err)
+	state, err := restored.State(job.Circuit.Spec.ID)
+	must(t, err)
+	if len(state.History) != 1 || state.History[0].Contributor != "alice" {
+		t.Fatal("restore lost remote commit")
+	}
+	must(t, restored.Audit(Core, 64))
+	// Live progress must not change an already pinned audit view.
+	must(t, WriteJSON(filepath.Join(s.Dir, "checkpoint.json"), remote))
+	old, err := pinned.State(job.Circuit.Spec.ID)
+	must(t, err)
+	if old.Head != job.Input || len(old.History) != 0 {
+		t.Fatal("snapshot followed live head")
+	}
+	must(t, pinned.Audit(Core, 64))
+}

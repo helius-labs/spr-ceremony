@@ -13,6 +13,14 @@ import (
 // VerifyExport independently reproduces keys for the recorded transcript prefix,
 // including snapshots taken before additional contributions were accepted.
 func (s *Store) VerifyExport(dir string, maxDomain uint64) error {
+	view, err := s.snapshot()
+	if err != nil {
+		return err
+	}
+	return view.verifyExport(dir, maxDomain)
+}
+
+func (s *Store) verifyExport(dir string, maxDomain uint64) error {
 	var m ExportManifest
 	if e := ReadJSON(filepath.Join(dir, "export.json"), &m); e != nil {
 		return e
@@ -145,7 +153,11 @@ func (s *Store) Export(track, out string, beacon []byte, maxDomain uint64) error
 	if !s.Manifest.Phase1.InsecureTestSetup {
 		return fmt.Errorf("production keys require close and finalize with the announced beacon")
 	}
-	return s.export(track, out, beacon, maxDomain, nil)
+	view, err := s.snapshot()
+	if err != nil {
+		return err
+	}
+	return view.export(track, out, beacon, maxDomain, nil)
 }
 
 func (s *Store) export(track, out string, beacon []byte, maxDomain uint64, proof *BeaconProof) error {

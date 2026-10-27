@@ -1,0 +1,62 @@
+{
+  "url": "https://circom.info/powersOfTau28_hez_final_21.ptau",
+  "blake2b": "9aef0573cef4ded9c4a75f148709056bf989f80dad96876aadeb6f1c6d062391f07a394a9e756d16f7eb233198d5b69407cca44594c763ab4a5b67ae73254678",
+  "hash_source": "https://raw.githubusercontent.com/iden3/snarkjs/master/README.md",
+  "date_utc": "2026-10-27",
+  "ptau": {
+    "sha256": "cdc7c94a6635bc91466d8c7d96faefe1d17ecc98a3596a748ca1e6c895f8c2b4",
+    "size": 2416002200
+  },
+  "verification": {
+    "tool": "snarkjs",
+    "version": "0.7.6",
+    "exit_code": 0,
+    "result": "Powers of Tau Ok!",
+    "log": {
+      "sha256": "22e52944201e08268c1e430989633da7890306f6e1a10101d7a6e53797512249",
+      "size": 45647
+    },
+    "npm_lock": {
+      "sha256": "b3b9c0b919ed421ef859d7f9bc795ce19daa6404eb40b35512bb4c51395c7948",
+      "size": 13549
+    }
+  },
+  "conversion": {
+    "source_revision": "577c91f3f8b8e6bccf9d2fbc629c9b18f5c56cad",
+    "ph1": {
+      "sha256": "ee243303f3207cb9ed86b836734938d55d56f8161a42afb7e51cdd143b34b43b",
+      "size": 402653219
+    },
+    "converter_binary": {
+      "sha256": "8f23d21c34ff38e37752a7446d47ce4399e1f29d088a1c98b2678b233da00746",
+      "size": 12435064
+    },
+    "log": {
+      "sha256": "67e4e6f30357983471f4644b0ca74cc266fe7fb9971ab70a05831af6707a39fa",
+      "size": 583
+    }
+  },
+  "import": {
+    "engine": "gnark-v0.16.4-bn254-mpcsetup",
+    "engine_go": {
+      "sha256": "ffea71d0a8d87c296ab86a6f3823b07c703cde0b39ccfe4f092514e7696c601d",
+      "size": 6243
+    },
+    "srs": {
+      "sha256": "f75bd40496b046942e62cdd2e0a2c3a580c68f789e705e97fa8e3a9db7c36780",
+      "size": 402653128
+    },
+    "algebraic_checks_passed": true
+  },
+  "integration_rehearsal": {
+    "circuit": "transfer_confidential_1_2",
+    "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6",
+    "verifier_revision": "70a93803e5f55b8425301d506c625169ef557c9d",
+    "two_contributors": true,
+    "gnark_proof_passed": true,
+    "solana_proof_passed": true,
+    "changed_public_input_rejected": true,
+    "insecure_test_setup": true
+  },
+  "independent_review": false
+}

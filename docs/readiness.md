@@ -25,7 +25,14 @@ Batch 4999 is deferred. Custom rings and batch 10 remain excluded.
 The automated Go suite covers plain and commitment-bearing fixtures, malformed
 contributions, replay/stale submissions, export tampering, lifecycle/beacon
 checks, reservation conflicts, checkpoint rewrites, and finalized-key recovery.
-Tests run with the race detector. The S3 integration suite additionally exercises
+Tests run with the race detector. The toolchain is updated to Go 1.27.3 and
+network dependencies to the patched versions; gnark and gnark-crypto pins remain
+unchanged. Govulncheck 1.9.0 is required in CI; the current scan finds zero
+called or imported-package vulnerabilities. The remaining module advisory is for
+`x/crypto/openpgp`, which is not imported.
+[Security update evidence](evidence/security-updates.json) records versions and
+advisories. Recompiling all 41 circuits after these updates reproduced every
+original R1CS hash. The S3 integration suite additionally exercises
 presigned downloads, publication outages, lost PUT responses, stale ETags,
 competing coordinators, corruption, and restore against Moto 5.1.14 pinned by
 container digest. Moto is an emulator, not proof of AWS policy behavior.
@@ -41,8 +48,13 @@ real-witness ceremony rehearsal is in progress; final results must be recorded
 before treating the all-circuit integration gate as satisfied.
 
 The public power-21 Powers of Tau file matches the BLAKE2b published by snarkjs.
-Its conversion and SRS algebraic import pass. Full snarkjs transcript verification
-is in progress; these preliminary checks do not replace that verification.
+Full snarkjs 0.7.6 transcript verification, conversion, and SRS algebraic import
+pass. A real Zolana transfer witness using these converted parameters passes
+through two rehearsal contributors, key packaging, gnark verification, and the
+pinned Solana verifier; changed public inputs are rejected.
+[The provenance record and logs](evidence/public-phase1.json) preserve the evidence.
+This run remains a rehearsal and is not an independent audit or production
+multi-party campaign.
 
 ## Required before public launch
 

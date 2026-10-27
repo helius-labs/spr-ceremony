@@ -1,0 +1,4 @@
+   Compiling spr-solana-rehearsal v0.1.0 (/home/ubuntu/src/spr-ceremony/adapters/solana)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.10s
+     Running `adapters/solana/target/debug/spr-solana-rehearsal /tmp/spr-public-vectors /tmp/tmp.0Bfq9wUWZ1/catalog.json`
+verified transfer_confidential_1_2: ceremony proof accepted; tampered public input rejected

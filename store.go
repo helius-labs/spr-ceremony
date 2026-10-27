@@ -74,6 +74,7 @@ type Store struct {
 	ManifestArtifact Artifact
 	Remote           BlobStore
 	now              func() time.Time
+	checkpointRef    *Artifact
 }
 type Input struct {
 	Spec Spec
@@ -260,6 +261,9 @@ func Open(dir string) (*Store, error) {
 		}
 		seen[c.Spec.ID] = true
 	}
+	if _, _, e := s.checkpoint(); e != nil {
+		return nil, fmt.Errorf("checkpoint unavailable; restore or recreate a pre-checkpoint prototype directory: %w", e)
+	}
 	return s, nil
 }
 func (s *Store) circuit(id string) (Circuit, error) {
@@ -419,7 +423,11 @@ func (s *Store) Accept(token, id, path string) (Receipt, error) {
 // Audit reconstructs the initial state from pinned R1CS/SRS and replays every
 // accepted transition. The manifest digest must be authenticated out of band.
 func (s *Store) Audit(track string, maxDomain uint64) error {
-	return s.audit(track, maxDomain, nil)
+	view, err := s.snapshot()
+	if err != nil {
+		return err
+	}
+	return view.audit(track, maxDomain, nil)
 }
 
 // audit can consume the reconstructed evaluations after each circuit's full

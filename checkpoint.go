@@ -45,6 +45,9 @@ type RecoveryPoint struct {
 }
 
 func (s *Store) lock() (func(), error) {
+	if s.checkpointRef != nil {
+		return nil, fmt.Errorf("checkpoint snapshot is read-only")
+	}
 	f, err := os.OpenFile(filepath.Join(s.Dir, "coordinator.lock"), os.O_CREATE|os.O_RDWR, 0600)
 	if err != nil {
 		return nil, err
@@ -80,7 +83,9 @@ func (s *Store) putJSON(value any) (Artifact, error) {
 func (s *Store) checkpoint() (Checkpoint, Artifact, error) {
 	var ref Artifact
 	var cp Checkpoint
-	if err := ReadJSON(filepath.Join(s.Dir, "checkpoint.json"), &ref); err != nil {
+	if s.checkpointRef != nil {
+		ref = *s.checkpointRef
+	} else if err := ReadJSON(filepath.Join(s.Dir, "checkpoint.json"), &ref); err != nil {
 		return cp, ref, err
 	}
 	if err := Check(s.Object(ref), ref); err != nil {
@@ -415,4 +420,22 @@ func Restore(ctx context.Context, remote BlobStore, out string, manifest, checkp
 		return err
 	}
 	return os.Rename(tmp, out)
+}
+
+// Snapshot creates a read-only view pinned to one immutable checkpoint. Audits
+// must not mix live heads while another process accepts contributions.
+func (s *Store) Snapshot(ref Artifact) (*Store, error) {
+	view := *s
+	view.checkpointRef = &ref
+	if _, _, err := view.checkpoint(); err != nil {
+		return nil, err
+	}
+	return &view, nil
+}
+func (s *Store) snapshot() (*Store, error) {
+	_, ref, err := s.checkpoint()
+	if err != nil {
+		return nil, err
+	}
+	return s.Snapshot(ref)
 }

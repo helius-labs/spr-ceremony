@@ -1,6 +1,6 @@
 module github.com/helius-labs/spr-ceremony/adapters/zolana
 
-go 1.27.1
+go 1.27.3
 
 require (
 	github.com/helius-labs/spr-ceremony v0.0.0

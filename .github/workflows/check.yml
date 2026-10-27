@@ -15,13 +15,14 @@ jobs:
     env:
       SPR_S3_ENDPOINT: http://127.0.0.1:5000
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5
         with:
           go-version-file: go.mod
           cache: true
       - run: test -z "$(gofmt -l *.go cmd/spr-ceremony/*.go adapters/zolana/*.go storage/*.go)"
       - run: go vet ./...
+      - run: go run golang.org/x/vuln/cmd/govulncheck@v1.9.0 ./...
       - run: go test -race ./...
       - run: go build ./cmd/spr-ceremony
       - run: python3 scripts/smoke-cli.py ./spr-ceremony
@@ -29,6 +30,6 @@ jobs:
   rust:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - run: cargo fmt --manifest-path adapters/solana/Cargo.toml --check
       - run: cargo build --locked --manifest-path adapters/solana/Cargo.toml

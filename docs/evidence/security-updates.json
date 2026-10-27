@@ -1,0 +1,19 @@
+{
+  "date_utc": "2026-10-27",
+  "tool": "govulncheck v1.9.0",
+  "go": "go1.27.3",
+  "called_vulnerabilities": 0,
+  "imported_package_vulnerabilities": 0,
+  "unused_module_advisory": "GO-2026-5932: x/crypto/openpgp is not imported by this application",
+  "grpc": "v1.83.2",
+  "x_net": "v0.60.0",
+  "gnark": "v0.16.4",
+  "gnark_crypto": "v0.21.1-0.20260913224755-1409fe592052",
+  "core_compilation_hashes_unchanged": 41,
+  "zolana_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6",
+  "references": [
+    "https://pkg.go.dev/vuln/GO-2026-6809",
+    "https://pkg.go.dev/vuln/GO-2026-6348",
+    "https://pkg.go.dev/vuln/GO-2026-6443"
+  ]
+}

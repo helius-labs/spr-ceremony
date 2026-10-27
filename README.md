@@ -16,7 +16,8 @@ AWS deployment/restore drill.** Engineering tests are not an external audit. See
 
 ## Build and rehearse
 
-Go 1.27.1 matches the pinned Zolana toolchain. Linux and macOS are supported;
+Go 1.27.3 includes security fixes over Zolana’s original 1.27.1 toolchain;
+the gnark versions remain pinned. Linux and macOS are supported;
 the coordinator uses Unix file locks and must have one active instance.
 
 ```sh
@@ -143,7 +144,11 @@ The complete core rehearsal is expensive. `SPR_R1CS_DIR`, `SPR_TEST_SRS`, and
 `SPR_REHEARSAL_DIR` allow reuse of compiled circuits, a marked test SRS, and
 completed stages. See [evidence](docs/readiness.md) for measured scope and limits.
 The manual GitHub Actions binary workflow produces downloadable build artifacts;
-it does not publish a GitHub release.
+it does not publish a GitHub release. The workflow signs build provenance with
+GitHub artifact attestations. After downloading a workflow-built binary, verify
+its repository provenance with `gh attestation verify PATH_TO_BINARY --repo
+helius-labs/spr-ceremony`, and check the source revision before running it. Locally
+built binaries have checksums and embedded build metadata, but no GitHub signature.
 
 Prototype directories created before checkpoints were introduced must be
 recreated. Old Semaphore `.ph2` contributions are not compatible with this engine.

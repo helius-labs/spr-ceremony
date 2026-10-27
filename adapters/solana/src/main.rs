@@ -55,7 +55,7 @@ fn main() {
         let entries: Vec<serde_json::Value> =
             serde_json::from_slice(&std::fs::read(catalog).expect("read catalog"))
                 .expect("parse catalog");
-        assert_eq!(entries.len(), 41, "full core catalog must have 41 circuits");
+        assert!(!entries.is_empty(), "catalog must not be empty");
         entries
             .iter()
             .map(|entry| entry["id"].as_str().expect("circuit ID").to_owned())
