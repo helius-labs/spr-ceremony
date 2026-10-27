@@ -1,0 +1,1726 @@
+{
+  "ceremony_validation_revision": "755ae276911c4519adca91a3bfd9f939e5815985",
+  "circuits": [
+    {
+      "checkpoint": {
+        "sha256": "665a50b1cb0206acebbf92c6bb5817481f82068f7e048cd5f8f2a41ce73263d2",
+        "size": 495
+      },
+      "circuit": "transfer_confidential_1_2",
+      "constraints": 30924,
+      "current_round_trip_seconds": 2.739405423,
+      "domain": 32768,
+      "elapsed_seconds": 2.675449745,
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "export": {
+        "sha256": "5d37e0a7226834011cb575c04a16e938783aee76405aea20ca21518b0689a1c6",
+        "size": 1567
+      },
+      "insecure_test_setup": true,
+      "manifest": {
+        "sha256": "c7d8c5f5c1dd4069205f9afbe474b0ea1c6d67bc01a2587f39776236d3d89f0b",
+        "size": 1247
+      },
+      "packaged_key": {
+        "sha256": "33dea929f78591ff86cd0a4786a8dbefdc9979bfc34728f04405fbbe7dc6a862",
+        "size": 9268304
+      },
+      "passed": true,
+      "phase2_input_bytes": 2025419,
+      "r1cs": {
+        "sha256": "aca3fea69fe143e6235bfe73a48de65d1f666a074a1f5b66c7022e78173d449a",
+        "size": 3620361
+      },
+      "raw_verifying_key": {
+        "sha256": "45ebc8ba4115501f4ca116db23759a5bd3ce17d9c98ff19def701f5bb1a7d562",
+        "size": 716
+      },
+      "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6"
+    },
+    {
+      "checkpoint": {
+        "sha256": "da399b97d72ae6c0440297dd5dc079045e850759bd98d2167140214df8efa2eb",
+        "size": 495
+      },
+      "circuit": "transfer_confidential_1_4",
+      "constraints": 34590,
+      "current_round_trip_seconds": 4.598545719,
+      "domain": 65536,
+      "elapsed_seconds": 860.552643526,
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "export": {
+        "sha256": "6c5249d8b73d5234129a0302bf10bda4c5e732144b98bc7f90c32e7712c68554",
+        "size": 1568
+      },
+      "insecure_test_setup": true,
+      "manifest": {
+        "sha256": "12ae5185801016518738ce58edb4562c826222bd68d7c2cafe65e1cb8cf04b4e",
+        "size": 1248
+      },
+      "packaged_key": {
+        "sha256": "6efe4e5d76e1be8bcd121b3d787e23053b78f3a533826315817939a22320cc9a",
+        "size": 11321591
+      },
+      "passed": true,
+      "phase2_input_bytes": 3191051,
+      "r1cs": {
+        "sha256": "38fc44f826077ee162e5a246e3c6c359d42ddf188b4d08b68fbc05900a28cf43",
+        "size": 4080092
+      },
+      "raw_verifying_key": {
+        "sha256": "639ad139207533cf5f76e6a2e9aa6efedbde600c9a7dc15067857e6148c35a94",
+        "size": 716
+      },
+      "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6"
+    },
+    {
+      "checkpoint": {
+        "sha256": "714c86c06266fb6e437a6ed92229afa20b14885aa9a148561dc45042c4c2bdeb",
+        "size": 495
+      },
+      "circuit": "transfer_confidential_1_8",
+      "constraints": 43170,
+      "current_round_trip_seconds": 7.19483827,
+      "domain": 65536,
+      "elapsed_seconds": 1184.997884294,
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "export": {
+        "sha256": "95dc6b58cf2c82e644eec6002972ac0b9728296144346ec699c240ea851974cb",
+        "size": 1568
+      },
+      "insecure_test_setup": true,
+      "manifest": {
+        "sha256": "62c4242871540dd273cb23e9761929955009338ae15acb89e70b9f8c077337b3",
+        "size": 1248
+      },
+      "packaged_key": {
+        "sha256": "f8896deb1eaf4abc8699509e49eb1ce740ec05dc17e7b237b77134f4a7d9c8ad",
+        "size": 13696474
+      },
+      "passed": true,
+      "phase2_input_bytes": 3465099,
+      "r1cs": {
+        "sha256": "d1cb0709da5f859652b9eaede111a0df17e61ddbfd649f9ec0bba03355072cdb",
+        "size": 5179735
+      },
+      "raw_verifying_key": {
+        "sha256": "4cac404afcca07d9c243e17e4afaa5fb94f034618959b1a07cc90e019f48d8e2",
+        "size": 716
+      },
+      "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6"
+    },
+    {
+      "checkpoint": {
+        "sha256": "74ca5a4c4bdeccfad25bab5fc20c66c21612e8cac80a7c926aabbc8761b48940",
+        "size": 495
+      },
+      "circuit": "transfer_confidential_2_2",
+      "constraints": 53876,
+      "current_round_trip_seconds": 3.355864014,
+      "domain": 65536,
+      "elapsed_seconds": 1351.316066465,
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "export": {
+        "sha256": "c590332a23be9cf17484bf6f0d04f2d755a41a886845cacd6498f0e1cab4b9db",
+        "size": 1569
+      },
+      "insecure_test_setup": true,
+      "manifest": {
+        "sha256": "b9298a34acb21ac39eb12f8e2137d723bdaf5642ab3270874ae7e2b4bdf02e06",
+        "size": 1248
+      },
+      "packaged_key": {
+        "sha256": "7f7ab42bdc744548b7b739fb76885c6f21996b70fa99876b52edbcaf2c19f777",
+        "size": 16407649
+      },
+      "passed": true,
+      "phase2_input_bytes": 3795371,
+      "r1cs": {
+        "sha256": "12270333ac9f8733d36bb6c08f05441c015bc0808fbaaa5ee035d1b793c3ce92",
+        "size": 6314652
+      },
+      "raw_verifying_key": {
+        "sha256": "df76a967ea06f5d06a07a4ee6bc45ed2811b21213025a28195773ef916b40790",
+        "size": 716
+      },
+      "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6"
+    },
+    {
+      "checkpoint": {
+        "sha256": "8d1e7a35d4bfc4a016de8375d697af29c3898a6ce4adc7daf12750e1335f6cb4",
+        "size": 495
+      },
+      "circuit": "transfer_confidential_2_4",
+      "constraints": 57558,
+      "current_round_trip_seconds": 3.251768406,
+      "domain": 65536,
+      "elapsed_seconds": 5.403999579,
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "export": {
+        "sha256": "7cdbff840c0b5f6c7a71f762d5d31b2f4aa43a3e94042123e964ce051aaf1060",
+        "size": 1569
+      },
+      "insecure_test_setup": true,
+      "manifest": {
+        "sha256": "af17c0fa60535527f3182d7e28f89e3a01ea91c15a99010a5472c37192bfbf04",
+        "size": 1248
+      },
+      "packaged_key": {
+        "sha256": "25979f7323081323a5dd5d63f9b5d48655577ea80f64ac4beef64d622ef29e4e",
+        "size": 17417690
+      },
+      "passed": true,
+      "phase2_input_bytes": 3912939,
+      "r1cs": {
+        "sha256": "cfd5512a669ea60f2b4f825dfa04e93c9dbd5ec9d8ee467fecaf6c091a14a855",
+        "size": 6777825
+      },
+      "raw_verifying_key": {
+        "sha256": "dd94dd77d2d8f7ce364d5077d5099d945bb454e9f599d60696c076dbbeff97a4",
+        "size": 716
+      },
+      "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6"
+    },
+    {
+      "checkpoint": {
+        "sha256": "fb02ec6807f511cad7b97d706eb7388b402b8313c479ac2b791a9c7bfcb1dac1",
+        "size": 496
+      },
+      "circuit": "transfer_confidential_1_16",
+      "constraints": 59562,
+      "current_round_trip_seconds": 4.049140405,
+      "domain": 65536,
+      "elapsed_seconds": 1397.220355004,
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "export": {
+        "sha256": "1991fc13750448066556113a5e079f2bea40c70850423c6b62da92837ac50883",
+        "size": 1571
+      },
+      "insecure_test_setup": true,
+      "manifest": {
+        "sha256": "35afe8af5815d8c16fa1730a2131788e4c7cc747135a184383494566f52880c5",
+        "size": 1250
+      },
+      "packaged_key": {
+        "sha256": "0f4446ef6794da0720dd0c9a728af9bfa6e0ce030d22a22c5e6818f496c9aa2f",
+        "size": 18122787
+      },
+      "passed": true,
+      "phase2_input_bytes": 3988619,
+      "r1cs": {
+        "sha256": "f52b643b55c488cbf125a34bc942bc908a8e2e8a7e13d0705f56345e95e1bdc1",
+        "size": 7186128
+      },
+      "raw_verifying_key": {
+        "sha256": "f2f18a1a755efdd07dbd3b983f3a7fa18449b185a5523823f75640a1e61f76cb",
+        "size": 716
+      },
+      "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6"
+    },
+    {
+      "checkpoint": {
+        "sha256": "4d7a44eac19531ad825df5753f17589b7abcf661098e9b67002db1fedde351ff",
+        "size": 495
+      },
+      "circuit": "transfer_confidential_2_8",
+      "constraints": 66170,
+      "current_round_trip_seconds": 4.823126703,
+      "domain": 131072,
+      "elapsed_seconds": 4.095560545,
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "export": {
+        "sha256": "64d53fb4ae128d6791d7761737e04b639ef5aa93e187a63f77141d3a42c1455f",
+        "size": 1571
+      },
+      "insecure_test_setup": true,
+      "manifest": {
+        "sha256": "bbfb2a9326aea4ff684edc3274a4579794a0697847ad70608a9746906bdc4a20",
+        "size": 1250
+      },
+      "packaged_key": {
+        "sha256": "e5ceed4551edfe18966843b87188066b978f94cf462dc5278331ffc77ca8c86a",
+        "size": 21888720
+      },
+      "passed": true,
+      "phase2_input_bytes": 6285163,
+      "r1cs": {
+        "sha256": "28b6b4f3f0d0a455e94a1672abf4eb5d0905b77b7a7f9bab5ff8e0fece9599a5",
+        "size": 7872687
+      },
+      "raw_verifying_key": {
+        "sha256": "0607d2fc50691ed0829657cd96edc41e9141049d7e83b09aa08d3a5e705cddbe",
+        "size": 716
+      },
+      "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6"
+    },
+    {
+      "checkpoint": {
+        "sha256": "44226627fe2be83182236015a8705c8b1928b8c5a4a7239efc3ce31a5d54d2f5",
+        "size": 495
+      },
+      "circuit": "transfer_confidential_3_2",
+      "constraints": 76268,
+      "current_round_trip_seconds": 2.686488889,
+      "domain": 131072,
+      "elapsed_seconds": 4.537604877,
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "export": {
+        "sha256": "124c86c58d694e51b5082172c9fcda95b3baa2e8f1e569c4cf8ed5e1b6e21ff3",
+        "size": 1571
+      },
+      "insecure_test_setup": true,
+      "manifest": {
+        "sha256": "2ad71a4465e057cf2ceef465c5a3f025506a14edc4fcddbe1b14cfd62f4b2a2f",
+        "size": 1250
+      },
+      "packaged_key": {
+        "sha256": "aaada047b64ce4e6aca560ce04940abcffb37c71e4b822f0d9afd409ffe78303",
+        "size": 24424894
+      },
+      "passed": true,
+      "phase2_input_bytes": 6595979,
+      "r1cs": {
+        "sha256": "8c48e58a5572b6dcd0ce54a22a10427b14d285e628c2a926183b4d85f0b65420",
+        "size": 8923099
+      },
+      "raw_verifying_key": {
+        "sha256": "e90bb380b76dbfcb55d69ed0bd2611a3e9ea5204fd6215735c3c6e7d8e1da820",
+        "size": 716
+      },
+      "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6"
+    },
+    {
+      "checkpoint": {
+        "sha256": "9d71f346e4347230f163b0672f66264d6168a12b82a559bde1b537a324119e18",
+        "size": 495
+      },
+      "circuit": "transfer_confidential_3_4",
+      "constraints": 79966,
+      "current_round_trip_seconds": 2.554894111,
+      "domain": 131072,
+      "elapsed_seconds": 1693.41243495,
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "export": {
+        "sha256": "930a1174c389ee8574310bac4c599de6304411fadf33844a75d001b0adbb4aab",
+        "size": 1571
+      },
+      "insecure_test_setup": true,
+      "manifest": {
+        "sha256": "bc28b0d6e1461a3e0dee44c75107dc0620b2090e5045dbe30d73a0dde8f04c87",
+        "size": 1250
+      },
+      "packaged_key": {
+        "sha256": "bd6e162d154fc23c49f7ae14f2981079a8fdf99608f56b5310dfac65ce940953",
+        "size": 25434537
+      },
+      "passed": true,
+      "phase2_input_bytes": 6714059,
+      "r1cs": {
+        "sha256": "d45c38dc079b9c617cc72bf7a826ca4e8ef302aa5131e5d81f2a0fd8d613517d",
+        "size": 9383986
+      },
+      "raw_verifying_key": {
+        "sha256": "0ca5e3ddcba88a956bf77def20fedb1b294604a6c3f4894d2e48e9729cf60ce6",
+        "size": 716
+      },
+      "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6"
+    },
+    {
+      "checkpoint": {
+        "sha256": "5a90553563a290a825c34e4772f75d2e019d0a2d0b6dd9425ae3f7f623dc905c",
+        "size": 496
+      },
+      "circuit": "transfer_confidential_2_16",
+      "constraints": 82626,
+      "current_round_trip_seconds": 5.06570927,
+      "domain": 131072,
+      "elapsed_seconds": 1751.196883374,
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "export": {
+        "sha256": "e5d2d2e7fd4b3e91fa51f519beb62c48d39b7d7c7916c6873467957ba7a7034e",
+        "size": 1573
+      },
+      "insecure_test_setup": true,
+      "manifest": {
+        "sha256": "d9b6890971f575d44b425f140ac3bc424bec4556d348df7332f8fda3a901fb96",
+        "size": 1252
+      },
+      "packaged_key": {
+        "sha256": "db1ecef1e7cccf82af45723082c152a4fb1485035cbf4be268aae0f6e9814d22",
+        "size": 26330245
+      },
+      "passed": true,
+      "phase2_input_bytes": 6810731,
+      "r1cs": {
+        "sha256": "8bd854bace7d6a71c99789f00d7986d60950c81b0377c3e20db76229907ef45e",
+        "size": 9886740
+      },
+      "raw_verifying_key": {
+        "sha256": "ac55e2bd47f30eb6ccce5dabc39aec8c8cd93195090ac017a7ae4fccccdb663d",
+        "size": 716
+      },
+      "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6"
+    },
+    {
+      "checkpoint": {
+        "sha256": "e40310a33198af359ba8aa5f35ad81af10fc8c7d38e680ee31e1ceff43771d9e",
+        "size": 495
+      },
+      "circuit": "transfer_confidential_3_8",
+      "constraints": 88610,
+      "current_round_trip_seconds": 3.133572329,
+      "domain": 131072,
+      "elapsed_seconds": 1872.852013137,
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "export": {
+        "sha256": "dd8a2ff03502ddee6c7b66c82e34dada2a5ac886aadcb88d51846e54fa6dc90a",
+        "size": 1572
+      },
+      "insecure_test_setup": true,
+      "manifest": {
+        "sha256": "23192eacfb51dfcc9576d7d9111080ebc8b37db685184ee18db8a958158010c2",
+        "size": 1251
+      },
+      "packaged_key": {
+        "sha256": "890f0b2afbbc7de23803007aff24213e13f4eb5f282433bc530d57d0645ebcbe",
+        "size": 27805709
+      },
+      "passed": true,
+      "phase2_input_bytes": 6990155,
+      "r1cs": {
+        "sha256": "457845019c218547f04858834668015046e58fe49c5234cc7af0a049a10cf4e5",
+        "size": 10472366
+      },
+      "raw_verifying_key": {
+        "sha256": "0f6828e82551e23cb48e90ed2d5d1af23c428f1d0faf9ffc402c1fd98703653d",
+        "size": 716
+      },
+      "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6"
+    },
+    {
+      "checkpoint": {
+        "sha256": "4bb1d8105153cbf6387d3533720b623fcbc10ce8522f80ee1b9bec1dd5c700c1",
+        "size": 495
+      },
+      "circuit": "transfer_confidential_4_2",
+      "constraints": 98676,
+      "current_round_trip_seconds": 5.432055314,
+      "domain": 131072,
+      "elapsed_seconds": 1954.314866623,
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "export": {
+        "sha256": "333a98ad8d3e26fc9d0efde367da8e690ceed023221a967ede404318784e6efb",
+        "size": 1572
+      },
+      "insecure_test_setup": true,
+      "manifest": {
+        "sha256": "304d24ad48809b794ae9be92a7fe42504fcb7f7ebcbc0d7484040d0007ecc310",
+        "size": 1251
+      },
+      "packaged_key": {
+        "sha256": "afe5baaf722c5de8a555039b55715db0889d9c86b8b1a46aa937e19caeff4629",
+        "size": 30346705
+      },
+      "passed": true,
+      "phase2_input_bytes": 7299947,
+      "r1cs": {
+        "sha256": "28d5f4e7935fc9d524f5e6bf4bb5451488dc80b81ce3334ca6c33d2a11a05881",
+        "size": 11531376
+      },
+      "raw_verifying_key": {
+        "sha256": "9d8f8ab9e97bc7321798157e375d1f7a468df0585dde29c88da22e07c66a6e33",
+        "size": 716
+      },
+      "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6"
+    },
+    {
+      "checkpoint": {
+        "sha256": "1b7354c986b0ac3081981c582052cd62539491bfee6784f915099f722b73a51e",
+        "size": 495
+      },
+      "circuit": "transfer_confidential_4_4",
+      "constraints": 102390,
+      "current_round_trip_seconds": 5.787124789,
+      "domain": 131072,
+      "elapsed_seconds": 1985.580255104,
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "export": {
+        "sha256": "bd9de108f5036f0a7055373faa93d99fa7eec03f8b6ae2c53e53274719fbc0e2",
+        "size": 1574
+      },
+      "insecure_test_setup": true,
+      "manifest": {
+        "sha256": "b8c23a15dad407528da8c9d2f3c37a82774cf9fc7489dd005d4760f9cb347405",
+        "size": 1253
+      },
+      "packaged_key": {
+        "sha256": "812a4bba03fc589907427810f579ad957b7398295937563db988cc0aff9ed075",
+        "size": 31362211
+      },
+      "passed": true,
+      "phase2_input_bytes": 7418539,
+      "r1cs": {
+        "sha256": "2b8238cc7bce71e374970cb7580895b19b5f235a2b53023f17037ff67ed50b78",
+        "size": 11996238
+      },
+      "raw_verifying_key": {
+        "sha256": "40550b727d84b45b11f1358457c14f7d7d0215a0873c3358e9d173357cb2ea3b",
+        "size": 716
+      },
+      "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6"
+    },
+    {
+      "checkpoint": {
+        "sha256": "3da910816d4594276a76351447ccd00777cb100e9585d5122d980be6d3131932",
+        "size": 495
+      },
+      "circuit": "transfer_confidential_4_8",
+      "constraints": 111066,
+      "current_round_trip_seconds": 5.253464508,
+      "domain": 131072,
+      "elapsed_seconds": 1040.640187022,
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "export": {
+        "sha256": "ea35b8b4504afdccf1e99fc265635db4e818ecf08ff09a1abd2a39e318618b5d",
+        "size": 1574
+      },
+      "insecure_test_setup": true,
+      "manifest": {
+        "sha256": "277a5d9bcca19702fd6869bcd843623db771a60a828dad4e307d0f4de084076b",
+        "size": 1253
+      },
+      "packaged_key": {
+        "sha256": "3547bb79d6e26e84aec259f1196e79afc42dfd1a9c36c69b9792713ace07a9a7",
+        "size": 33729279
+      },
+      "passed": true,
+      "phase2_input_bytes": 7695659,
+      "r1cs": {
+        "sha256": "c61ab2f21430957048bc344b8262f13d570998e5a1d69422c0f986f945cbd69b",
+        "size": 13076738
+      },
+      "raw_verifying_key": {
+        "sha256": "c390e9a97c6df60ca1bb53baf862ee587803264d32cbb63d677f1fbdd34bbac2",
+        "size": 716
+      },
+      "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6"
+    },
+    {
+      "checkpoint": {
+        "sha256": "ba0cd51d1a047ceb1fb07e9d15b9634c969291cf51a1ee0d2519a6da6cfe8b8c",
+        "size": 495
+      },
+      "circuit": "transfer_confidential_5_2",
+      "constraints": 121676,
+      "current_round_trip_seconds": 6.065288283,
+      "domain": 131072,
+      "elapsed_seconds": 7.529565999,
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "export": {
+        "sha256": "44b60f2ef327c8d4d301e56fd0323591edb6223015f61d163a14e00361e0e59b",
+        "size": 1574
+      },
+      "insecure_test_setup": true,
+      "manifest": {
+        "sha256": "79db6c837ff7d8938810d6683b4c5db5676ba9af6476191537561266ab50cc1c",
+        "size": 1253
+      },
+      "packaged_key": {
+        "sha256": "9f4fbb9c810e19eeb4427101fe6033e2e875a8186bd24c1d38ad91bf5258d371",
+        "size": 36450172
+      },
+      "passed": true,
+      "phase2_input_bytes": 8022859,
+      "r1cs": {
+        "sha256": "a1906b058a4c4a926dfbef50be91b3df6dfc091fe7b911073884a6c8dccd9f5d",
+        "size": 14232253
+      },
+      "raw_verifying_key": {
+        "sha256": "152efaa2a039754de464a74be0077a439dbb545a8362dde84d8f0105ec7a8141",
+        "size": 716
+      },
+      "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6"
+    },
+    {
+      "checkpoint": {
+        "sha256": "c6cb9e142c6fbf37a405518ae29eebde0a322590c1f0be2cdf2b6443130af037",
+        "size": 495
+      },
+      "circuit": "transfer_confidential_5_4",
+      "constraints": 125406,
+      "current_round_trip_seconds": 7.159109812,
+      "domain": 131072,
+      "elapsed_seconds": 7.748096875,
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "export": {
+        "sha256": "cced755d1bccf9a4a79ecd7643cd1e53b89f05b1fe242846425c8ac4314aa3c0",
+        "size": 1574
+      },
+      "insecure_test_setup": true,
+      "manifest": {
+        "sha256": "9ccea8220195044d70323912968a5b6dc8e1d74ba957d85e065a7f4ec5b1208d",
+        "size": 1253
+      },
+      "packaged_key": {
+        "sha256": "29332c42591056aa2fdb8d8f3323549e03d3e52f43fe365d0d16c1fa794013b8",
+        "size": 37465194
+      },
+      "passed": true,
+      "phase2_input_bytes": 8141963,
+      "r1cs": {
+        "sha256": "aae5767ccd9c89e2af6608d22af13cbeeaf22c57672f393815459473413e19f5",
+        "size": 14694743
+      },
+      "raw_verifying_key": {
+        "sha256": "a26356cc03c87ab8517e6403b893f20d0274f449311784211ed542db896775a3",
+        "size": 716
+      },
+      "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6"
+    },
+    {
+      "checkpoint": {
+        "sha256": "0c6501c760ae444579b78e694ae2b556249202b8763672050b944c806ebc6ceb",
+        "size": 496
+      },
+      "circuit": "transfer_confidential_4_16",
+      "constraints": 127650,
+      "current_round_trip_seconds": 8.174269014,
+      "domain": 131072,
+      "elapsed_seconds": 2.668232147,
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "export": {
+        "sha256": "6f3021b299ff63e30f1d14215590882a5847b34e3cf97f5b7c7e7d63cb9ffbfe",
+        "size": 1576
+      },
+      "insecure_test_setup": true,
+      "manifest": {
+        "sha256": "e249fde1cc7a394ed1ec16683ac871c9c4666186c1ada3c05e4fe43977e0ca9d",
+        "size": 1255
+      },
+      "packaged_key": {
+        "sha256": "1b4dae3dd393d10eba42d8c8b1b754cf387298d84a8a228856ef9b43f0eb8eec",
+        "size": 38206629
+      },
+      "passed": true,
+      "phase2_input_bytes": 8225323,
+      "r1cs": {
+        "sha256": "46dc0c05c51b3f2ecd57d495a350154f9ce9118c3204db94ef4dfc40360012d6",
+        "size": 15111512
+      },
+      "raw_verifying_key": {
+        "sha256": "905773660f375b49a20d397d11d4db03b42d7be12db94795602998ff35f260db",
+        "size": 716
+      },
+      "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6"
+    },
+    {
+      "checkpoint": {
+        "sha256": "fb40b33aaea108c9293885cc722b0f289a7ac647dd9d02159db6de1cac6f63f5",
+        "size": 495
+      },
+      "circuit": "transfer_confidential_5_8",
+      "constraints": 134114,
+      "current_round_trip_seconds": 7.644581773,
+      "domain": 262144,
+      "elapsed_seconds": 14.159456811,
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "export": {
+        "sha256": "d3f3a06b05513aad5bba48351f9a7bc5ee3507c33e6dfcc60177393bcd5e0e17",
+        "size": 1576
+      },
+      "insecure_test_setup": true,
+      "manifest": {
+        "sha256": "76391f527912c4d75558a0ffce4c60711554a4840ac331beec6c76be1520a890",
+        "size": 1254
+      },
+      "packaged_key": {
+        "sha256": "5acbb1d45b600e6ae7d74e2332ba81bcdc4f1a213c67caa296c297c910b028d3",
+        "size": 44027160
+      },
+      "passed": true,
+      "phase2_input_bytes": 12614411,
+      "r1cs": {
+        "sha256": "a2c6e55e55b6a4c19871fc0c4386586bc118ca39f985b655a8978a24e44dc2e6",
+        "size": 15772061
+      },
+      "raw_verifying_key": {
+        "sha256": "65128dbd7524e91cd5a6bb930148b0ecb4709f746e568590c8015e0c1849250a",
+        "size": 716
+      },
+      "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6"
+    },
+    {
+      "checkpoint": {
+        "sha256": "3b47782df28fc4902ff1a1bd45067fe2cc3fced083f5e43bacb551dd6c1ab893",
+        "size": 495
+      },
+      "circuit": "transfer_confidential_6_2",
+      "constraints": 144116,
+      "current_round_trip_seconds": 6.007063775,
+      "domain": 262144,
+      "elapsed_seconds": 14.850178722,
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "export": {
+        "sha256": "20541dfdeab160d1ccd163b223903a4199e02c4ad84878ee864ac74405d18cb9",
+        "size": 1576
+      },
+      "insecure_test_setup": true,
+      "manifest": {
+        "sha256": "cbef6b100f330535ea21226a6b3ee3e6bf52d02b66652c43fdba4e9605c8eb4a",
+        "size": 1254
+      },
+      "packaged_key": {
+        "sha256": "ed8ceac7dbdf121b5ca00f0fd4bd91f9e8d7740e676321ab68f2f8367e4e5a0b",
+        "size": 46571763
+      },
+      "passed": true,
+      "phase2_input_bytes": 12922155,
+      "r1cs": {
+        "sha256": "54f07ea0b60cacd94edf19b5b6930d69ddab275851bda2d6a7cc5fa50229da36",
+        "size": 16842230
+      },
+      "raw_verifying_key": {
+        "sha256": "091466e5a1bd6d5efa4601508137179bb80c9f1a27b673c125f399a2d197280c",
+        "size": 716
+      },
+      "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6"
+    },
+    {
+      "checkpoint": {
+        "sha256": "08ea4cc15f7cfef4dba2d0d6db7f74535144c534ef98e18e6016e53b001ac0c2",
+        "size": 495
+      },
+      "circuit": "transfer_confidential_6_4",
+      "constraints": 147862,
+      "current_round_trip_seconds": 8.377940824,
+      "domain": 262144,
+      "elapsed_seconds": 2440.549421465,
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "export": {
+        "sha256": "17be22fb7fefe069ed3231444b8f56cbb4a7bb028d61c4a4e5eadab63f46ca92",
+        "size": 1576
+      },
+      "insecure_test_setup": true,
+      "manifest": {
+        "sha256": "307d7a70bbf52f7e0fceea83dbf717c6debb60debecd7645eac94011ebb4f352",
+        "size": 1254
+      },
+      "packaged_key": {
+        "sha256": "478847f831ede3d174ad493afac9b3550ffa4b78e2598ce282e910602678ddc4",
+        "size": 47592319
+      },
+      "passed": true,
+      "phase2_input_bytes": 13041771,
+      "r1cs": {
+        "sha256": "0ef36ea5c9fd791100ae1307452c1b5992a1609b55a4908a680c0dbb2d9a2003",
+        "size": 17308366
+      },
+      "raw_verifying_key": {
+        "sha256": "3778359cd27f71a4b18b4f85592d5b1c89ef5465a274293ae780113aeaa2b425",
+        "size": 716
+      },
+      "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6"
+    },
+    {
+      "checkpoint": {
+        "sha256": "e7fd651864d548b341bcfa7fa3b0787850fb9811eaf01f804c6ffcfb7a72df3b",
+        "size": 496
+      },
+      "circuit": "transfer_confidential_5_16",
+      "constraints": 150762,
+      "current_round_trip_seconds": 6.637451706,
+      "domain": 262144,
+      "elapsed_seconds": 2460.878263263,
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "export": {
+        "sha256": "ff265a7e250af4dbd4e72e1445aa3abe90c1b4b9cf474ee4c72a8d9bf135b73a",
+        "size": 1578
+      },
+      "insecure_test_setup": true,
+      "manifest": {
+        "sha256": "6ef7fda0ae92c2e5fa631ba6c2b3c984c35a18bb516ca753e62fb4ac756103e9",
+        "size": 1256
+      },
+      "packaged_key": {
+        "sha256": "8e24a0afdb8b93ff119721f688e8c86c57721b62f5bb1e11f20b15b104fa4b34",
+        "size": 48522895
+      },
+      "passed": true,
+      "phase2_input_bytes": 13146123,
+      "r1cs": {
+        "sha256": "8535595c1604db42942a3f468bedcea07fb2d96637c0acb7d83f88af7db5e658",
+        "size": 17817668
+      },
+      "raw_verifying_key": {
+        "sha256": "7ee60aca58abf68efd5d4d6ce4730223896e84cf1a3337f7bae32cc752436b0a",
+        "size": 716
+      },
+      "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6"
+    },
+    {
+      "checkpoint": {
+        "sha256": "35a410a4ffe0847f193f98e90668c5b499646b64ede80abd2b7d7228a05408f1",
+        "size": 495
+      },
+      "circuit": "transfer_confidential_6_8",
+      "constraints": 156602,
+      "current_round_trip_seconds": 6.583205144,
+      "domain": 262144,
+      "elapsed_seconds": 2519.751227799,
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "export": {
+        "sha256": "171afc16160c71c3a9e8332fdde1071f4d4513b2ae8253564f561e7653181321",
+        "size": 1576
+      },
+      "insecure_test_setup": true,
+      "manifest": {
+        "sha256": "82f667e9a97115582a12e6d197c9579920ff6932d783fb11df3864c32ac87acf",
+        "size": 1254
+      },
+      "packaged_key": {
+        "sha256": "b206b4c472da00fd5c052e8616ba218e6e3bf7ca91b40f0cb386a98d7f2768b6",
+        "size": 49959013
+      },
+      "passed": true,
+      "phase2_input_bytes": 13320939,
+      "r1cs": {
+        "sha256": "d268fe27ab271af7b41966c578dee6d2cc9db2a61f80139eb30c8f63474cd72c",
+        "size": 18380940
+      },
+      "raw_verifying_key": {
+        "sha256": "e7fb12d499b83a513baa3a32b79b88fd0d0c31fd7f909c65b5bff7b4e6a1b01a",
+        "size": 716
+      },
+      "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6"
+    },
+    {
+      "checkpoint": {
+        "sha256": "f86e06f110466fba26b339a1a3566ca0b6b77f0809de15a23508ab0c91b3200e",
+        "size": 495
+      },
+      "circuit": "transfer_confidential_8_2",
+      "constraints": 189620,
+      "current_round_trip_seconds": 7.078193893,
+      "domain": 262144,
+      "elapsed_seconds": 10.006299324,
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "export": {
+        "sha256": "00a919fd6fdaf33591605abdd7cd9202b56006c3b4c2b90ac2d2551ba7d1faec",
+        "size": 1576
+      },
+      "insecure_test_setup": true,
+      "manifest": {
+        "sha256": "e7cfb663675dbb88d1c239da5c542903e12c08704f62a1cb2fbc8a6980646256",
+        "size": 1254
+      },
+      "packaged_key": {
+        "sha256": "b68dc7ac19c00587dceee3552022c357bcc30383571784ad9344c768f8b36f42",
+        "size": 58604493
+      },
+      "passed": true,
+      "phase2_input_bytes": 14352107,
+      "r1cs": {
+        "sha256": "ecb9b082517807f4aa19a92e3712a063af4f54ef3214f15c556c4f3c944bed40",
+        "size": 22147508
+      },
+      "raw_verifying_key": {
+        "sha256": "53f33cbb244daca1e14b021ef8b9ec037827fcbb219f7085c85b3507e543f0e8",
+        "size": 716
+      },
+      "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6"
+    },
+    {
+      "checkpoint": {
+        "sha256": "e80143d36f04eb50079966847bbac7b3f9f78c017f41b206318bb631af9d19c4",
+        "size": 495
+      },
+      "circuit": "transfer_confidential_8_4",
+      "constraints": 193398,
+      "current_round_trip_seconds": 11.482344453,
+      "domain": 262144,
+      "elapsed_seconds": 2758.240443968,
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "export": {
+        "sha256": "e7130287f83e434731e7511b4ab698a912008020d9c06cc0cfa01ab5d3753288",
+        "size": 1576
+      },
+      "insecure_test_setup": true,
+      "manifest": {
+        "sha256": "debe78b521112d351fb67636a1fd7228de8c009e5837ed2add8ae6140c9f39f1",
+        "size": 1254
+      },
+      "packaged_key": {
+        "sha256": "22f717760c7b858f1e0d99d313bed1762f9f259e7ea7ab0189ef3c3305ad8878",
+        "size": 59618088
+      },
+      "passed": true,
+      "phase2_input_bytes": 14472747,
+      "r1cs": {
+        "sha256": "0601376b82bdcf9809c7ee2d8318b8920d1e457929267de9f45b9f96ad9a3ac4",
+        "size": 22602907
+      },
+      "raw_verifying_key": {
+        "sha256": "879b6ec863b9d7cd96426afd1fad6ed7fee9467e439698ebf1700a85dd5ba61a",
+        "size": 716
+      },
+      "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6"
+    },
+    {
+      "checkpoint": {
+        "sha256": "24f58ade6e8f1e84f4175378b309a7329687762acef8ef95c57d789594f8320d",
+        "size": 495
+      },
+      "circuit": "transfer_confidential_8_8",
+      "constraints": 202202,
+      "current_round_trip_seconds": 10.698029231,
+      "domain": 262144,
+      "elapsed_seconds": 1867.615864599,
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "export": {
+        "sha256": "dfecfa035812210b918b8e17804953038a9c6db3bd5fcd54af70ee9ca2b8964b",
+        "size": 1576
+      },
+      "insecure_test_setup": true,
+      "manifest": {
+        "sha256": "cedcd7cbf1a684ad0d0d931894c656180ebe3f539dd955efc6665452547ece0c",
+        "size": 1254
+      },
+      "packaged_key": {
+        "sha256": "be2d61fd2f8c9b11afea7d4d5e2d2f78d61c90dafc522587faf5611449ba29b7",
+        "size": 62008338
+      },
+      "passed": true,
+      "phase2_input_bytes": 14753963,
+      "r1cs": {
+        "sha256": "41ca1cc0f3074b40a1164e80c79720937fd6ef5e607be5f6cd4990b5964b1dc2",
+        "size": 23691485
+      },
+      "raw_verifying_key": {
+        "sha256": "6c6e7102bb999ccdb4ed7658e0cccbfdd14c0b26f20650c58879377bf65bd4cf",
+        "size": 716
+      },
+      "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6"
+    },
+    {
+      "checkpoint": {
+        "sha256": "1363554de3f198a6ea32736cbd52652aa95b2dbd8bd6f30f6977ceda54d6f885",
+        "size": 496
+      },
+      "circuit": "transfer_confidential_8_16",
+      "constraints": 219042,
+      "current_round_trip_seconds": 10.917957024,
+      "domain": 262144,
+      "elapsed_seconds": 2903.012842159,
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "export": {
+        "sha256": "1656b983ab0e82b3f41a05d6e384031ae6c383a3ab6bff1a5d58a0100b16e2d5",
+        "size": 1578
+      },
+      "insecure_test_setup": true,
+      "manifest": {
+        "sha256": "8935f145d07f4c7c17005163353f8a5fc0b8a68956dcb0047a44e473d31abfd2",
+        "size": 1256
+      },
+      "packaged_key": {
+        "sha256": "03a80de46479124fa79fedce9a8908aa935245c1d79473054ec9fe3ff1514509",
+        "size": 66539281
+      },
+      "passed": true,
+      "phase2_input_bytes": 15291819,
+      "r1cs": {
+        "sha256": "77dd68856371da67dda039fcef52b2d846bed5a003ea1a20a2975dac4f2fcc11",
+        "size": 25749644
+      },
+      "raw_verifying_key": {
+        "sha256": "2fef19dd36b34bb614f64e97b97469767eba552d428421cb1e0a70f5f3602902",
+        "size": 716
+      },
+      "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6"
+    },
+    {
+      "checkpoint": {
+        "sha256": "97b38a2349af2214602e2038a9046b20801a7c89ab37f91bb645fbeb64e25dbf",
+        "size": 496
+      },
+      "circuit": "transfer_confidential_12_2",
+      "constraints": 280244,
+      "current_round_trip_seconds": 12.519143187,
+      "domain": 524288,
+      "elapsed_seconds": 3354.077980159,
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "export": {
+        "sha256": "e6a7cce4a2a6a5c3281b6634526b9926c4cacbaea6e6af1132c7ecd0b44a70db",
+        "size": 1579
+      },
+      "insecure_test_setup": true,
+      "manifest": {
+        "sha256": "66d09c9af9b24cb2d942a8115d3acbb8fbdc84cb9a6a675f48098ad66f46368b",
+        "size": 1257
+      },
+      "packaged_key": {
+        "sha256": "8f10bb0bb45505da2e386ca3309d7a6a1a7a1fe467da588956012a7f9d1f6c90",
+        "size": 90894806
+      },
+      "passed": true,
+      "phase2_input_bytes": 25588331,
+      "r1cs": {
+        "sha256": "c93586f5212fc83c4f9522bdd2cc1fa8b986803ab3b2d18bbfb5f1bd74da0244",
+        "size": 32658821
+      },
+      "raw_verifying_key": {
+        "sha256": "8e0147b91d39d2d8c3621ef460d00d1ea468f02fe647cdbb591650881b1a4f80",
+        "size": 716
+      },
+      "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6"
+    },
+    {
+      "checkpoint": {
+        "sha256": "6d9d16e6fc0cb6aa2ea9fb8ee54f2f1e3b7692e77c1bf5e407b48989b06c688d",
+        "size": 496
+      },
+      "circuit": "transfer_confidential_12_4",
+      "constraints": 284086,
+      "current_round_trip_seconds": 16.68517587,
+      "domain": 524288,
+      "elapsed_seconds": 3373.621282863,
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "export": {
+        "sha256": "acc692afeb4a9946e7f04daedfe8a61ec11115a7b8bcb02e4d1242221ab1822e",
+        "size": 1579
+      },
+      "insecure_test_setup": true,
+      "manifest": {
+        "sha256": "9e725395a3d32f260a09d8be3d4ff1c79e1cdd1d00dd33480cd6d50626cef991",
+        "size": 1257
+      },
+      "packaged_key": {
+        "sha256": "00d6b156784213be1e176e544a1b64ab0be47465d3f55b93087e24aec43ed759",
+        "size": 91933265
+      },
+      "passed": true,
+      "phase2_input_bytes": 25711019,
+      "r1cs": {
+        "sha256": "9308ba53795909672cca236803ff54ae734cc3512f33f7ee269856bf18b93222",
+        "size": 33131532
+      },
+      "raw_verifying_key": {
+        "sha256": "6b86e409d25da2032107bf24a05bba7460fc4481b2791e16c2d61145c5b2ccdd",
+        "size": 716
+      },
+      "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6"
+    },
+    {
+      "checkpoint": {
+        "sha256": "87303eba8c230fe0ee5e6b6cbb295744687362bc11e150853a4401e42c17944f",
+        "size": 496
+      },
+      "circuit": "transfer_confidential_12_8",
+      "constraints": 293018,
+      "current_round_trip_seconds": 16.693002092,
+      "domain": 524288,
+      "elapsed_seconds": 3443.422939811,
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "export": {
+        "sha256": "b435d076d3db302ae540209a812e56ec06962a75018189d6872a0aa1dd812be5",
+        "size": 1579
+      },
+      "insecure_test_setup": true,
+      "manifest": {
+        "sha256": "55d7c5ae9fc62497fe8686386ab994cf754e37dd9cd2113657427538182a36fe",
+        "size": 1257
+      },
+      "packaged_key": {
+        "sha256": "a4b2a2d9e8ba0ba9ba51ccf870364bfc77edc213b1f75a9fa7ae0546888caaa9",
+        "size": 94356501
+      },
+      "passed": true,
+      "phase2_input_bytes": 25996331,
+      "r1cs": {
+        "sha256": "bf859551cb8b1f2393a90f84656de21b9abb06eb67c5e62df76d7a6cf57e357f",
+        "size": 34237992
+      },
+      "raw_verifying_key": {
+        "sha256": "b8bdb5b9dc06a4f7b14f6a80a2a07c90fc8dcadc8175ee40678ccf232f151ab8",
+        "size": 716
+      },
+      "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6"
+    },
+    {
+      "checkpoint": {
+        "sha256": "00e479b00270a0d42bab16b38bab836ff713411265619d909fd5fbb65ee1a1ff",
+        "size": 496
+      },
+      "circuit": "transfer_confidential_16_2",
+      "constraints": 371124,
+      "current_round_trip_seconds": 20.29259803,
+      "domain": 524288,
+      "elapsed_seconds": 2847.604271937,
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "export": {
+        "sha256": "792aab7a2c4f1cb9966d63eb5ca126e1f7eb4387e1c60a538ed9ba8dcfa87ca4",
+        "size": 1579
+      },
+      "insecure_test_setup": true,
+      "manifest": {
+        "sha256": "b42451fde2a1d5929e7af93ccbe58998e0bdccd4d071ce6a5cd2c2a777488fd0",
+        "size": 1257
+      },
+      "packaged_key": {
+        "sha256": "26360b6f2b4f9c4f0d28f04f5e9b44e173fefa8b679f17065c68e3b25d80b704",
+        "size": 114871076
+      },
+      "passed": true,
+      "phase2_input_bytes": 28444139,
+      "r1cs": {
+        "sha256": "9d479d6ffdf1580b354d455a5c6c71b2f701815803ab84cfa850f8dbc7994e80",
+        "size": 43214491
+      },
+      "raw_verifying_key": {
+        "sha256": "6cd133618b42623570eb31f0c06ee7b6c1ab8512dd662346cfd78786c6c98501",
+        "size": 716
+      },
+      "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6"
+    },
+    {
+      "checkpoint": {
+        "sha256": "968923a61111651373baacca91457e28581dd96cd784a1373c41585f8221f25c",
+        "size": 496
+      },
+      "circuit": "transfer_confidential_16_4",
+      "constraints": 375030,
+      "current_round_trip_seconds": 17.855570566,
+      "domain": 524288,
+      "elapsed_seconds": 3878.342695079,
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "export": {
+        "sha256": "c3d5b736b77fdc98189a09d56dfaac68943b8fa6dac9c5d89bcdbfbfe4800236",
+        "size": 1579
+      },
+      "insecure_test_setup": true,
+      "manifest": {
+        "sha256": "9c712b41cf2e2000067651697460b3f41fb1cd7b7f59eea04546e8ed73b0f472",
+        "size": 1257
+      },
+      "packaged_key": {
+        "sha256": "13dcf5fef631778b96e0b721fd4f2d578b01c15f0549d5c02e4c0bb0cddfc1e5",
+        "size": 115914213
+      },
+      "passed": true,
+      "phase2_input_bytes": 28568875,
+      "r1cs": {
+        "sha256": "c73fe486950214b7816772b9844067f796f5db236da31a87702abe791bad46f1",
+        "size": 43684328
+      },
+      "raw_verifying_key": {
+        "sha256": "81f5fb91df670369cc32cf18ebe40a33d09e805ebaafd03d16d0ef59501e10c2",
+        "size": 716
+      },
+      "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6"
+    },
+    {
+      "checkpoint": {
+        "sha256": "7e6cf73328512ad6b3b648c05c6f0308b38dadf6d81916dd5ba516c6add9d6b1",
+        "size": 496
+      },
+      "circuit": "transfer_confidential_16_8",
+      "constraints": 384090,
+      "current_round_trip_seconds": 17.839179011,
+      "domain": 524288,
+      "elapsed_seconds": 11.59233482,
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "export": {
+        "sha256": "42f5d5aaf55def1155b921c5a44eebfb52f39bc50d04d65e082104b87fa774fa",
+        "size": 1579
+      },
+      "insecure_test_setup": true,
+      "manifest": {
+        "sha256": "1c435af44e7e3bf352eb223e8118d7a5ab1f740386ba9e5448cc2293cf047d27",
+        "size": 1257
+      },
+      "packaged_key": {
+        "sha256": "406d429f64b78166f2bc75b5775f449f97cac144b99ceae370bc1a8c053c43ab",
+        "size": 118362865
+      },
+      "passed": true,
+      "phase2_input_bytes": 28858283,
+      "r1cs": {
+        "sha256": "7bb995f1e00263f691306bac50f392bdb4a268f0b6cc37fb2b0e803917aa46b3",
+        "size": 44801100
+      },
+      "raw_verifying_key": {
+        "sha256": "1c80b1b125050b6ccae337f84babbfb7fbc1c0419cb5fac812e406bc408105b8",
+        "size": 716
+      },
+      "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6"
+    },
+    {
+      "checkpoint": {
+        "sha256": "cc5a17933e8c89a874ecf82a8e738cbe36dce6136d9907e8922ff9ba5dea130f",
+        "size": 496
+      },
+      "circuit": "transfer_confidential_24_2",
+      "constraints": 554228,
+      "current_round_trip_seconds": 28.222471891,
+      "domain": 1048576,
+      "elapsed_seconds": 4865.928967755,
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "export": {
+        "sha256": "ec419818ffa39d4afc64d54edf2a13b01efa0d37511cb405bd8b1cecb08c92f4",
+        "size": 1582
+      },
+      "insecure_test_setup": true,
+      "manifest": {
+        "sha256": "e2900ea4183891367e88d5f0432cca4272fcb96f95c7be7ea21d0aa5b939cd5b",
+        "size": 1259
+      },
+      "packaged_key": {
+        "sha256": "66fa28c2af5ca628669c075ac9c057b3472690e6483f4aa8b9b9a46caa3aa2d1",
+        "size": 179892799
+      },
+      "passed": true,
+      "phase2_input_bytes": 50975979,
+      "r1cs": {
+        "sha256": "bbfd1ce1a123d9f5c31f73f3c82087758c3fb55f8a41d387fb6d85649d396de2",
+        "size": 64440006
+      },
+      "raw_verifying_key": {
+        "sha256": "dda020500c595cadde2e3a9a4a6a1ed560fd053d383d8ad81612acf89af319f3",
+        "size": 716
+      },
+      "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6"
+    },
+    {
+      "checkpoint": {
+        "sha256": "06a59d9827b9c84f4f29de130dc15af443e11a960dfc341e5ad81d40b66a6d8d",
+        "size": 496
+      },
+      "circuit": "transfer_confidential_24_4",
+      "constraints": 558262,
+      "current_round_trip_seconds": 29.569158036,
+      "domain": 1048576,
+      "elapsed_seconds": 4884.065906258,
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "export": {
+        "sha256": "e1ef7c4b98a19e341849438bc2a87391fda34f1d80137aa95394a91ef210767a",
+        "size": 1582
+      },
+      "insecure_test_setup": true,
+      "manifest": {
+        "sha256": "c98a27dc43b6ca2f3903e70b3ec0e5f2d04b623c1a31067ed6998cceb4232b10",
+        "size": 1259
+      },
+      "packaged_key": {
+        "sha256": "cf7f1e3fc9d62977daa411cac1ae337e4d5dfef604a85b324793327dd106f44c",
+        "size": 180956658
+      },
+      "passed": true,
+      "phase2_input_bytes": 51104811,
+      "r1cs": {
+        "sha256": "110c6a4d6112222b438f9b152e8a914cf88b7a2091bba2ea81438387aa8370c5",
+        "size": 64915461
+      },
+      "raw_verifying_key": {
+        "sha256": "9c6ab50b25e000998197b013a8cc49ad10d0a5fe076a73eec3067cdd2b7d4021",
+        "size": 716
+      },
+      "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6"
+    },
+    {
+      "checkpoint": {
+        "sha256": "08695f7114db610fdb797f3b193212db8113a4b193e03235f5e7ef7a36fedf07",
+        "size": 496
+      },
+      "circuit": "transfer_confidential_32_2",
+      "constraints": 737252,
+      "current_round_trip_seconds": 40.998607499,
+      "domain": 1048576,
+      "elapsed_seconds": 3768.425222294,
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "export": {
+        "sha256": "cc6bddf63979b765c17ed445146c616b37337e7465c09b243c8bbe99162603e1",
+        "size": 1582
+      },
+      "insecure_test_setup": true,
+      "manifest": {
+        "sha256": "81b115e2fe28085089f98ce493689fb478cf4b04913ae56122ce93b7811205f0",
+        "size": 1259
+      },
+      "packaged_key": {
+        "sha256": "936a079b296ab805bfd7482e5451c51a4a610a58d13143563c2bdbff6ca6a4c4",
+        "size": 228024354
+      },
+      "passed": true,
+      "phase2_input_bytes": 56727915,
+      "r1cs": {
+        "sha256": "1e2090e6103ba77f9593e4400dc5342dc1b46dc2e4b45d3eb349417270307dbe",
+        "size": 85596385
+      },
+      "raw_verifying_key": {
+        "sha256": "29ea1bb2d074409c1d576120bda0edddcbe30499d66c7cbc835b1720f439e5ca",
+        "size": 716
+      },
+      "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6"
+    },
+    {
+      "checkpoint": {
+        "sha256": "57141cec8508831bfeb2a5dfc839f0fb24604946538e0fa0a0254d7e8e66db9e",
+        "size": 496
+      },
+      "circuit": "transfer_confidential_40_2",
+      "constraints": 917252,
+      "current_round_trip_seconds": 41.176073045,
+      "domain": 1048576,
+      "elapsed_seconds": 4144.195626313,
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "export": {
+        "sha256": "9eb22a6ac405475bdc11ed7375d9a971aec7ce34e630e43e8bb2412f70e5b6a5",
+        "size": 1583
+      },
+      "insecure_test_setup": true,
+      "manifest": {
+        "sha256": "bdcf6a601315627ce575092e1f1d30603e80b42b6c1897277748f9b3dd8ebc6e",
+        "size": 1260
+      },
+      "packaged_key": {
+        "sha256": "d08ed0cb6a63174d6e02c712d3a203450d1cb87f8c87d7c9e2c7fdb2f7614419",
+        "size": 275194260
+      },
+      "passed": true,
+      "phase2_input_bytes": 62382699,
+      "r1cs": {
+        "sha256": "594cf584aedd5db382c99706447e1904fdccfdb14cfb54ab869167c399489962",
+        "size": 106272195
+      },
+      "raw_verifying_key": {
+        "sha256": "f09bfcaee64b32f9abe277b72e8db5318a5cff337dda0e05d8e01c5978247a79",
+        "size": 716
+      },
+      "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6"
+    },
+    {
+      "checkpoint": {
+        "sha256": "d0363d7db766c0327b7bbd662c76cbc3b043239fda66de3d47c0232ecc550937",
+        "size": 496
+      },
+      "circuit": "transfer_confidential_48_2",
+      "constraints": 1098596,
+      "current_round_trip_seconds": 51.477739143,
+      "domain": 2097152,
+      "elapsed_seconds": 4777.767359939,
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "export": {
+        "sha256": "edb27e09ad3e17d6d5fc02fbde2c5ee02026e18981af173541d20a22099291dc",
+        "size": 1587
+      },
+      "insecure_test_setup": true,
+      "manifest": {
+        "sha256": "2ec4d85beb6aef566d8a4f22d2b8912f89fdd3dd3602478ce86f09543e34baf5",
+        "size": 1263
+      },
+      "packaged_key": {
+        "sha256": "41d66f2bdfd54fa25b950cd5b01734313a86f1b89afefe5c78529bbc053328fd",
+        "size": 356237998
+      },
+      "passed": true,
+      "phase2_input_bytes": 101634923,
+      "r1cs": {
+        "sha256": "d6ee3c9fcc86bffea56cbb3c22a3ce06f749c664d7b4d7dd5cb0b3b89cb08f24",
+        "size": 127092685
+      },
+      "raw_verifying_key": {
+        "sha256": "6a78f968eff4b0dd9b6c5f3842833dff4caf2807b7022a16c182edb9718dc4ad",
+        "size": 716
+      },
+      "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6"
+    },
+    {
+      "checkpoint": {
+        "sha256": "a2d70a7c868bc7f400720d399408d15f457926899dd45f9b59a2efb7dfb6651b",
+        "size": 496
+      },
+      "circuit": "transfer_confidential_49_2",
+      "constraints": 1121102,
+      "current_round_trip_seconds": 52.588208083,
+      "domain": 2097152,
+      "elapsed_seconds": 3909.686073482,
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "export": {
+        "sha256": "86b507574974826df159a54c4e76a4faec3dc83b3288f946f8f62cfd06d755c8",
+        "size": 1587
+      },
+      "insecure_test_setup": true,
+      "manifest": {
+        "sha256": "8d0e6042fccf94d5547ce99f58fc662d7880526cd5c5e4c05d869579a8716800",
+        "size": 1263
+      },
+      "packaged_key": {
+        "sha256": "df36f3248727e4737d0f612ca66136a8567b055ec96e387ec0d86a7dd1b6d16b",
+        "size": 362114353
+      },
+      "passed": true,
+      "phase2_input_bytes": 102341963,
+      "r1cs": {
+        "sha256": "9d5c39be3c12771be7e3864db882ce63cea1177f09892ac757b378ee8341141e",
+        "size": 129661970
+      },
+      "raw_verifying_key": {
+        "sha256": "79dfdaa2fddaa4965e756ddc7f05a34bd0f3aadb0edb3dfc74c35eb0e7b6c29d",
+        "size": 716
+      },
+      "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6"
+    },
+    {
+      "checkpoint": {
+        "sha256": "5c2f74d2153e4dded126a5ad0b828615c0cc7eb529eb159c2526efe0c281b70c",
+        "size": 479
+      },
+      "circuit": "merge_8_1",
+      "constraints": 180294,
+      "current_round_trip_seconds": 19.095241333,
+      "domain": 262144,
+      "elapsed_seconds": 16.237630871,
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "export": {
+        "sha256": "5fb076d8006ddfe590b7b79160498d7777d272e2efa00f15299b930b140d3852",
+        "size": 1544
+      },
+      "insecure_test_setup": true,
+      "manifest": {
+        "sha256": "9ed006342eaf6989d0b541ddd5d29a60d23358a7439fac38967b2dae1c9f054f",
+        "size": 1222
+      },
+      "packaged_key": {
+        "sha256": "7bd4ba9375a6b19818fc8c8cbc1e05a567ca7c7858b5536898d762b0958a9446",
+        "size": 56261701
+      },
+      "passed": true,
+      "phase2_input_bytes": 14056107,
+      "r1cs": {
+        "sha256": "acfff1a46f1978aad4817d3782b36cb25891f4abcc5e70b3996843115d2d96d9",
+        "size": 21166992
+      },
+      "raw_verifying_key": {
+        "sha256": "885eebdb3a60522a99c73bc9dbc7d2fcd21f50b131b6c2cde3195bfbcf8d0059",
+        "size": 716
+      },
+      "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6"
+    },
+    {
+      "checkpoint": {
+        "sha256": "a198da9855120bf64a58a6ab57cb4b22d1e278e006ee501caef3b238742eb49f",
+        "size": 480
+      },
+      "circuit": "merge_24_1",
+      "constraints": 527430,
+      "current_round_trip_seconds": 32.490339655,
+      "domain": 1048576,
+      "elapsed_seconds": 13.115155613,
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "export": {
+        "sha256": "63b2e4c40e74ae5d359f2f29b8323e6dfebee05f67b290fcbcc41cc1315add63",
+        "size": 1550
+      },
+      "insecure_test_setup": true,
+      "manifest": {
+        "sha256": "f643c8e83c51ee8c0135531ce3f3443d20e4f7341bd6557d1f8be56d5d85c3c4",
+        "size": 1227
+      },
+      "packaged_key": {
+        "sha256": "fcf656f5de1f8dabbfe11c374fd1e2a45c29aedd6a0f268e4aa5711d17ebf4a4",
+        "size": 173547104
+      },
+      "passed": true,
+      "phase2_input_bytes": 50124971,
+      "r1cs": {
+        "sha256": "3f0bf6b412669390857e73c16de0f07e9d8ef320706c7ad80028895d50e333f0",
+        "size": 61936587
+      },
+      "raw_verifying_key": {
+        "sha256": "58bfea4aa5a1e4dd8affa7c0e50cfb1373720337079ee42942627edba750e6ff",
+        "size": 716
+      },
+      "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6"
+    },
+    {
+      "checkpoint": {
+        "sha256": "6efcdc2ad4c6d6e16070dc570cb2533e2a0817aad67214e397c59a44039bc4a4",
+        "size": 480
+      },
+      "circuit": "merge_52_1",
+      "constraints": 1136222,
+      "current_round_trip_seconds": 53.341072904,
+      "domain": 2097152,
+      "elapsed_seconds": 4905.949188052,
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "export": {
+        "sha256": "43c69ffbafdab6b8efb3236d56d07c6f0b60c3c21926e80e271ae3805ee5908a",
+        "size": 1555
+      },
+      "insecure_test_setup": true,
+      "manifest": {
+        "sha256": "641db040756fa5fa7c30c36d67688f20bddc942ec862ed99db31e2f886258c22",
+        "size": 1231
+      },
+      "packaged_key": {
+        "sha256": "b5333533654817dd0cdb9c717f35486d541bd3240a7a0f877588438b720e1d1b",
+        "size": 368571264
+      },
+      "passed": true,
+      "phase2_input_bytes": 102801451,
+      "r1cs": {
+        "sha256": "b32b08f35d866208989755e08fd64b0aed661a653f507e72f0c269a5e20544b2",
+        "size": 133412211
+      },
+      "raw_verifying_key": {
+        "sha256": "2852f0918b3d2014f5ea8ca165f7733a8fb66623dfb8759752eb0e7a4028fb4b",
+        "size": 716
+      },
+      "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6"
+    }
+  ],
+  "circuits_passed": 41,
+  "core_uploads": 41,
+  "date_utc": "2026-10-27",
+  "excluded_pins_preserved": true,
+  "go": "go1.27.3",
+  "insecure_test_setup": true,
+  "logs": {
+    "build-verifier-emitter.log": {
+      "sha256": "6d77f64dfc8c5325b90fdbe05d8be367bdd578bcccec24f275c5ffee7d03dd6e",
+      "size": 72
+    },
+    "current-go-round-trip.log": {
+      "sha256": "130e2ea31a1812e9fef857d1d96da58de541a4d59c4b32705c519fcfd8c9dc0b",
+      "size": 31318
+    },
+    "phase1-checkpoint-bindings.log": {
+      "sha256": "c321bf889b02cbd937d8d321741796896556fead9c24f4985b40e768e5ed969f",
+      "size": 5655
+    },
+    "pinned-solana-verifier.log": {
+      "sha256": "0389276cc717b25e4c2be60e90904125a78bc26a31729e5f40814bf329f3d37b",
+      "size": 3935
+    },
+    "spr-core-resumed-time.txt": {
+      "sha256": "77ebfb2849fc7bd214caa2823fd3115bc6e99f5f2dd97ee8269de9dd7eacec52",
+      "size": 1032
+    },
+    "spr-core-resumed.log": {
+      "sha256": "a3b85885d265850532194ff935a9b963d224e1f4de52a87cc8ec63092a2b89f0",
+      "size": 33296
+    },
+    "stage-release.log": {
+      "sha256": "58ba715ebcb401fb0bc393a3baaa51e408e5081f7141d8ee3056fcdda8540674",
+      "size": 111
+    },
+    "verify-staged-release.log": {
+      "sha256": "663cc471049a8fb8f9fd6f13992785d27fd4132c598acbc61bccbda14191c815",
+      "size": 4314
+    }
+  },
+  "maximum_domain": 2097152,
+  "notes": [
+    "Initial Go 1.27.1 run was interrupted after 13 proofs; its completed stages were reused.",
+    "The resumed Go 1.27.3 run used 24 parallel cases. Timings include reused stages and contention.",
+    "Current-source revalidation reran packaging, proof generation, and client paths using saved completed exports.",
+    "Phase 1 derivations and checkpoint chains were then checked with current source for all 41 cases.",
+    "Rust verification uses the pinned host verifier, not Solana program deployment.",
+    "Release staging uses marked test fixtures assembled from separate per-circuit campaigns.",
+    "Saved proof vectors contain only public proof data and verifying keys from marked test parameters.",
+    "Resumed process memory and timing measure a parallel test runner, not a clean preparation run or intended production hardware."
+  ],
+  "phase1": {
+    "artifact": {
+      "sha256": "25731391b8f3f00991793170f815db6220774e3a231a019976733ff11f11d8fe",
+      "size": 402653128
+    },
+    "engine": "gnark-v0.16.4-bn254-mpcsetup",
+    "format": "spr-ceremony-v1",
+    "insecure_test_setup": true,
+    "provenance": "coordinator-generated rehearsal SRS; not production"
+  },
+  "phase1_checkpoint_bindings_passed": true,
+  "production_keys_created": false,
+  "proof_vectors": {
+    "../core-vectors/merge_24_1.json": {
+      "sha256": "26ca991857d3d489c0ea6b994ad29df2aad194adfab6fe2070ce7a3745839e52",
+      "size": 1740
+    },
+    "../core-vectors/merge_52_1.json": {
+      "sha256": "1a9d5ac8fab3096e2a3ab75fd33d4fcc40a78f84e862c1460bad8c1e24b00cff",
+      "size": 1743
+    },
+    "../core-vectors/merge_8_1.json": {
+      "sha256": "c8d041c2b54ec5b13a64d15a9fb471bad36bd99c619c387fcd96d98b58b4454e",
+      "size": 1738
+    },
+    "../core-vectors/transfer_confidential_12_2.json": {
+      "sha256": "66c03774659307415deae9dcfdfdecbceb3cf8e5c88ba88c5b135e171cc0d1fc",
+      "size": 1761
+    },
+    "../core-vectors/transfer_confidential_12_4.json": {
+      "sha256": "dd1401d9461db0a0a4e7118d402777ef6457c4efd94c9d88e4514f4bf0d9b2f0",
+      "size": 1757
+    },
+    "../core-vectors/transfer_confidential_12_8.json": {
+      "sha256": "01d496c744bfe884166c3034fad6f8b05ae3fea1fcadba60270013653ff6f97a",
+      "size": 1754
+    },
+    "../core-vectors/transfer_confidential_16_2.json": {
+      "sha256": "e3866b2e54add9f37ce6ac1dc1f704f99176a389bf033a85949983db81dd8243",
+      "size": 1756
+    },
+    "../core-vectors/transfer_confidential_16_4.json": {
+      "sha256": "4dee2446ea28940be5a873396a0e8ffe3b7e49a619878e50731c7890b4b6ea16",
+      "size": 1761
+    },
+    "../core-vectors/transfer_confidential_16_8.json": {
+      "sha256": "73ca27af7b9380987419bdbb9108507db5fef49d36622c957af00f2e37c16242",
+      "size": 1758
+    },
+    "../core-vectors/transfer_confidential_1_16.json": {
+      "sha256": "59da9b864d59f3588e3b9e2cc1f2ecfdef2bd011393772cf91d8c4060232967b",
+      "size": 1752
+    },
+    "../core-vectors/transfer_confidential_1_2.json": {
+      "sha256": "92b7cfe8abc58363c0bd1552011df199e9ad9c0c49dc6b0c325a4c697b83416d",
+      "size": 1756
+    },
+    "../core-vectors/transfer_confidential_1_4.json": {
+      "sha256": "a08113211f412ec5ae5bad0bcf442239789c53712731bee1a9ac37e4f614c322",
+      "size": 1756
+    },
+    "../core-vectors/transfer_confidential_1_8.json": {
+      "sha256": "51b067eeaf38e66cec95276d68cd63b7fce69cbf19285a84d655b2a5ae216f3e",
+      "size": 1761
+    },
+    "../core-vectors/transfer_confidential_24_2.json": {
+      "sha256": "a0857d54cf1527f2710396a437d801cf6a858cc2d83f653a6fbafee67593fa4a",
+      "size": 1760
+    },
+    "../core-vectors/transfer_confidential_24_4.json": {
+      "sha256": "712bc3b001001b585b9d8716b00d44aacf4c2d09fe2254f1b5a99c1d54546687",
+      "size": 1755
+    },
+    "../core-vectors/transfer_confidential_2_16.json": {
+      "sha256": "1b07c5a98bafd50b57ba5a144686057774b6e1ef848ee049e97bffdcf55ed460",
+      "size": 1755
+    },
+    "../core-vectors/transfer_confidential_2_2.json": {
+      "sha256": "a167fdfb56c834192019324e77df643f1587ae491c78a53fe0417aec558652af",
+      "size": 1757
+    },
+    "../core-vectors/transfer_confidential_2_4.json": {
+      "sha256": "467675364fdcc324646d4a5c820a73f74511488fa0f29c68f8aeabed16fe3ed2",
+      "size": 1754
+    },
+    "../core-vectors/transfer_confidential_2_8.json": {
+      "sha256": "802cf9edd1d70f1cd78f7657b96cf06699530d31cda7b636d4489d62d1013582",
+      "size": 1763
+    },
+    "../core-vectors/transfer_confidential_32_2.json": {
+      "sha256": "b0494c4013c22ba4cdfd59ecc0e00976b892fd2774eac058e70cbe539c00cd68",
+      "size": 1755
+    },
+    "../core-vectors/transfer_confidential_3_2.json": {
+      "sha256": "dbcb761a1e2ca63b1c3363054c5f7b254fb07dff9610afc9365c961ff39e4e1c",
+      "size": 1753
+    },
+    "../core-vectors/transfer_confidential_3_4.json": {
+      "sha256": "8c8419a0ca98056f845a1b0cf397f819ff9ff8afbca29098b1281b2fdda550ac",
+      "size": 1756
+    },
+    "../core-vectors/transfer_confidential_3_8.json": {
+      "sha256": "58bc5468b77dd14e645a827338cdda4406780445e11851e4f0a1f51b3ed9540d",
+      "size": 1759
+    },
+    "../core-vectors/transfer_confidential_40_2.json": {
+      "sha256": "7060e3ac8b49a61a06f06882a05c63e4bfd40cd5be2713d0f417330c0348e31e",
+      "size": 1761
+    },
+    "../core-vectors/transfer_confidential_48_2.json": {
+      "sha256": "f7d17e65f0a8b7a2e68672c246944d69dde2a6f18f1261dc5eff90f5d200323a",
+      "size": 1755
+    },
+    "../core-vectors/transfer_confidential_49_2.json": {
+      "sha256": "fe219e766a7d9f17a5badb3e9e29befc67bd0cfd530dc20d40f71b2ffdad4ffb",
+      "size": 1757
+    },
+    "../core-vectors/transfer_confidential_4_16.json": {
+      "sha256": "12c3e65944a5f2a03e5447c98ce9154e3765a6884e78eff87aadd56a47fafc2b",
+      "size": 1754
+    },
+    "../core-vectors/transfer_confidential_4_2.json": {
+      "sha256": "41011d4eff1a08b9d4ac575537a43a93e1732981cb72fca1d71e4acca8436af0",
+      "size": 1754
+    },
+    "../core-vectors/transfer_confidential_4_4.json": {
+      "sha256": "86cdbea4f0fdd8972d7c54c9779f0dc59ea87b2081bf3eb7d82de8dca5ebd578",
+      "size": 1761
+    },
+    "../core-vectors/transfer_confidential_4_8.json": {
+      "sha256": "a9b67bfa7cd0bf5796938af53ce74ac90c037e6bd960b12b95475c3d33e82c19",
+      "size": 1758
+    },
+    "../core-vectors/transfer_confidential_5_16.json": {
+      "sha256": "617732335d94c92b5c4bde3efc63ffba3a39ec244881cf3880a2af7d91fa7e51",
+      "size": 1757
+    },
+    "../core-vectors/transfer_confidential_5_2.json": {
+      "sha256": "3b58e91f0e3fc904278a1a8092b0f76fea3641b7bfbfeab51a71c231f57e4bc0",
+      "size": 1758
+    },
+    "../core-vectors/transfer_confidential_5_4.json": {
+      "sha256": "0e6a16c8b35c8cd890bcb204d29dcb088ed938861fb6dacc38ecf5ed6c4805ea",
+      "size": 1750
+    },
+    "../core-vectors/transfer_confidential_5_8.json": {
+      "sha256": "869d21a1eebb5c4b5a481ad59617b090105d8ddf6fff219f6a6026a2e491d607",
+      "size": 1755
+    },
+    "../core-vectors/transfer_confidential_6_2.json": {
+      "sha256": "1fd4357db1a35002ba5c290384409283b0fc6a388ef6a4c49aad89f769f9ca5d",
+      "size": 1760
+    },
+    "../core-vectors/transfer_confidential_6_4.json": {
+      "sha256": "379367c083a8b900e572402d22d965992f59163dacd0a74239a68ab68ad90ffb",
+      "size": 1757
+    },
+    "../core-vectors/transfer_confidential_6_8.json": {
+      "sha256": "1d3246e37c26e3459093e626b19d6c3410375ede57358efe535dd48838170f0d",
+      "size": 1757
+    },
+    "../core-vectors/transfer_confidential_8_16.json": {
+      "sha256": "914bb062e2520d3b668db53e1ae4ef86ea8e0d7caa25846e6e6547332403ac90",
+      "size": 1759
+    },
+    "../core-vectors/transfer_confidential_8_2.json": {
+      "sha256": "a5b0a9de3992835f233ddaf1d0c47cbb8c50ab9cea7fc65b30821aa94fc55f17",
+      "size": 1752
+    },
+    "../core-vectors/transfer_confidential_8_4.json": {
+      "sha256": "4f32ce93fd7fbd70a54dbe272a0e8ab9484ea52c84dcb80234474f5be3b40e10",
+      "size": 1758
+    },
+    "../core-vectors/transfer_confidential_8_8.json": {
+      "sha256": "f2d375402c7590d35fb1e2e892d462a9dccdc7b4eed7d4346da20576076397d0",
+      "size": 1754
+    }
+  },
+  "resumed_process": {
+    "gomaxprocs": 32,
+    "host_cpu": "AMD Ryzen 9 9950X, 16 physical cores / 32 logical CPUs",
+    "maximum_resident_kib": 54547136,
+    "parallel_cases": 24,
+    "production_coordinator_sizing": false,
+    "reused_completed_stages": true,
+    "wall_seconds": 5169
+  },
+  "solana_host_valid_and_invalid_checks_passed": true,
+  "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6",
+  "staged_release_fixture": "separate rehearsal campaigns; no finalized production checkpoint",
+  "staged_rust_verifiers_passed": true,
+  "total_constraints": 11716132,
+  "unchanged_copy_objects": 83,
+  "verifier_revision": "70a93803e5f55b8425301d506c625169ef557c9d"
+}

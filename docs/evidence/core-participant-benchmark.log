@@ -1,0 +1,327 @@
+# transfer_confidential_1_2
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor
+BenchmarkCoreContribution-4   	       1	1092006806 ns/op	   1.85 MB/s	102352168 B/op	  950778 allocs/op
+PASS
+
+# transfer_confidential_1_4
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor
+BenchmarkCoreContribution-4   	       1	1578014859 ns/op	   2.02 MB/s	167252880 B/op	 1497176 allocs/op
+PASS
+
+# transfer_confidential_1_8
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor
+BenchmarkCoreContribution-4   	       1	1787522333 ns/op	   1.94 MB/s	176250184 B/op	 1625640 allocs/op
+PASS
+
+# transfer_confidential_2_2
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor
+BenchmarkCoreContribution-4   	       1	1905479295 ns/op	   1.99 MB/s	187142968 B/op	 1780452 allocs/op
+PASS
+
+# transfer_confidential_2_4
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor
+BenchmarkCoreContribution-4   	       1	1908590085 ns/op	   2.05 MB/s	191006392 B/op	 1835545 allocs/op
+PASS
+
+# transfer_confidential_1_16
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor
+BenchmarkCoreContribution-4   	       1	2107202815 ns/op	   1.89 MB/s	193489904 B/op	 1871009 allocs/op
+PASS
+
+# transfer_confidential_2_8
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor
+BenchmarkCoreContribution-4   	       1	3102827731 ns/op	   2.03 MB/s	269137368 B/op	 2947524 allocs/op
+PASS
+
+# transfer_confidential_3_2
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor
+BenchmarkCoreContribution-4   	       1	3761462965 ns/op	   1.75 MB/s	279394288 B/op	 3093213 allocs/op
+PASS
+
+# transfer_confidential_3_4
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor
+BenchmarkCoreContribution-4   	       1	3532936777 ns/op	   1.90 MB/s	283284128 B/op	 3148579 allocs/op
+PASS
+
+# transfer_confidential_2_16
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor
+BenchmarkCoreContribution-4   	       1	3603118057 ns/op	   1.89 MB/s	286442368 B/op	 3193896 allocs/op
+PASS
+
+# transfer_confidential_3_8
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor
+BenchmarkCoreContribution-4   	       1	3860062191 ns/op	   1.81 MB/s	340936784 B/op	 3277970 allocs/op
+PASS
+
+# transfer_confidential_4_2
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor
+BenchmarkCoreContribution-4   	       1	3647957793 ns/op	   2.00 MB/s	351078144 B/op	 3423199 allocs/op
+PASS
+
+# transfer_confidential_4_4
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor
+BenchmarkCoreContribution-4   	       1	4360720369 ns/op	   1.70 MB/s	354952072 B/op	 3478751 allocs/op
+PASS
+
+# transfer_confidential_4_8
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor
+BenchmarkCoreContribution-4   	       1	3765016814 ns/op	   2.04 MB/s	363992480 B/op	 3608665 allocs/op
+PASS
+
+# transfer_confidential_5_2
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor
+BenchmarkCoreContribution-4   	       1	3914969259 ns/op	   2.05 MB/s	374678128 B/op	 3762021 allocs/op
+PASS
+
+# transfer_confidential_5_4
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor
+BenchmarkCoreContribution-4   	       1	4281474913 ns/op	   1.90 MB/s	378586944 B/op	 3817897 allocs/op
+PASS
+
+# transfer_confidential_4_16
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor
+BenchmarkCoreContribution-4   	       1	4396996258 ns/op	   1.87 MB/s	381334840 B/op	 3856973 allocs/op
+PASS
+
+# transfer_confidential_5_8
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor
+BenchmarkCoreContribution-4   	       1	6816735311 ns/op	   1.85 MB/s	524783120 B/op	 5914325 allocs/op
+PASS
+
+# transfer_confidential_6_2
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor
+BenchmarkCoreContribution-4   	       1	6377267353 ns/op	   2.03 MB/s	534818096 B/op	 6058568 allocs/op
+PASS
+
+# transfer_confidential_6_4
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor
+BenchmarkCoreContribution-4   	       1	6705883368 ns/op	   1.94 MB/s	538742352 B/op	 6114690 allocs/op
+PASS
+
+# transfer_confidential_5_16
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor
+BenchmarkCoreContribution-4   	       1	5559051417 ns/op	   2.36 MB/s	542190936 B/op	 6163612 allocs/op
+PASS
+
+# transfer_confidential_6_8
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor
+BenchmarkCoreContribution-4   	       1	4869197068 ns/op	   2.74 MB/s	547883176 B/op	 6245523 allocs/op
+PASS
+
+# transfer_confidential_8_2
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor
+BenchmarkCoreContribution-4   	       1	5257200759 ns/op	   2.73 MB/s	581571584 B/op	 6728897 allocs/op
+PASS
+
+# transfer_confidential_8_4
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor
+BenchmarkCoreContribution-4   	       1	5260537398 ns/op	   2.75 MB/s	585544448 B/op	 6785436 allocs/op
+PASS
+
+# transfer_confidential_8_8
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor
+BenchmarkCoreContribution-4   	       1	5399816705 ns/op	   2.73 MB/s	680937440 B/op	 6917260 allocs/op
+PASS
+
+# transfer_confidential_8_16
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor
+BenchmarkCoreContribution-4   	       1	5630432419 ns/op	   2.72 MB/s	698477040 B/op	 7169368 allocs/op
+PASS
+
+# transfer_confidential_12_2
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor
+BenchmarkCoreContribution-4   	       1	9360704623 ns/op	   2.73 MB/s	1033766608 B/op	11995868 allocs/op
+PASS
+
+# transfer_confidential_12_4
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor
+BenchmarkCoreContribution-4   	       1	9303156790 ns/op	   2.76 MB/s	1037766704 B/op	12053366 allocs/op
+PASS
+
+# transfer_confidential_12_8
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor
+BenchmarkCoreContribution-4   	       1	9448726431 ns/op	   2.75 MB/s	1047031232 B/op	12187094 allocs/op
+PASS
+
+# transfer_confidential_16_2
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor
+BenchmarkCoreContribution-4   	       1	10291668110 ns/op	   2.76 MB/s	1126752016 B/op	13334505 allocs/op
+PASS
+
+# transfer_confidential_16_4
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor
+BenchmarkCoreContribution-4   	       1	10310057831 ns/op	   2.77 MB/s	1130785480 B/op	13392982 allocs/op
+PASS
+
+# transfer_confidential_16_8
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor
+BenchmarkCoreContribution-4   	       1	10509085295 ns/op	   2.75 MB/s	1140241392 B/op	13528666 allocs/op
+PASS
+
+# transfer_confidential_24_2
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor
+BenchmarkCoreContribution-4   	       1	18744687996 ns/op	   2.72 MB/s	2055523920 B/op	23896567 allocs/op
+PASS
+
+# transfer_confidential_24_4
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor
+BenchmarkCoreContribution-4   	       1	18811911164 ns/op	   2.72 MB/s	2059700608 B/op	23956951 allocs/op
+PASS
+
+# transfer_confidential_32_2
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor
+BenchmarkCoreContribution-4   	       1	20217593320 ns/op	   2.81 MB/s	2242789032 B/op	26592748 allocs/op
+PASS
+
+# transfer_confidential_40_2
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor
+BenchmarkCoreContribution-4   	       1	23120795875 ns/op	   2.70 MB/s	2426940208 B/op	29243443 allocs/op
+PASS
+
+# transfer_confidential_48_2
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor
+BenchmarkCoreContribution-4   	       1	36503250564 ns/op	   2.78 MB/s	3705092912 B/op	47642920 allocs/op
+PASS
+
+# transfer_confidential_49_2
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor
+BenchmarkCoreContribution-4   	       1	36782790974 ns/op	   2.78 MB/s	3728087728 B/op	47974336 allocs/op
+PASS
+
+# merge_8_1
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor
+BenchmarkCoreContribution-4   	       1	5042033109 ns/op	   2.79 MB/s	571913296 B/op	 6590145 allocs/op
+PASS
+
+# merge_24_1
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor
+BenchmarkCoreContribution-4   	       1	18050993548 ns/op	   2.78 MB/s	2027795680 B/op	23497634 allocs/op
+PASS
+
+# merge_52_1
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor
+BenchmarkCoreContribution-4   	       1	36599380346 ns/op	   2.81 MB/s	3743058896 B/op	48189747 allocs/op
+PASS

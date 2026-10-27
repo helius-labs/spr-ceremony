@@ -1,0 +1,367 @@
+{
+  "date_utc": "2026-10-27",
+  "ceremony_revision": "755ae276911c4519adca91a3bfd9f939e5815985",
+  "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6",
+  "engine": "gnark-v0.16.4-bn254-mpcsetup",
+  "go": "go1.27.3",
+  "host_cpu": "AMD Ryzen 9 9950X, 16 physical cores / 32 logical CPUs",
+  "gomaxprocs": 4,
+  "runs_per_circuit": 1,
+  "circuits": 41,
+  "insecure_test_setup": true,
+  "network_included": false,
+  "campaign_state_changed": false,
+  "local_contribution_and_verification_seconds": 377.579317094,
+  "sequential_runner_wall_seconds": 378.88303094899675,
+  "input_bytes": 979812707,
+  "benchmark_binary_sha256": "e9438955ef9db424320b658c74f38bbb05153134c75473de72b067787178abae",
+  "command_template": "GOMAXPROCS=4 SPR_BENCHMARK_DIR=<saved circuit ceremony> SPR_BENCHMARK_CIRCUIT=<id> go test -run=^$ -bench=^BenchmarkCoreContribution$ -benchtime=1x -count=1 .",
+  "notes": [
+    "One sequential local contribution and verification against each of the 41 marked initial Phase 2 artifacts.",
+    "Other rehearsal validation was running on this host.",
+    "Excludes network transfers, queue waits, coordinator verification, and browser/WASM.",
+    "A single host measurement is not a minimum hardware guarantee.",
+    "The combined benchmark log adds circuit IDs and trims trailing whitespace."
+  ],
+  "per_circuit": [
+    {
+      "id": "transfer_confidential_1_2",
+      "initial": {
+        "sha256": "dd9f6f0b322e8cea47c9ea4307bcaee6d6df8407b65bc7c7711692d12d306a53",
+        "size": 2025419
+      },
+      "local_contribution_and_verification_seconds": 1.092006806
+    },
+    {
+      "id": "transfer_confidential_1_4",
+      "initial": {
+        "sha256": "dba52b70163767630faedfde0b0f6e80a252cbfcac786a5767a2250084798d11",
+        "size": 3191051
+      },
+      "local_contribution_and_verification_seconds": 1.578014859
+    },
+    {
+      "id": "transfer_confidential_1_8",
+      "initial": {
+        "sha256": "aff350ccb5bcf94742d514d7407229ca7f6d4b9a970d07f1839725596711bb38",
+        "size": 3465099
+      },
+      "local_contribution_and_verification_seconds": 1.787522333
+    },
+    {
+      "id": "transfer_confidential_2_2",
+      "initial": {
+        "sha256": "e24909640288392ebddf07f0d8c65c5f47cb9ca174cffccf92b0f80052a552e5",
+        "size": 3795371
+      },
+      "local_contribution_and_verification_seconds": 1.905479295
+    },
+    {
+      "id": "transfer_confidential_2_4",
+      "initial": {
+        "sha256": "bfeca051f9a2ce354d0f5ce9c6f7c32c4f2eccb100b04dfde4c22050bf0cf0ea",
+        "size": 3912939
+      },
+      "local_contribution_and_verification_seconds": 1.908590085
+    },
+    {
+      "id": "transfer_confidential_1_16",
+      "initial": {
+        "sha256": "479e5e31977a479d804fd45625c0cd1bad6775f3987f6a7b3f97301ec89a2154",
+        "size": 3988619
+      },
+      "local_contribution_and_verification_seconds": 2.107202815
+    },
+    {
+      "id": "transfer_confidential_2_8",
+      "initial": {
+        "sha256": "39516cd67d5119ac32350ed0f75f4854047c834044aea3c9122f7e3252175cb9",
+        "size": 6285163
+      },
+      "local_contribution_and_verification_seconds": 3.102827731
+    },
+    {
+      "id": "transfer_confidential_3_2",
+      "initial": {
+        "sha256": "50b7ee663b1ba34d3782ff100e5c72dce740e68eb0b4289795d23006fd8b43e2",
+        "size": 6595979
+      },
+      "local_contribution_and_verification_seconds": 3.761462965
+    },
+    {
+      "id": "transfer_confidential_3_4",
+      "initial": {
+        "sha256": "ee128676ca7fd41f8afd04f2870bfcf66592e2eafc693a9943e9f11a86953ba1",
+        "size": 6714059
+      },
+      "local_contribution_and_verification_seconds": 3.532936777
+    },
+    {
+      "id": "transfer_confidential_2_16",
+      "initial": {
+        "sha256": "53dfa7cde926002eed3353b0d7675e2ebf755afc1720e731fcca4dee0b3846e5",
+        "size": 6810731
+      },
+      "local_contribution_and_verification_seconds": 3.603118057
+    },
+    {
+      "id": "transfer_confidential_3_8",
+      "initial": {
+        "sha256": "24b7443a312d43600199d645efe9015cde7b19922cf723ff549960a706c16e2a",
+        "size": 6990155
+      },
+      "local_contribution_and_verification_seconds": 3.860062191
+    },
+    {
+      "id": "transfer_confidential_4_2",
+      "initial": {
+        "sha256": "39963f328b416f84ab456d207f21f44df95e895110ac7c62c4f446f00ffec3ec",
+        "size": 7299947
+      },
+      "local_contribution_and_verification_seconds": 3.647957793
+    },
+    {
+      "id": "transfer_confidential_4_4",
+      "initial": {
+        "sha256": "507714832c7aebd73ae34a03c5e851d700fb732781bccfa181a31a1bf57fdc91",
+        "size": 7418539
+      },
+      "local_contribution_and_verification_seconds": 4.360720369
+    },
+    {
+      "id": "transfer_confidential_4_8",
+      "initial": {
+        "sha256": "ac97f1b6653516ea39da3bdd5607355c477b4821bfb41fd888a9b8a299684d39",
+        "size": 7695659
+      },
+      "local_contribution_and_verification_seconds": 3.765016814
+    },
+    {
+      "id": "transfer_confidential_5_2",
+      "initial": {
+        "sha256": "b3e69f90b342487f06f9e1a5f4b95a248ea6bb68f0f843b7a19189b69fde9d69",
+        "size": 8022859
+      },
+      "local_contribution_and_verification_seconds": 3.914969259
+    },
+    {
+      "id": "transfer_confidential_5_4",
+      "initial": {
+        "sha256": "1cc151dd4ae00fee616c6aff1deb6e61fe404618c8a25eba16ac5fa7420d3a76",
+        "size": 8141963
+      },
+      "local_contribution_and_verification_seconds": 4.281474913
+    },
+    {
+      "id": "transfer_confidential_4_16",
+      "initial": {
+        "sha256": "94d75de01526802297a6638f3cefbb274bd91f96a4b37b2c08ab945f3b78cf63",
+        "size": 8225323
+      },
+      "local_contribution_and_verification_seconds": 4.396996258
+    },
+    {
+      "id": "transfer_confidential_5_8",
+      "initial": {
+        "sha256": "e939be402b580ec3b590577ce4ba36d15b63e8ec2d16a7aab2ffc82e9639bb6e",
+        "size": 12614411
+      },
+      "local_contribution_and_verification_seconds": 6.816735311
+    },
+    {
+      "id": "transfer_confidential_6_2",
+      "initial": {
+        "sha256": "8f9b56824ef46366fca97a2e4d544487f0d6a9dd37a3c35b4d66fb1692b85006",
+        "size": 12922155
+      },
+      "local_contribution_and_verification_seconds": 6.377267353
+    },
+    {
+      "id": "transfer_confidential_6_4",
+      "initial": {
+        "sha256": "02acfcc35725625286923367561d7a5ab4f7f8d4678d6d4135b9b5e5dc85d711",
+        "size": 13041771
+      },
+      "local_contribution_and_verification_seconds": 6.705883368
+    },
+    {
+      "id": "transfer_confidential_5_16",
+      "initial": {
+        "sha256": "b212625abdc786148e43cf92914e834755f9d3f5fcac819fc8d6cf943954fd54",
+        "size": 13146123
+      },
+      "local_contribution_and_verification_seconds": 5.559051417
+    },
+    {
+      "id": "transfer_confidential_6_8",
+      "initial": {
+        "sha256": "f1156ed378581ecca5a2d47fdb3b60efbced79b44287f62345434485b6766bfd",
+        "size": 13320939
+      },
+      "local_contribution_and_verification_seconds": 4.869197068
+    },
+    {
+      "id": "transfer_confidential_8_2",
+      "initial": {
+        "sha256": "7ec2556a26c3d0a41214d128c1990074f40f85154966cfd3096f24a00ee85f20",
+        "size": 14352107
+      },
+      "local_contribution_and_verification_seconds": 5.257200759
+    },
+    {
+      "id": "transfer_confidential_8_4",
+      "initial": {
+        "sha256": "b1c8617b765ac5c9ce4b04c3d1442fe99aab66a3457c207c3eee4a2d192feaf2",
+        "size": 14472747
+      },
+      "local_contribution_and_verification_seconds": 5.260537398
+    },
+    {
+      "id": "transfer_confidential_8_8",
+      "initial": {
+        "sha256": "dd27da3f833ff73ea8a113019164737db2130532da0e6e43f9c91bc9a1194826",
+        "size": 14753963
+      },
+      "local_contribution_and_verification_seconds": 5.399816705
+    },
+    {
+      "id": "transfer_confidential_8_16",
+      "initial": {
+        "sha256": "e6673cfb59e0f587cf72ccbf8ca9d6492ba23e46455741d4db39bc647f067c92",
+        "size": 15291819
+      },
+      "local_contribution_and_verification_seconds": 5.630432419
+    },
+    {
+      "id": "transfer_confidential_12_2",
+      "initial": {
+        "sha256": "f3eb32437d5a53f53678593ee039b90fe48f25c49ee44d114a885c273ddc751d",
+        "size": 25588331
+      },
+      "local_contribution_and_verification_seconds": 9.360704623
+    },
+    {
+      "id": "transfer_confidential_12_4",
+      "initial": {
+        "sha256": "a8c9de7ee655a7585ad34d8202703cfd1e5826ed4f3ba94088fbcaf287c0dcd2",
+        "size": 25711019
+      },
+      "local_contribution_and_verification_seconds": 9.30315679
+    },
+    {
+      "id": "transfer_confidential_12_8",
+      "initial": {
+        "sha256": "02547c8bdfe17956fab798deac3d132c0c5901d94f560b080f300f42bccfb9c7",
+        "size": 25996331
+      },
+      "local_contribution_and_verification_seconds": 9.448726431
+    },
+    {
+      "id": "transfer_confidential_16_2",
+      "initial": {
+        "sha256": "b2dc2ed250f12d42e3f53f266861845bcfe4678d27b06cbd8a83bf140ed59917",
+        "size": 28444139
+      },
+      "local_contribution_and_verification_seconds": 10.29166811
+    },
+    {
+      "id": "transfer_confidential_16_4",
+      "initial": {
+        "sha256": "e783ba763a0281a4699249f12ef3585d8eee96363e3285a01884254768c2080c",
+        "size": 28568875
+      },
+      "local_contribution_and_verification_seconds": 10.310057831
+    },
+    {
+      "id": "transfer_confidential_16_8",
+      "initial": {
+        "sha256": "2e3ee7654fd32c9771b3cb4d68ebc960fc908263d8681ee5b6a277ea59ab2d34",
+        "size": 28858283
+      },
+      "local_contribution_and_verification_seconds": 10.509085295
+    },
+    {
+      "id": "transfer_confidential_24_2",
+      "initial": {
+        "sha256": "dbc5b7a2c3efe9a467a22babc29afd50a854ee8ff842dc2a0fccab5613adfbd4",
+        "size": 50975979
+      },
+      "local_contribution_and_verification_seconds": 18.744687996
+    },
+    {
+      "id": "transfer_confidential_24_4",
+      "initial": {
+        "sha256": "fcff3ca9e8e5061f09afe8f0f4ccc5058742eeed045113631472eb9631dd77bb",
+        "size": 51104811
+      },
+      "local_contribution_and_verification_seconds": 18.811911164
+    },
+    {
+      "id": "transfer_confidential_32_2",
+      "initial": {
+        "sha256": "1820dae676a4236232cc25186b87af70a0d2354a9b48643f52ae10e7d09da073",
+        "size": 56727915
+      },
+      "local_contribution_and_verification_seconds": 20.21759332
+    },
+    {
+      "id": "transfer_confidential_40_2",
+      "initial": {
+        "sha256": "1e4027b4904f547561887ddf980018130152f9ea7fd46cf26737ebfc44976c2e",
+        "size": 62382699
+      },
+      "local_contribution_and_verification_seconds": 23.120795875
+    },
+    {
+      "id": "transfer_confidential_48_2",
+      "initial": {
+        "sha256": "c7d6bf0f6d870de2ea049890a2888f87a590de26048028f97407fae263b80d6d",
+        "size": 101634923
+      },
+      "local_contribution_and_verification_seconds": 36.503250564
+    },
+    {
+      "id": "transfer_confidential_49_2",
+      "initial": {
+        "sha256": "b944de41e04f65d4d0a50120d1308f55dc9b61794658d6865f0e6dda0c2018be",
+        "size": 102341963
+      },
+      "local_contribution_and_verification_seconds": 36.782790974
+    },
+    {
+      "id": "merge_8_1",
+      "initial": {
+        "sha256": "5ddaa75ce120f0549f33f0501f4b06080725d14506b4b44b36a3f8217a36b121",
+        "size": 14056107
+      },
+      "local_contribution_and_verification_seconds": 5.042033109
+    },
+    {
+      "id": "merge_24_1",
+      "initial": {
+        "sha256": "5d62d55bbe1d3ed3e421e494459361f6aaf559e24a69442b497866af8b1140e1",
+        "size": 50124971
+      },
+      "local_contribution_and_verification_seconds": 18.050993548
+    },
+    {
+      "id": "merge_52_1",
+      "initial": {
+        "sha256": "bb731e0934d64caef60803a57e1f1e5ac7001ab9df34ec8ffddae9f159f706fc",
+        "size": 102801451
+      },
+      "local_contribution_and_verification_seconds": 36.599380346
+    }
+  ],
+  "maximum_resident_kib": 1246468,
+  "logs": {
+    "core-participant-benchmark.log": {
+      "sha256": "6891cf2099920b44a3b3a8e4c7cc2b74683bdc5c03943e67669c9379cca3749e",
+      "size": 10081
+    },
+    "core-participant-benchmark-time.txt": {
+      "sha256": "388578a521f3f94cef179e101820ae88234d1040637b307947a56a17a6893010",
+      "size": 781
+    }
+  }
+}

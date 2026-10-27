@@ -45,9 +45,24 @@ resources have been applied. Rust verifier code is pinned to Zolana's actual
 
 The actual 41 core circuits compiled from Zolana
 `ff04c625ceb43c688cd048549e00a5dabc0c6ee6`: 11,716,132 constraints in total,
-maximum domain 2,097,152, and 1,366,876,096 bytes of compiled R1CS. A complete
-real-witness ceremony rehearsal is in progress; final results must be recorded
-before treating the all-circuit integration gate as satisfied.
+maximum domain 2,097,152, and 1,366,876,096 bytes of compiled R1CS. All 41 passed
+the real-witness rehearsal with two contributors, Zolana `.key` loading, proof
+generation, and gnark verification. Current-source revalidation also passed all
+41 Phase 1 derivation/checkpoint checks and pinned Solana host verifier checks,
+including rejection of changed public inputs.
+
+All 41 emitted Rust verifier modules passed the same valid/invalid proof checks.
+Staging verified Go/TypeScript pins, 41 core uploads, and 83 unchanged-key copies;
+every excluded pin was preserved. These are marked test fixtures assembled from
+separate per-circuit campaigns, not a finalized production campaign or deployment.
+The [report, public proof vectors, and logs](evidence/core-rehearsal/report.json)
+record the revisions and artifact hashes. CI replays all 41 saved public proof
+vectors against the pinned Rust verifier.
+
+The resumed rehearsal runner used 24 parallel cases, took 86 minutes, and peaked
+at about 52 GiB resident memory. It reused completed stages after an interruption;
+these numbers are not a clean preparation benchmark or production capacity
+certification. The report separates resumed timings from current-source checks.
 
 The public power-21 Powers of Tau file matches the BLAKE2b published by snarkjs.
 Full snarkjs 0.7.6 transcript verification, conversion, and SRS algebraic import
@@ -64,6 +79,22 @@ The largest-constraint core circuit, `merge_52_1`, was measured separately with
 on a Ryzen 9 9950X with other rehearsal work active; it excludes transfers and is
 not a minimum hardware guarantee. [Benchmark evidence](evidence/participant-benchmark.json)
 includes the exact input size and process measurements.
+
+A sequential benchmark of all 41 circuits on the same host took 377.6 seconds
+(about 6 minutes 18 seconds) for local contribution and verification with
+`GOMAXPROCS=4`, peaking at about 1.19 GiB resident memory. It used the marked
+initial Phase 2 artifacts and changed no campaign state. This excludes transfers,
+queue waits, and coordinator verification. The
+[full participant benchmark](evidence/core-participant-benchmark.json) records
+every circuit and the command used; it is not a guarantee for other hardware.
+
+Across all 41 circuits, the second rehearsal contributor downloaded 979,814,019
+bytes and uploaded the same amount, about 980 MB each way. These are serialized
+artifact sizes, not measured network throughput; retries, metadata, and protocol
+overhead are excluded. Prepared cryptographic artifacts total 3,145,703,323 bytes
+after deduplicating shared parameters. Archive capacity must also cover accepted
+contributions, final keys, temporary files, and retained object versions.
+[Per-circuit payload evidence](evidence/core-payloads.json) records these counts.
 
 The [participant binary workflow](https://github.com/helius-labs/spr-ceremony/actions/runs/40566501764)
 built all four Linux/macOS targets and signed their provenance. Downloaded checksums
@@ -86,10 +117,9 @@ its keys in Zolana.
 1. Independent review of the MPC engine/version, Phase 1 bridge and provenance,
    contribution decoding, final beacon construction, checkpoint model, and
    Zolana key conversion. Resolve findings and freeze the reviewed source/binaries.
-2. Complete all-41 real-circuit rehearsal, including Zolana `.key` loading,
-   valid proofs and invalid-public-input rejection in the pinned Solana verifier.
-   Record actual coordinator/participant RAM, disk, runtimes, and bandwidth on
-   intended hardware. Server limits are controls, not hardware certification.
+2. Measure coordinator/participant RAM, disk, runtimes, and network throughput
+   on intended hardware. The all-41 compatibility rehearsal above passes; server
+   limits and resumed test-run measurements are not hardware certification.
 3. A real AWS staging drill with the deployed IAM/bucket policy: presigned access,
    interrupted transfer, response loss/retry, coordinator crash, restore/audit,
    competing coordinator rejection, and final-key recovery. Confirm encryption,

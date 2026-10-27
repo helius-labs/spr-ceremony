@@ -31,5 +31,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5
+        with:
+          go-version-file: go.mod
+          cache: true
       - run: cargo fmt --manifest-path adapters/solana/Cargo.toml --check
       - run: cargo build --locked --manifest-path adapters/solana/Cargo.toml
+      - name: Verify all core rehearsal proofs
+        run: |
+          go run ./cmd/spr-ceremony catalog --track core > "$RUNNER_TEMP/core-catalog.json"
+          cargo run --locked --manifest-path adapters/solana/Cargo.toml --bin spr-solana-rehearsal -- \
+            docs/evidence/core-vectors "$RUNNER_TEMP/core-catalog.json"

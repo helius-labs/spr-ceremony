@@ -1,0 +1,23 @@
+	Command being timed: "env GOTOOLCHAIN=go1.27.3 GOMAXPROCS=32 SPR_TEST_SRS=/tmp/spr-core-rehearsal-21.srs SPR_VECTORS=/tmp/spr-core-vectors SPR_CORE_ALL=1 SPR_PARALLEL=24 SPR_REHEARSAL_DIR=/tmp/spr-core-rehearsal SPR_R1CS_DIR=/tmp/spr-core-patched-r1cs bash scripts/test-zolana.sh /home/ubuntu/src/zolana"
+	User time (seconds): 108850.43
+	System time (seconds): 107.79
+	Percent of CPU this job got: 2107%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 1:26:09
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 54547136
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 75
+	Minor (reclaiming a frame) page faults: 25768823
+	Voluntary context switches: 2172135
+	Involuntary context switches: 2877999
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 44902736
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

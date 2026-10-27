@@ -1,0 +1,45 @@
+   Compiling spr-solana-rehearsal v0.1.0 (/tmp/spr-staged-host-check-5cz0zclp)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.16s
+     Running `adapters/solana/target/debug/spr-solana-rehearsal /tmp/spr-core-vectors`
+verified staged merge_24_1: key pin, setup marker, proof, and invalid public input
+verified staged merge_52_1: key pin, setup marker, proof, and invalid public input
+verified staged merge_8_1: key pin, setup marker, proof, and invalid public input
+verified staged transfer_confidential_12_2: key pin, setup marker, proof, and invalid public input
+verified staged transfer_confidential_12_4: key pin, setup marker, proof, and invalid public input
+verified staged transfer_confidential_12_8: key pin, setup marker, proof, and invalid public input
+verified staged transfer_confidential_16_2: key pin, setup marker, proof, and invalid public input
+verified staged transfer_confidential_16_4: key pin, setup marker, proof, and invalid public input
+verified staged transfer_confidential_16_8: key pin, setup marker, proof, and invalid public input
+verified staged transfer_confidential_1_16: key pin, setup marker, proof, and invalid public input
+verified staged transfer_confidential_1_2: key pin, setup marker, proof, and invalid public input
+verified staged transfer_confidential_1_4: key pin, setup marker, proof, and invalid public input
+verified staged transfer_confidential_1_8: key pin, setup marker, proof, and invalid public input
+verified staged transfer_confidential_24_2: key pin, setup marker, proof, and invalid public input
+verified staged transfer_confidential_24_4: key pin, setup marker, proof, and invalid public input
+verified staged transfer_confidential_2_16: key pin, setup marker, proof, and invalid public input
+verified staged transfer_confidential_2_2: key pin, setup marker, proof, and invalid public input
+verified staged transfer_confidential_2_4: key pin, setup marker, proof, and invalid public input
+verified staged transfer_confidential_2_8: key pin, setup marker, proof, and invalid public input
+verified staged transfer_confidential_32_2: key pin, setup marker, proof, and invalid public input
+verified staged transfer_confidential_3_2: key pin, setup marker, proof, and invalid public input
+verified staged transfer_confidential_3_4: key pin, setup marker, proof, and invalid public input
+verified staged transfer_confidential_3_8: key pin, setup marker, proof, and invalid public input
+verified staged transfer_confidential_40_2: key pin, setup marker, proof, and invalid public input
+verified staged transfer_confidential_48_2: key pin, setup marker, proof, and invalid public input
+verified staged transfer_confidential_49_2: key pin, setup marker, proof, and invalid public input
+verified staged transfer_confidential_4_16: key pin, setup marker, proof, and invalid public input
+verified staged transfer_confidential_4_2: key pin, setup marker, proof, and invalid public input
+verified staged transfer_confidential_4_4: key pin, setup marker, proof, and invalid public input
+verified staged transfer_confidential_4_8: key pin, setup marker, proof, and invalid public input
+verified staged transfer_confidential_5_16: key pin, setup marker, proof, and invalid public input
+verified staged transfer_confidential_5_2: key pin, setup marker, proof, and invalid public input
+verified staged transfer_confidential_5_4: key pin, setup marker, proof, and invalid public input
+verified staged transfer_confidential_5_8: key pin, setup marker, proof, and invalid public input
+verified staged transfer_confidential_6_2: key pin, setup marker, proof, and invalid public input
+verified staged transfer_confidential_6_4: key pin, setup marker, proof, and invalid public input
+verified staged transfer_confidential_6_8: key pin, setup marker, proof, and invalid public input
+verified staged transfer_confidential_8_16: key pin, setup marker, proof, and invalid public input
+verified staged transfer_confidential_8_2: key pin, setup marker, proof, and invalid public input
+verified staged transfer_confidential_8_4: key pin, setup marker, proof, and invalid public input
+verified staged transfer_confidential_8_8: key pin, setup marker, proof, and invalid public input
+Verified 41 emitted verifiers, 41 uploads, 83 unchanged copies, and all excluded pins.

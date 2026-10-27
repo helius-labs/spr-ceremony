@@ -1,0 +1,345 @@
+{
+  "date_utc": "2026-10-27",
+  "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6",
+  "insecure_test_setup": true,
+  "circuits": 41,
+  "one_participant_download_bytes_after_initial_contribution": 979814019,
+  "one_participant_upload_bytes": 979814019,
+  "unique_prepared_artifact_bytes_excluding_metadata": 3145703323,
+  "measurement": "Serialized file sizes from accepted second-contributor receipts across 41 separate rehearsal campaigns.",
+  "limitations": [
+    "Not measured network throughput. Excludes retries, metadata, and protocol overhead.",
+    "Prepared artifact bytes deduplicate full/reduced SRS, R1CS, and initial Phase 2 by SHA256.",
+    "Prepared artifact bytes exclude histories, contributed outputs, final keys, temporary files, and retained S3 versions."
+  ],
+  "per_circuit": [
+    {
+      "id": "merge_24_1",
+      "download_bytes": 50125003,
+      "upload_bytes": 50125003,
+      "domain": 1048576,
+      "constraints": 527430,
+      "manifest_sha256": "f643c8e83c51ee8c0135531ce3f3443d20e4f7341bd6557d1f8be56d5d85c3c4"
+    },
+    {
+      "id": "merge_52_1",
+      "download_bytes": 102801483,
+      "upload_bytes": 102801483,
+      "domain": 2097152,
+      "constraints": 1136222,
+      "manifest_sha256": "641db040756fa5fa7c30c36d67688f20bddc942ec862ed99db31e2f886258c22"
+    },
+    {
+      "id": "merge_8_1",
+      "download_bytes": 14056139,
+      "upload_bytes": 14056139,
+      "domain": 262144,
+      "constraints": 180294,
+      "manifest_sha256": "9ed006342eaf6989d0b541ddd5d29a60d23358a7439fac38967b2dae1c9f054f"
+    },
+    {
+      "id": "transfer_confidential_12_2",
+      "download_bytes": 25588363,
+      "upload_bytes": 25588363,
+      "domain": 524288,
+      "constraints": 280244,
+      "manifest_sha256": "66d09c9af9b24cb2d942a8115d3acbb8fbdc84cb9a6a675f48098ad66f46368b"
+    },
+    {
+      "id": "transfer_confidential_12_4",
+      "download_bytes": 25711051,
+      "upload_bytes": 25711051,
+      "domain": 524288,
+      "constraints": 284086,
+      "manifest_sha256": "9e725395a3d32f260a09d8be3d4ff1c79e1cdd1d00dd33480cd6d50626cef991"
+    },
+    {
+      "id": "transfer_confidential_12_8",
+      "download_bytes": 25996363,
+      "upload_bytes": 25996363,
+      "domain": 524288,
+      "constraints": 293018,
+      "manifest_sha256": "55d7c5ae9fc62497fe8686386ab994cf754e37dd9cd2113657427538182a36fe"
+    },
+    {
+      "id": "transfer_confidential_16_2",
+      "download_bytes": 28444171,
+      "upload_bytes": 28444171,
+      "domain": 524288,
+      "constraints": 371124,
+      "manifest_sha256": "b42451fde2a1d5929e7af93ccbe58998e0bdccd4d071ce6a5cd2c2a777488fd0"
+    },
+    {
+      "id": "transfer_confidential_16_4",
+      "download_bytes": 28568907,
+      "upload_bytes": 28568907,
+      "domain": 524288,
+      "constraints": 375030,
+      "manifest_sha256": "9c712b41cf2e2000067651697460b3f41fb1cd7b7f59eea04546e8ed73b0f472"
+    },
+    {
+      "id": "transfer_confidential_16_8",
+      "download_bytes": 28858315,
+      "upload_bytes": 28858315,
+      "domain": 524288,
+      "constraints": 384090,
+      "manifest_sha256": "1c435af44e7e3bf352eb223e8118d7a5ab1f740386ba9e5448cc2293cf047d27"
+    },
+    {
+      "id": "transfer_confidential_1_16",
+      "download_bytes": 3988651,
+      "upload_bytes": 3988651,
+      "domain": 65536,
+      "constraints": 59562,
+      "manifest_sha256": "35afe8af5815d8c16fa1730a2131788e4c7cc747135a184383494566f52880c5"
+    },
+    {
+      "id": "transfer_confidential_1_2",
+      "download_bytes": 2025451,
+      "upload_bytes": 2025451,
+      "domain": 32768,
+      "constraints": 30924,
+      "manifest_sha256": "c7d8c5f5c1dd4069205f9afbe474b0ea1c6d67bc01a2587f39776236d3d89f0b"
+    },
+    {
+      "id": "transfer_confidential_1_4",
+      "download_bytes": 3191083,
+      "upload_bytes": 3191083,
+      "domain": 65536,
+      "constraints": 34590,
+      "manifest_sha256": "12ae5185801016518738ce58edb4562c826222bd68d7c2cafe65e1cb8cf04b4e"
+    },
+    {
+      "id": "transfer_confidential_1_8",
+      "download_bytes": 3465131,
+      "upload_bytes": 3465131,
+      "domain": 65536,
+      "constraints": 43170,
+      "manifest_sha256": "62c4242871540dd273cb23e9761929955009338ae15acb89e70b9f8c077337b3"
+    },
+    {
+      "id": "transfer_confidential_24_2",
+      "download_bytes": 50976011,
+      "upload_bytes": 50976011,
+      "domain": 1048576,
+      "constraints": 554228,
+      "manifest_sha256": "e2900ea4183891367e88d5f0432cca4272fcb96f95c7be7ea21d0aa5b939cd5b"
+    },
+    {
+      "id": "transfer_confidential_24_4",
+      "download_bytes": 51104843,
+      "upload_bytes": 51104843,
+      "domain": 1048576,
+      "constraints": 558262,
+      "manifest_sha256": "c98a27dc43b6ca2f3903e70b3ec0e5f2d04b623c1a31067ed6998cceb4232b10"
+    },
+    {
+      "id": "transfer_confidential_2_16",
+      "download_bytes": 6810763,
+      "upload_bytes": 6810763,
+      "domain": 131072,
+      "constraints": 82626,
+      "manifest_sha256": "d9b6890971f575d44b425f140ac3bc424bec4556d348df7332f8fda3a901fb96"
+    },
+    {
+      "id": "transfer_confidential_2_2",
+      "download_bytes": 3795403,
+      "upload_bytes": 3795403,
+      "domain": 65536,
+      "constraints": 53876,
+      "manifest_sha256": "b9298a34acb21ac39eb12f8e2137d723bdaf5642ab3270874ae7e2b4bdf02e06"
+    },
+    {
+      "id": "transfer_confidential_2_4",
+      "download_bytes": 3912971,
+      "upload_bytes": 3912971,
+      "domain": 65536,
+      "constraints": 57558,
+      "manifest_sha256": "af17c0fa60535527f3182d7e28f89e3a01ea91c15a99010a5472c37192bfbf04"
+    },
+    {
+      "id": "transfer_confidential_2_8",
+      "download_bytes": 6285195,
+      "upload_bytes": 6285195,
+      "domain": 131072,
+      "constraints": 66170,
+      "manifest_sha256": "bbfb2a9326aea4ff684edc3274a4579794a0697847ad70608a9746906bdc4a20"
+    },
+    {
+      "id": "transfer_confidential_32_2",
+      "download_bytes": 56727947,
+      "upload_bytes": 56727947,
+      "domain": 1048576,
+      "constraints": 737252,
+      "manifest_sha256": "81b115e2fe28085089f98ce493689fb478cf4b04913ae56122ce93b7811205f0"
+    },
+    {
+      "id": "transfer_confidential_3_2",
+      "download_bytes": 6596011,
+      "upload_bytes": 6596011,
+      "domain": 131072,
+      "constraints": 76268,
+      "manifest_sha256": "2ad71a4465e057cf2ceef465c5a3f025506a14edc4fcddbe1b14cfd62f4b2a2f"
+    },
+    {
+      "id": "transfer_confidential_3_4",
+      "download_bytes": 6714091,
+      "upload_bytes": 6714091,
+      "domain": 131072,
+      "constraints": 79966,
+      "manifest_sha256": "bc28b0d6e1461a3e0dee44c75107dc0620b2090e5045dbe30d73a0dde8f04c87"
+    },
+    {
+      "id": "transfer_confidential_3_8",
+      "download_bytes": 6990187,
+      "upload_bytes": 6990187,
+      "domain": 131072,
+      "constraints": 88610,
+      "manifest_sha256": "23192eacfb51dfcc9576d7d9111080ebc8b37db685184ee18db8a958158010c2"
+    },
+    {
+      "id": "transfer_confidential_40_2",
+      "download_bytes": 62382731,
+      "upload_bytes": 62382731,
+      "domain": 1048576,
+      "constraints": 917252,
+      "manifest_sha256": "bdcf6a601315627ce575092e1f1d30603e80b42b6c1897277748f9b3dd8ebc6e"
+    },
+    {
+      "id": "transfer_confidential_48_2",
+      "download_bytes": 101634955,
+      "upload_bytes": 101634955,
+      "domain": 2097152,
+      "constraints": 1098596,
+      "manifest_sha256": "2ec4d85beb6aef566d8a4f22d2b8912f89fdd3dd3602478ce86f09543e34baf5"
+    },
+    {
+      "id": "transfer_confidential_49_2",
+      "download_bytes": 102341995,
+      "upload_bytes": 102341995,
+      "domain": 2097152,
+      "constraints": 1121102,
+      "manifest_sha256": "8d0e6042fccf94d5547ce99f58fc662d7880526cd5c5e4c05d869579a8716800"
+    },
+    {
+      "id": "transfer_confidential_4_16",
+      "download_bytes": 8225355,
+      "upload_bytes": 8225355,
+      "domain": 131072,
+      "constraints": 127650,
+      "manifest_sha256": "e249fde1cc7a394ed1ec16683ac871c9c4666186c1ada3c05e4fe43977e0ca9d"
+    },
+    {
+      "id": "transfer_confidential_4_2",
+      "download_bytes": 7299979,
+      "upload_bytes": 7299979,
+      "domain": 131072,
+      "constraints": 98676,
+      "manifest_sha256": "304d24ad48809b794ae9be92a7fe42504fcb7f7ebcbc0d7484040d0007ecc310"
+    },
+    {
+      "id": "transfer_confidential_4_4",
+      "download_bytes": 7418571,
+      "upload_bytes": 7418571,
+      "domain": 131072,
+      "constraints": 102390,
+      "manifest_sha256": "b8c23a15dad407528da8c9d2f3c37a82774cf9fc7489dd005d4760f9cb347405"
+    },
+    {
+      "id": "transfer_confidential_4_8",
+      "download_bytes": 7695691,
+      "upload_bytes": 7695691,
+      "domain": 131072,
+      "constraints": 111066,
+      "manifest_sha256": "277a5d9bcca19702fd6869bcd843623db771a60a828dad4e307d0f4de084076b"
+    },
+    {
+      "id": "transfer_confidential_5_16",
+      "download_bytes": 13146155,
+      "upload_bytes": 13146155,
+      "domain": 262144,
+      "constraints": 150762,
+      "manifest_sha256": "6ef7fda0ae92c2e5fa631ba6c2b3c984c35a18bb516ca753e62fb4ac756103e9"
+    },
+    {
+      "id": "transfer_confidential_5_2",
+      "download_bytes": 8022891,
+      "upload_bytes": 8022891,
+      "domain": 131072,
+      "constraints": 121676,
+      "manifest_sha256": "79db6c837ff7d8938810d6683b4c5db5676ba9af6476191537561266ab50cc1c"
+    },
+    {
+      "id": "transfer_confidential_5_4",
+      "download_bytes": 8141995,
+      "upload_bytes": 8141995,
+      "domain": 131072,
+      "constraints": 125406,
+      "manifest_sha256": "9ccea8220195044d70323912968a5b6dc8e1d74ba957d85e065a7f4ec5b1208d"
+    },
+    {
+      "id": "transfer_confidential_5_8",
+      "download_bytes": 12614443,
+      "upload_bytes": 12614443,
+      "domain": 262144,
+      "constraints": 134114,
+      "manifest_sha256": "76391f527912c4d75558a0ffce4c60711554a4840ac331beec6c76be1520a890"
+    },
+    {
+      "id": "transfer_confidential_6_2",
+      "download_bytes": 12922187,
+      "upload_bytes": 12922187,
+      "domain": 262144,
+      "constraints": 144116,
+      "manifest_sha256": "cbef6b100f330535ea21226a6b3ee3e6bf52d02b66652c43fdba4e9605c8eb4a"
+    },
+    {
+      "id": "transfer_confidential_6_4",
+      "download_bytes": 13041803,
+      "upload_bytes": 13041803,
+      "domain": 262144,
+      "constraints": 147862,
+      "manifest_sha256": "307d7a70bbf52f7e0fceea83dbf717c6debb60debecd7645eac94011ebb4f352"
+    },
+    {
+      "id": "transfer_confidential_6_8",
+      "download_bytes": 13320971,
+      "upload_bytes": 13320971,
+      "domain": 262144,
+      "constraints": 156602,
+      "manifest_sha256": "82f667e9a97115582a12e6d197c9579920ff6932d783fb11df3864c32ac87acf"
+    },
+    {
+      "id": "transfer_confidential_8_16",
+      "download_bytes": 15291851,
+      "upload_bytes": 15291851,
+      "domain": 262144,
+      "constraints": 219042,
+      "manifest_sha256": "8935f145d07f4c7c17005163353f8a5fc0b8a68956dcb0047a44e473d31abfd2"
+    },
+    {
+      "id": "transfer_confidential_8_2",
+      "download_bytes": 14352139,
+      "upload_bytes": 14352139,
+      "domain": 262144,
+      "constraints": 189620,
+      "manifest_sha256": "e7cfb663675dbb88d1c239da5c542903e12c08704f62a1cb2fbc8a6980646256"
+    },
+    {
+      "id": "transfer_confidential_8_4",
+      "download_bytes": 14472779,
+      "upload_bytes": 14472779,
+      "domain": 262144,
+      "constraints": 193398,
+      "manifest_sha256": "debe78b521112d351fb67636a1fd7228de8c009e5837ed2add8ae6140c9f39f1"
+    },
+    {
+      "id": "transfer_confidential_8_8",
+      "download_bytes": 14753995,
+      "upload_bytes": 14753995,
+      "domain": 262144,
+      "constraints": 202202,
+      "manifest_sha256": "cedcd7cbf1a684ad0d0d931894c656180ebe3f539dd955efc6665452547ece0c"
+    }
+  ]
+}

@@ -1,0 +1,510 @@
+ok  	github.com/helius-labs/zolana/prover/server/circuits/spp_transaction/shared	16.106s
+ok  	github.com/helius-labs/zolana/prover/server/circuits/spp_merge	2.912s
+=== RUN   TestZolanaRoundTrip
+=== RUN   TestZolanaRoundTrip/transfer_confidential_1_2
+=== PAUSE TestZolanaRoundTrip/transfer_confidential_1_2
+=== RUN   TestZolanaRoundTrip/transfer_confidential_1_4
+=== PAUSE TestZolanaRoundTrip/transfer_confidential_1_4
+=== RUN   TestZolanaRoundTrip/transfer_confidential_1_8
+=== PAUSE TestZolanaRoundTrip/transfer_confidential_1_8
+=== RUN   TestZolanaRoundTrip/transfer_confidential_2_2
+=== PAUSE TestZolanaRoundTrip/transfer_confidential_2_2
+=== RUN   TestZolanaRoundTrip/transfer_confidential_2_4
+=== PAUSE TestZolanaRoundTrip/transfer_confidential_2_4
+=== RUN   TestZolanaRoundTrip/transfer_confidential_1_16
+=== PAUSE TestZolanaRoundTrip/transfer_confidential_1_16
+=== RUN   TestZolanaRoundTrip/transfer_confidential_2_8
+=== PAUSE TestZolanaRoundTrip/transfer_confidential_2_8
+=== RUN   TestZolanaRoundTrip/transfer_confidential_3_2
+=== PAUSE TestZolanaRoundTrip/transfer_confidential_3_2
+=== RUN   TestZolanaRoundTrip/transfer_confidential_3_4
+=== PAUSE TestZolanaRoundTrip/transfer_confidential_3_4
+=== RUN   TestZolanaRoundTrip/transfer_confidential_2_16
+=== PAUSE TestZolanaRoundTrip/transfer_confidential_2_16
+=== RUN   TestZolanaRoundTrip/transfer_confidential_3_8
+=== PAUSE TestZolanaRoundTrip/transfer_confidential_3_8
+=== RUN   TestZolanaRoundTrip/transfer_confidential_4_2
+=== PAUSE TestZolanaRoundTrip/transfer_confidential_4_2
+=== RUN   TestZolanaRoundTrip/transfer_confidential_4_4
+=== PAUSE TestZolanaRoundTrip/transfer_confidential_4_4
+=== RUN   TestZolanaRoundTrip/transfer_confidential_4_8
+=== PAUSE TestZolanaRoundTrip/transfer_confidential_4_8
+=== RUN   TestZolanaRoundTrip/transfer_confidential_5_2
+=== PAUSE TestZolanaRoundTrip/transfer_confidential_5_2
+=== RUN   TestZolanaRoundTrip/transfer_confidential_5_4
+=== PAUSE TestZolanaRoundTrip/transfer_confidential_5_4
+=== RUN   TestZolanaRoundTrip/transfer_confidential_4_16
+=== PAUSE TestZolanaRoundTrip/transfer_confidential_4_16
+=== RUN   TestZolanaRoundTrip/transfer_confidential_5_8
+=== PAUSE TestZolanaRoundTrip/transfer_confidential_5_8
+=== RUN   TestZolanaRoundTrip/transfer_confidential_6_2
+=== PAUSE TestZolanaRoundTrip/transfer_confidential_6_2
+=== RUN   TestZolanaRoundTrip/transfer_confidential_6_4
+=== PAUSE TestZolanaRoundTrip/transfer_confidential_6_4
+=== RUN   TestZolanaRoundTrip/transfer_confidential_5_16
+=== PAUSE TestZolanaRoundTrip/transfer_confidential_5_16
+=== RUN   TestZolanaRoundTrip/transfer_confidential_6_8
+=== PAUSE TestZolanaRoundTrip/transfer_confidential_6_8
+=== RUN   TestZolanaRoundTrip/transfer_confidential_8_2
+=== PAUSE TestZolanaRoundTrip/transfer_confidential_8_2
+=== RUN   TestZolanaRoundTrip/transfer_confidential_8_4
+=== PAUSE TestZolanaRoundTrip/transfer_confidential_8_4
+=== RUN   TestZolanaRoundTrip/transfer_confidential_8_8
+=== PAUSE TestZolanaRoundTrip/transfer_confidential_8_8
+=== RUN   TestZolanaRoundTrip/transfer_confidential_8_16
+=== PAUSE TestZolanaRoundTrip/transfer_confidential_8_16
+=== RUN   TestZolanaRoundTrip/transfer_confidential_12_2
+=== PAUSE TestZolanaRoundTrip/transfer_confidential_12_2
+=== RUN   TestZolanaRoundTrip/transfer_confidential_12_4
+=== PAUSE TestZolanaRoundTrip/transfer_confidential_12_4
+=== RUN   TestZolanaRoundTrip/transfer_confidential_12_8
+=== PAUSE TestZolanaRoundTrip/transfer_confidential_12_8
+=== RUN   TestZolanaRoundTrip/transfer_confidential_16_2
+=== PAUSE TestZolanaRoundTrip/transfer_confidential_16_2
+=== RUN   TestZolanaRoundTrip/transfer_confidential_16_4
+=== PAUSE TestZolanaRoundTrip/transfer_confidential_16_4
+=== RUN   TestZolanaRoundTrip/transfer_confidential_16_8
+=== PAUSE TestZolanaRoundTrip/transfer_confidential_16_8
+=== RUN   TestZolanaRoundTrip/transfer_confidential_24_2
+=== PAUSE TestZolanaRoundTrip/transfer_confidential_24_2
+=== RUN   TestZolanaRoundTrip/transfer_confidential_24_4
+=== PAUSE TestZolanaRoundTrip/transfer_confidential_24_4
+=== RUN   TestZolanaRoundTrip/transfer_confidential_32_2
+=== PAUSE TestZolanaRoundTrip/transfer_confidential_32_2
+=== RUN   TestZolanaRoundTrip/transfer_confidential_40_2
+=== PAUSE TestZolanaRoundTrip/transfer_confidential_40_2
+=== RUN   TestZolanaRoundTrip/transfer_confidential_48_2
+=== PAUSE TestZolanaRoundTrip/transfer_confidential_48_2
+=== RUN   TestZolanaRoundTrip/transfer_confidential_49_2
+=== PAUSE TestZolanaRoundTrip/transfer_confidential_49_2
+=== RUN   TestZolanaRoundTrip/merge_8_1
+=== PAUSE TestZolanaRoundTrip/merge_8_1
+=== RUN   TestZolanaRoundTrip/merge_24_1
+=== PAUSE TestZolanaRoundTrip/merge_24_1
+=== RUN   TestZolanaRoundTrip/merge_52_1
+=== PAUSE TestZolanaRoundTrip/merge_52_1
+=== CONT  TestZolanaRoundTrip/transfer_confidential_1_2
+=== CONT  TestZolanaRoundTrip/transfer_confidential_6_8
+=== CONT  TestZolanaRoundTrip/transfer_confidential_6_4
+=== CONT  TestZolanaRoundTrip/transfer_confidential_6_2
+=== NAME  TestZolanaRoundTrip/transfer_confidential_1_2
+    integration_test.go:70: compiling pinned Zolana circuit
+=== CONT  TestZolanaRoundTrip/transfer_confidential_2_8
+=== NAME  TestZolanaRoundTrip/transfer_confidential_6_2
+    integration_test.go:70: compiling pinned Zolana circuit
+=== CONT  TestZolanaRoundTrip/transfer_confidential_4_2
+=== CONT  TestZolanaRoundTrip/transfer_confidential_2_2
+=== CONT  TestZolanaRoundTrip/transfer_confidential_5_16
+=== NAME  TestZolanaRoundTrip/transfer_confidential_2_8
+    integration_test.go:70: compiling pinned Zolana circuit
+=== NAME  TestZolanaRoundTrip/transfer_confidential_5_16
+    integration_test.go:70: compiling pinned Zolana circuit
+=== NAME  TestZolanaRoundTrip/transfer_confidential_2_2
+    integration_test.go:70: compiling pinned Zolana circuit
+=== NAME  TestZolanaRoundTrip/transfer_confidential_6_4
+    integration_test.go:70: compiling pinned Zolana circuit
+=== NAME  TestZolanaRoundTrip/transfer_confidential_4_2
+    integration_test.go:70: compiling pinned Zolana circuit
+=== NAME  TestZolanaRoundTrip/transfer_confidential_6_8
+    integration_test.go:70: compiling pinned Zolana circuit
+=== NAME  TestZolanaRoundTrip/transfer_confidential_1_2
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+    integration_test.go:110: contributing: bob
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+=== NAME  TestZolanaRoundTrip/transfer_confidential_2_2
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+    integration_test.go:110: contributing: bob
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+=== NAME  TestZolanaRoundTrip/transfer_confidential_2_8
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+    integration_test.go:110: contributing: bob
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+=== NAME  TestZolanaRoundTrip/transfer_confidential_4_2
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+    integration_test.go:110: contributing: bob
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+=== NAME  TestZolanaRoundTrip/transfer_confidential_6_2
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+=== NAME  TestZolanaRoundTrip/transfer_confidential_6_4
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+=== NAME  TestZolanaRoundTrip/transfer_confidential_5_16
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+=== NAME  TestZolanaRoundTrip/transfer_confidential_6_8
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+=== NAME  TestZolanaRoundTrip/transfer_confidential_6_4
+    integration_test.go:110: contributing: bob
+=== NAME  TestZolanaRoundTrip/transfer_confidential_5_16
+    integration_test.go:110: contributing: bob
+=== NAME  TestZolanaRoundTrip/transfer_confidential_6_2
+    integration_test.go:110: contributing: bob
+=== NAME  TestZolanaRoundTrip/transfer_confidential_5_16
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+=== NAME  TestZolanaRoundTrip/transfer_confidential_6_4
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+=== NAME  TestZolanaRoundTrip/transfer_confidential_6_2
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+=== NAME  TestZolanaRoundTrip/transfer_confidential_6_8
+    integration_test.go:110: contributing: bob
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+=== NAME  TestZolanaRoundTrip/transfer_confidential_1_2
+    integration_test.go:154: proving and verifying valid Zolana witness
+=== NAME  TestZolanaRoundTrip/transfer_confidential_2_2
+    integration_test.go:154: proving and verifying valid Zolana witness
+=== NAME  TestZolanaRoundTrip/transfer_confidential_2_8
+    integration_test.go:154: proving and verifying valid Zolana witness
+=== CONT  TestZolanaRoundTrip/transfer_confidential_2_4
+    integration_test.go:70: compiling pinned Zolana circuit
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+    integration_test.go:110: contributing: bob
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+=== CONT  TestZolanaRoundTrip/transfer_confidential_16_8
+    integration_test.go:70: compiling pinned Zolana circuit
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+    integration_test.go:110: contributing: bob
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+=== NAME  TestZolanaRoundTrip/transfer_confidential_4_2
+    integration_test.go:154: proving and verifying valid Zolana witness
+=== NAME  TestZolanaRoundTrip/transfer_confidential_6_2
+    integration_test.go:154: proving and verifying valid Zolana witness
+=== CONT  TestZolanaRoundTrip/merge_52_1
+    integration_test.go:70: compiling pinned Zolana circuit
+=== NAME  TestZolanaRoundTrip/transfer_confidential_5_16
+    integration_test.go:154: proving and verifying valid Zolana witness
+=== NAME  TestZolanaRoundTrip/transfer_confidential_6_8
+    integration_test.go:154: proving and verifying valid Zolana witness
+=== NAME  TestZolanaRoundTrip/transfer_confidential_2_4
+    integration_test.go:154: proving and verifying valid Zolana witness
+=== NAME  TestZolanaRoundTrip/transfer_confidential_6_4
+    integration_test.go:154: proving and verifying valid Zolana witness
+=== CONT  TestZolanaRoundTrip/merge_24_1
+    integration_test.go:70: compiling pinned Zolana circuit
+=== NAME  TestZolanaRoundTrip/merge_52_1
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+    integration_test.go:110: contributing: bob
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+=== CONT  TestZolanaRoundTrip/merge_8_1
+    integration_test.go:70: compiling pinned Zolana circuit
+=== CONT  TestZolanaRoundTrip/transfer_confidential_49_2
+    integration_test.go:70: compiling pinned Zolana circuit
+=== NAME  TestZolanaRoundTrip/merge_24_1
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+    integration_test.go:110: contributing: bob
+=== NAME  TestZolanaRoundTrip/merge_8_1
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+=== NAME  TestZolanaRoundTrip/merge_24_1
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+=== NAME  TestZolanaRoundTrip/merge_8_1
+    integration_test.go:110: contributing: bob
+=== CONT  TestZolanaRoundTrip/transfer_confidential_48_2
+    integration_test.go:70: compiling pinned Zolana circuit
+=== CONT  TestZolanaRoundTrip/transfer_confidential_40_2
+    integration_test.go:70: compiling pinned Zolana circuit
+=== NAME  TestZolanaRoundTrip/merge_8_1
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+=== NAME  TestZolanaRoundTrip/transfer_confidential_49_2
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+    integration_test.go:110: contributing: bob
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+=== NAME  TestZolanaRoundTrip/transfer_confidential_48_2
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+=== NAME  TestZolanaRoundTrip/transfer_confidential_40_2
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+=== NAME  TestZolanaRoundTrip/transfer_confidential_48_2
+    integration_test.go:110: contributing: bob
+=== NAME  TestZolanaRoundTrip/transfer_confidential_40_2
+    integration_test.go:110: contributing: bob
+=== NAME  TestZolanaRoundTrip/transfer_confidential_48_2
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+=== NAME  TestZolanaRoundTrip/transfer_confidential_40_2
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+=== CONT  TestZolanaRoundTrip/transfer_confidential_32_2
+    integration_test.go:70: compiling pinned Zolana circuit
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+    integration_test.go:110: contributing: bob
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+=== NAME  TestZolanaRoundTrip/transfer_confidential_16_8
+    integration_test.go:154: proving and verifying valid Zolana witness
+=== NAME  TestZolanaRoundTrip/merge_8_1
+    integration_test.go:154: proving and verifying valid Zolana witness
+=== CONT  TestZolanaRoundTrip/transfer_confidential_24_4
+    integration_test.go:70: compiling pinned Zolana circuit
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+    integration_test.go:110: contributing: bob
+=== CONT  TestZolanaRoundTrip/transfer_confidential_24_2
+    integration_test.go:70: compiling pinned Zolana circuit
+=== NAME  TestZolanaRoundTrip/transfer_confidential_24_4
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+=== NAME  TestZolanaRoundTrip/transfer_confidential_24_2
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+    integration_test.go:110: contributing: bob
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+=== NAME  TestZolanaRoundTrip/merge_24_1
+    integration_test.go:154: proving and verifying valid Zolana witness
+=== CONT  TestZolanaRoundTrip/transfer_confidential_1_8
+    integration_test.go:70: compiling pinned Zolana circuit
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+    integration_test.go:110: contributing: bob
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+=== NAME  TestZolanaRoundTrip/transfer_confidential_32_2
+    integration_test.go:154: proving and verifying valid Zolana witness
+=== NAME  TestZolanaRoundTrip/transfer_confidential_40_2
+    integration_test.go:154: proving and verifying valid Zolana witness
+=== NAME  TestZolanaRoundTrip/transfer_confidential_1_8
+    integration_test.go:154: proving and verifying valid Zolana witness
+=== CONT  TestZolanaRoundTrip/transfer_confidential_12_2
+    integration_test.go:70: compiling pinned Zolana circuit
+=== NAME  TestZolanaRoundTrip/merge_52_1
+    integration_test.go:154: proving and verifying valid Zolana witness
+=== NAME  TestZolanaRoundTrip/transfer_confidential_12_2
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+    integration_test.go:110: contributing: bob
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+=== NAME  TestZolanaRoundTrip/transfer_confidential_24_4
+    integration_test.go:154: proving and verifying valid Zolana witness
+=== NAME  TestZolanaRoundTrip/transfer_confidential_49_2
+    integration_test.go:154: proving and verifying valid Zolana witness
+=== NAME  TestZolanaRoundTrip/transfer_confidential_48_2
+    integration_test.go:154: proving and verifying valid Zolana witness
+=== NAME  TestZolanaRoundTrip/transfer_confidential_24_2
+    integration_test.go:154: proving and verifying valid Zolana witness
+=== CONT  TestZolanaRoundTrip/transfer_confidential_16_4
+    integration_test.go:70: compiling pinned Zolana circuit
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+    integration_test.go:110: contributing: bob
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+=== CONT  TestZolanaRoundTrip/transfer_confidential_16_2
+    integration_test.go:70: compiling pinned Zolana circuit
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+    integration_test.go:110: contributing: bob
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+=== CONT  TestZolanaRoundTrip/transfer_confidential_12_8
+    integration_test.go:70: compiling pinned Zolana circuit
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+    integration_test.go:110: contributing: bob
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+=== NAME  TestZolanaRoundTrip/transfer_confidential_12_2
+    integration_test.go:154: proving and verifying valid Zolana witness
+=== CONT  TestZolanaRoundTrip/transfer_confidential_12_4
+    integration_test.go:70: compiling pinned Zolana circuit
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+    integration_test.go:110: contributing: bob
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+=== CONT  TestZolanaRoundTrip/transfer_confidential_8_4
+    integration_test.go:70: compiling pinned Zolana circuit
+=== CONT  TestZolanaRoundTrip/transfer_confidential_8_16
+    integration_test.go:70: compiling pinned Zolana circuit
+=== NAME  TestZolanaRoundTrip/transfer_confidential_8_4
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+=== CONT  TestZolanaRoundTrip/transfer_confidential_8_8
+    integration_test.go:70: compiling pinned Zolana circuit
+=== NAME  TestZolanaRoundTrip/transfer_confidential_8_16
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+=== CONT  TestZolanaRoundTrip/transfer_confidential_1_4
+    integration_test.go:70: compiling pinned Zolana circuit
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+=== NAME  TestZolanaRoundTrip/transfer_confidential_8_8
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+=== NAME  TestZolanaRoundTrip/transfer_confidential_8_4
+    integration_test.go:110: contributing: bob
+=== NAME  TestZolanaRoundTrip/transfer_confidential_8_16
+    integration_test.go:110: contributing: bob
+=== NAME  TestZolanaRoundTrip/transfer_confidential_1_4
+    integration_test.go:110: contributing: bob
+=== NAME  TestZolanaRoundTrip/transfer_confidential_8_4
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+=== NAME  TestZolanaRoundTrip/transfer_confidential_8_8
+    integration_test.go:110: contributing: bob
+=== NAME  TestZolanaRoundTrip/transfer_confidential_1_4
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+=== NAME  TestZolanaRoundTrip/transfer_confidential_8_16
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+=== NAME  TestZolanaRoundTrip/transfer_confidential_8_8
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+=== NAME  TestZolanaRoundTrip/transfer_confidential_1_4
+    integration_test.go:154: proving and verifying valid Zolana witness
+=== NAME  TestZolanaRoundTrip/transfer_confidential_16_4
+    integration_test.go:154: proving and verifying valid Zolana witness
+=== CONT  TestZolanaRoundTrip/transfer_confidential_5_4
+    integration_test.go:70: compiling pinned Zolana circuit
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+    integration_test.go:110: contributing: bob
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+=== NAME  TestZolanaRoundTrip/transfer_confidential_12_8
+    integration_test.go:154: proving and verifying valid Zolana witness
+=== NAME  TestZolanaRoundTrip/transfer_confidential_16_2
+    integration_test.go:154: proving and verifying valid Zolana witness
+=== CONT  TestZolanaRoundTrip/transfer_confidential_5_8
+    integration_test.go:70: compiling pinned Zolana circuit
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+    integration_test.go:110: contributing: bob
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+=== NAME  TestZolanaRoundTrip/transfer_confidential_8_8
+    integration_test.go:154: proving and verifying valid Zolana witness
+=== NAME  TestZolanaRoundTrip/transfer_confidential_8_16
+    integration_test.go:154: proving and verifying valid Zolana witness
+=== NAME  TestZolanaRoundTrip/transfer_confidential_8_4
+    integration_test.go:154: proving and verifying valid Zolana witness
+=== NAME  TestZolanaRoundTrip/transfer_confidential_12_4
+    integration_test.go:154: proving and verifying valid Zolana witness
+=== CONT  TestZolanaRoundTrip/transfer_confidential_4_16
+    integration_test.go:70: compiling pinned Zolana circuit
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+    integration_test.go:110: contributing: bob
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+=== NAME  TestZolanaRoundTrip/transfer_confidential_5_4
+    integration_test.go:154: proving and verifying valid Zolana witness
+=== CONT  TestZolanaRoundTrip/transfer_confidential_4_8
+    integration_test.go:70: compiling pinned Zolana circuit
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+    integration_test.go:110: contributing: bob
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+=== CONT  TestZolanaRoundTrip/transfer_confidential_5_2
+    integration_test.go:70: compiling pinned Zolana circuit
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+    integration_test.go:110: contributing: bob
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+=== CONT  TestZolanaRoundTrip/transfer_confidential_8_2
+    integration_test.go:70: compiling pinned Zolana circuit
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+    integration_test.go:110: contributing: bob
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+=== CONT  TestZolanaRoundTrip/transfer_confidential_4_4
+    integration_test.go:70: compiling pinned Zolana circuit
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+=== CONT  TestZolanaRoundTrip/transfer_confidential_1_16
+    integration_test.go:70: compiling pinned Zolana circuit
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+=== NAME  TestZolanaRoundTrip/transfer_confidential_4_4
+    integration_test.go:110: contributing: bob
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+=== CONT  TestZolanaRoundTrip/transfer_confidential_2_16
+    integration_test.go:70: compiling pinned Zolana circuit
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+=== NAME  TestZolanaRoundTrip/transfer_confidential_1_16
+    integration_test.go:110: contributing: bob
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+=== NAME  TestZolanaRoundTrip/transfer_confidential_2_16
+    integration_test.go:110: contributing: bob
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+=== NAME  TestZolanaRoundTrip/transfer_confidential_5_8
+    integration_test.go:154: proving and verifying valid Zolana witness
+=== NAME  TestZolanaRoundTrip/transfer_confidential_4_8
+    integration_test.go:154: proving and verifying valid Zolana witness
+=== NAME  TestZolanaRoundTrip/transfer_confidential_1_16
+    integration_test.go:154: proving and verifying valid Zolana witness
+=== CONT  TestZolanaRoundTrip/transfer_confidential_3_8
+    integration_test.go:70: compiling pinned Zolana circuit
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+    integration_test.go:110: contributing: bob
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+=== NAME  TestZolanaRoundTrip/transfer_confidential_4_16
+    integration_test.go:154: proving and verifying valid Zolana witness
+=== NAME  TestZolanaRoundTrip/transfer_confidential_5_2
+    integration_test.go:154: proving and verifying valid Zolana witness
+=== CONT  TestZolanaRoundTrip/transfer_confidential_3_4
+    integration_test.go:70: compiling pinned Zolana circuit
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+    integration_test.go:110: contributing: bob
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+=== CONT  TestZolanaRoundTrip/transfer_confidential_3_2
+    integration_test.go:70: compiling pinned Zolana circuit
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+    integration_test.go:110: contributing: bob
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+=== NAME  TestZolanaRoundTrip/transfer_confidential_2_16
+    integration_test.go:154: proving and verifying valid Zolana witness
+=== NAME  TestZolanaRoundTrip/transfer_confidential_4_4
+    integration_test.go:154: proving and verifying valid Zolana witness
+=== NAME  TestZolanaRoundTrip/transfer_confidential_8_2
+    integration_test.go:154: proving and verifying valid Zolana witness
+=== NAME  TestZolanaRoundTrip/transfer_confidential_3_8
+    integration_test.go:154: proving and verifying valid Zolana witness
+=== NAME  TestZolanaRoundTrip/transfer_confidential_3_4
+    integration_test.go:154: proving and verifying valid Zolana witness
+=== NAME  TestZolanaRoundTrip/transfer_confidential_3_2
+    integration_test.go:154: proving and verifying valid Zolana witness
+--- PASS: TestZolanaRoundTrip (0.00s)
+    --- PASS: TestZolanaRoundTrip/transfer_confidential_1_2 (2.74s)
+    --- PASS: TestZolanaRoundTrip/transfer_confidential_2_2 (3.36s)
+    --- PASS: TestZolanaRoundTrip/transfer_confidential_2_8 (4.83s)
+    --- PASS: TestZolanaRoundTrip/transfer_confidential_4_2 (5.43s)
+    --- PASS: TestZolanaRoundTrip/transfer_confidential_6_2 (6.01s)
+    --- PASS: TestZolanaRoundTrip/transfer_confidential_2_4 (3.25s)
+    --- PASS: TestZolanaRoundTrip/transfer_confidential_6_8 (6.58s)
+    --- PASS: TestZolanaRoundTrip/transfer_confidential_5_16 (6.64s)
+    --- PASS: TestZolanaRoundTrip/transfer_confidential_6_4 (8.38s)
+    --- PASS: TestZolanaRoundTrip/transfer_confidential_16_8 (17.84s)
+    --- PASS: TestZolanaRoundTrip/merge_8_1 (19.10s)
+    --- PASS: TestZolanaRoundTrip/merge_24_1 (32.49s)
+    --- PASS: TestZolanaRoundTrip/transfer_confidential_1_8 (7.20s)
+    --- PASS: TestZolanaRoundTrip/transfer_confidential_40_2 (41.18s)
+    --- PASS: TestZolanaRoundTrip/transfer_confidential_32_2 (41.00s)
+    --- PASS: TestZolanaRoundTrip/transfer_confidential_24_4 (29.57s)
+    --- PASS: TestZolanaRoundTrip/transfer_confidential_24_2 (28.22s)
+    --- PASS: TestZolanaRoundTrip/transfer_confidential_12_2 (12.52s)
+    --- PASS: TestZolanaRoundTrip/transfer_confidential_48_2 (51.48s)
+    --- PASS: TestZolanaRoundTrip/merge_52_1 (53.34s)
+    --- PASS: TestZolanaRoundTrip/transfer_confidential_49_2 (52.59s)
+    --- PASS: TestZolanaRoundTrip/transfer_confidential_1_4 (4.60s)
+    --- PASS: TestZolanaRoundTrip/transfer_confidential_16_4 (17.86s)
+    --- PASS: TestZolanaRoundTrip/transfer_confidential_12_8 (16.69s)
+    --- PASS: TestZolanaRoundTrip/transfer_confidential_8_8 (10.70s)
+    --- PASS: TestZolanaRoundTrip/transfer_confidential_8_16 (10.92s)
+    --- PASS: TestZolanaRoundTrip/transfer_confidential_8_4 (11.48s)
+    --- PASS: TestZolanaRoundTrip/transfer_confidential_16_2 (20.29s)
+    --- PASS: TestZolanaRoundTrip/transfer_confidential_12_4 (16.69s)
+    --- PASS: TestZolanaRoundTrip/transfer_confidential_5_4 (7.16s)
+    --- PASS: TestZolanaRoundTrip/transfer_confidential_5_8 (7.65s)
+    --- PASS: TestZolanaRoundTrip/transfer_confidential_1_16 (4.05s)
+    --- PASS: TestZolanaRoundTrip/transfer_confidential_4_8 (5.25s)
+    --- PASS: TestZolanaRoundTrip/transfer_confidential_5_2 (6.07s)
+    --- PASS: TestZolanaRoundTrip/transfer_confidential_2_16 (5.07s)
+    --- PASS: TestZolanaRoundTrip/transfer_confidential_4_4 (5.79s)
+    --- PASS: TestZolanaRoundTrip/transfer_confidential_4_16 (8.17s)
+    --- PASS: TestZolanaRoundTrip/transfer_confidential_8_2 (7.08s)
+    --- PASS: TestZolanaRoundTrip/transfer_confidential_3_8 (3.13s)
+    --- PASS: TestZolanaRoundTrip/transfer_confidential_3_4 (2.56s)
+    --- PASS: TestZolanaRoundTrip/transfer_confidential_3_2 (2.69s)
+PASS
+ok  	github.com/helius-labs/spr-ceremony/adapters/zolana	76.852s
