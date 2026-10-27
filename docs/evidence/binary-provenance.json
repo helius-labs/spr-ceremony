@@ -1,0 +1,37 @@
+{
+  "date_utc": "2026-10-27",
+  "source_revision": "216f92124d0ec53395d4b55c5a4443f29d25af4c",
+  "workflow_run": "https://github.com/helius-labs/spr-ceremony/actions/runs/40548909358",
+  "go": "go1.27.3",
+  "checksums_verified": true,
+  "github_attestation_verified": true,
+  "linux_amd64_executed": true,
+  "linux_amd64_called_vulnerabilities": 0,
+  "other_architectures_executed": false,
+  "subjects": [
+    {
+      "name": "spr-ceremony-darwin-amd64",
+      "digest": {
+        "sha256": "6d30267719694ab1748e474809ffd61986bee716fa6466084511e8a04f949c9c"
+      }
+    },
+    {
+      "name": "spr-ceremony-darwin-arm64",
+      "digest": {
+        "sha256": "4a64c05304e46f3a4859945b4c370f101b19d1a2fc56d9bcd62cd86f1631e44d"
+      }
+    },
+    {
+      "name": "spr-ceremony-linux-amd64",
+      "digest": {
+        "sha256": "beaa8d1fa7c2700de93fc88bf78585626fa4f5b3297423b2a1447b427448d362"
+      }
+    },
+    {
+      "name": "spr-ceremony-linux-arm64",
+      "digest": {
+        "sha256": "312bc72c5697858d77aba3876c571d59b6f161be7f838480d5c28432b6b1e884"
+      }
+    }
+  ]
+}

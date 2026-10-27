@@ -145,3 +145,55 @@ func TestQueueReservationsAndRenewal(t *testing.T) {
 		t.Fatal("expired reservation was not reclaimed")
 	}
 }
+
+func TestBeaconDeadlineRejectsFurtherWork(t *testing.T) {
+	s := demoStore(t)
+	cp, _, err := s.checkpoint()
+	must(t, err)
+	cp.Lifecycle.Phase = "prepared"
+	ref, err := s.putJSON(cp)
+	must(t, err)
+	must(t, WriteJSON(filepath.Join(s.Dir, "checkpoint.json"), ref))
+	now := time.Now().UTC().Truncate(time.Second)
+	plan, _ := testBeacon(t, now.Add(2*time.Hour))
+	s.now = func() time.Time { return now }
+	_, err = s.OpenCeremony(plan)
+	must(t, err)
+	i, err := s.InviteQueued("http://localhost", "alice", Core, 24*time.Hour)
+	must(t, err)
+	claim, err := s.Claim(i.Token, time.Hour)
+	must(t, err)
+	output := filepath.Join(t.TempDir(), "contribution")
+	must(t, Contribute(s.Object(claim.Job.Input), output, claim.Job.Circuit.Shape))
+	_, before, err := s.Lifecycle()
+	must(t, err)
+	s.now = func() time.Time { return plan.RoundTime }
+	if _, err = s.InviteQueued("http://localhost", "bob", Core, time.Hour); err == nil {
+		t.Fatal("invited after deadline")
+	}
+	if _, err = s.Claim(i.Token, time.Hour); err == nil {
+		t.Fatal("reserved after deadline")
+	}
+	if _, err = s.Renew(i.Token, claim.Job.Circuit.Spec.ID, time.Hour); err == nil {
+		t.Fatal("renewed after deadline")
+	}
+	if _, err = s.Accept(i.Token, claim.Job.Circuit.Spec.ID, output); err == nil {
+		t.Fatal("accepted after deadline")
+	}
+	if _, err = s.CloseCeremony(); err == nil {
+		t.Fatal("closed retroactively")
+	}
+	_, after, err := s.Lifecycle()
+	must(t, err)
+	if before != after {
+		t.Fatal("rejected operations changed checkpoint")
+	}
+	var info map[string]any
+	must(t, json.Unmarshal(plan.ChainInfo, &info))
+	info["period"] = uint64(1) << 63
+	raw, err := json.Marshal(info)
+	must(t, err)
+	if _, err = NewBeaconPlan(raw, plan.ChainHash, plan.Round); err == nil {
+		t.Fatal("accepted overflowing period")
+	}
+}

@@ -1,0 +1,21 @@
+{
+  "date_utc": "2026-10-27",
+  "circuit": "merge_52_1",
+  "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6",
+  "engine": "gnark-v0.16.4-bn254-mpcsetup",
+  "go": "go1.27.3",
+  "host_cpu": "AMD Ryzen 9 9950X, 16 physical cores / 32 logical CPUs",
+  "gomaxprocs": 4,
+  "input_bytes": 102801451,
+  "local_contribution_and_verification_seconds": 39.975923766,
+  "process_wall_seconds": 40.07,
+  "maximum_resident_kib": 1242596,
+  "insecure_test_setup": true,
+  "network_included": false,
+  "runs": 1,
+  "notes": [
+    "Other core rehearsal jobs were running on this host.",
+    "This measures native local contribution plus verification, not browser/WASM, coordinator initialization, or network transfer.",
+    "A single host measurement is not a minimum hardware guarantee."
+  ]
+}

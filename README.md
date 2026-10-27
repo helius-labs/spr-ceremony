@@ -147,7 +147,7 @@ The manual GitHub Actions binary workflow produces downloadable build artifacts;
 it does not publish a GitHub release. The workflow signs build provenance with
 GitHub artifact attestations. After downloading a workflow-built binary, verify
 its repository provenance with `gh attestation verify PATH_TO_BINARY --repo
-helius-labs/spr-ceremony`, and check the source revision before running it. Locally
+helius-labs/spr-ceremony`, and check the source revision before running it. GitHub downloads may need `chmod +x PATH_TO_BINARY` after verification. Locally
 built binaries have checksums and embedded build metadata, but no GitHub signature.
 
 Prototype directories created before checkpoints were introduced must be

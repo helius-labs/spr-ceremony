@@ -1,0 +1,6 @@
+goos: linux
+goarch: amd64
+pkg: github.com/helius-labs/spr-ceremony
+cpu: AMD Ryzen 9 9950X 16-Core Processor            
+BenchmarkCoreContribution-4   	       1	39975923766 ns/op	   2.57 MB/s	3743045152 B/op	48189717 allocs/op
+PASS

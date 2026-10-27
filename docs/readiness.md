@@ -56,6 +56,19 @@ pinned Solana verifier; changed public inputs are rejected.
 This run remains a rehearsal and is not an independent audit or production
 multi-party campaign.
 
+The largest-constraint core circuit, `merge_52_1`, was measured separately with
+`GOMAXPROCS=4`: about 40 seconds for local contribution plus verification, a
+102.8 MB input, and approximately 1.19 GiB peak resident memory. This was one run
+on a Ryzen 9 9950X with other rehearsal work active; it excludes transfers and is
+not a minimum hardware guarantee. [Benchmark evidence](evidence/participant-benchmark.json)
+includes the exact input size and process measurements.
+
+The [participant binary workflow](https://github.com/helius-labs/spr-ceremony/actions/runs/40548909358)
+built all four Linux/macOS targets and signed their provenance. Downloaded checksums
+and the GitHub attestation were verified. The Linux amd64 binary was executed and
+scanned; the other architectures were cross-compiled but not executed on native
+hardware. [Artifact evidence](evidence/binary-provenance.json) records the digests.
+
 ## Required before public launch
 
 1. Independent review of the MPC engine/version, Phase 1 bridge and provenance,
@@ -88,6 +101,9 @@ The built-in health endpoint does not probe S3. JSON metadata reads are capped a
 measure metadata growth before expanding to thousands of participants.
 
 Cryptographic computation loads vectors into RAM and is not resumable mid-step.
+Preparation publishes the complete campaign atomically; an interrupted preparation
+run must be repeated. S3 recovery begins once preparation has completed and been
+synced. Keep the preparation host and its persistent storage available throughout.
 S3 artifacts use single PUTs up to 5 GiB. There is no transcript garbage collector,
 account-wide deletion protection, attested participant host, or automatic secret
 erasure guarantee. Checkpoint timestamps require external witnessing; signatures
