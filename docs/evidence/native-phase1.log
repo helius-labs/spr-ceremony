@@ -1,0 +1,34 @@
+Using pinned public Phase 1 parameters; historical transcript replay is a separate audit procedure.
+Authenticating the supplied public transcript (SHA256, BLAKE2b, size)...
+Converting authenticated public parameters...
+zkeyStr: ptau 
+num sections: 7 
+ht: 1 
+hl: 44 
+ht: 2 
+hl: 268435392 
+ht: 3 
+hl: 268435456 
+ht: 4 
+hl: 134217728 
+ht: 5 
+hl: 134217728 
+ht: 6 
+hl: 128 
+ht: 7 
+hl: 83164 
+sections: [[] [{24 44}] [{80 268435392}] [{268435484 268435456}] [{536870952 134217728}] [{671088692 134217728}] [{805306432 128}] [{805306572 83164}]] 
+Power 21 supports up to 2097152 constraints
+1. Writing TauG1
+tauG1 numPoints: 4194303 
+2. Writing AlphaTauG1
+alphaTauG1 numPoints: 2097152 
+3. Writing BetaTauG1
+betaTauG1 numPoints: 2097152 
+4. Writing TauG2
+tauG2 numPoints: 2097152 
+5. Writing BetaG2
+betaG2: 
+Importing and checking curve, subgroup, and algebraic consistency; this may take several minutes...
+SRS: /tmp/spr-public-phase1-native-20261027/public-21.srs
+SHA256: f75bd40496b046942e62cdd2e0a2c3a580c68f789e705e97fa8e3a9db7c36780

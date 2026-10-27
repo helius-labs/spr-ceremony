@@ -2,7 +2,17 @@
 # Verify and convert the public power-21 transcript. No ceremony is opened here.
 set -euo pipefail
 repo_dir="$(cd "$(dirname "$0")/.." && pwd)"
-ptau="$(realpath "${1:?usage: verify-phase1.sh public.ptau /path/to/semaphore-mtb-setup new-output}")"
+for tool in python3 git node npm go; do
+    if ! command -v "$tool" >/dev/null 2>&1; then
+        echo "Required command not found: $tool" >&2
+        exit 1
+    fi
+done
+if [[ ! -x "$repo_dir/spr-ceremony" ]]; then
+    echo 'Build spr-ceremony before verifying Phase 1.' >&2
+    exit 1
+fi
+ptau="$(python3 -c 'import pathlib, sys; print(pathlib.Path(sys.argv[1]).resolve(strict=True))' "${1:?usage: verify-phase1.sh public.ptau /path/to/semaphore-mtb-setup new-output}")"
 converter_dir="$(cd "${2:?converter checkout required}" && pwd)"
 out="${3:?new output directory required}"
 expected_revision=577c91f3f8b8e6bccf9d2fbc629c9b18f5c56cad
@@ -15,6 +25,7 @@ fi
 if [[ -e "$out" ]]; then echo 'Output must be new.' >&2; exit 1; fi
 mkdir -p "$out"
 out="$(cd "$out" && pwd)"
+echo 'Checking the published power-21 BLAKE2b checksum...'
 python3 - "$ptau" "$expected_blake2b" <<'PY'
 import hashlib, sys
 h = hashlib.blake2b()
@@ -23,9 +34,13 @@ with open(sys.argv[1], 'rb') as f:
 if h.hexdigest() != sys.argv[2]: raise SystemExit('Published power-21 BLAKE2b mismatch')
 PY
 mkdir "$out/tools"
+echo "Installing the pinned transcript verifier; log: $out/npm.log"
 npm install --prefix "$out/tools" --ignore-scripts --no-audit --no-fund snarkjs@0.7.6 > "$out/npm.log" 2>&1
+echo "Verifying the full Powers of Tau transcript; log: $out/verification.log"
 "$out/tools/node_modules/.bin/snarkjs" powersoftau verify "$ptau" > "$out/verification.log" 2>&1
+echo 'Building the pinned Phase 1 converter...'
 (cd "$converter_dir" && go build -mod=readonly -o "$out/converter" .)
+echo "Converting verified parameters; log: $out/conversion.log"
 "$out/converter" p1i "$ptau" "$out/public-21.ph1" > "$out/conversion.log" 2>&1
 ph1_sha="$(python3 - "$out" "$ptau" "$expected_revision" "$expected_blake2b" <<'PY'
 import hashlib, json, pathlib, sys
@@ -46,7 +61,8 @@ record = {'source': 'https://circom.info/powersOfTau28_hez_final_21.ptau',
 print(record['ph1']['sha256'])
 PY
 )"
-provenance_sha="$(sha256sum "$out/provenance.json" | cut -d' ' -f1)"
+provenance_sha="$(python3 -c 'import hashlib, pathlib, sys; print(hashlib.sha256(pathlib.Path(sys.argv[1]).read_bytes()).hexdigest())' "$out/provenance.json")"
+echo 'Importing parameters and checking algebraic consistency...'
 "$repo_dir/spr-ceremony" import-ph1 --input "$out/public-21.ph1" --sha256 "$ph1_sha" \
     --provenance "Verified power-21 transcript; provenance.json SHA256 $provenance_sha" \
     --max-domain 2097152 --out "$out/public-21.srs"

@@ -10,6 +10,9 @@ Batch 4999 is deferred. Custom rings and batch 10 remain excluded.
   bounded contribution decoding, and cryptographic verification before acceptance.
   Independent audits reproduce each reduced SRS from the manifest's full Phase 1
   artifact before checking circuit initialization.
+- Native preparation of the fixed public power-21 parameters, with resumed
+  downloads, pinned input/output hashes, algebraic import, and explicit provenance
+  distinguishing this path from historical transcript replay.
 - Queued reservations, renewal, resumable downloads, idempotent submissions,
   bounded uploads, and disk preflight.
 - An immutable checkpoint chain binding circuit heads and lifecycle. S3
@@ -72,6 +75,15 @@ pinned Solana verifier; changed public inputs are rejected.
 [The provenance record and logs](evidence/public-phase1.json) preserve the evidence.
 This run remains a rehearsal and is not an independent audit or production
 multi-party campaign.
+
+The native `phase1` command reproduced the exact verified PH1 and SRS without
+external commands on `PATH`. Using an already downloaded transcript, it took
+109.14 seconds and peaked at 3,333,256 KiB RSS on Linux with `GOMAXPROCS=4`.
+This excludes download time and historical transcript replay. Corrupt inputs,
+failed conversions/imports, cache tampering, concurrent preparation, and resumed
+HTTP downloads are covered by fixture tests. macOS arm64 cross-compilation passes;
+this is not a macOS execution benchmark. [Native import evidence](evidence/native-phase1.json)
+records source hashes, artifact hashes, and logs.
 
 The largest-constraint core circuit, `merge_52_1`, was measured separately with
 `GOMAXPROCS=4`: about 40 seconds for local contribution plus verification, a

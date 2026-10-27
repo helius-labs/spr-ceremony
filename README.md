@@ -19,6 +19,10 @@ AWS deployment/restore drill.** Engineering tests are not an external audit. See
 Go 1.27.3 includes security fixes over Zolana’s original 1.27.1 toolchain;
 the gnark versions remain pinned. Linux and macOS are supported;
 the coordinator uses Unix file locks and must have one active instance.
+Participants need only the compiled binary. Normal Phase 1 preparation also
+runs inside that binary; source builds require Go, with modules fetched
+automatically. Independent historical transcript replay and Zolana release
+development have additional tools described in the runbook.
 
 ```sh
 go build -o spr-ceremony ./cmd/spr-ceremony
@@ -124,10 +128,23 @@ R1CS hashes, domains, and constraints. Production preparation requires matching
 compilation metadata. The cryptographic engine is pinned to gnark `v0.16.4` and
 gnark-crypto `v0.21.1-0.20260913224755-1409fe592052`.
 
-The Phase 1 bridge imports the legacy converter's compressed `.ph1` format.
-It checks encoding and algebraic consistency; it does not replay the original
-public transcript. [The Phase 1 procedure](docs/operations.md#phase-1-and-circuit-freeze)
-verifies the public transcript before conversion.
+Prepare the fixed public core Phase 1 parameters with one command:
+
+```sh
+./spr-ceremony phase1
+```
+
+It downloads/resumes the public power-21 transcript, authenticates its SHA256,
+published BLAKE2b and size, converts it in Go, and checks the imported SRS against
+the previously verified reference. The result is
+`ceremony-data/phase1/public-21.srs` with provenance metadata. This path requires
+no Node.js, Python, or separate converter checkout. Use `--input FILE.ptau` to
+reuse a local copy of the same transcript.
+
+This checks encoding and algebraic consistency; it does not replay the original
+historical contributions. [The independent audit procedure](docs/operations.md#independent-historical-transcript-replay)
+retains full snarkjs transcript replay and independent conversion. The lower-level
+`import-ph1` bridge also remains available for reviewed conversion workflows.
 
 After finalization, `spr-zolana package` wraps the ceremony keys in Zolana's
 existing `.key` format without running a new setup. The

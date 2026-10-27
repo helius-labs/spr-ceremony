@@ -11,6 +11,8 @@ require (
 	github.com/consensys/gnark-crypto v0.21.1-0.20260913224755-1409fe592052
 	github.com/drand/drand/v2 v2.1.1
 	github.com/drand/kyber v1.3.1
+	github.com/lightprotocol/ptau-deserializer v0.2.1
+	golang.org/x/crypto v0.57.0
 )
 
 require (
@@ -44,7 +46,6 @@ require (
 	go.dedis.ch/fixbuf v1.0.3 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.27.0 // indirect
-	golang.org/x/crypto v0.57.0 // indirect
 	golang.org/x/net v0.60.0 // indirect
 	golang.org/x/sync v0.23.0 // indirect
 	golang.org/x/sys v0.48.0 // indirect

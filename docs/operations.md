@@ -7,9 +7,59 @@ Freeze a clean Zolana revision, review the 41-circuit catalog, and compile with
 SRS (largest domain 2,097,152). Compilation metadata binds source and R1CS bytes;
 reviewers should reproduce those hashes from source.
 
-Obtain the public power-21 Powers of Tau artifact from the
-[snarkjs reference list](https://github.com/iden3/snarkjs/blob/master/README.md).
-Authenticate its published BLAKE2b independently. Then:
+The normal Phase 1 preparation path requires only the `spr-ceremony` binary:
+
+```sh
+./spr-ceremony phase1
+```
+
+This downloads the fixed public power-21 transcript into `ceremony-data/phase1`,
+authenticates its published BLAKE2b plus the pinned SHA256 and size, converts it
+in Go, and imports it with curve, subgroup, and algebraic consistency checks.
+Both the converted `.ph1` and final `.srs` must match the exact hashes in the
+[verified reference](evidence/public-phase1.json). It does not generate a new
+Phase 1 or open a ceremony. No Node.js, Python, npm, or separate converter build
+is needed for this path. Go is needed only if building the binary from source.
+
+Allow roughly 3.3 GB of disk for the transcript and converted parameters,
+separately from compiled circuits and ceremony data. The import can take several
+minutes. Rerun the command after interruption: downloads resume and authenticated
+conversions are reused. A completed SRS and its provenance are checked again
+before reuse; corrupt cached artifacts fail instead of being trusted. Keep the
+workspace and any supplied input file unchanged while preparation runs.
+
+To reuse an already downloaded copy of the same public transcript:
+
+```sh
+./spr-ceremony phase1 --input /path/to/powersOfTau28_hez_final_21.ptau
+```
+
+Use `--out /path/to/phase1` to change the workspace. The command supports only
+the fixed core power-21 source. It cannot import arbitrary PTAU files or accept
+replacement checksums. Its `provenance.json` explicitly records
+`historical_transcript_replayed: false`: this path authenticates the previously
+verified reference, **not** a fresh replay of every historical contribution.
+Independent transcript review remains a launch requirement.
+
+```sh
+./spr-ceremony prepare --track core --r1cs-dir core-r1cs \
+  --source-revision FROZEN_ZOLANA_COMMIT \
+  --srs ceremony-data/phase1/public-21.srs --out ceremony-data/core
+```
+
+Preparation is local and produces a `prepared` checkpoint. It cannot accept
+contributions yet. Publish the manifest digest and source/Phase 1 provenance for
+independent reviewers before opening.
+
+### Independent historical transcript replay
+
+For a fresh historical replay, obtain the public power-21 Powers of Tau artifact
+from the [snarkjs reference list](https://github.com/iden3/snarkjs/blob/master/README.md)
+and authenticate its published BLAKE2b independently.
+
+The helper requires Python 3, Node.js/npm, Git, Go, and a built `spr-ceremony`
+binary. It uses Python for paths and hashes, so GNU coreutils are not required
+on macOS. It prints each stage and the location of its detailed log.
 
 ```sh
 bash scripts/verify-phase1.sh /path/to/powersOfTau28_hez_final_21.ptau \
@@ -20,23 +70,15 @@ The helper checks the published hash, runs snarkjs 0.7.6 verification, builds th
 converter at `577c91f3f8b8e6bccf9d2fbc629c9b18f5c56cad`, converts, and imports.
 It records hashes of the transcript, verification log, npm lockfile, converter,
 and converted file. Failed verification leaves logs but no usable SRS metadata.
-Archive that directory, the original transcript, and the review record. The
-coordinator archives imported parameters automatically; it does not automatically
-upload the original `.ptau`, compiler source, or external review records.
+Its `public-21.srs` can be used by `prepare` in place of the one above.
+Archive the Phase 1 directory, original transcript, and review record for either
+path. The coordinator archives imported parameters automatically; it does not
+automatically upload the original `.ptau`, `provenance.json`, compiler source,
+or external review records.
 
 Review the bridge and independently reproduce conversion. The CLI's provenance
 string is an operator assertion, not a cryptographic proof of transcript review.
 Never relabel a rehearsal SRS as production.
-
-```sh
-./spr-ceremony prepare --track core --r1cs-dir core-r1cs \
-  --source-revision FROZEN_ZOLANA_COMMIT \
-  --srs /path/verified-phase1/public-21.srs --out ceremony-data/core
-```
-
-Preparation is local and produces a `prepared` checkpoint. It cannot accept
-contributions yet. Publish the manifest digest and source/Phase 1 provenance for
-independent reviewers before opening.
 
 ## Storage and hosting
 

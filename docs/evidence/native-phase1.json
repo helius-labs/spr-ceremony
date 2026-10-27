@@ -1,0 +1,93 @@
+{
+  "date_utc": "2026-10-27",
+  "platform": "linux/amd64",
+  "go": "go1.27.3",
+  "command": "/usr/bin/env PATH=/nonexistent GOMAXPROCS=4 /tmp/spr-native-phase1-prototype/spr-ceremony phase1 --input /tmp/spr-phase1/powersOfTau28_hez_final_21.ptau --out /tmp/spr-public-phase1-native-20261027",
+  "external_commands_on_path": false,
+  "input_previously_downloaded": true,
+  "download_included_in_timing": false,
+  "historical_transcript_replayed": false,
+  "algebraic_checks_passed": true,
+  "matched_verified_ph1_and_srs": true,
+  "exit_code": 0,
+  "wall_seconds": 109.14,
+  "peak_rss_kib": 3333256,
+  "implementation": {
+    "public_phase1.go": {
+      "sha256": "ef1e3e241d5980ed43a312db0323981971b642748dac0db3c80b831e2d09c6d8",
+      "size": 10822
+    },
+    "engine.go": {
+      "sha256": "56c9fa3d6be4144eb5f7f75ddef6d4e7dba5e9a8088344f15f385db284f0cdf2",
+      "size": 7293
+    },
+    "go.mod": {
+      "sha256": "039f18358a4ad0b6aa5610c6fe60107f1cc4dd588bd0f6b0775616b16df87646",
+      "size": 2589
+    },
+    "go.sum": {
+      "sha256": "034c228167bfd6ae01625c8abb06272a3f1415446f1c7d59b228262dad307073",
+      "size": 16670
+    }
+  },
+  "binary": {
+    "sha256": "6c305efabf6a49a6e953967cd3305d727992094db8b6cd9bd628ebe46bb327aa",
+    "size": 41526136
+  },
+  "provenance": {
+    "format": "spr-public-phase1-v1",
+    "mode": "pinned-public-transcript",
+    "power": 21,
+    "source": "https://circom.info/powersOfTau28_hez_final_21.ptau",
+    "hash_source": "https://github.com/iden3/snarkjs/blob/master/README.md",
+    "published_blake2b": "9aef0573cef4ded9c4a75f148709056bf989f80dad96876aadeb6f1c6d062391f07a394a9e756d16f7eb233198d5b69407cca44594c763ab4a5b67ae73254678",
+    "ptau": {
+      "sha256": "cdc7c94a6635bc91466d8c7d96faefe1d17ecc98a3596a748ca1e6c895f8c2b4",
+      "size": 2416002200
+    },
+    "converter": "github.com/lightprotocol/ptau-deserializer@v0.2.1",
+    "ph1": {
+      "sha256": "ee243303f3207cb9ed86b836734938d55d56f8161a42afb7e51cdd143b34b43b",
+      "size": 402653219
+    },
+    "engine": "gnark-v0.16.4-bn254-mpcsetup",
+    "srs": {
+      "sha256": "f75bd40496b046942e62cdd2e0a2c3a580c68f789e705e97fa8e3a9db7c36780",
+      "size": 402653128
+    },
+    "reference_verification": "https://github.com/helius-labs/spr-ceremony/blob/fc76579fef1515fed4aac939bc8fa4043b13b435/docs/evidence/public-phase1.json",
+    "historical_transcript_replayed": false,
+    "algebraic_checks_passed": true
+  },
+  "artifacts": {
+    "public-21.ph1": {
+      "sha256": "ee243303f3207cb9ed86b836734938d55d56f8161a42afb7e51cdd143b34b43b",
+      "size": 402653219
+    },
+    "public-21.srs": {
+      "sha256": "f75bd40496b046942e62cdd2e0a2c3a580c68f789e705e97fa8e3a9db7c36780",
+      "size": 402653128
+    },
+    "provenance.json": {
+      "sha256": "71a1962c63fb0f00cfb320c493621adad00b28ad76d9a2c3e90d577ddc7d675b",
+      "size": 1095
+    },
+    "public-21.srs.json": {
+      "sha256": "8d8c6912a58627a360deb13333ddff8ba706a16270c2a23b91ffdf446a6b010b",
+      "size": 429
+    }
+  },
+  "log": {
+    "sha256": "60d829fe37e72c604f52e8cef1e0ce9687a82a48d5219b83818788a5f67dbe2c",
+    "size": 1033
+  },
+  "time_log": {
+    "sha256": "49c3d07f8753cc5054149fedddbffbf0a9715127c4d1a864c517cd179eb3bdf9",
+    "size": 934
+  },
+  "limitations": [
+    "Local-input path measured; HTTP resume is covered by fixture tests.",
+    "Linux execution; macOS build checked separately.",
+    "Verification against an existing public reference is not an independent audit."
+  ]
+}

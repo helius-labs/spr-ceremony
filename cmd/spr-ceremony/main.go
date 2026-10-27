@@ -26,7 +26,7 @@ func main() {
 }
 func run(args []string) error {
 	if len(args) == 0 {
-		return fmt.Errorf("usage: spr-ceremony <version|catalog|demo|test-srs|import-ph1|prepare|open|close|finalize|serve|invite|contribute|verify-contribution|verify-attestation|status|checkpoint|sync|restore|fetch-export|audit|export|verify-export> [flags]")
+		return fmt.Errorf("usage: spr-ceremony <version|catalog|demo|test-srs|phase1|import-ph1|prepare|open|close|finalize|serve|invite|contribute|verify-contribution|verify-attestation|status|checkpoint|sync|restore|fetch-export|audit|export|verify-export> [flags]")
 	}
 	f := flag.NewFlagSet(args[0], flag.ContinueOnError)
 	dir := f.String("dir", "ceremony-data", "coordinator ceremony directory")
@@ -258,6 +258,27 @@ func run(args []string) error {
 				return fmt.Errorf("output already exists or is inaccessible")
 			}
 			return ceremony.TestSRS(*out, *power)
+		}
+	case "phase1":
+		input := f.String("input", "", "optional local copy of the fixed public power-21 PTAU; downloaded otherwise")
+		action = func() error {
+			if *track != ceremony.Core {
+				return fmt.Errorf("phase1 supports only the core power-21 parameters")
+			}
+			if *maxDomain < 1<<21 {
+				return fmt.Errorf("phase1 requires --max-domain of at least 2097152")
+			}
+			if *out == "" {
+				*out = filepath.Join("ceremony-data", "phase1")
+			}
+			fmt.Fprintln(os.Stderr, "Using pinned public Phase 1 parameters; historical transcript replay is a separate audit procedure.")
+			info, e := ceremony.PreparePublicPhase1(context.Background(), *out, *input, os.Stderr)
+			if e != nil {
+				return e
+			}
+			fmt.Fprintln(os.Stdout, "SRS:", filepath.Join(*out, "public-21.srs"))
+			fmt.Fprintln(os.Stdout, "SHA256:", info.Artifact.SHA256)
+			return nil
 		}
 	case "import-ph1":
 		input := f.String("input", "", "compressed semaphore-mtb-setup phase1 file")
