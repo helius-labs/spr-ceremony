@@ -17,6 +17,7 @@ type Claim struct {
 	Expires     time.Time `json:"expires,omitempty"`
 	Done        bool      `json:"done"`
 	WaitSeconds int       `json:"wait_seconds,omitempty"`
+	Receipts    []Receipt `json:"receipts,omitempty"`
 }
 
 func (s *Store) leasePath(id string) string { return filepath.Join(s.Dir, "leases", id+".json") }
@@ -55,6 +56,29 @@ func (s *Store) Claim(token string, ttl time.Duration) (Claim, error) {
 	if err != nil {
 		return result, err
 	}
+	// Recover a receipt lost after acceptance, even after closure. This never
+	// reserves work or changes ceremony state.
+	completed := 0
+	var receipts []Receipt
+	for _, scope := range i.Jobs {
+		st, e := s.State(scope.Circuit.Spec.ID)
+		if e != nil {
+			return result, e
+		}
+		found := false
+		for _, r := range st.History {
+			if r.Contributor == i.Contributor {
+				receipts = append(receipts, r)
+				found = true
+			}
+		}
+		if found {
+			completed++
+		}
+	}
+	if completed == len(i.Jobs) {
+		return Claim{Done: true, Receipts: receipts}, nil
+	}
 	if cp.Lifecycle.Phase != "open" {
 		return result, fmt.Errorf("ceremony is not open")
 	}
@@ -92,25 +116,9 @@ func (s *Store) Claim(token string, ttl time.Duration) (Claim, error) {
 		}
 		pending = append(pending, job)
 	}
-	// Distinguish completed work from circuits reserved by other people.
+	// Completion was checked above; remaining circuits are reserved by others.
 	if len(pending) == 0 {
-		for _, scope := range i.Jobs {
-			st, e := s.State(scope.Circuit.Spec.ID)
-			if e != nil {
-				return result, e
-			}
-			found := false
-			for _, r := range st.History {
-				if r.Contributor == i.Contributor {
-					found = true
-					break
-				}
-			}
-			if !found {
-				return Claim{WaitSeconds: 5}, nil
-			}
-		}
-		return Claim{Done: true}, nil
+		return Claim{WaitSeconds: 5}, nil
 	}
 	job := pending[0]
 	expires := s.nowUTC().Add(ttl)

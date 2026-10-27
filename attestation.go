@@ -109,8 +109,7 @@ func (s *Store) VerifyAttestation(a Attestation) error {
 			return fmt.Errorf("attested contribution is absent: %s #%d", r.Circuit, r.Sequence)
 		}
 		expected := st.History[r.Sequence-1]
-		if r.Circuit != expected.Circuit || r.Sequence != expected.Sequence || r.Contributor != expected.Contributor ||
-			r.Parent != expected.Parent || r.Output != expected.Output || !r.AcceptedAt.Equal(expected.AcceptedAt) {
+		if !sameReceipt(r, expected) {
 			return fmt.Errorf("attested contribution differs from checkpoint: %s #%d", r.Circuit, r.Sequence)
 		}
 		covered[r.Circuit], seen[key] = true, true

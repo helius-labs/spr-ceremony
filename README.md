@@ -41,6 +41,9 @@ are reused, and already accepted circuits are skipped. Invitations default to
 24 hours; renew an expired invitation using the same name. There is no need to
 manually refresh an invitation after another contributor advances a circuit.
 A contribution interrupted during computation starts that computation again.
+If acceptance succeeded before the client stopped, rerunning also recovers a
+missing receipt after checking its saved input/output files. Completed queue
+invitations can recover receipts after closure while the invitation remains valid.
 
 Participants can verify their saved input/output pairs offline and publish a
 small attestation, following the useful participant-controlled audit flow in

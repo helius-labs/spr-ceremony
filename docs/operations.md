@@ -51,6 +51,10 @@ The configuration enables versioning, public-access blocks, AES256 encryption,
 TLS-only access, immutable object creation, and conditional checkpoint writes.
 The CLI checks versioning, encryption, and public-access blocks for production.
 It cannot prove the entire IAM/bucket policy or account security posture.
+The coordinator also needs `s3:ListBucket` on this dedicated archive bucket:
+AWS otherwise returns an access denial for missing objects, preventing initial
+publication. Object reads and writes remain scoped to the configured prefix.
+See [AWS's HeadObject permissions](https://docs.aws.amazon.com/AmazonS3/latest/API/API_HeadObject.html).
 
 ```sh
 ./spr-ceremony sync --dir ceremony-data/core --s3-config s3.json --out prepared-recovery.json
@@ -227,6 +231,20 @@ same verifier generator revision pinned by Zolana, preserves all excluded pins,
 and writes only the 41 verifier modules plus the lockfile and TypeScript hash
 table. It leaves the source checkout untouched.
 
+With proof vectors from the matching packaged keys, validate the emitted Rust
+constants, Go/TypeScript pins, and complete publication plan:
+
+```sh
+python3 scripts/verify-staged-core.py --package packaged-core \
+  --staged staged-core-release --zolana /path/to/clean/zolana \
+  --vectors /path/to/matching-core-vectors
+```
+
+This compiles a temporary host test crate and checks a valid proof plus a changed
+public input for every generated verifier. It does not execute a Solana program.
+When testing explicitly marked rehearsal packages, the test-only crate enables
+their compile guard; Zolana's deployable crates and guard remain unchanged.
+
 `publication.json` lists core uploads and copies of unchanged S3-distributed keys
 under the new immutable key-set prefix. Zolana currently uses one global prefix:
 excluded keys therefore still need to exist there. The old 4999 key may require
@@ -237,5 +255,8 @@ Publish and verify every planned object before merging the staged source files
 and deploying matching verifier code. Validate download hashes through the real
 distribution endpoint and perform Zolana's deployment/integration checks. The
 helper does not publish, copy, deploy, or generate a fresh local trusted setup.
+Apply Zolana's repository and SDK release rules when incorporating the staged
+files, including its SDK changelog, `npm run check`, package/consumer checks,
+and Rust verifier-to-lockfile checks. Staging alone does not satisfy these gates.
 Never run Zolana's all-key rotation script for this handoff: it would replace the
 ceremony keys and excluded keys with new single-party setups.

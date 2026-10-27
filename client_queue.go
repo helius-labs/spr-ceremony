@@ -39,6 +39,9 @@ func (c *Client) runQueue(ctx context.Context, i Invitation, track string) error
 			return err
 		}
 		if claim.Done {
+			if err = c.recoverReceipts(i, claim.Receipts); err != nil {
+				return err
+			}
 			fmt.Fprintln(c.Progress, "All invited circuits have an accepted contribution.")
 			return nil
 		}

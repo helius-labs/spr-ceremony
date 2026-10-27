@@ -104,8 +104,10 @@ resource "aws_iam_policy" "coordinator" {
         Resource = "${aws_s3_bucket.ceremony.arn}/${var.prefix}/*"
       },
       {
-        Effect   = "Allow"
-        Action   = ["s3:GetBucketVersioning", "s3:GetBucketPublicAccessBlock", "s3:GetEncryptionConfiguration"]
+        Effect = "Allow"
+        # HEAD/GET of a missing object returns 403 without ListBucket. The
+        # coordinator needs the 404 response to seed immutable objects/pointers.
+        Action   = ["s3:ListBucket", "s3:GetBucketVersioning", "s3:GetBucketPublicAccessBlock", "s3:GetEncryptionConfiguration"]
         Resource = aws_s3_bucket.ceremony.arn
       }
     ]
