@@ -233,6 +233,13 @@ func run(args []string) error {
 			if *digest != s.ManifestArtifact.SHA256 {
 				return fmt.Errorf("manifest digest mismatch")
 			}
+			var metadata ceremony.ExportManifest
+			if e = ceremony.ReadJSON(filepath.Join(*keys, "export.json"), &metadata); e != nil {
+				return e
+			}
+			if metadata.Track != *track {
+				return fmt.Errorf("export track does not match --track; batch-4999 requires explicit selection")
+			}
 			if e = s.VerifyExport(*keys, *maxDomain); e != nil {
 				return e
 			}
