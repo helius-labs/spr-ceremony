@@ -20,7 +20,7 @@ jobs:
         with:
           go-version-file: go.mod
           cache: true
-      - run: test -z "$(gofmt -l *.go cmd/spr-ceremony/*.go adapters/zolana/*.go storage/*.go)"
+      - run: test -z "$(gofmt -l *.go cmd/*/*.go internal/*/*.go adapters/zolana/*.go storage/*.go)"
       - run: go vet ./...
       - run: go run golang.org/x/vuln/cmd/govulncheck@v1.9.0 ./...
       - run: go test -race -count=1 ./...
@@ -42,3 +42,41 @@ jobs:
           go run ./cmd/spr-ceremony catalog --track core > "$RUNNER_TEMP/core-catalog.json"
           cargo run --locked --manifest-path adapters/solana/Cargo.toml --bin spr-solana-rehearsal -- \
             docs/evidence/core-vectors "$RUNNER_TEMP/core-catalog.json"
+  browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5
+        with:
+          go-version-file: go.mod
+          cache: true
+      - name: Build browser rehearsal
+        run: |
+          bash scripts/build-browser.sh
+          go build -o "$RUNNER_TEMP/spr-browser-rehearsal" ./cmd/spr-browser-rehearsal
+          "$RUNNER_TEMP/spr-browser-rehearsal" demo --out "$RUNNER_TEMP/browser-demo"
+      - name: Install browser test tools
+        run: |
+          python3 -m venv "$RUNNER_TEMP/browser-tools"
+          "$RUNNER_TEMP/browser-tools/bin/pip" install -r scripts/browser-requirements.txt
+          "$RUNNER_TEMP/browser-tools/bin/python" -m playwright install --with-deps chromium webkit
+      - name: Verify browser contributions and failure handling
+        run: |
+          for browser in chromium webkit; do
+            "$RUNNER_TEMP/browser-tools/bin/python" scripts/benchmark-browser.py \
+              --bundle "$RUNNER_TEMP/browser-demo" --native "$RUNNER_TEMP/spr-browser-rehearsal" \
+              --browser "$browser" --out "$RUNNER_TEMP/browser-results/$browser" --timeout 120
+          done
+          for fault in input-hash length-prefix entropy cancel; do
+            "$RUNNER_TEMP/browser-tools/bin/python" scripts/benchmark-browser.py \
+              --bundle "$RUNNER_TEMP/browser-demo" --native "$RUNNER_TEMP/spr-browser-rehearsal" \
+              --fault "$fault" --out "$RUNNER_TEMP/browser-results/fault-$fault" --timeout 30
+          done
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: browser-rehearsal-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/browser-demo/
+            ${{ runner.temp }}/browser-results/
+          if-no-files-found: error
+          retention-days: 30

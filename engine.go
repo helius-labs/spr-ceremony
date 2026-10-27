@@ -7,6 +7,8 @@ import (
 	"io"
 	"os"
 
+	"github.com/helius-labs/spr-ceremony/internal/contribution"
+
 	"github.com/consensys/gnark-crypto/ecc"
 	"github.com/consensys/gnark-crypto/ecc/bn254"
 	"github.com/consensys/gnark-crypto/ecc/bn254/mpcsetup"
@@ -14,11 +16,7 @@ import (
 	cs "github.com/consensys/gnark/constraint/bn254"
 )
 
-type Shape struct {
-	Private     int   `json:"private"`
-	Z           int   `json:"z"`
-	Commitments []int `json:"commitments"`
-}
+type Shape = contribution.Shape
 
 func shapeOf(p *mpc.Phase2) Shape {
 	s := Shape{Private: len(p.Parameters.G1.PKK), Z: len(p.Parameters.G1.Z)}
@@ -28,119 +26,34 @@ func shapeOf(p *mpc.Phase2) Shape {
 	return s
 }
 
-// ValidatePhase2 checks compressed point tags and all length prefixes before
-// gnark allocates slices. Accepted objects use gnark's canonical compressed format.
+// ValidatePhase2 rejects malformed lengths and point tags before decoding.
 func ValidatePhase2(path string, s Shape) error {
-	f, e := os.Open(path)
-	if e != nil {
-		return e
+	f, err := os.Open(path)
+	if err != nil {
+		return err
 	}
 	defer f.Close()
-	r := bufio.NewReaderSize(f, 1<<20)
-	var nc uint16
-	if e = binary.Read(r, binary.BigEndian, &nc); e != nil {
-		return e
-	}
-	if int(nc) != len(s.Commitments) {
-		return fmt.Errorf("commitment count mismatch")
-	}
-	point := func(size int) error {
-		var b [64]byte
-		if _, e := io.ReadFull(r, b[:size]); e != nil {
-			return e
-		}
-		if b[0]&0xc0 == 0 {
-			return fmt.Errorf("uncompressed point is not allowed")
-		}
-		return nil
-	}
-	vector := func(want int) error {
-		var n uint32
-		if e := binary.Read(r, binary.BigEndian, &n); e != nil {
-			return e
-		}
-		if uint64(n) != uint64(want) {
-			return fmt.Errorf("parameter vector size mismatch: got %d want %d", n, want)
-		}
-		for range n {
-			if e := point(32); e != nil {
-				return e
-			}
-		}
-		return nil
-	}
-	if e = point(32); e != nil {
-		return e
-	}
-	if e = vector(s.Private); e != nil {
-		return e
-	}
-	if e = vector(s.Z); e != nil {
-		return e
-	}
-	if e = point(64); e != nil {
-		return e
-	}
-	for _, n := range s.Commitments {
-		if e = vector(n); e != nil {
-			return e
-		}
-	}
-	for range s.Commitments {
-		if e = point(64); e != nil {
-			return e
-		}
-	}
-	for i := 0; i < 1+len(s.Commitments); i++ {
-		if e = point(32); e != nil {
-			return e
-		}
-		if e = point(64); e != nil {
-			return e
-		}
-	}
-	n, e := r.ReadByte()
-	if e != nil {
-		return e
-	}
-	if n != 0 && n != 32 {
-		return fmt.Errorf("invalid challenge length")
-	}
-	var b [32]byte
-	if _, e = io.ReadFull(r, b[:n]); e != nil {
-		return e
-	}
-	if _, e = r.ReadByte(); e != io.EOF {
-		return fmt.Errorf("trailing phase2 data")
-	}
-	return nil
+	return contribution.Validate(f, s)
 }
 
 func ReadPhase2(path string, s Shape) (*mpc.Phase2, error) {
-	if e := ValidatePhase2(path, s); e != nil {
-		return nil, e
+	f, err := os.Open(path)
+	if err != nil {
+		return nil, err
 	}
-	p := new(mpc.Phase2)
-	if e := ReadBinary(path, p); e != nil {
-		return nil, e
-	}
-	return p, nil
+	defer f.Close()
+	return contribution.Read(f, s)
 }
 
 func Contribute(input, output string, s Shape) error {
-	p, e := ReadPhase2(input, s)
-	if e != nil {
-		return e
+	f, err := os.Open(input)
+	if err != nil {
+		return err
 	}
-	p.Contribute()
-	prev, e := ReadPhase2(input, s)
-	if e != nil {
-		return e
-	}
-	if e = prev.Verify(p); e != nil {
-		return e
-	}
-	return WriteBinary(output, p)
+	defer f.Close()
+	return Atomic(output, func(w io.Writer) error {
+		return contribution.Contribute(f, w, s, nil)
+	})
 }
 
 func Verify(input, output string, s Shape) error {

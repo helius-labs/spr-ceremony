@@ -1,0 +1,2 @@
+# Developer-only browser automation. No Python or Node is required by the page.
+playwright==1.63.0

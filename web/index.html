@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Zolana · Browser ceremony rehearsal</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="network.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <main>
+    <p class="eyebrow">ZOLANA / TRUSTED SETUP</p>
+    <h1>A contribution from<br>your browser.</h1>
+    <p class="intro">Your browser computes a contribution and checks it locally.
+      Save the public result for an independent native verification.</p>
+    <p class="notice">Rehearsal only. These are insecure test parameters. This page does not join a live ceremony queue.</p>
+    <section aria-labelledby="circuit-title">
+      <div class="heading"><h2 id="circuit-title">Loading circuit…</h2><span id="size"></span></div>
+      <p id="description">Reading the rehearsal description.</p>
+      <div class="buttons">
+        <button id="start" disabled>Run rehearsal</button>
+        <button id="cancel" class="secondary" disabled>Cancel</button>
+      </div>
+      <p id="status" role="status" aria-live="polite">Loading…</p>
+      <progress id="progress" max="100" value="0" aria-label="Download progress"></progress>
+      <p id="elapsed" class="detail"></p>
+      <div id="results" hidden>
+        <p id="result-summary"></p>
+        <div class="buttons">
+          <a id="save-output" class="button" download="contribution.ph2">Save contribution</a>
+          <a id="save-report" class="button secondary" download="browser-report.json">Save report</a>
+        </div>
+        <p class="detail">Saving these files does not submit a contribution. The report records this run; use the native verifier to check the saved result.</p>
+      </div>
+    </section>
+    <details>
+      <summary>What happens on this page?</summary>
+      <p>A worker runs the pinned Go contribution engine through WebAssembly. It checks the input hash, generates randomness using the browser’s cryptographic random source, computes the update, and verifies it before exporting.</p>
+      <p>The page downloads public parameters and code. It uploads nothing. This prototype does not save the sampled secret or guarantee that browser or operating-system memory has been erased.</p>
+      <p>Cancel stops the worker. Rerunning starts a fresh contribution. Resumable transfers, queue reservations, and coordinator receipts are not part of this rehearsal.</p>
+      <p class="detail" id="build"></p>
+    </details>
+  </main>
+</body>
+</html>

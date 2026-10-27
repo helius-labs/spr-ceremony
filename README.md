@@ -116,6 +116,25 @@ must also be witnessed outside the coordinator; S3 hashes alone do not establish
 when a beacon plan or closure was announced. Recovery instructions are in the
 [runbook](docs/operations.md#recovery).
 
+## Browser rehearsal
+
+The [browser prototype](docs/browser-prototype.md) runs the same Go contribution
+engine through WebAssembly in a worker, using marked test parameters. It exports
+a public contribution that can be verified by the native tool. Browser assets
+build with Go and a shell; participants need only a browser. There is no frontend
+package installation or third-party runtime script.
+
+```sh
+bash scripts/build-browser.sh
+go run ./cmd/spr-browser-rehearsal demo --out dist/browser-demo
+go run ./cmd/spr-browser-rehearsal serve --dir dist/browser-demo
+```
+
+Open `http://127.0.0.1:8081`. This is a single-circuit rehearsal, not a live queue
+or production browser contributor. The prepared static bundle can also be hosted
+over HTTPS. See the prototype guide for native verification, real core fixtures,
+browser benchmarks, and the proposed integration with per-circuit reservations.
+
 ## Source and release integration
 
 ```sh
