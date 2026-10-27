@@ -181,7 +181,9 @@ does not fetch or authenticate a beacon.
 
 Packaging replays the transcript and reproduces the exported keys before wrapping
 them with the exact frozen R1CS into Zolana's `.key` format. It checks the source
-revision and refuses test setups. Regenerating Rust verification keys, SDK hashes,
+revision and refuses test setups. Zolana's legacy `HasCommitment` file-header bit
+is preserved; actual proof commitments come from the compiled circuit metadata.
+Regenerating Rust verification keys, SDK hashes,
 and `proving-keys.lock`, publishing artifacts, and deploying remain separate
 release work. Do not run Zolana's current key-rotation setup steps over ceremony
 keys: those steps generate a fresh local setup.
@@ -228,6 +230,8 @@ two contributions, key export, and gnark proof verification. The Rust harness th
 checks those proofs with `groth16-solana`, including rejection of changed public
 inputs. The fixture generator uses Go overlays and does not edit Zolana source.
 Set `SPR_TEST_SRS` to a previously generated power-18 rehearsal SRS to reuse it.
+`SPR_TEST_RUN` can select one Go subtest, for example
+`'^TestZolanaRoundTrip$/^merge_8_1$'`, when repeating an integration check.
 
 ## Prototype boundaries
 

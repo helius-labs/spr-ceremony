@@ -345,6 +345,12 @@ func (s *Store) Accept(token, id, path string) (Receipt, error) {
 // Audit reconstructs the initial state from pinned R1CS/SRS and replays every
 // accepted transition. The manifest digest must be authenticated out of band.
 func (s *Store) Audit(track string, maxDomain uint64) error {
+	return s.audit(track, maxDomain, nil)
+}
+
+// audit can consume the reconstructed evaluations after each circuit's full
+// transcript has verified. Export uses this to avoid repeating initialization.
+func (s *Store) audit(track string, maxDomain uint64, consume func(Circuit, *mpc.SrsCommons, *mpc.Phase2Evaluations, State) error) error {
 	count := 0
 	for _, c := range s.Manifest.Circuits {
 		if c.Spec.Track != track {
@@ -365,7 +371,7 @@ func (s *Store) Audit(track string, maxDomain uint64) error {
 			return e
 		}
 		p := new(mpc.Phase2)
-		p.Initialize(r1cs, srs)
+		evals := p.Initialize(r1cs, srs)
 		if !reflect.DeepEqual(shapeOf(p), c.Shape) || Domain(r1cs) != c.Domain || r1cs.GetNbConstraints() != c.Constraints {
 			return fmt.Errorf("circuit metadata mismatch")
 		}
@@ -395,6 +401,11 @@ func (s *Store) Audit(track string, maxDomain uint64) error {
 		}
 		if st.Circuit != c.Spec.ID || st.Head != parent {
 			return fmt.Errorf("head mismatch")
+		}
+		if consume != nil {
+			if e = consume(c, srs, &evals, st); e != nil {
+				return e
+			}
 		}
 	}
 	if count == 0 {

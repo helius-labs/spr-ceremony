@@ -150,11 +150,18 @@ func TestHTTPContributionReplayAndExport(t *testing.T) {
 		t.Fatal("substituted exported key accepted")
 	}
 	// Transcript replay detects a missing accepted contribution object.
-	st, e := s.State("demo_plain")
+	st, e := s.State("demo_commitment")
 	must(t, e)
 	must(t, os.Remove(s.Object(st.History[0].Output)))
 	if e = s.Audit(Core, 64); e == nil {
 		t.Fatal("missing transcript accepted")
+	}
+	failedExport := filepath.Join(t.TempDir(), "failed-export")
+	if e = s.Export(Core, failedExport, beacon, 64); e == nil {
+		t.Fatal("export accepted an incomplete transcript")
+	}
+	if _, e = os.Stat(failedExport); !os.IsNotExist(e) {
+		t.Fatal("failed export published partial keys")
 	}
 }
 

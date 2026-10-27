@@ -115,9 +115,6 @@ func (s *Store) Export(track, out string, beacon []byte, maxDomain uint64) error
 	if _, e := os.Stat(out); !os.IsNotExist(e) {
 		return fmt.Errorf("export directory already exists or is inaccessible")
 	}
-	if e := s.Audit(track, maxDomain); e != nil {
-		return e
-	}
 	if e := os.MkdirAll(filepath.Dir(out), 0700); e != nil {
 		return e
 	}
@@ -127,32 +124,15 @@ func (s *Store) Export(track, out string, beacon []byte, maxDomain uint64) error
 	}
 	defer os.RemoveAll(tmp)
 	m := ExportManifest{Format: Format, Engine: Engine, ManifestSHA256: s.ManifestArtifact.SHA256, Track: track, Beacon: fmt.Sprintf("%x", beacon), InsecureTestSetup: s.Manifest.Phase1.InsecureTestSetup}
-	for _, c := range s.Manifest.Circuits {
-		if c.Spec.Track != track {
-			continue
-		}
-		st, e := s.State(c.Spec.ID)
-		if e != nil {
-			return e
-		}
+	e = s.audit(track, maxDomain, func(c Circuit, srs *mpc.SrsCommons, evals *mpc.Phase2Evaluations, st State) error {
 		if len(st.History) == 0 {
 			return fmt.Errorf("%s has no accepted contributions", c.Spec.ID)
 		}
-		r1cs, e := ReadR1CS(s.Object(c.R1CS))
-		if e != nil {
-			return e
-		}
-		srs, e := ReadSRS(s.Object(c.SRS), maxDomain)
-		if e != nil {
-			return e
-		}
-		initial := new(mpc.Phase2)
-		evals := initial.Initialize(r1cs, srs)
 		p, e := ReadPhase2(s.Object(st.Head), c.Shape)
 		if e != nil {
 			return e
 		}
-		pk, vk := p.Seal(srs, &evals, beacon)
+		pk, vk := p.Seal(srs, evals, beacon)
 		pkPath := filepath.Join(tmp, c.Spec.ID+".pk")
 		vkPath := filepath.Join(tmp, c.Spec.ID+".vk")
 		if e = WriteBinary(pkPath, pk); e != nil {
@@ -170,6 +150,10 @@ func (s *Store) Export(track, out string, beacon []byte, maxDomain uint64) error
 			return e
 		}
 		m.Circuits = append(m.Circuits, ExportedCircuit{Circuit: c, Head: st.Head, Contributions: len(st.History), PK: pa, VK: va})
+		return nil
+	})
+	if e != nil {
+		return e
 	}
 	if e = WriteJSON(filepath.Join(tmp, "export.json"), m); e != nil {
 		return e

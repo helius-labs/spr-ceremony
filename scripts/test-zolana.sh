@@ -57,4 +57,4 @@ go mod edit -modfile "$tmp_dir/go.mod" \
     -replace "github.com/helius-labs/zolana/prover/server=$zolana_dir/prover/server"
 go mod tidy -modfile "$tmp_dir/go.mod"
 SPR_WITNESSES="$tmp_dir/witnesses" go test -modfile "$tmp_dir/go.mod" \
-    -run '^TestZolanaRoundTrip$' -v -count=1 -timeout 30m .
+    -run "${SPR_TEST_RUN:-^TestZolanaRoundTrip$}" -v -count=1 -timeout 30m .

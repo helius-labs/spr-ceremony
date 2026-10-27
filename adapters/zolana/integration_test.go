@@ -15,6 +15,7 @@ import (
 	"github.com/consensys/gnark/backend/groth16"
 	groth "github.com/consensys/gnark/backend/groth16/bn254"
 	"github.com/consensys/gnark/backend/witness"
+	"github.com/consensys/gnark/constraint"
 	gnarkio "github.com/consensys/gnark/io"
 	ceremony "github.com/helius-labs/spr-ceremony"
 )
@@ -84,8 +85,11 @@ func TestZolanaRoundTrip(t *testing.T) {
 			proof, e := groth16.Prove(ccs, pk, full)
 			check(t, e)
 			check(t, groth16.Verify(proof, vk, public))
-			if spec.Family == "merge" && len(proof.(*groth.Proof).Commitments) != 1 {
-				t.Fatal("merge commitment is missing")
+			// Zolana's legacy HasCommitment file-header bit does not describe
+			// the compiled circuit's BSB22 commitments.
+			wantCommitments := len(ccs.GetCommitments().(constraint.Groth16Commitments))
+			if len(proof.(*groth.Proof).Commitments) != wantCommitments {
+				t.Fatal("proof commitment count differs from compiled circuit")
 			}
 			if vectors := os.Getenv("SPR_VECTORS"); vectors != "" {
 				var vkRaw bytes.Buffer
