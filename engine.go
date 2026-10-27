@@ -191,6 +191,37 @@ func ReadSRS(path string, maxDomain uint64) (*mpc.SrsCommons, error) {
 	return s, nil
 }
 
+// trimSRS preserves the public Phase 1 powers for the circuit's FFT domain.
+// The returned slices share immutable backing storage with the full SRS.
+func trimSRS(full *mpc.SrsCommons, n uint64) (*mpc.SrsCommons, error) {
+	if n < 2 || ecc.NextPowerOfTwo(n) != n || n > uint64(len(full.G2.Tau)) ||
+		n > uint64(len(full.G1.AlphaTau)) || n > uint64(len(full.G1.BetaTau)) ||
+		2*n-1 > uint64(len(full.G1.Tau)) {
+		return nil, fmt.Errorf("invalid circuit SRS domain %d", n)
+	}
+	trim := *full
+	trim.G1.Tau = full.G1.Tau[:2*n-1]
+	trim.G1.AlphaTau = full.G1.AlphaTau[:n]
+	trim.G1.BetaTau = full.G1.BetaTau[:n]
+	trim.G2.Tau = full.G2.Tau[:n]
+	return &trim, nil
+}
+
+func verifyDerivedSRS(full *mpc.SrsCommons, c Circuit) (*mpc.SrsCommons, error) {
+	trim, err := trimSRS(full, c.Domain)
+	if err != nil {
+		return nil, err
+	}
+	h := hashWriter{}
+	if _, err = trim.WriteTo(&h); err != nil {
+		return nil, err
+	}
+	if h.artifact() != c.SRS {
+		return nil, fmt.Errorf("%s SRS does not derive from the manifest's Phase 1 artifact", c.Spec.ID)
+	}
+	return trim, nil
+}
+
 // ImportPH1 bridges the old tool's compressed .ph1 encoding to gnark's common
 // SRS. The caller must authenticate the file against independently verified
 // Powers of Tau provenance; this verifies algebraic consistency, not provenance.

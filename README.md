@@ -154,6 +154,9 @@ bash scripts/build-release.sh
 The complete core rehearsal is expensive. `SPR_R1CS_DIR`, `SPR_TEST_SRS`, and
 `SPR_REHEARSAL_DIR` allow reuse of compiled circuits, a marked test SRS, and
 completed stages. See [evidence](docs/readiness.md) for measured scope and limits.
+To recheck all saved checkpoints and their Phase 1 derivations without repeating
+initialization, set `SPR_CORE_REHEARSAL` to the saved rehearsal directory and
+`SPR_TEST_SRS` to its marked SRS, then run `go test -run '^TestCoreRehearsalBindings$'`.
 The manual GitHub Actions binary workflow produces downloadable build artifacts;
 it does not publish a GitHub release. The workflow signs build provenance with
 GitHub artifact attestations. After downloading a workflow-built binary, verify

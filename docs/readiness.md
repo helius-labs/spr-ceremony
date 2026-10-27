@@ -8,6 +8,8 @@ Batch 4999 is deferred. Custom rings and batch 10 remain excluded.
 
 - Frozen compilation metadata and Phase 1 provenance, per-circuit transcripts,
   bounded contribution decoding, and cryptographic verification before acceptance.
+  Independent audits reproduce each reduced SRS from the manifest's full Phase 1
+  artifact before checking circuit initialization.
 - Queued reservations, renewal, resumable downloads, idempotent submissions,
   bounded uploads, and disk preflight.
 - An immutable checkpoint chain binding circuit heads and lifecycle. S3

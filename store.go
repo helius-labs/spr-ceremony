@@ -203,18 +203,17 @@ func Prepare(dir, source, srsPath string, info SRSInfo, inputs []Input, maxDomai
 		if n > maxDomain || n > uint64(len(srs.G2.Tau)) {
 			return fmt.Errorf("%s: circuit domain %d exceeds supplied SRS or limit %d", in.Spec.ID, n, maxDomain)
 		}
-		trim := *srs
-		trim.G1.Tau = srs.G1.Tau[:2*n-1]
-		trim.G1.AlphaTau = srs.G1.AlphaTau[:n]
-		trim.G1.BetaTau = srs.G1.BetaTau[:n]
-		trim.G2.Tau = srs.G2.Tau[:n]
+		trim, e := trimSRS(srs, n)
+		if e != nil {
+			return e
+		}
 		p := new(mpc.Phase2)
-		p.Initialize(c, &trim)
+		p.Initialize(c, trim)
 		ca, e := s.put(in.R1CS)
 		if e != nil {
 			return e
 		}
-		sa, e := s.putBinary(&trim)
+		sa, e := s.putBinary(trim)
 		if e != nil {
 			return e
 		}
@@ -436,6 +435,17 @@ func (s *Store) audit(track string, maxDomain uint64, consume func(Circuit, *mpc
 	if err := s.AuditCheckpoints(); err != nil {
 		return err
 	}
+	phase1 := s.Manifest.Phase1
+	if phase1.Format != Format || phase1.Engine != Engine || phase1.Provenance == "" {
+		return fmt.Errorf("invalid Phase 1 metadata")
+	}
+	if err := Check(s.Object(phase1.Artifact), phase1.Artifact); err != nil {
+		return err
+	}
+	fullSRS, err := ReadSRS(s.Object(phase1.Artifact), maxDomain)
+	if err != nil {
+		return err
+	}
 	count := 0
 	for _, c := range s.Manifest.Circuits {
 		if c.Spec.Track != track {
@@ -451,7 +461,10 @@ func (s *Store) audit(track string, maxDomain uint64, consume func(Circuit, *mpc
 		if e != nil {
 			return e
 		}
-		srs, e := ReadSRS(s.Object(c.SRS), maxDomain)
+		if Domain(r1cs) != c.Domain || r1cs.GetNbConstraints() != c.Constraints {
+			return fmt.Errorf("circuit metadata mismatch")
+		}
+		srs, e := verifyDerivedSRS(fullSRS, c)
 		if e != nil {
 			return e
 		}
