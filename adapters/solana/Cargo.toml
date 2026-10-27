@@ -1,0 +1,11 @@
+[package]
+name = "spr-solana-rehearsal"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+base64 = "0.22"
+groth16-solana = { version = "0.2.0", features = ["bsb22", "gnark-vk"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"

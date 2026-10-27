@@ -1,0 +1,19 @@
+name: Check
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  go:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+      - run: test -z "$(gofmt -l *.go cmd/spr-ceremony/*.go adapters/zolana/*.go)"
+      - run: go vet ./...
+      - run: go test -race ./...
+      - run: go build ./cmd/spr-ceremony

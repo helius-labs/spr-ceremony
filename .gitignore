@@ -1,0 +1,12 @@
+/spr-ceremony
+/spr-zolana
+/ceremony-data/
+/rehearsal/
+/work/
+/invitations/
+/export/
+/go.work
+/go.work.sum
+*.test
+/adapters/solana/target/
+/adapters/solana/Cargo.lock
