@@ -176,7 +176,7 @@ func (s *Store) HandlerWithOptions(options ServerOptions) http.Handler {
 			return
 		}
 		defer active.Delete(owner)
-		if err := CheckDiskSpace(s.Dir, uint64(r.ContentLength)+options.MinFreeBytes); err != nil {
+		if err := CheckDiskSpace(s.Dir, 2*uint64(r.ContentLength)+options.MinFreeBytes); err != nil {
 			http.Error(w, "insufficient coordinator disk capacity", 507)
 			return
 		}

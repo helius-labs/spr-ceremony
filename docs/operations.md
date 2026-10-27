@@ -126,8 +126,11 @@ Contributors can run `verify-contribution --invitation alice.json --work alice-w
 --out alice-attestation.json` entirely offline, even after their invitation expires.
 Retain the input/output pairs until verification. Publish only the generated
 attestation (or its SHA256), through a channel under the contributor's control.
-Reviewers should compare its circuit, parent, output, and sequence references with
-the final transcript. It proves a valid saved transition; it does not establish
+Reviewers can run `verify-attestation --dir recovered-core --attestation
+alice-attestation.json --manifest-sha256 AUTHENTICATED_MANIFEST
+--checkpoint-sha256 AUTHENTICATED_CHECKPOINT` to check every receipt and full-track
+coverage. Missing or changed receipts fail. Run `audit` separately for the full
+MPC chain. It proves a valid saved transition; it does not establish
 participant identity, secret erasure, or inclusion by itself.
 
 ## Close, finalize, and independently verify

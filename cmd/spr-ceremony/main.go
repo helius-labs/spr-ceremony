@@ -26,7 +26,7 @@ func main() {
 }
 func run(args []string) error {
 	if len(args) == 0 {
-		return fmt.Errorf("usage: spr-ceremony <version|catalog|demo|test-srs|import-ph1|prepare|open|close|finalize|serve|invite|contribute|verify-contribution|status|checkpoint|sync|restore|fetch-export|audit|export|verify-export> [flags]")
+		return fmt.Errorf("usage: spr-ceremony <version|catalog|demo|test-srs|import-ph1|prepare|open|close|finalize|serve|invite|contribute|verify-contribution|verify-attestation|status|checkpoint|sync|restore|fetch-export|audit|export|verify-export> [flags]")
 	}
 	f := flag.NewFlagSet(args[0], flag.ContinueOnError)
 	dir := f.String("dir", "ceremony-data", "coordinator ceremony directory")
@@ -435,7 +435,8 @@ func run(args []string) error {
 				Circuits   []ceremony.State   `json:"circuits"`
 			}{life, ref, states})
 		}
-	case "audit":
+	case "audit", "verify-attestation":
+		attestation := f.String("attestation", "", "participant attestation JSON for inclusion verification")
 		digest := f.String("manifest-sha256", "", "out-of-band authenticated manifest digest")
 		checkpoint := f.String("checkpoint-sha256", "", "authenticated checkpoint digest (required for production)")
 		action = func() error {
@@ -462,6 +463,20 @@ func run(args []string) error {
 				if ref.SHA256 != *checkpoint {
 					return fmt.Errorf("--checkpoint-sha256 must match the authenticated publication")
 				}
+			}
+			if args[0] == "verify-attestation" {
+				var a ceremony.Attestation
+				if e = ceremony.ReadJSON(*attestation, &a); e != nil {
+					return e
+				}
+				if a.Track != *track {
+					return fmt.Errorf("attestation track mismatch")
+				}
+				if e = s.VerifyAttestation(a); e != nil {
+					return e
+				}
+				fmt.Fprintln(os.Stdout, "All attested receipts are included in checkpoint:", pinnedRef.SHA256)
+				return nil
 			}
 			if e = s.Audit(*track, *maxDomain); e != nil {
 				return e

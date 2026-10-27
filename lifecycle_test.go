@@ -190,7 +190,7 @@ func TestBeaconDeadlineRejectsFurtherWork(t *testing.T) {
 	}
 	var info map[string]any
 	must(t, json.Unmarshal(plan.ChainInfo, &info))
-	info["period"] = uint64(1) << 63
+	info["period"] = (uint64(1) << 63) + 1 // would wrap time.Duration back to one second
 	raw, err := json.Marshal(info)
 	must(t, err)
 	if _, err = NewBeaconPlan(raw, plan.ChainHash, plan.Round); err == nil {

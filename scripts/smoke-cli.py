@@ -23,14 +23,23 @@ if endpoint:
 with tempfile.TemporaryDirectory(prefix='spr-cli-') as temporary:
     root = Path(temporary)
     def run(*args):
-        result = subprocess.run([binary, *map(str, args)], cwd=root, env=env, check=True, capture_output=True, text=True)
+        result = subprocess.run([binary, *map(str, args)], cwd=root, env=env, check=False, capture_output=True, text=True)
+        if result.returncode:
+            print(result.stdout, file=sys.stderr)
+            print(result.stderr, file=sys.stderr)
+            result.check_returncode()
         return result.stdout
     run('demo', '--out', 'ceremony')
     manifest = hashlib.sha256((root / 'ceremony/manifest.json').read_bytes()).hexdigest()
     if endpoint:
-        # The storage Go tests create this local test bucket first.
-        (root / 's3.json').write_text(json.dumps({'bucket': 'spr-ceremony-test', 'region': 'us-east-1',
-                                                'prefix': 'cli-' + uuid.uuid4().hex, 'endpoint': endpoint}))
+        # Each smoke run owns its own emulator bucket; Go test caching must
+        # never determine whether this independent integration test works.
+        bucket = 'spr-cli-' + uuid.uuid4().hex
+        request = urllib.request.Request(endpoint.rstrip('/') + '/' + bucket, data=b'', method='PUT')
+        with urllib.request.urlopen(request, timeout=10) as response:
+            assert response.status == 200
+        (root / 's3.json').write_text(json.dumps({'bucket': bucket, 'region': 'us-east-1',
+                                                'prefix': 'smoke', 'endpoint': endpoint}))
         run('sync', '--dir', 'ceremony', '--s3-config', 's3.json')
     with socket.socket() as sock:
         sock.bind(('127.0.0.1', 0))
@@ -52,6 +61,7 @@ with tempfile.TemporaryDirectory(prefix='spr-cli-') as temporary:
             run('contribute', '--invitation', 'alice.json')
             run('verify-contribution', '--invitation', 'alice.json', '--out', 'attestation.json')
             assert 'token' not in json.loads((root / 'attestation.json').read_text())
+            run('verify-attestation', '--dir', 'ceremony', '--attestation', 'attestation.json', '--manifest-sha256', manifest)
             status = json.loads(run('status', '--dir', 'ceremony'))
             assert status['lifecycle']['phase'] == 'open'
             assert len(status['circuits']) == 2 and all(len(c['history']) == 1 for c in status['circuits'])

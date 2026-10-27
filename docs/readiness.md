@@ -69,7 +69,10 @@ and the GitHub attestation were verified. The Linux amd64 binary was executed an
 scanned; the other architectures were cross-compiled but not executed on native
 hardware. [Artifact evidence](evidence/binary-provenance.json) records the digests.
 
-## Required before public launch
+## Release gates
+
+Items 1–4 apply before opening the public campaign. Item 5 applies before using
+its keys in Zolana.
 
 1. Independent review of the MPC engine/version, Phase 1 bridge and provenance,
    contribution decoding, final beacon construction, checkpoint model, and

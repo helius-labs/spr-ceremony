@@ -16,6 +16,10 @@ func TestOfflineAttestationRejectsMissingAndCorruptFiles(t *testing.T) {
 	s := demoStore(t)
 	server := httptest.NewServer(s.Handler())
 	defer server.Close()
+	_, initial, err := s.Lifecycle()
+	must(t, err)
+	before, err := s.Snapshot(initial)
+	must(t, err)
 	i, err := s.InviteQueued(server.URL, "alice", Core, time.Hour)
 	must(t, err)
 	client := NewClient(t.TempDir())
@@ -27,6 +31,21 @@ func TestOfflineAttestationRejectsMissingAndCorruptFiles(t *testing.T) {
 	must(t, err)
 	if len(attestation.Receipts) != len(i.Jobs) {
 		t.Fatal("incomplete attestation")
+	}
+	must(t, s.VerifyAttestation(attestation))
+	if before.VerifyAttestation(attestation) == nil {
+		t.Fatal("attested receipts absent from checkpoint")
+	}
+	omitted := attestation
+	omitted.Receipts = attestation.Receipts[:1]
+	if s.VerifyAttestation(omitted) == nil {
+		t.Fatal("accepted incomplete track attestation")
+	}
+	tampered := attestation
+	tampered.Receipts = append([]Receipt(nil), attestation.Receipts...)
+	tampered.Receipts[0].Output.SHA256 = strings.Repeat("0", 64)
+	if s.VerifyAttestation(tampered) == nil {
+		t.Fatal("accepted a changed attested output")
 	}
 	data, err := json.Marshal(attestation)
 	must(t, err)

@@ -76,3 +76,49 @@ func VerifyLocalContributions(work string, i Invitation) (Attestation, error) {
 	}
 	return a, nil
 }
+
+// VerifyAttestation checks inclusion of every attested receipt and coverage of
+// the full track in a fixed checkpoint. Audit separately verifies the MPC chain.
+func (s *Store) VerifyAttestation(a Attestation) error {
+	view, err := s.snapshot()
+	if err != nil {
+		return err
+	}
+	if a.Format != Format || a.Engine != Engine || a.ManifestSHA256 != view.ManifestArtifact.SHA256 ||
+		a.InsecureTestSetup != view.Manifest.Phase1.InsecureTestSetup || !safeID.MatchString(a.Contributor) ||
+		(a.Track != Core && a.Track != Large) || len(a.Receipts) == 0 {
+		return fmt.Errorf("attestation provenance mismatch")
+	}
+	covered := map[string]bool{}
+	seen := map[string]bool{}
+	for _, r := range a.Receipts {
+		c, err := view.circuit(r.Circuit)
+		if err != nil {
+			return err
+		}
+		key := fmt.Sprintf("%s/%d", r.Circuit, r.Sequence)
+		if c.Spec.Track != a.Track || r.Contributor != a.Contributor || r.Sequence < 1 || seen[key] ||
+			r.Parent.Validate() != nil || r.Output.Validate() != nil {
+			return fmt.Errorf("invalid attested receipt")
+		}
+		st, err := view.State(r.Circuit)
+		if err != nil {
+			return err
+		}
+		if r.Sequence > len(st.History) {
+			return fmt.Errorf("attested contribution is absent: %s #%d", r.Circuit, r.Sequence)
+		}
+		expected := st.History[r.Sequence-1]
+		if r.Circuit != expected.Circuit || r.Sequence != expected.Sequence || r.Contributor != expected.Contributor ||
+			r.Parent != expected.Parent || r.Output != expected.Output || !r.AcceptedAt.Equal(expected.AcceptedAt) {
+			return fmt.Errorf("attested contribution differs from checkpoint: %s #%d", r.Circuit, r.Sequence)
+		}
+		covered[r.Circuit], seen[key] = true, true
+	}
+	for _, c := range view.Manifest.Circuits {
+		if c.Spec.Track == a.Track && !covered[c.Spec.ID] {
+			return fmt.Errorf("attestation omits %s", c.Spec.ID)
+		}
+	}
+	return nil
+}

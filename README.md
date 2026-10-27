@@ -52,7 +52,15 @@ small attestation, following the useful participant-controlled audit flow in
 ```
 
 The attestation includes public hashes and receipts, never the invitation token
-or signed URLs. Compare its receipts against the published final transcript.
+or signed URLs. Check that every attested receipt appears in an independently authenticated
+checkpoint:
+
+```sh
+./spr-ceremony verify-attestation --dir recovered-core --attestation alice-attestation.json \
+  --manifest-sha256 AUTHENTICATED_MANIFEST --checkpoint-sha256 AUTHENTICATED_CHECKPOINT
+```
+
+Run `audit` separately to verify the full MPC transcript.
 It is not an identity signature or a substitute for a full ceremony audit.
 
 `demo` uses tiny circuits and explicitly insecure parameters. Its extra scheduling
