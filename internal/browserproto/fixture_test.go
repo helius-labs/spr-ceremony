@@ -47,3 +47,22 @@ func TestFixtureBounds(t *testing.T) {
 		})
 	}
 }
+
+func TestProductionEntryKeepsRehearsalGuard(t *testing.T) {
+	f := Fixture{Format: ContributionFormat, Engine: Engine, Track: "core", Circuit: "merge_8_1", Manifest: Artifact{SHA256: strings.Repeat("a", 64), Size: 100}, Input: Artifact{SHA256: strings.Repeat("b", 64), Size: 203}}
+	if err := f.ValidateContribution(); err != nil {
+		t.Fatal(err)
+	}
+	if err := f.Validate(); err == nil {
+		t.Fatal("rehearsal tool accepted production input")
+	}
+	f.Track = "batch-4999"
+	if err := f.ValidateContribution(); err == nil {
+		t.Fatal("large track accepted")
+	}
+	f.Track = "core"
+	f.Input.Size = MaxInputBytes + 1
+	if err := f.ValidateContribution(); err == nil {
+		t.Fatal("oversized input accepted")
+	}
+}

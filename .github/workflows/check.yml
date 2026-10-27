@@ -44,6 +44,11 @@ jobs:
             docs/evidence/core-vectors "$RUNNER_TEMP/core-catalog.json"
   browser:
     runs-on: ubuntu-latest
+    services:
+      s3:
+        image: motoserver/moto@sha256:800719627036dc38dc699e9f314f624f2c98ac3d8bb754db078cb2698f08ee77
+        ports:
+          - 5000:5000
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5
@@ -54,6 +59,7 @@ jobs:
         run: |
           bash scripts/build-browser.sh
           go build -o "$RUNNER_TEMP/spr-browser-rehearsal" ./cmd/spr-browser-rehearsal
+          go build -o "$RUNNER_TEMP/spr-ceremony" ./cmd/spr-ceremony
           "$RUNNER_TEMP/spr-browser-rehearsal" demo --out "$RUNNER_TEMP/browser-demo"
       - name: Install browser test tools
         run: |
@@ -72,7 +78,14 @@ jobs:
               --bundle "$RUNNER_TEMP/browser-demo" --native "$RUNNER_TEMP/spr-browser-rehearsal" \
               --fault "$fault" --out "$RUNNER_TEMP/browser-results/fault-$fault" --timeout 30
           done
+      - name: Verify hosted queue, recovery, native handoff, and S3
+        env:
+          SPR_S3_ENDPOINT: http://127.0.0.1:5000
+        run: |
+          "$RUNNER_TEMP/browser-tools/bin/python" scripts/test-hosted-browser.py \
+            --binary "$RUNNER_TEMP/spr-ceremony" --out "$RUNNER_TEMP/browser-results/hosted"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
         with:
           name: browser-rehearsal-${{ github.sha }}
           path: |

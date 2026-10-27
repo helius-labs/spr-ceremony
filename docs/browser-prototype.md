@@ -1,13 +1,14 @@
 # Browser contribution rehearsal
 
-This prototype runs the pinned Go Phase 2 contribution engine in a browser
+This standalone rehearsal runs the pinned Go Phase 2 contribution engine in a browser
 worker. It authenticates the input, checks encoding and lengths before decoding,
 contributes using Go's browser `crypto/rand` implementation, verifies the update,
 and exports the public result. The native client and WebAssembly share the
 implementation in `internal/contribution`; the gnark versions are unchanged.
 
-It accepts **marked, insecure core rehearsal parameters only**. There is no
-coordinator submission, participant signup, invitation handling, or queue UI.
+It accepts **marked, insecure core rehearsal parameters only**. This standalone page has no
+coordinator submission or queue. The separate [hosted UI](hosted-ui.md) implements
+private invitations, live contributions, and recovery.
 The page downloads public data and code and uploads nothing. No sampled secret
 is intentionally persisted, but stopping a worker is not proof of memory erasure.
 
@@ -54,7 +55,7 @@ The prototype caps input files at 128 MiB, enough for the measured core catalog.
 Batch 4999 is outside this prototype. Transferring input to the worker avoids a
 second main-page copy; terminating the worker on completion/cancellation releases
 its runtime for reuse by the browser. Interrupted downloads or computation start
-again; resumption belongs to the next integration stage.
+again; the hosted UI adds transfer/output recovery.
 
 ## Hosted deployment
 
@@ -94,7 +95,7 @@ Circuit B: initial → Bob   → Carol → Alice
 ```
 
 This is a lease-based scheduler, not a promise of one global FIFO position.
-The hosted client would reuse `/v1/claim`, `/v1/heartbeat/{circuit}`,
+The hosted client reuses `/v1/claim`, `/v1/heartbeat/{circuit}`,
 `/v1/download/{hash}`, and `/v1/contributions/{circuit}`. Downloads use immutable
 hash references. A heartbeat runs outside the computation worker. The coordinator
 verifies the result against the reserved input and commits it durably to S3
@@ -105,14 +106,13 @@ An abandoned reservation expires. Before resubmitting after interruption, the
 client must reacquire a valid reservation and check its input hash. If the head
 changed, it recomputes against the new head; a stale result cannot replace it.
 Accepted circuits are tracked by contributor identity, allowing the same
-participant to resume without starting all 41 again. The browser UI should show
-that person's completed circuits and current job rather than a fictitious global
-queue position. Native and browser clients can use the same protocol.
+participant to resume without starting all 41 again. The hosted UI shows
+that person's completed circuits and current job. Native and browser clients can use the same protocol.
 
-Remaining integration includes authenticated manifest/invitation handling,
-heartbeat and tab-suspension recovery, resumable transfers, retained public
-outputs/receipts, duplicate-tab handling, and S3 CORS for the intended hosted
-origin. The shared engine alone does not implement those browser behaviors.
+The [hosted UI](hosted-ui.md) adds authenticated manifest/invitation handling,
+heartbeat renewal, resumed downloads, retained public outputs/receipts,
+duplicate-tab locking, and explicit S3 CORS/origin configuration. The standalone
+rehearsal remains useful for isolated engine measurements.
 
 ## Automated validation and measurements
 

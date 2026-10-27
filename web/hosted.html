@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Zolana · Trusted setup ceremony</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="network.js" defer></script>
+  <script type="module" src="hosted.js"></script>
+</head>
+<body>
+<main>
+  <p class="eyebrow">ZOLANA / TRUSTED SETUP</p>
+  <h1>Make the setup<br>stronger together.</h1>
+  <p class="intro">Contribute fresh randomness from your computer. The ceremony verifies your public contribution before accepting it.</p>
+  <noscript><p class="notice">JavaScript is required for the browser client. You can use the native client with your invitation file.</p></noscript>
+  <p id="notice" class="notice" hidden></p>
+  <section id="join" aria-labelledby="join-title">
+    <h2 id="join-title">Join with your invitation</h2>
+    <p>Open the private link from the organizer, or choose your invitation file. No account is needed.</p>
+    <label class="file-label" for="invitation">Invitation JSON</label>
+    <input id="invitation" type="file" accept=".json,application/json">
+    <p class="detail">Keep your invitation private. Its token stays in this tab’s memory. Reopen the link or file after a reload to resume.</p>
+  </section>
+  <section id="participant" aria-labelledby="participant-title" hidden>
+    <div class="heading"><h2 id="participant-title"></h2><span id="count">0 accepted</span></div>
+    <p id="scope"></p>
+    <div class="buttons">
+      <button id="start" disabled>Contribute in browser</button>
+      <button id="pause" class="secondary" disabled>Pause</button>
+      <button id="native" class="secondary">Use native client</button>
+    </div>
+    <p class="detail">Keep this tab open and your computer awake. Large core circuits can take around 10 minutes each in a browser. The native client is faster.</p>
+    <p id="circuit" class="detail"></p>
+    <progress id="progress" max="100" value="0" aria-label="Current circuit progress"></progress>
+    <p id="elapsed" class="detail"></p>
+    <div class="buttons"><button id="receipts" class="secondary" disabled>Save public receipts</button><button id="refresh" class="secondary">Refresh progress</button></div>
+  </section>
+  <p id="status" role="status" aria-live="polite">Loading the ceremony…</p>
+  <section id="native-panel" aria-labelledby="native-title" hidden>
+    <h2 id="native-title">Contribute with the native client</h2>
+    <p>Download the binary for your computer, verify it, and save your private invitation. The client joins the same queue; accepted progress appears here.</p>
+    <div id="downloads" class="downloads"></div>
+    <p id="native-unavailable" class="detail" hidden>The organizer has not installed native downloads on this host. Build from the source revision shown below, or obtain that revision’s attested binary from the organizer.</p>
+    <div class="buttons"><button id="save-invitation">Save private invitation</button></div>
+    <label for="platform">Your computer</label>
+    <select id="platform"><option value="darwin-arm64">Mac · Apple silicon</option><option value="darwin-amd64">Mac · Intel</option><option value="linux-amd64">Linux · x86-64</option><option value="linux-arm64">Linux · ARM64</option></select>
+    <p>In Terminal, open the folder containing the downloads, then run:</p>
+    <pre id="native-command"></pre>
+    <details><summary>Verify the downloaded program</summary>
+      <p>Compare its SHA256 with an independently authenticated release. A checksum supplied by this website alone cannot authenticate the website.</p>
+      <p>GitHub’s CLI can verify the build attestation. Check that the source commit matches the published release:</p>
+      <pre id="verify-command"></pre>
+      <p id="revision" class="detail"></p>
+      <a href="https://github.com/helius-labs/spr-ceremony" target="_blank" rel="noopener noreferrer">Source and build instructions</a>
+    </details>
+  </section>
+  <details>
+    <summary>What am I trusting?</summary>
+    <p>The worker uses the browser’s cryptographic random source, checks the input hash, computes the contribution, and verifies it locally. Only the public result is uploaded. The coordinator independently verifies it and commits a checkpoint before accepting it.</p>
+    <p>You are trusting the code delivered by this host and your computer. A compromised host or extension could steal randomness. For an independently checked build, use the native client or review and host the source yourself. Neither browser nor native execution guarantees memory erasure.</p>
+    <p>Public download chunks, completed outputs awaiting acceptance, and receipts are kept in browser storage. Storage can be evicted; save your receipts. A receipt proves inclusion in the checkpoint you checked. Final transcript verification is a separate step.</p>
+    <p>Pausing stops the worker and releases the reservation. A saved output can be reused only while its parent remains the current circuit head. Otherwise a new contribution is required.</p>
+    <p class="detail" id="manifest"></p>
+    <p class="detail" id="build"></p>
+  </details>
+</main>
+</body>
+</html>

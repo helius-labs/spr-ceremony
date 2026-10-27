@@ -10,6 +10,7 @@ import (
 )
 
 const Format = "spr-browser-rehearsal-v1"
+const ContributionFormat = "spr-browser-contribution-v1"
 const Engine = "gnark-v0.16.4-bn254-mpcsetup"
 const MaxInputBytes = 128 << 20
 
@@ -33,6 +34,20 @@ func (f Fixture) Validate() error {
 	if f.Format != Format || f.Engine != Engine || f.Track != "core" || !f.InsecureTestSetup {
 		return fmt.Errorf("browser prototype accepts marked core rehearsals only")
 	}
+	return f.validateBounds()
+}
+
+// ValidateContribution is a separate entry point: rehearsal tools retain their
+// test-only guard. The hosted client authenticates this job against its pinned
+// manifest and queue reservation before handing it to the isolated engine.
+func (f Fixture) ValidateContribution() error {
+	if f.Format != ContributionFormat || f.Engine != Engine || f.Track != "core" {
+		return fmt.Errorf("browser contributions require the pinned core engine")
+	}
+	return f.validateBounds()
+}
+
+func (f Fixture) validateBounds() error {
 	if !regexp.MustCompile(`^[a-z0-9][a-z0-9_-]{0,99}$`).MatchString(f.Circuit) {
 		return fmt.Errorf("invalid circuit ID")
 	}

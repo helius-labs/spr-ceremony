@@ -116,24 +116,35 @@ must also be witnessed outside the coordinator; S3 hashes alone do not establish
 when a beacon plan or closure was announced. Recovery instructions are in the
 [runbook](docs/operations.md#recovery).
 
-## Browser rehearsal
+## Hosted participant UI
 
-The [browser prototype](docs/browser-prototype.md) runs the same Go contribution
-engine through WebAssembly in a worker, using marked test parameters. It exports
-a public contribution that can be verified by the native tool. Browser assets
-build with Go and a shell; participants need only a browser. There is no frontend
-package installation or third-party runtime script.
+The [hosted UI](docs/hosted-ui.md) accepts private invitations and joins the same
+core queue as the native client. It computes in a browser worker, renews leases,
+resumes public downloads, retains completed output through retries/reloads, and
+checks accepted receipts against published checkpoints. Participants need only a
+browser, or can download the native client and their invitation from the site.
 
 ```sh
+export GOTOOLCHAIN=go1.27.3
 bash scripts/build-browser.sh
-go run ./cmd/spr-browser-rehearsal demo --out dist/browser-demo
-go run ./cmd/spr-browser-rehearsal serve --dir dist/browser-demo
+./spr-ceremony serve --dir rehearsal --web-dir dist/browser \
+  --public-url http://127.0.0.1:8080
 ```
 
-Open `http://127.0.0.1:8081`. This is a single-circuit rehearsal, not a live queue
-or production browser contributor. The prepared static bundle can also be hosted
-over HTTPS. See the prototype guide for native verification, real core fixtures,
-browser benchmarks, and the proposed integration with per-circuit reservations.
+In a second terminal:
+
+```sh
+./spr-ceremony invite --dir rehearsal --name alice \
+  --out invitations/alice.json --link-out invitations/alice.link
+```
+
+Open the private link or choose the invitation file at `http://127.0.0.1:8080`.
+The guide covers HTTPS deployment, native binary distribution, optional direct S3
+downloads, recovery, and remaining launch checks. Browser assets build with Go
+and a shell; there is no npm install or external runtime script.
+
+The [standalone rehearsal](docs/browser-prototype.md) remains available for a
+single-circuit benchmark and independent verification without joining a queue.
 
 ## Source and release integration
 

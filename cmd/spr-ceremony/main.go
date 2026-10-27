@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"io"
 	"net/http"
 	"os"
 	"os/signal"
@@ -328,6 +329,10 @@ func run(args []string) error {
 		}
 	case "serve":
 		listen := f.String("listen", "127.0.0.1:8080", "listen address; use a TLS reverse proxy outside localhost")
+		webDir := f.String("web-dir", "", "checked browser bundle from scripts/build-browser.sh; enables hosted UI")
+		publicURL := f.String("public-url", "", "exact HTTPS origin of the hosted UI")
+		downloadOrigin := f.String("browser-download-origin", "", "optional exact S3 HTTPS origin with CORS; default downloads through coordinator")
+		nativeDir := f.String("native-dir", "", "optional verified participant binary bundle from the same source revision")
 		maxUploads := f.Int("max-uploads", 2, "maximum concurrent staged contributions")
 		leaseTTL := f.Duration("lease-ttl", 30*time.Minute, "renewable circuit reservation lifetime")
 		reserve := f.Uint64("reserve-disk-bytes", 2<<30, "minimum free disk retained after staging an upload")
@@ -347,7 +352,16 @@ func run(args []string) error {
 				}
 			}
 			fmt.Fprintln(os.Stderr, "Serving", *listen, "manifest", s.ManifestArtifact.SHA256)
-			server := &http.Server{Addr: *listen, Handler: s.HandlerWithOptions(ceremony.ServerOptions{MaxUploads: *maxUploads, LeaseTTL: *leaseTTL, UploadTimeout: 30 * time.Minute, MinFreeBytes: *reserve}), ReadHeaderTimeout: 10 * time.Second, ReadTimeout: 30 * time.Minute, WriteTimeout: 2 * time.Hour, IdleTimeout: 2 * time.Minute, MaxHeaderBytes: 16 << 10}
+			handler := s.HandlerWithOptions(ceremony.ServerOptions{MaxUploads: *maxUploads, LeaseTTL: *leaseTTL, UploadTimeout: 30 * time.Minute, MinFreeBytes: *reserve})
+			if *webDir != "" {
+				handler, e = ceremony.WebHandler(handler, ceremony.WebOptions{Directory: *webDir, Origin: *publicURL, DownloadOrigin: *downloadOrigin, NativeDirectory: *nativeDir, InsecureTestSetup: s.Manifest.Phase1.InsecureTestSetup})
+				if e != nil {
+					return e
+				}
+			} else if *publicURL != "" || *downloadOrigin != "" || *nativeDir != "" {
+				return fmt.Errorf("browser options require --web-dir")
+			}
+			server := &http.Server{Addr: *listen, Handler: handler, ReadHeaderTimeout: 10 * time.Second, ReadTimeout: 30 * time.Minute, WriteTimeout: 2 * time.Hour, IdleTimeout: 2 * time.Minute, MaxHeaderBytes: 16 << 10}
 			ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 			defer stop()
 			result := make(chan error, 1)
@@ -365,12 +379,16 @@ func run(args []string) error {
 		base := f.String("url", "http://127.0.0.1:8080", "coordinator HTTPS origin")
 		name := f.String("name", "", "contributor pseudonym (letters, digits, underscore, hyphen)")
 		ttl := f.Duration("ttl", 24*time.Hour, "invitation lifetime")
+		linkOut := f.String("link-out", "", "optional private file for a browser invitation link (core only)")
 		action = func() error {
 			if e := requireOut(); e != nil {
 				return e
 			}
 			if e := ceremony.ValidateURL(*base); e != nil {
 				return e
+			}
+			if *linkOut != "" && *track != ceremony.Core {
+				return fmt.Errorf("browser invitations support core only")
 			}
 			s, e := open()
 			if e != nil {
@@ -382,6 +400,15 @@ func run(args []string) error {
 			}
 			if e = ceremony.WriteJSON(*out, i); e != nil {
 				return e
+			}
+			if *linkOut != "" {
+				link, err := ceremony.InvitationLink(i)
+				if err != nil {
+					return err
+				}
+				if err = ceremony.Atomic(*linkOut, func(w io.Writer) error { _, err := io.WriteString(w, link+"\n"); return err }); err != nil {
+					return err
+				}
 			}
 			fmt.Fprintf(os.Stdout, "Wrote invitation for %d %s circuits to %s\n", len(i.Jobs), i.Track, *out)
 			return nil

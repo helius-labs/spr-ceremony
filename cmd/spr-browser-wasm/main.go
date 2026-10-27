@@ -48,7 +48,11 @@ func run() error {
 	if err := d.Decode(&extra); err != io.EOF {
 		return fmt.Errorf("trailing fixture data")
 	}
-	if err := fixture.Validate(); err != nil {
+	validate := fixture.Validate
+	if fixture.Format == browserproto.ContributionFormat {
+		validate = fixture.ValidateContribution
+	}
+	if err := validate(); err != nil {
 		return err
 	}
 	source := js.Global().Get("sprInput")
@@ -92,7 +96,7 @@ func run() error {
 	sha = sha256.Sum256(output.Bytes())
 	fixtureSHA := sha256.Sum256([]byte(text))
 	b, _ := json.Marshal(map[string]any{
-		"engine": browserproto.Engine, "circuit": fixture.Circuit, "insecure_test_setup": true,
+		"engine": browserproto.Engine, "circuit": fixture.Circuit, "insecure_test_setup": fixture.InsecureTestSetup,
 		"fixture_sha256": hex.EncodeToString(fixtureSHA[:]), "input": fixture.Input,
 		"output":                    browserproto.Artifact{SHA256: hex.EncodeToString(sha[:]), Size: int64(output.Len())},
 		"local_verification_passed": true, "stage_seconds": stages, "engine_seconds": time.Since(start).Seconds(),

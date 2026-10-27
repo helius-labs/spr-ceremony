@@ -14,9 +14,15 @@ jobs:
         with:
           go-version-file: go.mod
       - run: bash scripts/build-release.sh
+      - name: Build browser bundle
+        run: |
+          bash scripts/build-browser.sh
+          tar -C dist/browser -czf "dist/browser-${GITHUB_SHA}.tar.gz" .
       - uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4
         with:
-          subject-path: 'dist/**/spr-ceremony-*'
+          subject-path: |
+            dist/**/spr-ceremony-*
+            dist/browser-*.tar.gz
           create-storage-record: false
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:

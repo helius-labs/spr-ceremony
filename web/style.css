@@ -11,7 +11,7 @@ section { padding: 28px; background: #17201b; border: 1px solid #344239; border-
 h2 { font-size: 20px; margin: 0; overflow-wrap: anywhere; }
 #size, .detail { color: #a2b3a8; font-size: 13px; line-height: 1.6; }
 .buttons { display: flex; gap: 12px; flex-wrap: wrap; margin: 24px 0; }
-button, .button { display: inline-block; padding: 12px 20px; border: 1px solid transparent; border-radius: 6px; background: #b6e4c5; color: #122017; cursor: pointer; font: 600 14px inherit; text-decoration: none; }
+button, .button { display: inline-block; padding: 12px 20px; border: 1px solid transparent; border-radius: 6px; background: #b6e4c5; color: #122017; cursor: pointer; font: inherit; font-size: 14px; font-weight: 600; text-decoration: none; }
 .secondary { background: transparent; color: #d8e4dd; border-color: #617769; }
 button:disabled { opacity: .45; cursor: default; }
 button:focus-visible, a:focus-visible, summary:focus-visible { outline: 2px solid #e4f6ea; outline-offset: 4px; }
@@ -22,3 +22,12 @@ details { margin-top: 24px; color: #b8c5bc; line-height: 1.6; }
 summary { cursor: pointer; color: #e6ede8; }
 #build { overflow-wrap: anywhere; }
 [hidden] { display: none !important; }
+section + section { margin-top: 20px; }
+section p { line-height: 1.6; }
+input, select { color: inherit; background: #101614; border: 1px solid #617769; border-radius: 6px; padding: 10px; max-width: 100%; font: inherit; }
+label { display: block; margin: 16px 0 8px; }
+pre { background: #101614; border-radius: 6px; padding: 16px; overflow-x: auto; font: 12px/1.8 ui-monospace, monospace; white-space: pre-wrap; overflow-wrap: anywhere; }
+a { color: #b6e4c5; }
+.downloads { display: flex; flex-wrap: wrap; gap: 10px; }
+#manifest { overflow-wrap: anywhere; }
+@media (max-width: 520px) { main { padding: 32px 16px; } section { padding: 20px; } .buttons > * { flex-grow: 1; text-align: center; } }

@@ -41,6 +41,23 @@ func (s *Store) HandlerWithOptions(options ServerOptions) http.Handler {
 	uploads := make(chan struct{}, options.MaxUploads)
 	var active sync.Map
 	mux := http.NewServeMux()
+	mux.HandleFunc("GET /v1/invitation", func(w http.ResponseWriter, r *http.Request) {
+		i, err := s.invitation(strings.TrimPrefix(r.Header.Get("Authorization"), "Bearer "))
+		w.Header().Set("Cache-Control", "no-store")
+		if err != nil {
+			http.Error(w, "invalid or expired invitation", 401)
+			return
+		}
+		respond(w, i)
+	})
+	mux.HandleFunc("POST /v1/release/{circuit}", func(w http.ResponseWriter, r *http.Request) {
+		err := s.Release(strings.TrimPrefix(r.Header.Get("Authorization"), "Bearer "), r.PathValue("circuit"))
+		if err != nil {
+			http.Error(w, err.Error(), 409)
+			return
+		}
+		respond(w, map[string]bool{"released": true})
+	})
 	mux.HandleFunc("GET /healthz", func(w http.ResponseWriter, r *http.Request) {
 		if _, _, err := s.checkpoint(); err != nil {
 			http.Error(w, "checkpoint unavailable", 503)
@@ -213,5 +230,6 @@ func (s *Store) HandlerWithOptions(options ServerOptions) http.Handler {
 }
 func respond(w http.ResponseWriter, v any) {
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Cache-Control", "no-store")
 	_ = json.NewEncoder(w).Encode(v)
 }

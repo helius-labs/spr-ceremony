@@ -10,6 +10,15 @@ terraform {
 
 variable "region" { type = string }
 variable "bucket_name" { type = string }
+variable "browser_origins" {
+  description = "Exact hosted ceremony origins allowed to read presigned public artifacts. Empty uses coordinator downloads."
+  type        = list(string)
+  default     = []
+  validation {
+    condition     = alltrue([for origin in var.browser_origins : can(regex("^https://[a-zA-Z0-9.-]+(:[0-9]+)?$", origin))])
+    error_message = "Use exact HTTPS origins without paths, wildcards, query strings, or trailing slashes."
+  }
+}
 variable "prefix" {
   type    = string
   default = "core/v1"
@@ -31,6 +40,18 @@ resource "aws_s3_bucket" "ceremony" {
 resource "aws_s3_bucket_versioning" "ceremony" {
   bucket = aws_s3_bucket.ceremony.id
   versioning_configuration { status = "Enabled" }
+}
+
+resource "aws_s3_bucket_cors_configuration" "browser" {
+  count  = length(var.browser_origins) > 0 ? 1 : 0
+  bucket = aws_s3_bucket.ceremony.id
+  cors_rule {
+    allowed_origins = var.browser_origins
+    allowed_methods = ["GET", "HEAD"]
+    allowed_headers = ["Range"]
+    expose_headers  = ["Content-Range", "Content-Length", "ETag"]
+    max_age_seconds = 300
+  }
 }
 
 resource "aws_s3_bucket_public_access_block" "ceremony" {

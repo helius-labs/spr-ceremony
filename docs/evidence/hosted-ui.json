@@ -1,0 +1,85 @@
+{
+  "checks": [
+    "chromium: real queued contribution, checkpoint inclusion, receipts export, credential isolation",
+    "webkit: real queued contribution, checkpoint inclusion, receipts export, credential isolation",
+    "lost acceptance response: idempotent upload and receipt recovery",
+    "reload after failed publication: retained output reused, no repeated entropy computation",
+    "short leases renewed; concurrent contributors on separate circuits; duplicate tab refused",
+    "advanced circuit head: stale saved output discarded and freshly recomputed",
+    "altered acceptance receipt rejected; authentic checkpoint recovers response",
+    "pause cancels transfer and releases the circuit; resume completes",
+    "multi-chunk download resumes saved ranges; malformed Content-Range rejected",
+    "native invitation handoff and accepted progress displayed",
+    "manifest substitution rejected before claiming",
+    "closed ceremony retains accepted progress and disables unfinished work",
+    "native audit replays every browser transition; no duplicate accepted entries",
+    "S3 presigned range downloads, no browser AWS credentials, accepted transcript restored and audited"
+  ],
+  "safari_tested": false,
+  "source_base": "8e6b8aa92c7e8c248f72799f42b6757cde37c10f",
+  "source_modified": true,
+  "build": {
+    "format": "spr-browser-build-v1",
+    "engine": "gnark-v0.16.4-bn254-mpcsetup",
+    "go_version": "go1.27.3",
+    "source_revision": "8e6b8aa92c7e8c248f72799f42b6757cde37c10f",
+    "source_modified": true,
+    "assets": {
+      "app.js": {
+        "sha256": "85ba636bd04bdd9912797cec231012ba9ee623aea26bc4d20710d68c50285eae",
+        "size": 5761
+      },
+      "cache.js": {
+        "sha256": "8461605abcef9d68d7857d71c60b0ed6d0b140c3fd624da986832cb456723317",
+        "size": 1984
+      },
+      "contributor.wasm": {
+        "sha256": "d14b5a415674ccc569f19a32763360ddc4915fb6e7383494970acf917af1da12",
+        "size": 8735034
+      },
+      "hosted.html": {
+        "sha256": "9633a5ed7a981f607f923c3ef3d836c13ac36c687421b862b511e98eac5abbe2",
+        "size": 5223
+      },
+      "hosted.js": {
+        "sha256": "b3b5965a3ebc4f38036d7f6b825b1580364a35decebdaf5780393968696b35da",
+        "size": 10278
+      },
+      "index.html": {
+        "sha256": "370a2ea8d83e3b134298eae7472840d4c8e31270fbb6c7459f8c9bf415a78638",
+        "size": 2561
+      },
+      "network.js": {
+        "sha256": "1d67daf0c7d0dedac955bcb5547d51ebc1088a5e875b722985a7e26d43f742bc",
+        "size": 1440
+      },
+      "protocol.js": {
+        "sha256": "5d23025768de0a2ffc56a8acd10a7d9ad59b126b4ea9f3bea318496cb4841b51",
+        "size": 9582
+      },
+      "session.js": {
+        "sha256": "3390ecf1d69fb08dce1ab1c2fc6c67080c77034bd3c3ca1b03c5bdd40df4fe44",
+        "size": 11426
+      },
+      "style.css": {
+        "sha256": "88de4792ab920f1bb5ca089ab5551d9728f85cdfbba77ec49db462aa9c02dcd8",
+        "size": 2582
+      },
+      "transfer.js": {
+        "sha256": "e840728d02628eeee4ae31aebc61987c46a0a00c3305933b27fabb5965d09fed",
+        "size": 3032
+      },
+      "wasm_exec.js": {
+        "sha256": "0c949f4996f9a89698e4b5c586de32249c3b69b7baadb64d220073cc04acba14",
+        "size": 16992
+      },
+      "worker.js": {
+        "sha256": "576f32fecade65f2c4f24078e4fbbb26fb525240d6ba73eb32f4cc39db32f1c5",
+        "size": 1731
+      }
+    }
+  },
+  "platform": "Linux x86_64; Playwright 1.63.0; Chromium 153.0.8010.12; WebKit 26.6",
+  "s3": "Moto pinned at sha256:800719627036dc38dc699e9f314f624f2c98ac3d8bb754db078cb2698f08ee77; real AWS not tested",
+  "note": "Marked tiny circuit fixtures; production crypto engine and coordinator. Independent native replay and S3 restore passed. Source changes in this work are committed immediately after this record."
+}

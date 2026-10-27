@@ -1,0 +1,539 @@
+{
+  "format": "spr-browser-benchmarks-v1",
+  "measured_date": "2026-10-27",
+  "note": "Single Linux runs on a Ryzen 9 9950X. Marked test parameters. Browser build metadata records modified source based on 7215e73; code was committed as 8e6b8aa. These are engine rehearsal timings, excluding hosted queue/publication. WASM capacity is not browser RSS. Safari not tested.",
+  "results": [
+    {
+      "browser_engine": "chromium",
+      "browser_version": "153.0.8010.12",
+      "platform": "Linux-6.8.0-147-generic-x86_64-with-glibc2.39",
+      "report": {
+        "circuit": "transfer_confidential_1_2",
+        "engine": "gnark-v0.16.4-bn254-mpcsetup",
+        "engine_seconds": 11.736280064,
+        "fixture_sha256": "11e8b74483480f25eb435178b5fa430a534e4fadd8dc1c6f0cf3e940f7c70a74",
+        "input": {
+          "sha256": "dd9f6f0b322e8cea47c9ea4307bcaee6d6df8407b65bc7c7711692d12d306a53",
+          "size": 2025419
+        },
+        "insecure_test_setup": true,
+        "local_verification_passed": true,
+        "output": {
+          "sha256": "6cada67ff3a390f311535769af605e4dab1f8a9cb7a26d48b37ec10a12e193e1",
+          "size": 2025451
+        },
+        "stage_seconds": {
+          "authenticate": 0.012199936,
+          "contribute": 8.573289984,
+          "decode": 0.935775232,
+          "encode": 0.010949888,
+          "verify": 2.19424
+        },
+        "wasm_memory_bytes": 45088768,
+        "download_seconds": 0.015714999999850987,
+        "total_seconds": 11.81154999999702,
+        "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+        "stages": [
+          {
+            "type": "stage",
+            "stage": "load_engine"
+          },
+          {
+            "type": "stage",
+            "elapsed_seconds": 0.012199936,
+            "go_heap_alloc_bytes": 4491232,
+            "go_heap_sys_bytes": 5308416,
+            "stage": "decode",
+            "wasm_memory_bytes": 11272192
+          },
+          {
+            "type": "stage",
+            "elapsed_seconds": 0.947975168,
+            "go_heap_alloc_bytes": 9628936,
+            "go_heap_sys_bytes": 13238272,
+            "stage": "contribute",
+            "wasm_memory_bytes": 19922944
+          },
+          {
+            "type": "stage",
+            "elapsed_seconds": 9.521265152,
+            "go_heap_alloc_bytes": 18472528,
+            "go_heap_sys_bytes": 20807680,
+            "stage": "verify",
+            "wasm_memory_bytes": 27262976
+          },
+          {
+            "type": "stage",
+            "elapsed_seconds": 11.715505152,
+            "go_heap_alloc_bytes": 21030752,
+            "go_heap_sys_bytes": 38600704,
+            "stage": "encode",
+            "wasm_memory_bytes": 45088768
+          },
+          {
+            "type": "stage",
+            "elapsed_seconds": 11.72645504,
+            "go_heap_alloc_bytes": 21032872,
+            "go_heap_sys_bytes": 38600704,
+            "stage": "complete",
+            "wasm_memory_bytes": 45088768
+          }
+        ],
+        "build": {
+          "format": "spr-browser-build-v1",
+          "engine": "gnark-v0.16.4-bn254-mpcsetup",
+          "go_version": "go1.27.3",
+          "source_revision": "7215e73a0d05ca362bfb2dec688906d6e13c8bde",
+          "source_modified": true,
+          "assets": {
+            "app.js": {
+              "sha256": "85ba636bd04bdd9912797cec231012ba9ee623aea26bc4d20710d68c50285eae",
+              "size": 5761
+            },
+            "contributor.wasm": {
+              "sha256": "e8e379ad3a5d3b2fe152130729eb50300e67ca73d1d26043c3d56c988ee41f33",
+              "size": 8730902
+            },
+            "index.html": {
+              "sha256": "370a2ea8d83e3b134298eae7472840d4c8e31270fbb6c7459f8c9bf415a78638",
+              "size": 2561
+            },
+            "network.js": {
+              "sha256": "1d67daf0c7d0dedac955bcb5547d51ebc1088a5e875b722985a7e26d43f742bc",
+              "size": 1440
+            },
+            "style.css": {
+              "sha256": "c6f7d0e361947408de4bcd1bd50c51647631a4e5d987d71a950e1ec6e4308618",
+              "size": 1863
+            },
+            "wasm_exec.js": {
+              "sha256": "0c949f4996f9a89698e4b5c586de32249c3b69b7baadb64d220073cc04acba14",
+              "size": 16992
+            },
+            "worker.js": {
+              "sha256": "576f32fecade65f2c4f24078e4fbbb26fb525240d6ba73eb32f4cc39db32f1c5",
+              "size": 1731
+            }
+          }
+        },
+        "native_verification_passed": false,
+        "memory_note": "WASM linear memory capacity; excludes browser, JavaScript buffers, and process overhead."
+      },
+      "native": {
+        "circuit": "transfer_confidential_1_2",
+        "input": {
+          "sha256": "dd9f6f0b322e8cea47c9ea4307bcaee6d6df8407b65bc7c7711692d12d306a53",
+          "size": 2025419
+        },
+        "insecure_test_setup": true,
+        "native_verification_passed": true,
+        "output": {
+          "sha256": "6cada67ff3a390f311535769af605e4dab1f8a9cb7a26d48b37ec10a12e193e1",
+          "size": 2025451
+        },
+        "seconds": 0.068660872
+      },
+      "changed_challenge_rejected": true,
+      "safari_tested": false
+    },
+    {
+      "browser_engine": "webkit",
+      "browser_version": "26.6",
+      "platform": "Linux-6.8.0-147-generic-x86_64-with-glibc2.39",
+      "report": {
+        "circuit": "transfer_confidential_1_2",
+        "engine": "gnark-v0.16.4-bn254-mpcsetup",
+        "engine_seconds": 12.046159872,
+        "fixture_sha256": "11e8b74483480f25eb435178b5fa430a534e4fadd8dc1c6f0cf3e940f7c70a74",
+        "input": {
+          "sha256": "dd9f6f0b322e8cea47c9ea4307bcaee6d6df8407b65bc7c7711692d12d306a53",
+          "size": 2025419
+        },
+        "insecure_test_setup": true,
+        "local_verification_passed": true,
+        "output": {
+          "sha256": "8ce2d6df3ae46f6765a4f044c6862124b9d39e9aadc087c08ce397e10b31cbc3",
+          "size": 2025451
+        },
+        "stage_seconds": {
+          "authenticate": 0.00969984,
+          "contribute": 8.721080064,
+          "decode": 0.998500096,
+          "encode": 0.009799936,
+          "verify": 2.29808
+        },
+        "wasm_memory_bytes": 45088768,
+        "download_seconds": 0.006139999999999987,
+        "total_seconds": 12.10864,
+        "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+        "stages": [
+          {
+            "type": "stage",
+            "stage": "load_engine"
+          },
+          {
+            "type": "stage",
+            "elapsed_seconds": 0.00969984,
+            "go_heap_alloc_bytes": 4491072,
+            "go_heap_sys_bytes": 5308416,
+            "stage": "decode",
+            "wasm_memory_bytes": 11272192
+          },
+          {
+            "type": "stage",
+            "elapsed_seconds": 1.008199936,
+            "go_heap_alloc_bytes": 9628936,
+            "go_heap_sys_bytes": 13238272,
+            "stage": "contribute",
+            "wasm_memory_bytes": 19922944
+          },
+          {
+            "type": "stage",
+            "elapsed_seconds": 9.72928,
+            "go_heap_alloc_bytes": 18445408,
+            "go_heap_sys_bytes": 20807680,
+            "stage": "verify",
+            "wasm_memory_bytes": 27262976
+          },
+          {
+            "type": "stage",
+            "elapsed_seconds": 12.02736,
+            "go_heap_alloc_bytes": 18933792,
+            "go_heap_sys_bytes": 38633472,
+            "stage": "encode",
+            "wasm_memory_bytes": 45088768
+          },
+          {
+            "type": "stage",
+            "elapsed_seconds": 12.037159936,
+            "go_heap_alloc_bytes": 18935912,
+            "go_heap_sys_bytes": 38633472,
+            "stage": "complete",
+            "wasm_memory_bytes": 45088768
+          }
+        ],
+        "build": {
+          "format": "spr-browser-build-v1",
+          "engine": "gnark-v0.16.4-bn254-mpcsetup",
+          "go_version": "go1.27.3",
+          "source_revision": "7215e73a0d05ca362bfb2dec688906d6e13c8bde",
+          "source_modified": true,
+          "assets": {
+            "app.js": {
+              "sha256": "85ba636bd04bdd9912797cec231012ba9ee623aea26bc4d20710d68c50285eae",
+              "size": 5761
+            },
+            "contributor.wasm": {
+              "sha256": "e8e379ad3a5d3b2fe152130729eb50300e67ca73d1d26043c3d56c988ee41f33",
+              "size": 8730902
+            },
+            "index.html": {
+              "sha256": "370a2ea8d83e3b134298eae7472840d4c8e31270fbb6c7459f8c9bf415a78638",
+              "size": 2561
+            },
+            "network.js": {
+              "sha256": "1d67daf0c7d0dedac955bcb5547d51ebc1088a5e875b722985a7e26d43f742bc",
+              "size": 1440
+            },
+            "style.css": {
+              "sha256": "c6f7d0e361947408de4bcd1bd50c51647631a4e5d987d71a950e1ec6e4308618",
+              "size": 1863
+            },
+            "wasm_exec.js": {
+              "sha256": "0c949f4996f9a89698e4b5c586de32249c3b69b7baadb64d220073cc04acba14",
+              "size": 16992
+            },
+            "worker.js": {
+              "sha256": "576f32fecade65f2c4f24078e4fbbb26fb525240d6ba73eb32f4cc39db32f1c5",
+              "size": 1731
+            }
+          }
+        },
+        "native_verification_passed": false,
+        "memory_note": "WASM linear memory capacity; excludes browser, JavaScript buffers, and process overhead."
+      },
+      "native": {
+        "circuit": "transfer_confidential_1_2",
+        "input": {
+          "sha256": "dd9f6f0b322e8cea47c9ea4307bcaee6d6df8407b65bc7c7711692d12d306a53",
+          "size": 2025419
+        },
+        "insecure_test_setup": true,
+        "native_verification_passed": true,
+        "output": {
+          "sha256": "8ce2d6df3ae46f6765a4f044c6862124b9d39e9aadc087c08ce397e10b31cbc3",
+          "size": 2025451
+        },
+        "seconds": 0.070655652
+      },
+      "changed_challenge_rejected": true,
+      "safari_tested": false
+    },
+    {
+      "browser_engine": "chromium",
+      "browser_version": "153.0.8010.12",
+      "platform": "Linux-6.8.0-147-generic-x86_64-with-glibc2.39",
+      "report": {
+        "circuit": "merge_52_1",
+        "engine": "gnark-v0.16.4-bn254-mpcsetup",
+        "engine_seconds": 596.861010176,
+        "fixture_sha256": "ab9993d728ce75d73bbfc9060dffb8939f675596b81951697748ece4833d884c",
+        "input": {
+          "sha256": "bb731e0934d64caef60803a57e1f1e5ac7001ab9df34ec8ffddae9f159f706fc",
+          "size": 102801451
+        },
+        "insecure_test_setup": true,
+        "local_verification_passed": true,
+        "output": {
+          "sha256": "f28e76bf4c4b0076304d866d8643a5ddd48de14a58ec3f94cb5852822a3fc6a4",
+          "size": 102801483
+        },
+        "stage_seconds": {
+          "authenticate": 0.48854528,
+          "contribute": 455.670349824,
+          "decode": 47.157260032,
+          "encode": 0.506785024,
+          "verify": 92.551559936
+        },
+        "wasm_memory_bytes": 1581514752,
+        "download_seconds": 0.06113000000268221,
+        "total_seconds": 597.0079600000009,
+        "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.8010.12 Safari/537.36",
+        "stages": [
+          {
+            "type": "stage",
+            "stage": "load_engine"
+          },
+          {
+            "type": "stage",
+            "elapsed_seconds": 0.48854528,
+            "go_heap_alloc_bytes": 205803576,
+            "go_heap_sys_bytes": 207749120,
+            "stage": "decode",
+            "wasm_memory_bytes": 213909504
+          },
+          {
+            "type": "stage",
+            "elapsed_seconds": 47.645805312,
+            "go_heap_alloc_bytes": 422250760,
+            "go_heap_sys_bytes": 618266624,
+            "stage": "contribute",
+            "wasm_memory_bytes": 630980608
+          },
+          {
+            "type": "stage",
+            "elapsed_seconds": 503.316155136,
+            "go_heap_alloc_bytes": 826874672,
+            "go_heap_sys_bytes": 835026944,
+            "stage": "verify",
+            "wasm_memory_bytes": 855375872
+          },
+          {
+            "type": "stage",
+            "elapsed_seconds": 595.867715072,
+            "go_heap_alloc_bytes": 1223357568,
+            "go_heap_sys_bytes": 1560084480,
+            "stage": "encode",
+            "wasm_memory_bytes": 1581514752
+          },
+          {
+            "type": "stage",
+            "elapsed_seconds": 596.374500096,
+            "go_heap_alloc_bytes": 1223359728,
+            "go_heap_sys_bytes": 1560084480,
+            "stage": "complete",
+            "wasm_memory_bytes": 1581514752
+          }
+        ],
+        "build": {
+          "format": "spr-browser-build-v1",
+          "engine": "gnark-v0.16.4-bn254-mpcsetup",
+          "go_version": "go1.27.3",
+          "source_revision": "7215e73a0d05ca362bfb2dec688906d6e13c8bde",
+          "source_modified": true,
+          "assets": {
+            "app.js": {
+              "sha256": "85ba636bd04bdd9912797cec231012ba9ee623aea26bc4d20710d68c50285eae",
+              "size": 5761
+            },
+            "contributor.wasm": {
+              "sha256": "e8e379ad3a5d3b2fe152130729eb50300e67ca73d1d26043c3d56c988ee41f33",
+              "size": 8730902
+            },
+            "index.html": {
+              "sha256": "370a2ea8d83e3b134298eae7472840d4c8e31270fbb6c7459f8c9bf415a78638",
+              "size": 2561
+            },
+            "network.js": {
+              "sha256": "1d67daf0c7d0dedac955bcb5547d51ebc1088a5e875b722985a7e26d43f742bc",
+              "size": 1440
+            },
+            "style.css": {
+              "sha256": "c6f7d0e361947408de4bcd1bd50c51647631a4e5d987d71a950e1ec6e4308618",
+              "size": 1863
+            },
+            "wasm_exec.js": {
+              "sha256": "0c949f4996f9a89698e4b5c586de32249c3b69b7baadb64d220073cc04acba14",
+              "size": 16992
+            },
+            "worker.js": {
+              "sha256": "576f32fecade65f2c4f24078e4fbbb26fb525240d6ba73eb32f4cc39db32f1c5",
+              "size": 1731
+            }
+          }
+        },
+        "native_verification_passed": false,
+        "memory_note": "WASM linear memory capacity; excludes browser, JavaScript buffers, and process overhead."
+      },
+      "native": {
+        "circuit": "merge_52_1",
+        "input": {
+          "sha256": "bb731e0934d64caef60803a57e1f1e5ac7001ab9df34ec8ffddae9f159f706fc",
+          "size": 102801451
+        },
+        "insecure_test_setup": true,
+        "native_verification_passed": true,
+        "output": {
+          "sha256": "f28e76bf4c4b0076304d866d8643a5ddd48de14a58ec3f94cb5852822a3fc6a4",
+          "size": 102801483
+        },
+        "seconds": 2.706137809
+      },
+      "changed_challenge_rejected": true,
+      "safari_tested": false
+    },
+    {
+      "browser_engine": "webkit",
+      "browser_version": "26.6",
+      "platform": "Linux-6.8.0-147-generic-x86_64-with-glibc2.39",
+      "report": {
+        "circuit": "merge_52_1",
+        "engine": "gnark-v0.16.4-bn254-mpcsetup",
+        "engine_seconds": 611.605100032,
+        "fixture_sha256": "ab9993d728ce75d73bbfc9060dffb8939f675596b81951697748ece4833d884c",
+        "input": {
+          "sha256": "bb731e0934d64caef60803a57e1f1e5ac7001ab9df34ec8ffddae9f159f706fc",
+          "size": 102801451
+        },
+        "insecure_test_setup": true,
+        "local_verification_passed": true,
+        "output": {
+          "sha256": "97463f75199521451c800659bd84082ed7126b0e280b900f0e982d50330a2ea5",
+          "size": 102801483
+        },
+        "stage_seconds": {
+          "authenticate": 0.441179904,
+          "contribute": 463.327700224,
+          "decode": 50.296999936,
+          "encode": 0.439159808,
+          "verify": 96.674520064
+        },
+        "wasm_memory_bytes": 1582039040,
+        "download_seconds": 0.23277999999999996,
+        "total_seconds": 611.9132000000001,
+        "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+        "stages": [
+          {
+            "type": "stage",
+            "stage": "load_engine"
+          },
+          {
+            "type": "stage",
+            "elapsed_seconds": 0.441179904,
+            "go_heap_alloc_bytes": 205803576,
+            "go_heap_sys_bytes": 207749120,
+            "stage": "decode",
+            "wasm_memory_bytes": 213909504
+          },
+          {
+            "type": "stage",
+            "elapsed_seconds": 50.73817984,
+            "go_heap_alloc_bytes": 422250600,
+            "go_heap_sys_bytes": 618266624,
+            "stage": "contribute",
+            "wasm_memory_bytes": 630980608
+          },
+          {
+            "type": "stage",
+            "elapsed_seconds": 514.065880064,
+            "go_heap_alloc_bytes": 827849008,
+            "go_heap_sys_bytes": 835551232,
+            "stage": "verify",
+            "wasm_memory_bytes": 855900160
+          },
+          {
+            "type": "stage",
+            "elapsed_seconds": 610.740400128,
+            "go_heap_alloc_bytes": 1223357408,
+            "go_heap_sys_bytes": 1560608768,
+            "stage": "encode",
+            "wasm_memory_bytes": 1582039040
+          },
+          {
+            "type": "stage",
+            "elapsed_seconds": 611.179559936,
+            "go_heap_alloc_bytes": 1223359568,
+            "go_heap_sys_bytes": 1560608768,
+            "stage": "complete",
+            "wasm_memory_bytes": 1582039040
+          }
+        ],
+        "build": {
+          "format": "spr-browser-build-v1",
+          "engine": "gnark-v0.16.4-bn254-mpcsetup",
+          "go_version": "go1.27.3",
+          "source_revision": "7215e73a0d05ca362bfb2dec688906d6e13c8bde",
+          "source_modified": true,
+          "assets": {
+            "app.js": {
+              "sha256": "85ba636bd04bdd9912797cec231012ba9ee623aea26bc4d20710d68c50285eae",
+              "size": 5761
+            },
+            "contributor.wasm": {
+              "sha256": "e8e379ad3a5d3b2fe152130729eb50300e67ca73d1d26043c3d56c988ee41f33",
+              "size": 8730902
+            },
+            "index.html": {
+              "sha256": "370a2ea8d83e3b134298eae7472840d4c8e31270fbb6c7459f8c9bf415a78638",
+              "size": 2561
+            },
+            "network.js": {
+              "sha256": "1d67daf0c7d0dedac955bcb5547d51ebc1088a5e875b722985a7e26d43f742bc",
+              "size": 1440
+            },
+            "style.css": {
+              "sha256": "c6f7d0e361947408de4bcd1bd50c51647631a4e5d987d71a950e1ec6e4308618",
+              "size": 1863
+            },
+            "wasm_exec.js": {
+              "sha256": "0c949f4996f9a89698e4b5c586de32249c3b69b7baadb64d220073cc04acba14",
+              "size": 16992
+            },
+            "worker.js": {
+              "sha256": "576f32fecade65f2c4f24078e4fbbb26fb525240d6ba73eb32f4cc39db32f1c5",
+              "size": 1731
+            }
+          }
+        },
+        "native_verification_passed": false,
+        "memory_note": "WASM linear memory capacity; excludes browser, JavaScript buffers, and process overhead."
+      },
+      "native": {
+        "circuit": "merge_52_1",
+        "input": {
+          "sha256": "bb731e0934d64caef60803a57e1f1e5ac7001ab9df34ec8ffddae9f159f706fc",
+          "size": 102801451
+        },
+        "insecure_test_setup": true,
+        "native_verification_passed": true,
+        "output": {
+          "sha256": "97463f75199521451c800659bd84082ed7126b0e280b900f0e982d50330a2ea5",
+          "size": 102801483
+        },
+        "seconds": 2.7345352
+      },
+      "changed_challenge_rejected": true,
+      "safari_tested": false
+    }
+  ]
+}

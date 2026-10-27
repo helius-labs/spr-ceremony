@@ -22,16 +22,9 @@ import (
 	"github.com/helius-labs/spr-ceremony/internal/browserproto"
 )
 
-var assets = []string{"index.html", "style.css", "app.js", "worker.js", "network.js", "wasm_exec.js", "contributor.wasm"}
+var assets = ceremony.BrowserAssets
 
-type buildInfo struct {
-	Format         string                       `json:"format"`
-	Engine         string                       `json:"engine"`
-	GoVersion      string                       `json:"go_version"`
-	SourceRevision string                       `json:"source_revision"`
-	SourceModified bool                         `json:"source_modified"`
-	Assets         map[string]ceremony.Artifact `json:"assets"`
-}
+type buildInfo = ceremony.BrowserBuild
 
 func main() {
 	if err := run(os.Args[1:]); err != nil {
