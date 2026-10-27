@@ -1,7 +1,7 @@
 {
   "date_utc": "2026-10-27",
-  "source_revision": "216f92124d0ec53395d4b55c5a4443f29d25af4c",
-  "workflow_run": "https://github.com/helius-labs/spr-ceremony/actions/runs/40548909358",
+  "source_revision": "600c9754cf039737bb9fe7e337e5f9dcc177afa9",
+  "workflow_run": "https://github.com/helius-labs/spr-ceremony/actions/runs/40566501764",
   "go": "go1.27.3",
   "checksums_verified": true,
   "github_attestation_verified": true,
@@ -12,26 +12,34 @@
     {
       "name": "spr-ceremony-darwin-amd64",
       "digest": {
-        "sha256": "6d30267719694ab1748e474809ffd61986bee716fa6466084511e8a04f949c9c"
+        "sha256": "4166713473bf7875e77432fd7009af66797840821a6e8feddf7eab4c8bcc179b"
       }
     },
     {
       "name": "spr-ceremony-darwin-arm64",
       "digest": {
-        "sha256": "4a64c05304e46f3a4859945b4c370f101b19d1a2fc56d9bcd62cd86f1631e44d"
+        "sha256": "4c21b9ad9a307d712444dc57db766ac7377c10ad9c4ce6f366efe368583d85ce"
       }
     },
     {
       "name": "spr-ceremony-linux-amd64",
       "digest": {
-        "sha256": "beaa8d1fa7c2700de93fc88bf78585626fa4f5b3297423b2a1447b427448d362"
+        "sha256": "582091c0f0a88875018590fad8ac20dca40a47c885dd646bced995c1b39dd7d6"
       }
     },
     {
       "name": "spr-ceremony-linux-arm64",
       "digest": {
-        "sha256": "312bc72c5697858d77aba3876c571d59b6f161be7f838480d5c28432b6b1e884"
+        "sha256": "11cc7e107196312254f6cac8de46b182e8b73876b6334ce5c16ab35fd2dba69f"
       }
     }
-  ]
+  ],
+  "all_four_reproduced_byte_for_byte": true,
+  "reproduction": {
+    "image": "golang@sha256:9048d5e7751706200eb1719c7dae0436950d362f29a1da91fa05e5c63867c60f",
+    "platform": "linux/amd64",
+    "gomodcache": "/home/runner/go/pkg/mod",
+    "network": "none",
+    "note": "Pinned gnark-crypto assembly embeds absolute include paths. Matching the CI module-cache path is necessary despite -trimpath."
+  }
 }

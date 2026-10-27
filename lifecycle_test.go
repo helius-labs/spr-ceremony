@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"io"
 	"net/http/httptest"
+	"os"
 	"path/filepath"
 	"testing"
 	"time"
@@ -14,6 +15,34 @@ import (
 	drandcrypto "github.com/drand/drand/v2/crypto"
 	"github.com/drand/kyber/util/random"
 )
+
+func TestPublishedQuicknetBeacon(t *testing.T) {
+	// A public response supplies an independent interoperability fixture. This
+	// test runs offline; it does not require a live endpoint or future round.
+	data, err := os.ReadFile("docs/evidence/live-beacon.json")
+	must(t, err)
+	var fixture struct {
+		ChainInfo  json.RawMessage `json:"chain_info"`
+		Proof      BeaconProof     `json:"proof"`
+		Randomness string          `json:"randomness"`
+	}
+	must(t, json.Unmarshal(data, &fixture))
+	const chainHash = "52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971"
+	plan, err := NewBeaconPlan(fixture.ChainInfo, chainHash, fixture.Proof.Round)
+	must(t, err)
+	randomness, err := VerifyBeacon(plan, fixture.Proof)
+	must(t, err)
+	if hex.EncodeToString(randomness) != fixture.Randomness {
+		t.Fatal("published quicknet randomness mismatch")
+	}
+	wrong := fixture.Proof
+	wrong.Round++
+	later, err := NewBeaconPlan(fixture.ChainInfo, chainHash, wrong.Round)
+	must(t, err)
+	if _, err = VerifyBeacon(later, wrong); err == nil {
+		t.Fatal("published signature verified for a different round")
+	}
+}
 
 func testBeacon(t *testing.T, at time.Time) (BeaconPlan, BeaconProof) {
 	t.Helper()

@@ -1,0 +1,32 @@
+{
+  "chain_hash": "52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971",
+  "chain_hash_source": "https://docs.drand.love/developer/API-v1/drand-http-api/",
+  "chain_info": {
+    "public_key": "83cf0f2896adee7eb8b5f01fcad3912212c437e0073e911fb90022d3e760183c8c4b450b6a0a6c3ac6a5776a2d1064510d1fec758c921cc22b0e17e63aaf4bcb5ed66304de9cf809bd274ca73bab4af5a6e9c76a4bc09e76eae8991ef5ece45a",
+    "period": 3,
+    "genesis_time": 1692803367,
+    "hash": "52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971",
+    "groupHash": "f477d5c89f21a17c863a7f937c6a6d15859414d2be09cd448d4279af331c5d3e",
+    "schemeID": "bls-unchained-g1-rfc9380",
+    "metadata": {
+      "beaconID": "quicknet"
+    }
+  },
+  "changed_signature_rejected": true,
+  "checked_at": "2026-10-27T19:26:49.524470234Z",
+  "exact_round_fetch_verified": true,
+  "fetch_url": "https://api2.drand.sh/52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971/public/33441939",
+  "proof": {
+    "round": 33441939,
+    "signature": "8db0387bfd9f512ae9f7378f59b1cbf7c6eff1839f4dd73aff2b58cfca394b1f226282e0955e3f2b7a71dab8bacb77ef",
+    "randomness": "b128855ccf2001705d1366629635d41ed3adcc77abfba91fa77aa7b59049b1a1"
+  },
+  "randomness": "b128855ccf2001705d1366629635d41ed3adcc77abfba91fa77aa7b59049b1a1",
+  "round": 33441939,
+  "round_time": "2026-10-27T19:26:21Z",
+  "signature_verified": true,
+  "source_revision": "600c9754cf039737bb9fe7e337e5f9dcc177afa9",
+  "used_to_finalize_campaign": false,
+  "wrong_randomness_rejected": true,
+  "wrong_round_rejected": true
+}

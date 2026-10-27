@@ -65,11 +65,18 @@ on a Ryzen 9 9950X with other rehearsal work active; it excludes transfers and i
 not a minimum hardware guarantee. [Benchmark evidence](evidence/participant-benchmark.json)
 includes the exact input size and process measurements.
 
-The [participant binary workflow](https://github.com/helius-labs/spr-ceremony/actions/runs/40548909358)
+The [participant binary workflow](https://github.com/helius-labs/spr-ceremony/actions/runs/40566501764)
 built all four Linux/macOS targets and signed their provenance. Downloaded checksums
-and the GitHub attestation were verified. The Linux amd64 binary was executed and
+and the GitHub attestation were verified. All four binaries were reproduced byte
+for byte in the pinned Go container with the same module-cache path as CI. The
+Linux amd64 binary was executed and
 scanned; the other architectures were cross-compiled but not executed on native
 hardware. [Artifact evidence](evidence/binary-provenance.json) records the digests.
+
+A live quicknet response was verified against the chain hash published by drand,
+including an exact-round fetch from a second endpoint and rejection of altered
+signatures, rounds, and randomness. The saved [public beacon fixture](evidence/live-beacon.json)
+also runs offline in CI. It was not used to finalize any campaign.
 
 ## Release gates
 

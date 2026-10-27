@@ -56,7 +56,13 @@
     "gnark_proof_passed": true,
     "solana_proof_passed": true,
     "changed_public_input_rejected": true,
-    "insecure_test_setup": true
+    "insecure_test_setup": true,
+    "full_phase1_binding_verified": true,
+    "binding_verifier_revision": "600c9754cf039737bb9fe7e337e5f9dcc177afa9",
+    "binding_verification_log": {
+      "sha256": "5156b82b8f2706805dce59d9b42c6a400de741d3f9a9efd500f3d0cb1f03fb2c",
+      "size": 44
+    }
   },
   "independent_review": false
 }

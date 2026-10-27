@@ -93,6 +93,10 @@ Use an independently authenticated drand chain-info JSON and chain hash for the
 unchained RFC9380 G1 scheme (`bls-unchained-g1-rfc9380`). Select a specific future
 round allowing time for contributions, closure, and independent witnesses. The
 round must be more than one hour away at opening; normal campaigns need longer.
+The [drand API reference](https://docs.drand.love/developer/API-v1/drand-http-api/)
+publishes quicknet's chain hash. The checked public response in
+[live-beacon.json](evidence/live-beacon.json) is an interoperability fixture,
+not a future round to reuse for a campaign.
 
 ```sh
 ./spr-ceremony open --dir ceremony-data/core --chain-info drand-chain.json \
@@ -260,3 +264,29 @@ files, including its SDK changelog, `npm run check`, package/consumer checks,
 and Rust verifier-to-lockfile checks. Staging alone does not satisfy these gates.
 Never run Zolana's all-key rotation script for this handoff: it would replace the
 ceremony keys and excluded keys with new single-party setups.
+
+## Reproduce participant binaries
+
+The checked binaries and source revision are recorded in
+[binary-provenance.json](evidence/binary-provenance.json). Use a full, clean Git
+clone at that revision; a worktree whose `.git` points outside the container
+will not provide build metadata. Populate its dependencies with `go mod download`
+and create an empty output directory before running:
+
+```sh
+docker run --rm --platform linux/amd64 --network none \
+  --user "$(id -u):$(id -g)" \
+  --mount type=bind,src="$(pwd)",dst=/source,readonly \
+  --mount type=bind,src="$(go env GOMODCACHE)",dst=/home/runner/go/pkg/mod,readonly \
+  --mount type=bind,src=/ABSOLUTE/OUTPUT/DIRECTORY,dst=/out \
+  --workdir /source --env GOMODCACHE=/home/runner/go/pkg/mod \
+  --env GOCACHE=/tmp/build-cache --env GOTOOLCHAIN=local \
+  --env GOMAXPROCS=2 --env GOFLAGS=-p=2 \
+  golang@sha256:9048d5e7751706200eb1719c7dae0436950d362f29a1da91fa05e5c63867c60f \
+  bash scripts/build-release.sh /out/release
+```
+
+All four outputs matched the signed CI artifacts byte for byte in this environment.
+The module-cache path is significant: the pinned gnark-crypto assembly includes
+absolute source paths in debug records despite Go's `-trimpath`. Builds using
+a different cache path can have identical machine code and different file hashes.
