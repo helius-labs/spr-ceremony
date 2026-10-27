@@ -1,4 +1,4 @@
-# Zolana core trusted setup
+# Solana Privacy Rings · Trusted setup
 
 Groth16 BN254 Phase 2 tooling for **41 core circuits**: 38 confidential-transfer
 shapes and standard merges with 8, 24, or 52 inputs. Custom rings and batch 10 are

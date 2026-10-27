@@ -1,4 +1,4 @@
-# Hosted core participant UI
+# Solana Privacy Rings · Hosted ceremony
 
 The hosted UI runs the existing Go contribution engine in a WebAssembly worker
 and joins the same per-circuit queue as the native client. The initial release
@@ -31,7 +31,7 @@ In a second terminal:
 ```
 
 Open `http://127.0.0.1:8080` and choose `invitations/alice.json`, or open the link
-stored in `invitations/alice.link`. Click **Contribute in browser**. This small
+stored in `invitations/alice.link`. Click **Contribute**. This small
 rehearsal is clearly marked and cannot produce production keys. Use a new output
 directory for another demo. Both invitation files are private, mode 0600.
 
@@ -46,7 +46,7 @@ invitation delivery channel and an independently published announcement.
 
 Use the small local rehearsal first, including Safari on the actual Mac. It has
 **two** core test circuits, not the real 41-circuit catalog. A successful browser
-run shows **2 / 2 accepted** and enables **Save public receipts**.
+run shows **2 / 2 accepted** and enables **Save receipts**.
 
 1. Finish a contribution in Safari and save its receipts. Reload the page, choose
    the same invitation file again, and confirm it still shows **2 / 2 accepted**.
@@ -67,14 +67,14 @@ run shows **2 / 2 accepted** and enables **Save public receipts**.
      --url http://127.0.0.1:8080 --name bob --out invitations/bob.json
    ```
 
-   Reload the page, choose `invitations/bob.json`, and open **Use native client**.
+   Reload the page, choose `invitations/bob.json`, and open **Use terminal**.
    For this local test, use the binary you already built:
 
    ```sh
    ./spr-ceremony contribute --invitation invitations/bob.json --work work/web-native
    ```
 
-   Keep the server running in the first terminal. Click **Refresh progress** in
+   Keep the server running in the first terminal. Click **Refresh** in
    the browser; Bob should now show **2 / 2 accepted**. Run the audit again.
    The local rehearsal has no binary downloads unless `--native-dir` is set;
    the already built `spr-ceremony` is sufficient for testing the handoff.
@@ -91,6 +91,34 @@ Stop the server with Ctrl-C. Restarting `serve` with the same directory preserve
 accepted work; `demo` must be given a new output directory for a fresh campaign.
 This local check does not exercise WAN/TLS, actual AWS permissions, or full core
 resource requirements. Those remain separate staging tests.
+
+## Finish the local rehearsal
+
+After both participants finish, save receipts and stop the server with Ctrl-C.
+Audit and reproduce a test export:
+
+```sh
+manifest_sha=$(shasum -a 256 ceremony-data/web-demo/manifest.json | awk '{print $1}')
+./spr-ceremony audit --dir ceremony-data/web-demo --manifest-sha256 "$manifest_sha"
+./spr-ceremony export --dir ceremony-data/web-demo --out export/web-demo \
+  --beacon 4242424242424242424242424242424242424242424242424242424242424242
+./spr-ceremony verify-export --dir ceremony-data/web-demo --export export/web-demo \
+  --manifest-sha256 "$manifest_sha"
+```
+
+The fixed beacon here is **test data**. The export is explicitly marked insecure;
+these keys must never be used for production. This legacy demo also contains an
+unused excluded-track sentinel, so `close` requires more than the two core demo
+circuits. The test export above intentionally verifies only core and does not
+claim a production lifecycle closure. Do not change a frozen manifest to remove
+circuits.
+
+For a real core-only campaign, [close and finalize](operations.md#close-finalize-and-independently-verify)
+freezes all 41 heads before the preannounced beacon round. Then verify the signed
+beacon, finalize, independently audit the transcript, and reproduce the exported
+keys. Valid-witness and invalid-witness proof tests against the native and Solana
+verifiers check circuit behavior separately; a correct ceremony does not prove
+that a circuit implements the intended application rules.
 
 ## Participant behavior
 
@@ -118,7 +146,7 @@ resource requirements. Those remain separate staging tests.
   and its conditional checkpoint update complete before acceptance. The browser
   checks receipt fields against its own output and verifies receipt inclusion in
   the published immutable checkpoint/state objects.
-- **Save public receipts** exports the native attestation JSON format. It contains
+- **Save receipts** exports the native attestation JSON format. It contains
   no bearer token. Receipts from another device count as accepted work, without
   claiming that this browser computed them. A final transcript audit remains
   separate from inclusion checking.
@@ -131,7 +159,7 @@ that secret material has been erased from operating-system memory.
 
 ## Native client handoff
 
-**Use native client** offers configured platform binaries, their hashes, the
+**Use terminal** offers configured platform binaries, their hashes, the
 source revision, provenance verification commands, and a private invitation
 JSON download. The participant then runs:
 

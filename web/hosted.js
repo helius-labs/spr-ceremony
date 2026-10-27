@@ -9,13 +9,14 @@ const browserCapable = typeof Worker === "function" && typeof WebAssembly === "o
 const fragment = new URLSearchParams(location.hash.slice(1));
 history.replaceState(null, "", location.pathname);
 const labels = {
-  queue: "Joining the queue…", waiting: "All available circuits are reserved. Waiting for a turn…",
-  download: "Downloading public parameters…", load_engine: "Checking the contribution engine…",
-  decode: "Checking and decoding public parameters…", contribute: "Computing fresh randomness into your contribution…",
-  verify: "Verifying your contribution locally…", encode: "Encoding the public result…", computed: "Saving the public output…",
-  upload: "Uploading the public result and waiting for coordinator verification…", receipt: "Checking the acceptance receipt in the published checkpoint…",
-  accepted: "Contribution accepted and receipt checked.", complete: "All invited circuits have an accepted contribution. Save your public receipts."
+  queue: "Joining…", waiting: "Waiting for a circuit…",
+  download: "Downloading…", load_engine: "Loading…",
+  decode: "Checking parameters…", contribute: "Contributing…",
+  verify: "Verifying locally…", encode: "Preparing upload…", computed: "Saving…",
+  upload: "Uploading. Awaiting verification…", receipt: "Checking receipt…",
+  accepted: "Accepted.", complete: "Complete. Save your receipts."
 };
+function formatBytes(n) { return n >= 1e6 ? `${(n / 1e6).toFixed(n >= 100e6 ? 0 : 1)} MB` : `${(n / 1e3).toFixed(1)} KB`; }
 function status(text, error = false) { $("status").textContent = text; $("status").classList.toggle("error", error); }
 function update(event) {
   if (event.stage === "progress") {
@@ -24,7 +25,7 @@ function update(event) {
     return;
   }
   if (event.stage === "circuit") {
-    $("circuit").textContent = `${event.circuit} · contribution #${event.sequence} · ${(event.bytes / 1e6).toFixed(1)} MB`;
+    $("circuit").textContent = `${event.circuit} · #${event.sequence} · ${formatBytes(event.bytes)}`;
   }
   if (event.stage === "download" && event.total) $("progress").value = 100 * event.done / event.total;
   else if (event.stage === "complete") $("progress").value = 100;
@@ -43,17 +44,17 @@ function save(name, data, type = "application/json") {
 function newSession() { return new Session(invitation, manifestRef, build, { ...config, rehearsal: invitation.insecure_test_setup }, cache, update); }
 async function connect(value, pin) {
   require(!invitation, "Reload this page to switch invitations");
-  status("Authenticating the invitation and manifest…");
+  status("Checking your invitation…");
   const authenticated = await authenticate(value, pin);
   const opened = await PublicCache.open(`${value.manifest_sha256}:${value.contributor}`);
   invitation = value; manifestRef = authenticated.ref; cache = opened;
   session = newSession();
   $("join").hidden = true; $("participant").hidden = false;
-  $("participant-title").textContent = `Welcome, ${invitation.contributor}`;
+  $("participant-title").textContent = invitation.contributor;
   const bytes = invitation.jobs.reduce((sum, j) => sum + j.input.size, 0);
-  $("scope").textContent = `${invitation.jobs.length} core circuits · approximately ${(bytes / 1e6).toFixed(0)} MB to download and upload each. Work is reserved one circuit at a time.`;
+  $("scope").textContent = `${invitation.jobs.length} circuit${invitation.jobs.length === 1 ? "" : "s"} · ${formatBytes(bytes)} each way`;
   $("manifest").textContent = `Manifest SHA256: ${manifestRef.sha256}`;
-  if (invitation.insecure_test_setup) { $("notice").hidden = false; $("notice").textContent = "Rehearsal only. These parameters use an insecure test setup and cannot become production keys."; }
+  if (invitation.insecure_test_setup) { $("notice").hidden = false; $("notice").textContent = "Test ceremony. These keys are not for production."; }
   $("start").disabled = true;
   await refresh();
 }
@@ -65,9 +66,9 @@ async function refresh() {
     const view = await session.inspect();
     const done = new Set(view.receipts.map(r => r.circuit)).size === invitation.jobs.length;
     if (done) update({ stage: "complete" });
-    else status(view.checkpoint.lifecycle.phase === "open" ? "Ready. Choose the browser or native client to contribute." : `Ceremony is ${view.checkpoint.lifecycle.phase}. Accepted receipts remain available.`);
+    else status(view.checkpoint.lifecycle.phase === "open" ? "Ready when you are." : `Ceremony ${view.checkpoint.lifecycle.phase}. Your receipts are available.`);
     $("start").disabled = done || view.checkpoint.lifecycle.phase !== "open" || !browserCapable;
-    if (!browserCapable) status("This browser cannot run the worker safely. Use the native client below.");
+    if (!browserCapable) status("Use the terminal client in this browser.");
   } catch (e) { status(e.message, true); }
   finally { refreshing = false; $("refresh").disabled = false; }
 }
@@ -87,11 +88,11 @@ async function initialize() {
   for (const item of config.native) {
     require(/^spr-ceremony-(darwin|linux)-(arm64|amd64)$/.test(item.name) && item.url === `/native/${item.name}` && hex(item.sha256), "Invalid native download metadata");
     const a = document.createElement("a"); a.className = "button secondary"; a.href = item.url; a.download = item.name;
-    a.textContent = item.name.replace("spr-ceremony-", ""); $("downloads").append(a);
+    a.textContent = {"darwin-arm64": "Mac · Apple silicon", "darwin-amd64": "Mac · Intel", "linux-amd64": "Linux · x86-64", "linux-arm64": "Linux · ARM64"}[item.name.replace("spr-ceremony-", "")]; $("downloads").append(a);
   }
   $("native-unavailable").hidden = config.native.length !== 0;
   commands();
-  status("Open your private invitation link or choose the invitation file.");
+  status("Your invitation stays private.");
 }
 $("invitation").addEventListener("change", async () => {
   try {
@@ -105,7 +106,7 @@ $("invitation").addEventListener("change", async () => {
 $("start").addEventListener("click", async () => {
   if (active || refreshing || !invitation) return;
   active = true; session = newSession();
-  document.documentElement.dataset.stage = "starting"; status("Checking saved progress…");
+  document.documentElement.dataset.stage = "starting"; status("Resuming…");
   $("start").disabled = true; $("pause").disabled = false; $("refresh").disabled = true; $("native").disabled = true;
   const started = Date.now();
   const timer = setInterval(() => { $("elapsed").textContent = `${Math.floor((Date.now() - started) / 60000)} min ${Math.floor((Date.now() - started) / 1000) % 60} sec elapsed`; }, 1000);
@@ -115,14 +116,14 @@ $("start").addEventListener("click", async () => {
     await session.run();
   } catch (e) {
     document.documentElement.dataset.stage = e.name === "AbortError" ? "paused" : "error";
-    status(e.name === "AbortError" ? "Paused. Resume to reuse saved public work or recompute on the latest circuit head." : `${e.message}. Resume when ready, or use the native client.`, e.name !== "AbortError");
+    status(e.name === "AbortError" ? "Paused. Resume when ready." : `${e.message.replace(/[. ]+$/, "")}. Retry or use terminal.`, e.name !== "AbortError");
   } finally {
     active = false; clearInterval(timer); await wakeLock?.release().catch(() => {}); wakeLock = null;
     const complete = new Set(session.view?.receipts.map(r => r.circuit)).size === invitation.jobs.length;
-    $("start").disabled = complete || !browserCapable; $("start").textContent = complete ? "Completed" : "Resume in browser"; $("pause").disabled = true; $("refresh").disabled = false; $("native").disabled = false;
+    $("start").disabled = complete || !browserCapable; $("start").textContent = complete ? "Completed" : "Resume"; $("pause").disabled = true; $("refresh").disabled = false; $("native").disabled = false;
   }
 });
-$("pause").addEventListener("click", () => { $("pause").disabled = true; status("Pausing and releasing the reservation…"); session?.pause(); });
+$("pause").addEventListener("click", () => { $("pause").disabled = true; status("Pausing…"); session?.pause(); });
 $("native").addEventListener("click", () => { $("native-panel").hidden = !$("native-panel").hidden; });
 $("save-invitation").addEventListener("click", () => save("invitation.json", invitation));
 $("receipts").addEventListener("click", () => { if (session.view?.receipts.length) save("receipts.json", session.attestation()); });

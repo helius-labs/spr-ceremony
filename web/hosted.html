@@ -4,64 +4,65 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark">
-  <title>Zolana · Trusted setup ceremony</title>
+  <title>Solana Privacy Rings · Ceremony</title>
   <link rel="stylesheet" href="style.css">
   <script src="network.js" defer></script>
   <script type="module" src="hosted.js"></script>
 </head>
 <body>
 <main>
-  <p class="eyebrow">ZOLANA / TRUSTED SETUP</p>
-  <h1>Make the setup<br>stronger together.</h1>
-  <p class="intro">Contribute fresh randomness from your computer. The ceremony verifies your public contribution before accepting it.</p>
-  <noscript><p class="notice">JavaScript is required for the browser client. You can use the native client with your invitation file.</p></noscript>
+  <p class="eyebrow"><span class="mark" aria-hidden="true"></span> TRUSTED SETUP</p>
+  <h1>Solana Privacy<br><span>Rings.</span></h1>
+  <noscript><p class="notice">Enable JavaScript or use the terminal client.</p></noscript>
   <p id="notice" class="notice" hidden></p>
   <section id="join" aria-labelledby="join-title">
-    <h2 id="join-title">Join with your invitation</h2>
-    <p>Open the private link from the organizer, or choose your invitation file. No account is needed.</p>
-    <label class="file-label" for="invitation">Invitation JSON</label>
+    <h2 id="join-title">Your invitation</h2>
+    <label class="file-label" for="invitation">Choose your invitation file</label>
     <input id="invitation" type="file" accept=".json,application/json">
-    <p class="detail">Keep your invitation private. Its token stays in this tab’s memory. Reopen the link or file after a reload to resume.</p>
+    <p class="detail">Or open your private link.</p>
   </section>
   <section id="participant" aria-labelledby="participant-title" hidden>
     <div class="heading"><h2 id="participant-title"></h2><span id="count">0 accepted</span></div>
-    <p id="scope"></p>
-    <div class="buttons">
-      <button id="start" disabled>Contribute in browser</button>
+    <p id="scope" class="detail"></p>
+    <div class="buttons" id="contribute-actions">
+      <button id="start" disabled>Contribute</button>
       <button id="pause" class="secondary" disabled>Pause</button>
-      <button id="native" class="secondary">Use native client</button>
+      <button id="native" class="secondary">Use terminal</button>
     </div>
-    <p class="detail">Keep this tab open and your computer awake. Large core circuits can take around 10 minutes each in a browser. The native client is faster.</p>
     <p id="circuit" class="detail"></p>
     <progress id="progress" max="100" value="0" aria-label="Current circuit progress"></progress>
     <p id="elapsed" class="detail"></p>
-    <div class="buttons"><button id="receipts" class="secondary" disabled>Save public receipts</button><button id="refresh" class="secondary">Refresh progress</button></div>
+    <p class="detail" id="keep-open">Keep this tab open. Terminal is faster.</p>
+    <div class="buttons footer-actions"><button id="receipts" class="secondary" disabled>Save receipts</button><button id="refresh" class="secondary">Refresh</button></div>
   </section>
-  <p id="status" role="status" aria-live="polite">Loading the ceremony…</p>
+  <p id="status" role="status" aria-live="polite">Loading…</p>
   <section id="native-panel" aria-labelledby="native-title" hidden>
-    <h2 id="native-title">Contribute with the native client</h2>
-    <p>Download the binary for your computer, verify it, and save your private invitation. The client joins the same queue; accepted progress appears here.</p>
+    <h2 id="native-title">Use your terminal.</h2>
+    <p>Download. Verify. Contribute.</p>
     <div id="downloads" class="downloads"></div>
-    <p id="native-unavailable" class="detail" hidden>The organizer has not installed native downloads on this host. Build from the source revision shown below, or obtain that revision’s attested binary from the organizer.</p>
-    <div class="buttons"><button id="save-invitation">Save private invitation</button></div>
+    <p id="native-unavailable" class="detail" hidden>Downloads aren’t configured on this host. Use your existing binary.</p>
+    <div class="buttons"><button id="save-invitation">Save invitation</button></div>
     <label for="platform">Your computer</label>
     <select id="platform"><option value="darwin-arm64">Mac · Apple silicon</option><option value="darwin-amd64">Mac · Intel</option><option value="linux-amd64">Linux · x86-64</option><option value="linux-arm64">Linux · ARM64</option></select>
-    <p>In Terminal, open the folder containing the downloads, then run:</p>
+    <p class="detail">Run from your downloads folder:</p>
     <pre id="native-command"></pre>
-    <details><summary>Verify the downloaded program</summary>
-      <p>Compare its SHA256 with an independently authenticated release. A checksum supplied by this website alone cannot authenticate the website.</p>
-      <p>GitHub’s CLI can verify the build attestation. Check that the source commit matches the published release:</p>
+    <details><summary>Verify your download</summary>
+      <p>Check the release hash and build attestation against the published source commit. A checksum from this website alone cannot authenticate it.</p>
       <pre id="verify-command"></pre>
       <p id="revision" class="detail"></p>
-      <a href="https://github.com/helius-labs/spr-ceremony" target="_blank" rel="noopener noreferrer">Source and build instructions</a>
+      <a href="https://github.com/helius-labs/spr-ceremony" target="_blank" rel="noopener noreferrer">Source</a>
     </details>
   </section>
   <details>
-    <summary>What am I trusting?</summary>
-    <p>The worker uses the browser’s cryptographic random source, checks the input hash, computes the contribution, and verifies it locally. Only the public result is uploaded. The coordinator independently verifies it and commits a checkpoint before accepting it.</p>
-    <p>You are trusting the code delivered by this host and your computer. A compromised host or extension could steal randomness. For an independently checked build, use the native client or review and host the source yourself. Neither browser nor native execution guarantees memory erasure.</p>
-    <p>Public download chunks, completed outputs awaiting acceptance, and receipts are kept in browser storage. Storage can be evicted; save your receipts. A receipt proves inclusion in the checkpoint you checked. Final transcript verification is a separate step.</p>
-    <p>Pausing stops the worker and releases the reservation. A saved output can be reused only while its parent remains the current circuit head. Otherwise a new contribution is required.</p>
+    <summary>How it works</summary>
+    <p>Your computer adds fresh randomness and verifies the result. Only public data is uploaded. The coordinator verifies it again before acceptance.</p>
+    <p>One contributor per circuit. Large circuits can take about 10 minutes in a browser. Keep your computer awake.</p>
+    <p>Pause releases your reservation. Reopen your private invitation to resume. Saved output is reusable while its parent is current; unfinished computation restarts.</p>
+  </details>
+  <details>
+    <summary>Trust &amp; verification</summary>
+    <p>You trust this host’s code and your computer. A compromised host or extension could steal randomness. For an independently checked build, use the terminal client. Neither client guarantees memory erasure.</p>
+    <p>Browser storage holds public work and receipts. Your invitation stays in memory. Save your receipts: storage can be evicted. Receipt inclusion and final transcript verification are separate checks.</p>
     <p class="detail" id="manifest"></p>
     <p class="detail" id="build"></p>
   </details>
