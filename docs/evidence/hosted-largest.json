@@ -1,0 +1,169 @@
+{
+  "format": "spr-hosted-large-rehearsal-v1",
+  "circuit": "merge_52_1",
+  "insecure_test_setup": true,
+  "initial_run": {
+    "served_build": {
+      "format": "spr-browser-build-v1",
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "go_version": "go1.27.3",
+      "source_revision": "8e6b8aa92c7e8c248f72799f42b6757cde37c10f",
+      "source_modified": true,
+      "assets": {
+        "app.js": {
+          "sha256": "85ba636bd04bdd9912797cec231012ba9ee623aea26bc4d20710d68c50285eae",
+          "size": 5761
+        },
+        "cache.js": {
+          "sha256": "8461605abcef9d68d7857d71c60b0ed6d0b140c3fd624da986832cb456723317",
+          "size": 1984
+        },
+        "contributor.wasm": {
+          "sha256": "d14b5a415674ccc569f19a32763360ddc4915fb6e7383494970acf917af1da12",
+          "size": 8735034
+        },
+        "hosted.html": {
+          "sha256": "9633a5ed7a981f607f923c3ef3d836c13ac36c687421b862b511e98eac5abbe2",
+          "size": 5223
+        },
+        "hosted.js": {
+          "sha256": "b3b5965a3ebc4f38036d7f6b825b1580364a35decebdaf5780393968696b35da",
+          "size": 10278
+        },
+        "index.html": {
+          "sha256": "370a2ea8d83e3b134298eae7472840d4c8e31270fbb6c7459f8c9bf415a78638",
+          "size": 2561
+        },
+        "network.js": {
+          "sha256": "1d67daf0c7d0dedac955bcb5547d51ebc1088a5e875b722985a7e26d43f742bc",
+          "size": 1440
+        },
+        "protocol.js": {
+          "sha256": "5d23025768de0a2ffc56a8acd10a7d9ad59b126b4ea9f3bea318496cb4841b51",
+          "size": 9582
+        },
+        "session.js": {
+          "sha256": "65728a6d1128065fa93444d2f1a1aee29444cbd858fdcbbc15aa503bc5f6cc51",
+          "size": 10932
+        },
+        "style.css": {
+          "sha256": "88de4792ab920f1bb5ca089ab5551d9728f85cdfbba77ec49db462aa9c02dcd8",
+          "size": 2582
+        },
+        "transfer.js": {
+          "sha256": "e840728d02628eeee4ae31aebc61987c46a0a00c3305933b27fabb5965d09fed",
+          "size": 3032
+        },
+        "wasm_exec.js": {
+          "sha256": "0c949f4996f9a89698e4b5c586de32249c3b69b7baadb64d220073cc04acba14",
+          "size": 16992
+        },
+        "worker.js": {
+          "sha256": "576f32fecade65f2c4f24078e4fbbb26fb525240d6ba73eb32f4cc39db32f1c5",
+          "size": 1731
+        }
+      }
+    },
+    "input_bytes": 102801483,
+    "local_computation_and_verification_completed": true,
+    "computed_stage_wall_seconds": 578.45,
+    "native_acceptance_verified": true,
+    "automation_limitation": "Playwright exceeded Node string limits when inspecting the large ArrayBuffer POST after computation. The coordinator accepted the contribution. This run did not retain its final browser report."
+  },
+  "recovery_run": {
+    "browser": "chromium",
+    "version": "153.0.8010.12",
+    "wall_seconds": 0.3004698449985881,
+    "reports": [],
+    "receipts": {
+      "format": "spr-ceremony-v1",
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "manifest_sha256": "641db040756fa5fa7c30c36d67688f20bddc942ec862ed99db31e2f886258c22",
+      "contributor": "hosted-chromium",
+      "track": "core",
+      "insecure_test_setup": true,
+      "receipts": [
+        {
+          "circuit": "merge_52_1",
+          "sequence": 3,
+          "contributor": "hosted-chromium",
+          "parent": {
+            "sha256": "0eba5d455331537f35c3731fa099894f6d1645c4de719a9d340a723e5be867a1",
+            "size": 102801483
+          },
+          "output": {
+            "sha256": "88a7c1fb82d1c3f19b0ff444e8716754cbe56b099ae937076f9d3770ba79a48b",
+            "size": 102801483
+          },
+          "accepted_at": "2026-10-27T23:09:18.950094345Z"
+        }
+      ]
+    },
+    "native_acceptance": true,
+    "checkpoint_inclusion": true,
+    "recovery_and_reupload": true,
+    "safari_tested": false,
+    "build": {
+      "format": "spr-browser-build-v1",
+      "engine": "gnark-v0.16.4-bn254-mpcsetup",
+      "go_version": "go1.27.3",
+      "source_revision": "81be50f9d0d213ec2000d4f7fdff72a1d5838016",
+      "source_modified": true,
+      "assets": {
+        "app.js": {
+          "sha256": "85ba636bd04bdd9912797cec231012ba9ee623aea26bc4d20710d68c50285eae",
+          "size": 5761
+        },
+        "cache.js": {
+          "sha256": "8461605abcef9d68d7857d71c60b0ed6d0b140c3fd624da986832cb456723317",
+          "size": 1984
+        },
+        "contributor.wasm": {
+          "sha256": "939425e569e110db1e9d893d3c3168dc54a059740b498a7beaaec90f3de176f0",
+          "size": 8735034
+        },
+        "hosted.html": {
+          "sha256": "9633a5ed7a981f607f923c3ef3d836c13ac36c687421b862b511e98eac5abbe2",
+          "size": 5223
+        },
+        "hosted.js": {
+          "sha256": "df8e63afd955b68458102a357181e493cd0ef790f3cf6046c4a99f82ffee736d",
+          "size": 10295
+        },
+        "index.html": {
+          "sha256": "370a2ea8d83e3b134298eae7472840d4c8e31270fbb6c7459f8c9bf415a78638",
+          "size": 2561
+        },
+        "network.js": {
+          "sha256": "1d67daf0c7d0dedac955bcb5547d51ebc1088a5e875b722985a7e26d43f742bc",
+          "size": 1440
+        },
+        "protocol.js": {
+          "sha256": "5d23025768de0a2ffc56a8acd10a7d9ad59b126b4ea9f3bea318496cb4841b51",
+          "size": 9582
+        },
+        "session.js": {
+          "sha256": "cac4fa0b11c6ba631a4dd709deba7547f6f3671b49ad5fd3b5ff2969d8b779e9",
+          "size": 11476
+        },
+        "style.css": {
+          "sha256": "88de4792ab920f1bb5ca089ab5551d9728f85cdfbba77ec49db462aa9c02dcd8",
+          "size": 2582
+        },
+        "transfer.js": {
+          "sha256": "e840728d02628eeee4ae31aebc61987c46a0a00c3305933b27fabb5965d09fed",
+          "size": 3032
+        },
+        "wasm_exec.js": {
+          "sha256": "0c949f4996f9a89698e4b5c586de32249c3b69b7baadb64d220073cc04acba14",
+          "size": 16992
+        },
+        "worker.js": {
+          "sha256": "576f32fecade65f2c4f24078e4fbbb26fb525240d6ba73eb32f4cc39db32f1c5",
+          "size": 1731
+        }
+      }
+    }
+  },
+  "note": "Recovery independently checked the accepted checkpoint and resubmitted the identical 102.8 MB public output as a Blob, without advancing history. The shipped client saves ArrayBuffers in IndexedDB and uploads Blobs. Linux Chromium only for this hosted large test; earlier isolated engine tests include Linux WebKit. Safari and full 41-circuit browser sessions remain device tests."
+}

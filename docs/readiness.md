@@ -38,8 +38,9 @@ checks, reservation conflicts, checkpoint rewrites, and finalized-key recovery.
 Tests run with the race detector. The toolchain is updated to Go 1.27.3 and
 network dependencies to the patched versions; gnark and gnark-crypto pins remain
 unchanged. Govulncheck 1.9.0 is required in CI; the current scan finds zero
-called or imported-package vulnerabilities. The remaining module advisory is for
-`x/crypto/openpgp`, which is not imported.
+called or imported-package vulnerabilities. Module-level advisories are reported
+separately for code outside the imported package set; this is not a claim that
+every package in every dependency module is free of advisories.
 [Security update evidence](evidence/security-updates.json) records versions and
 advisories. Recompiling all 41 circuits after these updates reproduced every
 original R1CS hash. The S3 integration suite additionally exercises

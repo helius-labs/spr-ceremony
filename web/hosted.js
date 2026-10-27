@@ -54,12 +54,12 @@ async function connect(value, pin) {
   $("scope").textContent = `${invitation.jobs.length} core circuits · approximately ${(bytes / 1e6).toFixed(0)} MB to download and upload each. Work is reserved one circuit at a time.`;
   $("manifest").textContent = `Manifest SHA256: ${manifestRef.sha256}`;
   if (invitation.insecure_test_setup) { $("notice").hidden = false; $("notice").textContent = "Rehearsal only. These parameters use an insecure test setup and cannot become production keys."; }
-  $("start").disabled = !browserCapable;
+  $("start").disabled = true;
   await refresh();
 }
 async function refresh() {
   if (!invitation || active || refreshing) return;
-  refreshing = true; $("refresh").disabled = true;
+  refreshing = true; $("refresh").disabled = true; $("start").disabled = true;
   try {
     session = newSession();
     const view = await session.inspect();

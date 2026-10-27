@@ -1,0 +1,30 @@
+{
+  "source_revision": "81be50f9d0d213ec2000d4f7fdff72a1d5838016",
+  "workflow": "https://github.com/helius-labs/spr-ceremony/actions/runs/40599416944",
+  "attestation_verified": true,
+  "browser_archive_attestation_verified": true,
+  "downloads": [
+    {
+      "name": "spr-ceremony-darwin-arm64",
+      "sha256": "ff82570a798c0b189f9e5df819a1ccf1b3a7f8dc4f9fcc23c403b6fb41d3a177",
+      "download_verified": true
+    },
+    {
+      "name": "spr-ceremony-darwin-amd64",
+      "sha256": "439520fe2c845b2c982c21ad379ea182b192322d39946a612a490e6a67a40df5",
+      "download_verified": true
+    },
+    {
+      "name": "spr-ceremony-linux-arm64",
+      "sha256": "b44c7f8d92c04d64689f1e111753de1c50ef44cc7f1fce805d637eba908c51fc",
+      "download_verified": true
+    },
+    {
+      "name": "spr-ceremony-linux-amd64",
+      "sha256": "5c89d28b91662da4c3cc1dbc67ce7ff64c8663c53962c8a171b764109425c331",
+      "download_verified": true
+    }
+  ],
+  "linux_amd64_contribution_verified": true,
+  "macos_native_execution_tested": false
+}

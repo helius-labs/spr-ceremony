@@ -150,7 +150,7 @@ export class Session {
       // Recheck after computation/tab suspension before spending time uploading.
       await renew();
       this.event("upload");
-      const receipt = await this.api(`/v1/contributions/${job.circuit.spec.id}`, { body: pending.output, signal, timeout: 30 * 60 * 1000 });
+      const receipt = await this.api(`/v1/contributions/${job.circuit.spec.id}`, { body: new Blob([pending.output], { type: "application/octet-stream" }), signal, timeout: 30 * 60 * 1000 });
       checkReceipt(receipt, job, this.invitation, pending.report.output);
       this.event("receipt");
       const view = await this.inspect(signal);

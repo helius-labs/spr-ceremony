@@ -42,6 +42,56 @@ after a reload. Do not put invitation tokens in query strings, analytics, logs,
 public screenshots, or tickets. Authenticate the manifest pin through the private
 invitation delivery channel and an independently published announcement.
 
+## Manual test on a Mac
+
+Use the small local rehearsal first, including Safari on the actual Mac. It has
+**two** core test circuits, not the real 41-circuit catalog. A successful browser
+run shows **2 / 2 accepted** and enables **Save public receipts**.
+
+1. Finish a contribution in Safari and save its receipts. Reload the page, choose
+   the same invitation file again, and confirm it still shows **2 / 2 accepted**.
+   The token is deliberately not retained across reloads. Reopening must not add
+   another contribution.
+2. In another terminal, verify the whole core transcript independently:
+
+   ```sh
+   manifest_sha=$(shasum -a 256 ceremony-data/web-demo/manifest.json | awk '{print $1}')
+   ./spr-ceremony audit --dir ceremony-data/web-demo --manifest-sha256 "$manifest_sha"
+   ```
+
+   Expect `Transcript verified: core`.
+3. Create a second invitation to test the native option:
+
+   ```sh
+   ./spr-ceremony invite --dir ceremony-data/web-demo \
+     --url http://127.0.0.1:8080 --name bob --out invitations/bob.json
+   ```
+
+   Reload the page, choose `invitations/bob.json`, and open **Use native client**.
+   For this local test, use the binary you already built:
+
+   ```sh
+   ./spr-ceremony contribute --invitation invitations/bob.json --work work/web-native
+   ```
+
+   Keep the server running in the first terminal. Click **Refresh progress** in
+   the browser; Bob should now show **2 / 2 accepted**. Run the audit again.
+   The local rehearsal has no binary downloads unless `--native-dir` is set;
+   the already built `spr-ceremony` is sufficient for testing the handoff.
+4. Repeat with a fresh pseudonym in another browser. Accepted contributors are
+   identified by pseudonym, so reusing Alice's invitation will correctly show
+   completed work instead of creating a new participant.
+5. For a manual pause or reload during work, use browser network throttling or a
+   real core rehearsal: the toy circuits finish too quickly for reliable manual
+   interruption. **Pause** should release the lease and **Resume** should finish.
+   Closing/reloading loses in-progress computation; completed public work can be
+   reused only if its parent is still current. Automated CI covers these cases.
+
+Stop the server with Ctrl-C. Restarting `serve` with the same directory preserves
+accepted work; `demo` must be given a new output directory for a fresh campaign.
+This local check does not exercise WAN/TLS, actual AWS permissions, or full core
+resource requirements. Those remain separate staging tests.
+
 ## Participant behavior
 
 - One lease per circuit. Different contributors can compute on different circuits
@@ -180,6 +230,11 @@ python /path/to/scripts/test-hosted-browser.py --binary ./spr-ceremony \
 
 Set `SPR_S3_ENDPOINT` to a loopback Moto endpoint to exercise presigned downloads
 and restore. The test creates its own marked ceremony and emulator bucket.
+
+[The hosted largest-core rehearsal](evidence/hosted-largest.json) records a
+102.8 MB contribution accepted by the native coordinator and recovered from its
+checkpoint. A Playwright large-body inspection limit interrupted the original
+automation after acceptance; Blob upload and idempotent reupload were then checked.
 
 [Measured browser results](evidence/browser-benchmarks.json) include real small
 and largest core circuits. These are Linux Chromium/WebKit results, not macOS

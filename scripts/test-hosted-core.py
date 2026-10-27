@@ -18,6 +18,7 @@ async def main():
     p.add_argument('--web-dir', default='dist/browser')
     p.add_argument('--out', required=True)
     p.add_argument('--browser', choices=['chromium', 'webkit'], default='chromium')
+    p.add_argument('--recover', action='store_true', help='recover a previously accepted marked run and reupload its identical public output')
     args = p.parse_args()
     binary, directory, web, out = map(lambda x: Path(x).resolve(), [args.binary, args.dir, args.web_dir, args.out])
     raw = (directory / 'manifest.json').read_bytes()
@@ -60,9 +61,11 @@ async def main():
             page.on('pageerror', lambda e: errors.append(str(e)))
             await page.goto(origin)
             await page.locator('#invitation').set_input_files(invite)
-            await page.wait_for_function('() => !document.querySelector("#start").disabled')
+            await page.wait_for_function('() => !document.querySelector("#refresh").disabled && (!document.querySelector("#start").disabled || document.documentElement.dataset.stage === "complete")')
+            already_done = await page.get_attribute('html', 'data-stage') == 'complete'
+            assert not already_done or args.recover, 'This pseudonym already finished; use --recover to check recovery'
             start = time.monotonic()
-            await page.locator('#start').click()
+            if not already_done: await page.locator('#start').click()
             last = None
             while time.monotonic() - start < 2400:
                 stage = await page.get_attribute('html', 'data-stage')
@@ -79,11 +82,28 @@ async def main():
             await (await downloading.value).save_as(receipt)
             subprocess.run([binary, 'verify-attestation', '--dir', directory, '--attestation', receipt,
                             '--manifest-sha256', hashlib.sha256(raw).hexdigest()], check=True, capture_output=True)
+            if args.recover:
+                receipts = json.loads(receipt.read_text())['receipts']
+                invitation = json.loads(invite.read_text())
+                # Fetch/upload inside the browser; never serialize the large
+                # binary through Playwright's JSON transport. Blob uploads also
+                # avoid DevTools expanding raw binary postData into giant text.
+                for entry in receipts:
+                    result = await page.evaluate('''async data => {
+                      const bytes = await (await fetch('/v1/objects/' + data.receipt.output.sha256)).arrayBuffer();
+                      const response = await fetch('/v1/contributions/' + data.receipt.circuit, {
+                        method: 'POST', headers: {Authorization: 'Bearer ' + data.token, 'Content-Type': 'application/octet-stream'},
+                        body: new Blob([bytes], {type: 'application/octet-stream'})
+                      });
+                      if (!response.ok) throw new Error('Reupload failed: ' + response.status);
+                      return await response.json();
+                    }''', {'token': invitation['token'], 'receipt': entry})
+                    assert result == entry
             await page.screenshot(path=out / 'page.png', full_page=True)
             report = {'browser': args.browser, 'version': browser.version, 'wall_seconds': time.monotonic() - start,
                       'reports': await page.evaluate('() => window.sprRunReports'), 'receipts': json.loads(receipt.read_text()),
-                      'native_acceptance': True, 'checkpoint_inclusion': True, 'safari_tested': False,
-                      'build': json.loads((web / 'build.json').read_text())}
+                      'native_acceptance': True, 'checkpoint_inclusion': True, 'recovery_and_reupload': args.recover, 'safari_tested': False,
+                      'build': await (await context.request.get(origin + '/build.json')).json()}
             (out / 'result.json').write_text(json.dumps(report, indent=2) + '\n')
             print(json.dumps({'complete': True, 'seconds': report['wall_seconds']}), flush=True)
             await browser.close()
