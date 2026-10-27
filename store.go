@@ -10,7 +10,6 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
-	"syscall"
 	"time"
 
 	mpc "github.com/consensys/gnark/backend/groth16/bn254/mpcsetup"
@@ -67,11 +66,14 @@ type Invitation struct {
 	Expires           time.Time `json:"expires"`
 	InsecureTestSetup bool      `json:"insecure_test_setup"`
 	Jobs              []Job     `json:"jobs"`
+	Mode              string    `json:"mode,omitempty"`
 }
 type Store struct {
 	Dir              string
 	Manifest         Manifest
 	ManifestArtifact Artifact
+	Remote           BlobStore
+	now              func() time.Time
 }
 type Input struct {
 	Spec Spec
@@ -82,7 +84,18 @@ func (s *Store) Object(a Artifact) string   { return filepath.Join(s.Dir, "objec
 func (s *Store) statePath(id string) string { return filepath.Join(s.Dir, "state", id+".json") }
 func (s *Store) State(id string) (State, error) {
 	var st State
-	e := ReadJSON(s.statePath(id), &st)
+	cp, _, e := s.checkpoint()
+	if e != nil {
+		return st, e
+	}
+	ref, ok := cp.States[id]
+	if !ok {
+		return st, fmt.Errorf("unknown circuit")
+	}
+	if e = Check(s.Object(ref), ref); e != nil {
+		return st, e
+	}
+	e = ReadJSON(s.Object(ref), &st)
 	return st, e
 }
 func (s *Store) put(path string) (Artifact, error) {
@@ -145,6 +158,9 @@ func Prepare(dir, source, srsPath string, info SRSInfo, inputs []Input, maxDomai
 	s := &Store{Dir: tmp, Manifest: Manifest{Format: Format, Engine: Engine, SourceRevision: source, Phase1: info}}
 	srs, e := ReadSRS(srsPath, maxDomain)
 	if e != nil {
+		return e
+	}
+	if _, e = s.put(srsPath); e != nil {
 		return e
 	}
 	seen := map[string]bool{}
@@ -213,6 +229,13 @@ func Prepare(dir, source, srsPath string, info SRSInfo, inputs []Input, maxDomai
 	if e = WriteJSON(filepath.Join(tmp, "manifest.json"), s.Manifest); e != nil {
 		return e
 	}
+	s.ManifestArtifact, e = Digest(filepath.Join(tmp, "manifest.json"))
+	if e != nil {
+		return e
+	}
+	if e = s.initializeCheckpoint(); e != nil {
+		return e
+	}
 	return os.Rename(tmp, dir)
 }
 
@@ -249,14 +272,38 @@ func (s *Store) circuit(id string) (Circuit, error) {
 }
 
 func (s *Store) Invite(url, name, track string, ttl time.Duration) (Invitation, error) {
+	return s.invite(url, name, track, ttl, "")
+}
+
+func (s *Store) InviteQueued(url, name, track string, ttl time.Duration) (Invitation, error) {
+	return s.invite(url, name, track, ttl, "queue")
+}
+
+func (s *Store) invite(url, name, track string, ttl time.Duration, mode string) (Invitation, error) {
 	if !safeID.MatchString(name) || (track != Core && track != Large) || ttl <= 0 {
 		return Invitation{}, fmt.Errorf("invalid contributor, track, or lifetime")
+	}
+	unlock, e := s.lock()
+	if e != nil {
+		return Invitation{}, e
+	}
+	defer unlock()
+	cp, _, e := s.checkpoint()
+	if e != nil {
+		return Invitation{}, e
+	}
+	if cp.Lifecycle.Phase != "open" {
+		return Invitation{}, fmt.Errorf("ceremony is not open")
+	}
+	if cp.Lifecycle.Beacon != nil && !s.nowUTC().Before(cp.Lifecycle.Beacon.RoundTime) {
+		return Invitation{}, fmt.Errorf("announced beacon deadline has passed")
 	}
 	b := make([]byte, 32)
 	if _, e := rand.Read(b); e != nil {
 		return Invitation{}, e
 	}
 	i := Invitation{Format: Format, URL: url, Token: hex.EncodeToString(b), ManifestSHA256: s.ManifestArtifact.SHA256, Contributor: name, Track: track, Expires: time.Now().UTC().Add(ttl), InsecureTestSetup: s.Manifest.Phase1.InsecureTestSetup}
+	i.Mode = mode
 	for _, c := range s.Manifest.Circuits {
 		if c.Spec.Track == track {
 			st, e := s.State(c.Spec.ID)
@@ -284,8 +331,8 @@ func (s *Store) invitation(token string) (Invitation, error) {
 	return i, nil
 }
 
-// Accept uses a per-circuit OS lock, including across processes. Large circuit
-// verification cannot prevent unrelated circuits from advancing.
+// Accept serializes the commit under a coordinator lock, including across
+// processes. S3 publication is part of acceptance when remote storage is enabled.
 func (s *Store) Accept(token, id, path string) (Receipt, error) {
 	i, e := s.invitation(token)
 	if e != nil {
@@ -301,15 +348,15 @@ func (s *Store) Accept(token, id, path string) (Receipt, error) {
 	if job == nil {
 		return Receipt{}, fmt.Errorf("circuit is not in invitation")
 	}
-	lock, e := os.OpenFile(s.statePath(id)+".lock", os.O_CREATE|os.O_RDWR, 0600)
+	unlock, e := s.lock()
 	if e != nil {
 		return Receipt{}, e
 	}
-	defer lock.Close()
-	if e = syscall.Flock(int(lock.Fd()), syscall.LOCK_EX); e != nil {
+	defer unlock()
+	cp, checkpoint, e := s.checkpoint()
+	if e != nil {
 		return Receipt{}, e
 	}
-	defer syscall.Flock(int(lock.Fd()), syscall.LOCK_UN)
 	st, e := s.State(id)
 	if e != nil {
 		return Receipt{}, e
@@ -319,9 +366,22 @@ func (s *Store) Accept(token, id, path string) (Receipt, error) {
 		return Receipt{}, e
 	}
 	for _, r := range st.History {
-		if r.Output == a && r.Parent == job.Input && r.Contributor == i.Contributor {
+		if r.Output == a && (r.Parent == job.Input || i.Mode == "queue") && r.Contributor == i.Contributor {
 			return r, nil
 		}
+	}
+	if cp.Lifecycle.Phase != "open" {
+		return Receipt{}, fmt.Errorf("ceremony is not open")
+	}
+	if cp.Lifecycle.Beacon != nil && !s.nowUTC().Before(cp.Lifecycle.Beacon.RoundTime) {
+		return Receipt{}, fmt.Errorf("announced beacon deadline has passed")
+	}
+	if i.Mode == "queue" {
+		l, e := s.lease(token, id)
+		if e != nil {
+			return Receipt{}, e
+		}
+		job = &l.Job
 	}
 	if st.Head != job.Input || len(st.History)+1 != job.Sequence {
 		return Receipt{}, fmt.Errorf("stale invitation: circuit has advanced; request a new invitation")
@@ -336,10 +396,24 @@ func (s *Store) Accept(token, id, path string) (Receipt, error) {
 	if e != nil {
 		return Receipt{}, e
 	}
+	if cp.Lifecycle.Beacon != nil && !s.nowUTC().Before(cp.Lifecycle.Beacon.RoundTime) {
+		return Receipt{}, fmt.Errorf("announced beacon deadline passed during verification")
+	}
 	r := Receipt{Circuit: id, Sequence: job.Sequence, Contributor: i.Contributor, Parent: st.Head, Output: a, AcceptedAt: time.Now().UTC()}
 	st.Head = a
 	st.History = append(st.History, r)
-	return r, WriteJSON(s.statePath(id), st)
+	ref, e := s.putJSON(st)
+	if e != nil {
+		return Receipt{}, e
+	}
+	cp.States[id] = ref
+	if e = s.commitCheckpoint(cp, checkpoint); e != nil {
+		return Receipt{}, e
+	}
+	if i.Mode == "queue" {
+		_ = os.Remove(s.leasePath(id))
+	}
+	return r, nil
 }
 
 // Audit reconstructs the initial state from pinned R1CS/SRS and replays every
@@ -351,6 +425,9 @@ func (s *Store) Audit(track string, maxDomain uint64) error {
 // audit can consume the reconstructed evaluations after each circuit's full
 // transcript has verified. Export uses this to avoid repeating initialization.
 func (s *Store) audit(track string, maxDomain uint64, consume func(Circuit, *mpc.SrsCommons, *mpc.Phase2Evaluations, State) error) error {
+	if err := s.AuditCheckpoints(); err != nil {
+		return err
+	}
 	count := 0
 	for _, c := range s.Manifest.Circuits {
 		if c.Spec.Track != track {

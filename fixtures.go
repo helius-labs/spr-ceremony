@@ -30,8 +30,8 @@ func (c *DemoCircuit) Define(api frontend.API) error {
 }
 
 func TestSRS(path string, power uint) error {
-	if power < 2 || power > 20 {
-		return fmt.Errorf("test SRS power must be between 2 and 20")
+	if power < 2 || power > 22 {
+		return fmt.Errorf("test SRS power must be between 2 and 22")
 	}
 	p := new(mpc.Phase1)
 	p.Initialize(uint64(1) << power)

@@ -12,6 +12,7 @@ import (
 	"github.com/consensys/gnark-crypto/ecc"
 	"github.com/consensys/gnark/backend/groth16"
 	"github.com/consensys/gnark/constraint"
+	gnarkio "github.com/consensys/gnark/io"
 	ceremony "github.com/helius-labs/spr-ceremony"
 	"github.com/helius-labs/zolana/prover/server/prover/common"
 	merge "github.com/helius-labs/zolana/prover/server/prover/merge"
@@ -50,6 +51,8 @@ func run(args []string) error {
 	out := f.String("out", "", "new output directory")
 	exported := f.String("export", "", "directory containing exported ceremony pk/vk files")
 	storeDir := f.String("ceremony", "", "ceremony directory containing pinned R1CS objects")
+	manifestDigest := f.String("manifest-sha256", "", "authenticated ceremony manifest digest")
+	checkpointDigest := f.String("checkpoint-sha256", "", "authenticated finalized checkpoint digest")
 	maxDomain := f.Uint64("max-domain", 1<<22, "maximum in-memory SRS domain during export verification")
 	if e := f.Parse(args[1:]); e != nil {
 		return e
@@ -122,9 +125,31 @@ func run(args []string) error {
 		if s.ManifestArtifact.SHA256 != exportedManifest.ManifestSHA256 || s.Manifest.SourceRevision != zolanaRevision {
 			return fmt.Errorf("ceremony source or manifest mismatch")
 		}
+		life, checkpoint, e := s.Lifecycle()
+		if e != nil {
+			return e
+		}
+		exportRef, e := ceremony.Digest(filepath.Join(*exported, "export.json"))
+		if e != nil {
+			return e
+		}
+		if life.Phase != "finalized" || life.FinalExport == nil || *life.FinalExport != exportRef {
+			return fmt.Errorf("package requires the finalized export")
+		}
+		if *manifestDigest != s.ManifestArtifact.SHA256 || *checkpointDigest != checkpoint.SHA256 {
+			return fmt.Errorf("authenticated manifest and finalized checkpoint digests are required")
+		}
 		if e = s.VerifyExport(*exported, *maxDomain); e != nil {
 			return e
 		}
+		packageInfo := struct {
+			Source     string                       `json:"source_revision"`
+			Manifest   ceremony.Artifact            `json:"manifest"`
+			Checkpoint ceremony.Artifact            `json:"checkpoint"`
+			Export     ceremony.Artifact            `json:"export"`
+			Keys       map[string]ceremony.Artifact `json:"keys"`
+			RawVKs     map[string]ceremony.Artifact `json:"raw_vks"`
+		}{zolanaRevision, s.ManifestArtifact, checkpoint, exportRef, map[string]ceremony.Artifact{}, map[string]ceremony.Artifact{}}
 		for _, entry := range exportedManifest.Circuits {
 			spec := entry.Circuit.Spec
 			if !ceremony.IsCatalogSpec(spec) || spec.Track != *track {
@@ -153,20 +178,31 @@ func run(args []string) error {
 			if e = ceremony.ReadBinary(vkPath, vk); e != nil {
 				return e
 			}
-			var system io.WriterTo
-			switch spec.Family {
-			case "transfer-confidential":
-				system = &common.TransferProofSystem{CircuitType: common.TransferConfidentialCircuitType, NInputs: spec.Inputs, NOutputs: spec.Outputs, Confidential: true, ProvingKey: pk, VerifyingKey: vk, ConstraintSystem: ccs}
-			case "merge":
-				system = &common.TransferProofSystem{CircuitType: common.MergeCircuitType, NInputs: spec.Inputs, NOutputs: 1, HasCommitment: true, ProvingKey: pk, VerifyingKey: vk, ConstraintSystem: ccs}
-			case "address-append":
-				system = &common.BatchProofSystem{CircuitType: common.BatchAddressAppendCircuitType, TreeHeight: spec.Height, BatchSize: spec.Batch, ProvingKey: pk, VerifyingKey: vk, ConstraintSystem: ccs}
-			default:
-				return fmt.Errorf("unsupported circuit")
+			system, e := wrapSystem(spec, pk, vk, ccs)
+			if e != nil {
+				return e
 			}
 			if e = ceremony.WriteBinary(filepath.Join(tmp, spec.ID+".key"), system); e != nil {
 				return e
 			}
+			keyName, vkName := spec.ID+".key", spec.ID+".vkbin"
+			packageInfo.Keys[keyName], e = ceremony.Digest(filepath.Join(tmp, keyName))
+			if e != nil {
+				return e
+			}
+			if e = ceremony.Atomic(filepath.Join(tmp, vkName), func(w io.Writer) error {
+				_, e := vk.(gnarkio.WriterRawTo).WriteRawTo(w)
+				return e
+			}); e != nil {
+				return e
+			}
+			packageInfo.RawVKs[vkName], e = ceremony.Digest(filepath.Join(tmp, vkName))
+			if e != nil {
+				return e
+			}
+		}
+		if e = ceremony.WriteJSON(filepath.Join(tmp, "package.json"), packageInfo); e != nil {
+			return e
 		}
 		if e = ceremony.WriteJSON(filepath.Join(tmp, "ceremony-export.json"), exportedManifest); e != nil {
 			return e
@@ -175,4 +211,19 @@ func run(args []string) error {
 		return fmt.Errorf("unknown command")
 	}
 	return os.Rename(tmp, *out)
+}
+
+// wrapSystem preserves Zolana's legacy file headers while using the supplied
+// ceremony keys and frozen circuit. It never invokes a local trusted setup.
+func wrapSystem(spec ceremony.Spec, pk groth16.ProvingKey, vk groth16.VerifyingKey, ccs constraint.ConstraintSystem) (io.WriterTo, error) {
+	switch spec.Family {
+	case "transfer-confidential":
+		return &common.TransferProofSystem{CircuitType: common.TransferConfidentialCircuitType, NInputs: spec.Inputs, NOutputs: spec.Outputs, Confidential: true, ProvingKey: pk, VerifyingKey: vk, ConstraintSystem: ccs}, nil
+	case "merge":
+		return &common.TransferProofSystem{CircuitType: common.MergeCircuitType, NInputs: spec.Inputs, NOutputs: 1, HasCommitment: true, ProvingKey: pk, VerifyingKey: vk, ConstraintSystem: ccs}, nil
+	case "address-append":
+		return &common.BatchProofSystem{CircuitType: common.BatchAddressAppendCircuitType, TreeHeight: spec.Height, BatchSize: spec.Batch, ProvingKey: pk, VerifyingKey: vk, ConstraintSystem: ccs}, nil
+	default:
+		return nil, fmt.Errorf("unsupported circuit")
+	}
 }

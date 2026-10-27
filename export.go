@@ -20,12 +20,50 @@ func (s *Store) VerifyExport(dir string, maxDomain uint64) error {
 	if m.Format != Format || m.Engine != Engine || m.ManifestSHA256 != s.ManifestArtifact.SHA256 || m.InsecureTestSetup != s.Manifest.Phase1.InsecureTestSetup {
 		return fmt.Errorf("export provenance mismatch")
 	}
+	if !m.InsecureTestSetup || m.BeaconProof != nil {
+		if m.BeaconPlan == nil || m.BeaconProof == nil || m.Closure == nil {
+			return fmt.Errorf("final export requires a verified beacon and closure")
+		}
+		current, _, e := s.checkpoint()
+		if e != nil {
+			return e
+		}
+		if !samePlan(current.Lifecycle.Beacon, m.BeaconPlan) {
+			return fmt.Errorf("export uses a different announced beacon")
+		}
+		included, e := s.containsCheckpoint(*m.Closure)
+		if e != nil {
+			return e
+		}
+		if !included {
+			return fmt.Errorf("closure is not in the published checkpoint history")
+		}
+		b, e := VerifyBeacon(*m.BeaconPlan, *m.BeaconProof)
+		if e != nil {
+			return e
+		}
+		if hex.EncodeToString(b) != m.Beacon {
+			return fmt.Errorf("export beacon mismatch")
+		}
+		if e = Check(s.Object(*m.Closure), *m.Closure); e != nil {
+			return e
+		}
+		var closed Checkpoint
+		if e = ReadJSON(s.Object(*m.Closure), &closed); e != nil {
+			return e
+		}
+		if closed.Manifest != s.ManifestArtifact || closed.Lifecycle.Phase != "closed" || !samePlan(closed.Lifecycle.Beacon, m.BeaconPlan) || closed.Lifecycle.ClosedAt == nil || !closed.Lifecycle.ClosedAt.Before(m.BeaconPlan.RoundTime) {
+			return fmt.Errorf("invalid ceremony closure")
+		}
+		for _, entry := range m.Circuits {
+			if closed.Lifecycle.ClosedHeads[entry.Circuit.Spec.ID] != entry.Head {
+				return fmt.Errorf("export differs from closed heads")
+			}
+		}
+	}
 	beacon, e := hex.DecodeString(m.Beacon)
 	if e != nil || len(beacon) < 32 {
 		return fmt.Errorf("invalid export beacon")
-	}
-	if e = s.Audit(m.Track, maxDomain); e != nil {
-		return e
 	}
 	expected := 0
 	for _, c := range s.Manifest.Circuits {
@@ -36,39 +74,31 @@ func (s *Store) VerifyExport(dir string, maxDomain uint64) error {
 	if len(m.Circuits) != expected {
 		return fmt.Errorf("incomplete export")
 	}
-	seen := map[string]bool{}
+	entries := map[string]ExportedCircuit{}
 	for _, entry := range m.Circuits {
 		c, e := s.circuit(entry.Circuit.Spec.ID)
 		if e != nil {
 			return e
 		}
-		if !sameCircuit(c, entry.Circuit) || c.Spec.Track != m.Track || seen[c.Spec.ID] {
+		if !sameCircuit(c, entry.Circuit) || c.Spec.Track != m.Track || entries[c.Spec.ID].Circuit.Spec.ID != "" {
 			return fmt.Errorf("export circuit mismatch")
 		}
-		seen[c.Spec.ID] = true
-		st, e := s.State(c.Spec.ID)
-		if e != nil {
-			return e
+		entries[c.Spec.ID] = entry
+	}
+	return s.audit(m.Track, maxDomain, func(c Circuit, srs *mpc.SrsCommons, evals *mpc.Phase2Evaluations, st State) error {
+		entry, ok := entries[c.Spec.ID]
+		if !ok {
+			return fmt.Errorf("export omitted circuit")
 		}
 		n := entry.Contributions
 		if n < 1 || n > len(st.History) || st.History[n-1].Output != entry.Head {
 			return fmt.Errorf("export head is not an accepted transcript prefix")
 		}
-		r1cs, e := ReadR1CS(s.Object(c.R1CS))
-		if e != nil {
-			return e
-		}
-		srs, e := ReadSRS(s.Object(c.SRS), maxDomain)
-		if e != nil {
-			return e
-		}
-		initial := new(mpc.Phase2)
-		evals := initial.Initialize(r1cs, srs)
 		p, e := ReadPhase2(s.Object(entry.Head), c.Shape)
 		if e != nil {
 			return e
 		}
-		pk, vk := p.Seal(srs, &evals, beacon)
+		pk, vk := p.Seal(srs, evals, beacon)
 		for _, pair := range []struct {
 			name  string
 			value io.WriterTo
@@ -85,8 +115,8 @@ func (s *Store) VerifyExport(dir string, maxDomain uint64) error {
 				return e
 			}
 		}
-	}
-	return nil
+		return nil
+	})
 }
 
 type ExportedCircuit struct {
@@ -104,11 +134,21 @@ type ExportManifest struct {
 	Beacon            string            `json:"beacon"`
 	InsecureTestSetup bool              `json:"insecure_test_setup"`
 	Circuits          []ExportedCircuit `json:"circuits"`
+	BeaconPlan        *BeaconPlan       `json:"beacon_plan,omitempty"`
+	BeaconProof       *BeaconProof      `json:"beacon_proof,omitempty"`
+	Closure           *Artifact         `json:"closure,omitempty"`
 }
 
 // Export creates a reproducible key snapshot. It does not deploy keys or rotate
 // any Zolana lockfile. Further contributions need a new snapshot and beacon.
 func (s *Store) Export(track, out string, beacon []byte, maxDomain uint64) error {
+	if !s.Manifest.Phase1.InsecureTestSetup {
+		return fmt.Errorf("production keys require close and finalize with the announced beacon")
+	}
+	return s.export(track, out, beacon, maxDomain, nil)
+}
+
+func (s *Store) export(track, out string, beacon []byte, maxDomain uint64, proof *BeaconProof) error {
 	if len(beacon) < 32 {
 		return fmt.Errorf("beacon must contain at least 32 bytes")
 	}
@@ -124,6 +164,15 @@ func (s *Store) Export(track, out string, beacon []byte, maxDomain uint64) error
 	}
 	defer os.RemoveAll(tmp)
 	m := ExportManifest{Format: Format, Engine: Engine, ManifestSHA256: s.ManifestArtifact.SHA256, Track: track, Beacon: fmt.Sprintf("%x", beacon), InsecureTestSetup: s.Manifest.Phase1.InsecureTestSetup}
+	if proof != nil {
+		cp, ref, e := s.checkpoint()
+		if e != nil {
+			return e
+		}
+		m.BeaconPlan = cp.Lifecycle.Beacon
+		m.BeaconProof = proof
+		m.Closure = &ref
+	}
 	e = s.audit(track, maxDomain, func(c Circuit, srs *mpc.SrsCommons, evals *mpc.Phase2Evaluations, st State) error {
 		if len(st.History) == 0 {
 			return fmt.Errorf("%s has no accepted contributions", c.Spec.ID)

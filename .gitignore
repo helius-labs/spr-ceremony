@@ -9,4 +9,9 @@
 /go.work.sum
 *.test
 /adapters/solana/target/
-/adapters/solana/Cargo.lock
+/dist/
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+__pycache__/

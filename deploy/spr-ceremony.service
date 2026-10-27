@@ -1,0 +1,24 @@
+[Unit]
+Description=Zolana core ceremony coordinator
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=spr-ceremony
+Group=spr-ceremony
+StateDirectory=spr-ceremony
+StateDirectoryMode=0700
+WorkingDirectory=/var/lib/spr-ceremony
+ExecStart=/usr/local/bin/spr-ceremony serve --dir /var/lib/spr-ceremony/core --listen 127.0.0.1:8080
+Restart=on-failure
+RestartSec=10
+TimeoutStopSec=70
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target

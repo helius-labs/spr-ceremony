@@ -12,6 +12,8 @@ import (
 	"path/filepath"
 )
 
+const maxJSONBytes = 4 << 20
+
 type Artifact struct {
 	SHA256 string `json:"sha256"`
 	Size   int64  `json:"size"`
@@ -96,7 +98,14 @@ func ReadJSON(path string, v any) error {
 		return e
 	}
 	defer f.Close()
-	return decodeJSON(io.LimitReader(f, 4<<20), v)
+	st, e := f.Stat()
+	if e != nil {
+		return e
+	}
+	if st.Size() > maxJSONBytes {
+		return fmt.Errorf("JSON metadata exceeds 4 MiB limit")
+	}
+	return decodeJSON(io.LimitReader(f, maxJSONBytes), v)
 }
 func decodeJSON(r io.Reader, v any) error {
 	d := json.NewDecoder(r)

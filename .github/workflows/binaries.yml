@@ -1,0 +1,20 @@
+name: Build participant binaries
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - run: bash scripts/build-release.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: participant-binaries-${{ github.sha }}
+          path: dist/
+          if-no-files-found: error
+          retention-days: 30

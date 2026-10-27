@@ -1,256 +1,149 @@
-# SPR ceremony prototype
+# Zolana core trusted setup
 
-Groth16 BN254 Phase 2 ceremony tooling for Zolana. The contributor binary handles
-downloads, local contributions, uploads, and acceptance receipts. The coordinator
-keeps an independent transcript for every circuit.
+Groth16 BN254 Phase 2 tooling for **41 core circuits**: 38 confidential-transfer
+shapes and standard merges with 8, 24, or 52 inputs. Custom rings and batch 10 are
+excluded. Batch 4999 is deferred; its separate prototype track is not covered by
+the production opening/finalization workflow.
 
-| Track | Scope | Circuits |
-| --- | --- | ---: |
-| `core` | 38 confidential transfer shapes; standard merge with 8, 24, or 52 inputs | 41 |
-| `batch-4999` | Address-append, tree height 40, batch size 4999 | 1 |
+Participants run one command. The coordinator assigns an available circuit,
+renews its reservation, verifies the contribution, and publishes a durable
+checkpoint before returning an acceptance receipt. Downloads can go directly
+from private S3 through short-lived URLs. Participants need no AWS credentials.
 
-Custom-ring variants and batch 10 are excluded. `core` is the default; every
-large-track operation requires `--track batch-4999`. Different tracks can use
-separate coordinator directories, servers, participants, and schedules.
+**Public launch still requires independent cryptographic/security review and an
+AWS deployment/restore drill.** Engineering tests are not an external audit. See
+[launch gates and evidence](docs/readiness.md) and the [operator runbook](docs/operations.md).
 
-**This is a prototype for rehearsal and integration testing.** The full 4999
-circuit has not been benchmarked. The engine loads parameter vectors into memory;
-separate scheduling does not reduce that circuit's memory requirement. Read
-[the limitations](#prototype-boundaries) before arranging a public ceremony.
+## Build and rehearse
 
-## Build
-
-Go 1.27.1 is pinned to match the current Zolana toolchain. Linux and macOS are
-supported; the coordinator uses Unix file locks.
+Go 1.27.1 matches the pinned Zolana toolchain. Linux and macOS are supported;
+the coordinator uses Unix file locks and must have one active instance.
 
 ```sh
 go build -o spr-ceremony ./cmd/spr-ceremony
 go test -race ./...
-```
-
-Participants need only the compiled `spr-ceremony` binary and an invitation JSON
-file. Building from source requires Go. There are no published release binaries
-yet.
-
-## Try a local ceremony
-
-Initialize a rehearsal and start the coordinator:
-
-```sh
 ./spr-ceremony demo --out rehearsal
 ./spr-ceremony serve --dir rehearsal
 ```
-
-`demo` creates tiny plain and commitment-bearing circuits in `core`, plus a tiny
-circuit in the large track to exercise scheduling. **That third circuit is not
-batch 4999.** The manifest and every export carry `insecure_test_setup: true`.
 
 In another terminal:
 
 ```sh
 ./spr-ceremony invite --dir rehearsal --name alice --out invitations/alice.json
 ./spr-ceremony contribute --invitation invitations/alice.json
-
-./spr-ceremony invite --dir rehearsal --name bob --out invitations/bob.json
-./spr-ceremony contribute --invitation invitations/bob.json
 ./spr-ceremony status --dir rehearsal
 ```
 
-The same contribution command can be rerun after a disconnect. It resumes partial
-downloads, reuses completed local outputs, and retries uploads. Repeated accepted
-uploads return the original receipt without adding a second contribution.
+Send invitations privately. Give every contributor a stable, unique pseudonym.
+Rerun `contribute` after interruption: downloads resume, completed local outputs
+are reused, and already accepted circuits are skipped. Invitations default to
+24 hours; renew an expired invitation using the same name. There is no need to
+manually refresh an invitation after another contributor advances a circuit.
+A contribution interrupted during computation starts that computation again.
 
-Exercise the separate track:
-
-```sh
-./spr-ceremony invite --dir rehearsal --name large-alice \
-  --track batch-4999 --out invitations/large-alice.json
-./spr-ceremony contribute --invitation invitations/large-alice.json \
-  --track batch-4999
-```
-
-To replay the core transcript, use the manifest digest printed by `demo`:
+Participants can verify their saved input/output pairs offline and publish a
+small attestation, following the useful participant-controlled audit flow in
+[BMT's ceremony](https://github.com/lightprotocol/bmt-setup-ceremony):
 
 ```sh
-./spr-ceremony audit --dir rehearsal --manifest-sha256 <manifest-sha256>
+./spr-ceremony verify-contribution --invitation invitations/alice.json \
+  --work work --out alice-attestation.json
 ```
 
-Export and independently reproduce a key snapshot:
+The attestation includes public hashes and receipts, never the invitation token
+or signed URLs. Compare its receipts against the published final transcript.
+It is not an identity signature or a substitute for a full ceremony audit.
 
-```sh
-# This fixed beacon is ONLY for the rehearsal.
-./spr-ceremony export --dir rehearsal --out export/rehearsal \
-  --beacon 4242424242424242424242424242424242424242424242424242424242424242
-./spr-ceremony verify-export --dir rehearsal --export export/rehearsal \
-  --manifest-sha256 <manifest-sha256>
-```
+`demo` uses tiny circuits and explicitly insecure parameters. Its extra scheduling
+fixture is **not** the real 4999 circuit. Test markers propagate into exports;
+production packaging rejects them. Tiny rehearsal snapshots may use a fixed
+beacon with `export`; real campaigns must use `open`, `close`, and `finalize`.
 
-An export records its exact accepted head, contribution count, beacon, and key
-hashes. It remains verifiable if later contributions are accepted. Exporting does
-not close the ceremony or deploy keys.
-
-## Zolana circuit adapter
-
-The optional adapter compiles Zolana's actual circuit constructors with their
-existing compiler settings. The participant binary has no Zolana dependency.
-Build against an explicit clean checkout:
-
-```sh
-bash scripts/build-zolana.sh /path/to/zolana
-./spr-zolana compile --track core --out ceremony-data/core-r1cs
-```
-
-For the first integration exercise, compile just one circuit:
-
-```sh
-./spr-zolana compile --circuit transfer_confidential_1_2 \
-  --out ceremony-data/transfer-r1cs
-```
-
-The output includes `compilation.json` with the source commit, circuit parameters,
-constraint/domain sizes, and R1CS SHA256s. Production preparation requires these
-metadata to match. The build helper checks the selected gnark dependencies against
-the ceremony engine's pins.
-
-Batch 4999 has an independent compilation command. Run it only after arranging
-appropriate resources:
-
-```sh
-./spr-zolana compile --track batch-4999 --out ceremony-data/batch-r1cs
-```
-
-### Supply Phase 1 parameters
-
-Reuse an independently verified public Powers of Tau ceremony. The bridge accepts
-the **compressed `.ph1` format** emitted by `semaphore-mtb-setup p1i`, not a raw
-`.ptau` file. Authenticate the original Powers of Tau artifact and the conversion
-before trusting its `.ph1` digest.
-
-```sh
-./spr-ceremony import-ph1 --input verified.ph1 \
-  --sha256 <authenticated-ph1-sha256> \
-  --provenance '<public ceremony, source digest, converter revision and verification record>' \
-  --out ceremony-data/public.srs
-```
-
-The importer checks the digest, points, and algebraic consistency. It does not
-replay the public Phase 1 contribution transcript or prove that the operator's
-provenance statement is true. Preserve that verification record separately.
-
-For local testing only, `test-srs --power N --out ...` generates an explicitly
-marked rehearsal SRS. Its metadata marker propagates through preparation and
-export. The Zolana packaging command refuses rehearsal exports.
-
-### Prepare and run a track
-
-```sh
-./spr-ceremony prepare --track core \
-  --r1cs-dir ceremony-data/core-r1cs \
-  --source-revision <commit-from-compilation.json> \
-  --srs ceremony-data/public.srs --out ceremony-data/core
-./spr-ceremony serve --dir ceremony-data/core --listen 127.0.0.1:8080
-./spr-ceremony invite --dir ceremony-data/core --name alice \
-  --url https://ceremony.example.org --out invitations/alice.json
-```
-
-Place the server behind HTTPS for remote use. The client permits cleartext HTTP
-only on loopback. Deliver the invitation and binary through an authenticated
-channel: the invitation pins the manifest digest and input hashes, and its token
-authorizes uploads. Invitations default to 24 hours and can be issued with `--ttl`.
-
-The coordinator does not give contributors cloud credentials. Participants receive
-only the changing Phase 2 objects; static SRS and R1CS data are used during
-initialization, transcript audit, and key extraction.
-
-`--circuit` on `prepare` allows a subset rehearsal or a separate campaign for one
-circuit. Completeness is checked against that campaign's manifest, so a subset
-campaign must not be presented as covering the entire 41-circuit core track.
-
-### Export Zolana keys
-
-Choose and announce a public beacon source/time before closing participation,
-following the upstream gnark sealing protocol. The CLI accepts its hex bytes; it
-does not fetch or authenticate a beacon.
-
-```sh
-./spr-ceremony export --dir ceremony-data/core --out export/core \
-  --beacon <public-beacon-hex>
-./spr-zolana package --ceremony ceremony-data/core --export export/core \
-  --out export/zolana-keys
-```
-
-Packaging replays the transcript and reproduces the exported keys before wrapping
-them with the exact frozen R1CS into Zolana's `.key` format. It checks the source
-revision and refuses test setups. Zolana's legacy `HasCommitment` file-header bit
-is preserved; actual proof commitments come from the compiled circuit metadata.
-Regenerating Rust verification keys, SDK hashes,
-and `proving-keys.lock`, publishing artifacts, and deploying remain separate
-release work. Do not run Zolana's current key-rotation setup steps over ceremony
-keys: those steps generate a fresh local setup.
-
-## Independent verification and storage
-
-The coordinator directory contains:
+## Storage and phases
 
 ```text
-manifest.json          frozen circuit, source, engine and Phase 1 metadata
-objects/<sha256>       immutable public R1CS, SRS and Phase 2 objects
-state/<circuit>.json   accepted head and ordered receipts
-invitations/           PRIVATE upload tokens; never publish this directory
+verified Phase 1 + pinned circuit compilation
+                   ↓
+               prepare → sync to S3
+                   ↓
+       open with an announced future beacon
+                   ↓
+       queued contributions → verified checkpoints → S3
+                   ↓
+       close and publish frozen heads before beacon
+                   ↓
+       verify beacon → finalize → archived proving/verifying keys
+                   ↓
+       independently verify → package → stage Zolana release
 ```
 
-Public HTTP endpoints expose `/v1/manifest`, `/v1/status`, and
-`/v1/objects/<sha256>`. An auditor needs the authenticated manifest, the selected
-track's state files, and every referenced object. `audit` reconstructs each initial
-state and verifies every accepted transition; `verify-export` additionally
-reproduces the recorded key snapshot. Archive these public files, not the entire
-coordinator directory containing invitations.
+S3 contains content-addressed public artifacts: full and circuit-sized Phase 1
+parameters, R1CS, initial and contributed Phase 2 files, checkpoint history, and
+final keys. Immutable objects are uploaded first; a conditional pointer update
+commits the checkpoint. An outage prevents acceptance, and a stale coordinator
+cannot overwrite a different published head. Invitations and reservations stay
+local. [Terraform](infra/s3/main.tf) provisions a private, encrypted, versioned
+bucket and a coordinator policy without delete permission.
 
-Contributions are serialized per circuit using filesystem locks and an atomic
-head update. Invitations snapshot the current heads. If two contributors start
-from the same head, only the first valid submission advances it; the other needs
-a new invitation. The prototype has no automatic queue/reservation service.
-
-## Validation
-
-The root tests exercise HTTP contribution, commitment-bearing proofs, reproducible
-exports, malformed inputs, conflicting branches, resumable downloads, receipt
-recovery, and transcript/key tampering.
-
-Optional integration checks use valid witnesses from the pinned Zolana checkout:
+```json
+{"bucket":"YOUR-CEREMONY-BUCKET","region":"YOUR-REGION","prefix":"core/v1"}
+```
 
 ```sh
-SPR_VECTORS=/absolute/path/to/vectors \
-  bash scripts/test-zolana.sh /path/to/zolana
-bash scripts/test-solana.sh /path/to/groth16-solana /absolute/path/to/vectors
+./spr-ceremony sync --dir ceremony-data/core --s3-config s3.json --out recovery.json
+./spr-ceremony serve --dir ceremony-data/core
 ```
 
-These checks run a confidential 1×2 transfer and standard 8-input merge through
-two contributions, key export, and gnark proof verification. The Rust harness then
-checks those proofs with `groth16-solana`, including rejection of changed public
-inputs. The fixture generator uses Go overlays and does not edit Zolana source.
-Set `SPR_TEST_SRS` to a previously generated power-18 rehearsal SRS to reuse it.
-`SPR_TEST_RUN` can select one Go subtest, for example
-`'^TestZolanaRoundTrip$/^merge_8_1$'`, when repeating an integration check.
+Successful `sync` saves the storage configuration locally. Later accepted
+contributions and phase transitions sync automatically. Checkpoint references
+must also be witnessed outside the coordinator; S3 hashes alone do not establish
+when a beacon plan or closure was announced. Recovery instructions are in the
+[runbook](docs/operations.md#recovery).
 
-## Prototype boundaries
+## Source and release integration
 
-- Batch 4999 is cataloged and isolated, but its initialization, contribution,
-  verification, extraction, and hardware requirements remain unmeasured.
-- Upstream MPC operations use full in-memory vectors. The default `--max-domain`
-  is `2^22`; raising it explicitly is not a memory-suitability check. Contributors
-  also have a default 1 GiB input-file limit (`--max-file-bytes`).
-- Downloads resume by byte range. Interrupted uploads restart from the beginning;
-  accepted uploads are idempotent. Completed local contribution outputs are
-  reused. Interrupted computation restarts with fresh randomness; secrets are
-  never checkpointed to disk by this tool.
-- There is no automatic queue, invitation renewal, signed release distribution,
-  deployment automation, or public infrastructure in this prototype.
-- The coordinator assumes a trusted local filesystem and bounded rehearsal
-  traffic. Internet deployment needs authentication/rate-limit/resource review
-  and external cryptographic review, including the Phase 1 conversion and beacon
-  procedure, before a production ceremony.
+```sh
+bash scripts/build-zolana.sh /path/to/clean/zolana
+./spr-zolana compile --track core --out core-r1cs
+```
 
-The cryptographic engine is gnark `v0.16.4` with gnark-crypto
-`v0.21.1-0.20260913224755-1409fe592052`. Its Phase 2 format differs from the old
-Semaphore fork; existing `.ph2` contributions are not imported.
+The adapter uses Zolana's real constructors and records the source revision,
+R1CS hashes, domains, and constraints. Production preparation requires matching
+compilation metadata. The cryptographic engine is pinned to gnark `v0.16.4` and
+gnark-crypto `v0.21.1-0.20260913224755-1409fe592052`.
+
+The Phase 1 bridge imports the legacy converter's compressed `.ph1` format.
+It checks encoding and algebraic consistency; it does not replay the original
+public transcript. [The Phase 1 procedure](docs/operations.md#phase-1-and-circuit-freeze)
+verifies the public transcript before conversion.
+
+After finalization, `spr-zolana package` wraps the ceremony keys in Zolana's
+existing `.key` format without running a new setup. The
+[release staging helper](scripts/stage-core-release.py) generates the 41 Rust
+verifier modules, updates Go/TypeScript key pins, and writes an S3 publication
+plan. It preserves excluded key hashes and never uploads or deploys a release.
+
+## Validation and binaries
+
+```sh
+# Includes storage outage, response loss, corruption, and restore tests when set:
+SPR_S3_ENDPOINT=http://127.0.0.1:5000 go test -race ./...
+python3 -m unittest discover -s scripts -p 'test_*.py'
+
+# Real Zolana witnesses, two contributors, packaging, and proof verification:
+SPR_CORE_ALL=1 SPR_VECTORS=/tmp/core-vectors \
+  bash scripts/test-zolana.sh /path/to/zolana
+SPR_CORE_ALL=1 bash scripts/test-solana.sh /path/to/pinned/groth16-solana /tmp/core-vectors
+
+# Clean committed source; Linux/macOS amd64 and arm64, with SHA256SUMS:
+bash scripts/build-release.sh
+```
+
+The complete core rehearsal is expensive. `SPR_R1CS_DIR`, `SPR_TEST_SRS`, and
+`SPR_REHEARSAL_DIR` allow reuse of compiled circuits, a marked test SRS, and
+completed stages. See [evidence](docs/readiness.md) for measured scope and limits.
+The manual GitHub Actions binary workflow produces downloadable build artifacts;
+it does not publish a GitHub release.
+
+Prototype directories created before checkpoints were introduced must be
+recreated. Old Semaphore `.ph2` contributions are not compatible with this engine.

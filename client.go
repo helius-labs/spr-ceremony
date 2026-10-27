@@ -102,88 +102,114 @@ func (c *Client) Run(ctx context.Context, i Invitation, track string) error {
 	if i.InsecureTestSetup {
 		fmt.Fprintln(c.Progress, "REHEARSAL: coordinator-generated test SRS; outputs are not production keys")
 	}
-	for _, job := range i.Jobs {
-		id := job.Circuit.Spec.ID
-		fmt.Fprintf(c.Progress, "[%s] %s: downloading parent %s\n", track, id, job.Input.SHA256[:12])
-		dir := filepath.Join(c.Work, i.ManifestSHA256, i.Contributor, id, job.Input.SHA256)
-		if e = os.MkdirAll(dir, 0700); e != nil {
-			return e
-		}
-		input := filepath.Join(dir, "input.ph2")
-		output := filepath.Join(dir, "output.ph2")
-		if e = c.download(ctx, base+"/v1/objects/"+job.Input.SHA256, input, job.Input); e != nil {
-			return e
-		}
-		var cached struct {
-			Input  Artifact `json:"input"`
-			Output Artifact `json:"output"`
-		}
-		reuse := ReadJSON(output+".json", &cached) == nil && cached.Input == job.Input && Check(output, cached.Output) == nil
-		if !reuse {
-			fmt.Fprintf(c.Progress, "[%s] %s: contributing fresh randomness\n", track, id)
-			if e = Contribute(input, output, job.Circuit.Shape); e != nil {
-				return e
-			}
-			cached.Input = job.Input
-			cached.Output, e = Digest(output)
-			if e != nil {
-				return e
-			}
-			if e = WriteJSON(output+".json", cached); e != nil {
-				return e
-			}
-		}
-		fmt.Fprintf(c.Progress, "[%s] %s: uploading and awaiting verification\n", track, id)
-		var receipt Receipt
-		if e = retry(ctx, func() error {
-			f, e := os.Open(output)
-			if e != nil {
-				return e
-			}
-			defer f.Close()
-			req, e := http.NewRequestWithContext(ctx, "POST", base+"/v1/contributions/"+id, f)
-			if e != nil {
-				return e
-			}
-			req.ContentLength = cached.Output.Size
-			req.Header.Set("Authorization", "Bearer "+i.Token)
-			req.Header.Set("Content-Type", "application/octet-stream")
-			resp, e := c.HTTP.Do(req)
-			if e != nil {
-				return e
-			}
-			defer resp.Body.Close()
-			if resp.StatusCode != 200 {
-				msg, _ := io.ReadAll(io.LimitReader(resp.Body, 2048))
-				err := fmt.Errorf("upload rejected (%d): %s", resp.StatusCode, strings.TrimSpace(string(msg)))
-				if resp.StatusCode >= 500 {
-					return err
-				}
-				return permanentError{err}
-			}
-			return decodeJSON(io.LimitReader(resp.Body, 1<<20), &receipt)
-		}); e != nil {
-			return e
-		}
-		if receipt.Circuit != id || receipt.Sequence != job.Sequence || receipt.Parent != job.Input || receipt.Output != cached.Output || receipt.Contributor != i.Contributor {
-			return fmt.Errorf("acceptance receipt mismatch")
-		}
-		if e = WriteJSON(filepath.Join(dir, "receipt.json"), receipt); e != nil {
-			return e
-		}
-		fmt.Fprintf(c.Progress, "[%s] %s: accepted #%d, SHA256 %s\n", track, id, receipt.Sequence, receipt.Output.SHA256)
+	if i.Mode == "queue" {
+		return c.runQueue(ctx, i, track)
 	}
+	if i.Mode != "" {
+		return fmt.Errorf("unsupported invitation mode")
+	}
+	for _, job := range i.Jobs {
+		if e = c.runJob(ctx, i, job, track); e != nil {
+			return e
+		}
+	}
+	return nil
+}
+
+func (c *Client) runJob(ctx context.Context, i Invitation, job Job, track string) error {
+	var e error
+	base := strings.TrimRight(i.URL, "/")
+	id := job.Circuit.Spec.ID
+	fmt.Fprintf(c.Progress, "[%s] %s: downloading parent %s\n", track, id, job.Input.SHA256[:12])
+	dir := filepath.Join(c.Work, i.ManifestSHA256, i.Contributor, id, job.Input.SHA256)
+	if e = os.MkdirAll(dir, 0700); e != nil {
+		return e
+	}
+	if e = CheckDiskSpace(dir, uint64(job.Input.Size)*3+(64<<20)); e != nil {
+		return fmt.Errorf("%s disk preflight: %w", id, e)
+	}
+	input := filepath.Join(dir, "input.ph2")
+	output := filepath.Join(dir, "output.ph2")
+	if e = c.downloadWithURL(ctx, func(ctx context.Context) (string, error) { return c.downloadTicket(ctx, base, job.Input) }, input, job.Input); e != nil {
+		return e
+	}
+	var cached struct {
+		Input  Artifact `json:"input"`
+		Output Artifact `json:"output"`
+	}
+	reuse := ReadJSON(output+".json", &cached) == nil && cached.Input == job.Input && Check(output, cached.Output) == nil
+	if !reuse {
+		fmt.Fprintf(c.Progress, "[%s] %s: contributing fresh randomness\n", track, id)
+		if e = Contribute(input, output, job.Circuit.Shape); e != nil {
+			return e
+		}
+		cached.Input = job.Input
+		cached.Output, e = Digest(output)
+		if e != nil {
+			return e
+		}
+		if e = WriteJSON(output+".json", cached); e != nil {
+			return e
+		}
+	}
+	fmt.Fprintf(c.Progress, "[%s] %s: uploading and awaiting verification\n", track, id)
+	var receipt Receipt
+	if e = retry(ctx, func() error {
+		f, e := os.Open(output)
+		if e != nil {
+			return e
+		}
+		defer f.Close()
+		req, e := http.NewRequestWithContext(ctx, "POST", base+"/v1/contributions/"+id, f)
+		if e != nil {
+			return e
+		}
+		req.ContentLength = cached.Output.Size
+		req.Header.Set("Authorization", "Bearer "+i.Token)
+		req.Header.Set("Content-Type", "application/octet-stream")
+		resp, e := c.HTTP.Do(req)
+		if e != nil {
+			return e
+		}
+		defer resp.Body.Close()
+		if resp.StatusCode != 200 {
+			msg, _ := io.ReadAll(io.LimitReader(resp.Body, 2048))
+			err := fmt.Errorf("upload rejected (%d): %s", resp.StatusCode, strings.TrimSpace(string(msg)))
+			if resp.StatusCode >= 500 || resp.StatusCode == 429 {
+				return err
+			}
+			return permanentError{err}
+		}
+		return decodeJSON(io.LimitReader(resp.Body, 1<<20), &receipt)
+	}); e != nil {
+		return e
+	}
+	if receipt.Circuit != id || receipt.Sequence != job.Sequence || receipt.Parent != job.Input || receipt.Output != cached.Output || receipt.Contributor != i.Contributor {
+		return fmt.Errorf("acceptance receipt mismatch")
+	}
+	if e = WriteJSON(filepath.Join(dir, "receipt.json"), receipt); e != nil {
+		return e
+	}
+	fmt.Fprintf(c.Progress, "[%s] %s: accepted #%d, SHA256 %s\n", track, id, receipt.Sequence, receipt.Output.SHA256)
 	return nil
 }
 
 // HTTP Range resumes transfer bytes only. Input bytes are authenticated before
 // use. A server that ignores Range safely restarts the download.
 func (c *Client) download(ctx context.Context, raw, path string, a Artifact) error {
+	return c.downloadWithURL(ctx, func(context.Context) (string, error) { return raw, nil }, path, a)
+}
+
+func (c *Client) downloadWithURL(ctx context.Context, resolve func(context.Context) (string, error), path string, a Artifact) error {
 	if Check(path, a) == nil {
 		return nil
 	}
 	part := path + ".part"
 	return retry(ctx, func() error {
+		raw, e := resolve(ctx)
+		if e != nil {
+			return e
+		}
 		var offset int64
 		if st, e := os.Stat(part); e == nil {
 			offset = st.Size()
@@ -219,6 +245,9 @@ func (c *Client) download(ctx context.Context, raw, path string, a Artifact) err
 				return permanentError{fmt.Errorf("invalid Content-Range")}
 			}
 		} else {
+			if resp.StatusCode == 403 || resp.StatusCode == 429 || resp.StatusCode >= 500 {
+				return fmt.Errorf("download failed: HTTP %d", resp.StatusCode)
+			}
 			return permanentError{fmt.Errorf("download failed: HTTP %d", resp.StatusCode)}
 		}
 		f, e := os.OpenFile(part, os.O_CREATE|os.O_WRONLY, 0600)

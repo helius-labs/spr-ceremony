@@ -7,13 +7,28 @@ permissions:
 jobs:
   go:
     runs-on: ubuntu-latest
+    services:
+      s3:
+        image: motoserver/moto@sha256:800719627036dc38dc699e9f314f624f2c98ac3d8bb754db078cb2698f08ee77
+        ports:
+          - 5000:5000
+    env:
+      SPR_S3_ENDPOINT: http://127.0.0.1:5000
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
           go-version-file: go.mod
           cache: true
-      - run: test -z "$(gofmt -l *.go cmd/spr-ceremony/*.go adapters/zolana/*.go)"
+      - run: test -z "$(gofmt -l *.go cmd/spr-ceremony/*.go adapters/zolana/*.go storage/*.go)"
       - run: go vet ./...
       - run: go test -race ./...
       - run: go build ./cmd/spr-ceremony
+      - run: python3 scripts/smoke-cli.py ./spr-ceremony
+      - run: python3 -m unittest discover -s scripts -p 'test_*.py'
+  rust:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: cargo fmt --manifest-path adapters/solana/Cargo.toml --check
+      - run: cargo build --locked --manifest-path adapters/solana/Cargo.toml

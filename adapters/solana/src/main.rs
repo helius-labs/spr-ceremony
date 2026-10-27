@@ -51,7 +51,19 @@ fn main() {
     let directory = std::env::args()
         .nth(1)
         .expect("usage: spr-solana-rehearsal <vectors-dir>");
-    for id in ["transfer_confidential_1_2", "merge_8_1"] {
+    let ids: Vec<String> = if let Some(catalog) = std::env::args().nth(2) {
+        let entries: Vec<serde_json::Value> =
+            serde_json::from_slice(&std::fs::read(catalog).expect("read catalog"))
+                .expect("parse catalog");
+        assert_eq!(entries.len(), 41, "full core catalog must have 41 circuits");
+        entries
+            .iter()
+            .map(|entry| entry["id"].as_str().expect("circuit ID").to_owned())
+            .collect()
+    } else {
+        vec!["transfer_confidential_1_2".into(), "merge_8_1".into()]
+    };
+    for id in ids {
         let path = std::path::Path::new(&directory).join(format!("{id}.json"));
         let vector: Vector = serde_json::from_slice(&std::fs::read(path).expect("read vector"))
             .expect("parse vector");

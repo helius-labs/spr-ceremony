@@ -8,10 +8,14 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"os/signal"
 	"path/filepath"
+	"runtime/debug"
+	"syscall"
 	"time"
 
 	ceremony "github.com/helius-labs/spr-ceremony"
+	"github.com/helius-labs/spr-ceremony/storage"
 )
 
 func main() {
@@ -22,15 +26,37 @@ func main() {
 }
 func run(args []string) error {
 	if len(args) == 0 {
-		return fmt.Errorf("usage: spr-ceremony <catalog|demo|test-srs|import-ph1|prepare|serve|invite|contribute|status|audit|export|verify-export> [flags]")
+		return fmt.Errorf("usage: spr-ceremony <version|catalog|demo|test-srs|import-ph1|prepare|open|close|finalize|serve|invite|contribute|verify-contribution|status|checkpoint|sync|restore|fetch-export|audit|export|verify-export> [flags]")
 	}
 	f := flag.NewFlagSet(args[0], flag.ContinueOnError)
 	dir := f.String("dir", "ceremony-data", "coordinator ceremony directory")
 	track := f.String("track", ceremony.Core, "core or batch-4999; large track is always opt-in")
 	out := f.String("out", "", "output path (must be new for prepare/demo/export)")
 	maxDomain := f.Uint64("max-domain", 1<<22, "maximum in-memory SRS domain; does not establish hardware suitability")
+	remoteConfig := f.String("s3-config", "", "S3 configuration JSON (credentials use the AWS default chain)")
 	var action func() error
-	open := func() (*ceremony.Store, error) { return ceremony.Open(*dir) }
+	open := func() (*ceremony.Store, error) {
+		s, e := ceremony.Open(*dir)
+		if e != nil {
+			return nil, e
+		}
+		path := *remoteConfig
+		if path == "" {
+			path = filepath.Join(*dir, "s3.json")
+			if _, e = os.Stat(path); os.IsNotExist(e) {
+				return s, nil
+			}
+		}
+		var cfg storage.Config
+		if e = ceremony.ReadJSON(path, &cfg); e != nil {
+			return nil, e
+		}
+		s.Remote, e = storage.New(context.Background(), cfg)
+		if e == nil && !s.Manifest.Phase1.InsecureTestSetup {
+			e = s.Remote.(*storage.S3).CheckBucket(context.Background())
+		}
+		return s, e
+	}
 	print := func(v any) error { e := json.NewEncoder(os.Stdout); e.SetIndent("", "  "); return e.Encode(v) }
 	requireOut := func() error {
 		if *out == "" {
@@ -39,6 +65,165 @@ func run(args []string) error {
 		return nil
 	}
 	switch args[0] {
+	case "version":
+		action = func() error {
+			info, ok := debug.ReadBuildInfo()
+			if !ok {
+				return fmt.Errorf("build information unavailable")
+			}
+			return print(struct {
+				Engine string           `json:"engine"`
+				Build  *debug.BuildInfo `json:"build"`
+			}{ceremony.Engine, info})
+		}
+	case "open":
+		info := f.String("chain-info", "", "authenticated drand chain-info JSON")
+		hash := f.String("chain-hash", "", "independently authenticated drand chain hash")
+		round := f.Uint64("round", 0, "future drand round announced before opening")
+		action = func() error {
+			b, e := os.ReadFile(*info)
+			if e != nil {
+				return e
+			}
+			plan, e := ceremony.NewBeaconPlan(b, *hash, *round)
+			if e != nil {
+				return e
+			}
+			s, e := open()
+			if e != nil {
+				return e
+			}
+			ref, e := s.OpenCeremony(plan)
+			if e != nil {
+				return e
+			}
+			return print(ref)
+		}
+	case "close":
+		action = func() error {
+			s, e := open()
+			if e != nil {
+				return e
+			}
+			ref, e := s.CloseCeremony()
+			if e != nil {
+				return e
+			}
+			return print(ref)
+		}
+	case "finalize":
+		proofFile := f.String("beacon-file", "", "JSON containing the planned signed beacon")
+		proofURL := f.String("beacon-url", "", "HTTPS endpoint for the exact planned round")
+		action = func() error {
+			if e := requireOut(); e != nil {
+				return e
+			}
+			s, e := open()
+			if e != nil {
+				return e
+			}
+			life, _, e := s.Lifecycle()
+			if e != nil {
+				return e
+			}
+			if life.Beacon == nil {
+				return fmt.Errorf("ceremony has no beacon plan")
+			}
+			var proof ceremony.BeaconProof
+			if *proofFile != "" && *proofURL != "" {
+				return fmt.Errorf("choose one beacon source")
+			}
+			if *proofURL != "" {
+				proof, e = ceremony.FetchBeacon(context.Background(), *proofURL, *life.Beacon)
+			} else {
+				e = ceremony.ReadJSON(*proofFile, &proof)
+			}
+			if e != nil {
+				return e
+			}
+			ref, e := s.Finalize(*out, proof, *maxDomain)
+			if e != nil {
+				return e
+			}
+			return print(ref)
+		}
+	case "checkpoint", "sync":
+		action = func() error {
+			s, e := open()
+			if e != nil {
+				return e
+			}
+			_, ref, e := s.Lifecycle()
+			if e != nil {
+				return e
+			}
+			if args[0] == "sync" {
+				ref, e = s.Sync(context.Background())
+				if e != nil {
+					return e
+				}
+				if remote, ok := s.Remote.(*storage.S3); ok {
+					if e = ceremony.WriteJSON(filepath.Join(*dir, "s3.json"), remote.Config); e != nil {
+						return e
+					}
+				}
+			}
+			point := ceremony.RecoveryPoint{Manifest: s.ManifestArtifact, Checkpoint: ref}
+			if *out != "" {
+				if e = ceremony.WriteJSON(*out, point); e != nil {
+					return e
+				}
+				digest, e := ceremony.Digest(*out)
+				if e != nil {
+					return e
+				}
+				fmt.Fprintln(os.Stderr, "Recovery file SHA256:", digest.SHA256)
+			}
+			return print(point)
+		}
+	case "fetch-export":
+		action = func() error {
+			if e := requireOut(); e != nil {
+				return e
+			}
+			s, e := open()
+			if e != nil {
+				return e
+			}
+			return s.MaterializeExport(*out)
+		}
+	case "restore":
+		recovery := f.String("recovery-file", "", "authenticated checkpoint recovery JSON")
+		digest := f.String("recovery-sha256", "", "out-of-band SHA256 of the recovery file")
+		action = func() error {
+			if e := requireOut(); e != nil {
+				return e
+			}
+			a, e := ceremony.Digest(*recovery)
+			if e != nil {
+				return e
+			}
+			if a.SHA256 != *digest {
+				return fmt.Errorf("recovery file digest mismatch")
+			}
+			var point ceremony.RecoveryPoint
+			if e = ceremony.ReadJSON(*recovery, &point); e != nil {
+				return e
+			}
+			var cfg storage.Config
+			if e = ceremony.ReadJSON(*remoteConfig, &cfg); e != nil {
+				return e
+			}
+			remote, e := storage.New(context.Background(), cfg)
+			if e != nil {
+				return e
+			}
+			if e = ceremony.Restore(context.Background(), remote, *out, point.Manifest, point.Checkpoint); e != nil {
+				return e
+			}
+			fmt.Fprintln(os.Stdout, "Restored authenticated checkpoint; audit before resuming coordination.")
+			return nil
+		}
 	case "catalog":
 		id := f.String("circuit", "", "select a single circuit")
 		action = func() error {
@@ -122,14 +307,38 @@ func run(args []string) error {
 		}
 	case "serve":
 		listen := f.String("listen", "127.0.0.1:8080", "listen address; use a TLS reverse proxy outside localhost")
+		maxUploads := f.Int("max-uploads", 2, "maximum concurrent staged contributions")
+		leaseTTL := f.Duration("lease-ttl", 30*time.Minute, "renewable circuit reservation lifetime")
+		reserve := f.Uint64("reserve-disk-bytes", 2<<30, "minimum free disk retained after staging an upload")
 		action = func() error {
 			s, e := open()
 			if e != nil {
 				return e
 			}
+			if s.Remote != nil {
+				if _, e = s.Sync(context.Background()); e != nil {
+					return e
+				}
+				if remote, ok := s.Remote.(*storage.S3); ok {
+					if e = ceremony.WriteJSON(filepath.Join(*dir, "s3.json"), remote.Config); e != nil {
+						return e
+					}
+				}
+			}
 			fmt.Fprintln(os.Stderr, "Serving", *listen, "manifest", s.ManifestArtifact.SHA256)
-			server := &http.Server{Addr: *listen, Handler: s.Handler(), ReadHeaderTimeout: 10 * time.Second, IdleTimeout: 2 * time.Minute, MaxHeaderBytes: 16 << 10}
-			return server.ListenAndServe()
+			server := &http.Server{Addr: *listen, Handler: s.HandlerWithOptions(ceremony.ServerOptions{MaxUploads: *maxUploads, LeaseTTL: *leaseTTL, UploadTimeout: 30 * time.Minute, MinFreeBytes: *reserve}), ReadHeaderTimeout: 10 * time.Second, ReadTimeout: 30 * time.Minute, WriteTimeout: 2 * time.Hour, IdleTimeout: 2 * time.Minute, MaxHeaderBytes: 16 << 10}
+			ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+			defer stop()
+			result := make(chan error, 1)
+			go func() { result <- server.ListenAndServe() }()
+			select {
+			case e := <-result:
+				return e
+			case <-ctx.Done():
+				shutdown, cancel := context.WithTimeout(context.Background(), time.Minute)
+				defer cancel()
+				return server.Shutdown(shutdown)
+			}
 		}
 	case "invite":
 		base := f.String("url", "http://127.0.0.1:8080", "coordinator HTTPS origin")
@@ -146,7 +355,7 @@ func run(args []string) error {
 			if e != nil {
 				return e
 			}
-			i, e := s.Invite(*base, *name, *track, *ttl)
+			i, e := s.InviteQueued(*base, *name, *track, *ttl)
 			if e != nil {
 				return e
 			}
@@ -169,6 +378,34 @@ func run(args []string) error {
 			c.MaxFileBytes = *maxBytes
 			return c.Run(context.Background(), i, *track)
 		}
+	case "verify-contribution":
+		invite := f.String("invitation", "", "authenticated invitation JSON; may be expired")
+		work := f.String("work", "work", "retained participant workspace")
+		action = func() error {
+			if e := requireOut(); e != nil {
+				return e
+			}
+			var i ceremony.Invitation
+			if e := ceremony.ReadJSON(*invite, &i); e != nil {
+				return e
+			}
+			if i.Track != *track {
+				return fmt.Errorf("invitation track differs from --track")
+			}
+			a, e := ceremony.VerifyLocalContributions(*work, i)
+			if e != nil {
+				return e
+			}
+			if e = ceremony.WriteJSON(*out, a); e != nil {
+				return e
+			}
+			digest, e := ceremony.Digest(*out)
+			if e != nil {
+				return e
+			}
+			fmt.Fprintln(os.Stderr, "Offline contribution verification passed. Public attestation SHA256:", digest.SHA256)
+			return print(digest)
+		}
 	case "status":
 		action = func() error {
 			s, e := open()
@@ -188,10 +425,19 @@ func run(args []string) error {
 			if len(states) == 0 {
 				return fmt.Errorf("no circuits in track")
 			}
-			return print(states)
+			life, ref, e := s.Lifecycle()
+			if e != nil {
+				return e
+			}
+			return print(struct {
+				Lifecycle  ceremony.Lifecycle `json:"lifecycle"`
+				Checkpoint ceremony.Artifact  `json:"checkpoint"`
+				Circuits   []ceremony.State   `json:"circuits"`
+			}{life, ref, states})
 		}
 	case "audit":
 		digest := f.String("manifest-sha256", "", "out-of-band authenticated manifest digest")
+		checkpoint := f.String("checkpoint-sha256", "", "authenticated checkpoint digest (required for production)")
 		action = func() error {
 			s, e := open()
 			if e != nil {
@@ -199,6 +445,15 @@ func run(args []string) error {
 			}
 			if *digest != s.ManifestArtifact.SHA256 {
 				return fmt.Errorf("--manifest-sha256 must match authenticated manifest")
+			}
+			if !s.Manifest.Phase1.InsecureTestSetup {
+				_, ref, e := s.Lifecycle()
+				if e != nil {
+					return e
+				}
+				if ref.SHA256 != *checkpoint {
+					return fmt.Errorf("--checkpoint-sha256 must match the authenticated publication")
+				}
 			}
 			if e = s.Audit(*track, *maxDomain); e != nil {
 				return e
@@ -225,6 +480,7 @@ func run(args []string) error {
 	case "verify-export":
 		keys := f.String("export", "", "export directory")
 		digest := f.String("manifest-sha256", "", "out-of-band authenticated manifest digest")
+		checkpoint := f.String("checkpoint-sha256", "", "authenticated checkpoint digest (required for production)")
 		action = func() error {
 			s, e := open()
 			if e != nil {
@@ -232,6 +488,15 @@ func run(args []string) error {
 			}
 			if *digest != s.ManifestArtifact.SHA256 {
 				return fmt.Errorf("manifest digest mismatch")
+			}
+			if !s.Manifest.Phase1.InsecureTestSetup {
+				_, ref, e := s.Lifecycle()
+				if e != nil {
+					return e
+				}
+				if ref.SHA256 != *checkpoint {
+					return fmt.Errorf("checkpoint digest mismatch")
+				}
 			}
 			var metadata ceremony.ExportManifest
 			if e = ceremony.ReadJSON(filepath.Join(*keys, "export.json"), &metadata); e != nil {

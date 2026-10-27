@@ -10,7 +10,7 @@ mkdir -p "$tmp_dir/witnesses"
 # Filter existing fixture exporters using Go's overlay support. The Zolana
 # checkout is never edited, and excluded ring circuits are not generated.
 python3 - "$zolana_dir" "$tmp_dir" <<'PY'
-import json, pathlib, sys
+import json, pathlib, sys, os
 root, out = map(pathlib.Path, sys.argv[1:])
 base = root / 'prover/server/circuits'
 changes = [
@@ -26,7 +26,8 @@ for i, (path, old, new) in enumerate(changes):
     text = path.read_text()
     if text.count(old) != 1:
         raise SystemExit(f'fixture exporter changed: {path}')
-    text = text.replace(old, new)
+    if os.getenv('SPR_CORE_ALL') != '1':
+        text = text.replace(old, new)
     if i == 0:
         old = 'for _, family := range []string{"transfer_ring", "transfer_confidential", "transfer_eddsa_ring", "transfer_ring_authority"} {'
         if text.count(old) != 1:
@@ -49,12 +50,15 @@ cd "$repo_dir"
 go build -o spr-ceremony ./cmd/spr-ceremony
 if [[ -z "${SPR_TEST_SRS:-}" ]]; then
     export SPR_TEST_SRS="$tmp_dir/rehearsal.srs"
-    ./spr-ceremony test-srs --power 18 --out "$SPR_TEST_SRS"
+    power=18
+    if [[ "${SPR_CORE_ALL:-}" == 1 ]]; then power=21; fi
+    ./spr-ceremony test-srs --power "$power" --out "$SPR_TEST_SRS"
 fi
 cp "$repo_dir/adapters/zolana/go.mod" "$tmp_dir/go.mod"
 cd "$repo_dir/adapters/zolana"
 go mod edit -modfile "$tmp_dir/go.mod" \
     -replace "github.com/helius-labs/zolana/prover/server=$zolana_dir/prover/server"
 go mod tidy -modfile "$tmp_dir/go.mod"
-SPR_WITNESSES="$tmp_dir/witnesses" go test -modfile "$tmp_dir/go.mod" \
-    -run "${SPR_TEST_RUN:-^TestZolanaRoundTrip$}" -v -count=1 -timeout 30m .
+SPR_WITNESSES="$tmp_dir/witnesses" SPR_SOURCE_REVISION="$(git -C "$zolana_dir" rev-parse HEAD)" go test -modfile "$tmp_dir/go.mod" \
+    -run "${SPR_TEST_RUN:-^TestZolanaRoundTrip$}" -v -count=1 \
+    -parallel "${SPR_PARALLEL:-4}" -timeout "${SPR_TIMEOUT:-24h}" .
