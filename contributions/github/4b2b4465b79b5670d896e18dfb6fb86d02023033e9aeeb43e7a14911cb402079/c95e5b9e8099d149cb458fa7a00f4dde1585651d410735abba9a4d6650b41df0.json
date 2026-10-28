@@ -1,0 +1,18 @@
+{
+  "format": "spr-github-identity-v1",
+  "manifest": {
+    "sha256": "4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079",
+    "size": 31586
+  },
+  "coordinator_key": {
+    "sha256": "85a9444e4673ecee6d2fb7c549058caec4941767389549ff122b05d83334db0e",
+    "size": 477
+  },
+  "invitation_id": "c95e5b9e8099d149cb458fa7a00f4dde1585651d410735abba9a4d6650b41df0",
+  "contributor": "jorrit",
+  "receipts_sha256": "9c8657e80a29248f29e2f7cad5808e7e005ed621bd2ebc303161e74042595b57",
+  "github_id": 58553958,
+  "github_login": "ananas-block",
+  "linked_at": "2026-10-28T22:42:25.195935223Z",
+  "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrielEJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmdpw5nooj/iqPaxmOQyTYvXFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAPSNAQDgpl9gJZuH2VrP1HOVZCagPzRrzbnRTfDkaUAwCNx2FAEAhWYw\nRi00ge4uf+jAAQvLaqRkdbJzm9ry75Jncq8Isw0=\n-----END PGP SIGNATURE-----"
+}
