@@ -30,11 +30,55 @@
     "GitHub OAuth state/PKCE, explicit consent, replay, revocation, expiry, account replacement rejection and signed sidecar recovery tested with a simulated provider",
     "Updated record-publication workflow passed against the live public records"
   ],
-  "deployed": false,
+  "deployed": true,
   "limits": [
-    "The live coordinator and hosted installer were not restarted or updated; deployment hold remains active.",
-    "Real GitHub OAuth registration, secret configuration and a live linking check are pending.",
+    "A real GitHub account consent/callback/publication flow remains pending; deployed configuration and unauthenticated endpoint behavior were checked.",
     "The ten-client test checks scheduling and integrity on small fixtures, not full-core throughput or failure certification.",
-    "OAuth linking is optional and remains disabled without configuration."
-  ]
+    "OAuth linking is optional and does not authenticate personal participant signatures or secret erasure."
+  ],
+  "deployment": {
+    "checked_at": "2026-10-28T22:00:27.383856+00:00",
+    "status_unchanged": true,
+    "accepted": 181,
+    "reservations": 0,
+    "checkpoint": "3600c48b2f3d687b754922777c62f62d7db78557356d902405b9c56a944e5339",
+    "checks": {
+      "/healthz": {
+        "status": 200,
+        "sha256": "6489d6d7a33c5d40e18fc61eeb6c34c341279ee61816394dde5189aa4ad8fae5"
+      },
+      "/build.json": {
+        "status": 200,
+        "sha256": "f37e0ff5189402d20230071b9272aa237d4c4e1ae19c218bf940081a3468db40"
+      },
+      "/join.sh": {
+        "status": 200,
+        "sha256": "cd4aa46984e2c52d251eb41f572deab601df481602cc285a0743e5fc41a1018b"
+      },
+      "/hosted.js": {
+        "status": 200,
+        "sha256": "8318947b92cf9f88abba257b4433dd2ca16257994dc13a1ee695b121ea9ca8b5"
+      },
+      "/v1/github/session": {
+        "status": 410,
+        "sha256": "2af28c26993555e315faaa988678030c81f006fc696907d77009aa5d20c17eeb",
+        "unauthenticated_session_rejected": true
+      }
+    },
+    "url": "https://d3gz3drevfa8mb.cloudfront.net",
+    "ssm_command": "5d7381c4-9e24-404a-8db2-1be532e69fba",
+    "runtime_check": {
+      "revision": "5629f879c52f925cc2216cd82cc21a9f5e0ab306",
+      "go": "go1.27.3",
+      "gnark_crypto": "v0.22.0",
+      "finalize_workers": 24,
+      "gomaxprocs": 96,
+      "memory_max_bytes": 103079215104,
+      "services_active": true
+    },
+    "github_oauth_enabled": true,
+    "github_oauth_private_config_permissions_verified": true,
+    "secret_values_inspected_or_published": false,
+    "infrastructure_change": "Only runtime IAM permission for the configured OAuth secret was added; no storage or instance replacement."
+  }
 }

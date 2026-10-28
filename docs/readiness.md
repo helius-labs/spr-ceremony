@@ -420,5 +420,7 @@ live public records. Upload capacity responses now wait without consuming the
 four transient network retry attempts, bounded by cancellation, invitation expiry
 and a 30-minute upload deadline. Ten concurrent clients completed and audited
 two fixture circuits each. All four native release platform checks passed.
-This release has not been deployed; real OAuth app setup and live linking remain
-pending. See [GitHub setup](github.md).
+Deployed on October 28 with GitHub OAuth enabled. Runtime and hosted release
+hashes, service health and private configuration permissions passed checks. All
+181 accepted circuit contributions and the checkpoint remained unchanged. A real
+GitHub consent/callback/publication check remains pending. See [GitHub setup](github.md).
