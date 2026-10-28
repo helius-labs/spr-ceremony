@@ -1,0 +1,37 @@
+{
+  "checked_at": "2026-10-28T17:47:02.454092+00:00",
+  "deployment": "spr-ceremony-test",
+  "checks_passed": false,
+  "checks": {
+    "s3_versioning": true,
+    "s3_public_access_block": true,
+    "data_volume_encrypted": true,
+    "daily_backup_policy": true,
+    "completed_backup_within_48_hours": false,
+    "latest_backup_private": false,
+    "health_and_disk_alarms": true,
+    "confirmed_alert_recipient": false,
+    "signing_key_backup_metadata": true
+  },
+  "latest_completed_backup": null,
+  "pending_backups": 1,
+  "backup_age_hours": null,
+  "confirmed_alert_recipients": 0,
+  "limits": [
+    "Configuration checks do not prove restore success or notification delivery.",
+    "No signing key values or recipient addresses are read into this report.",
+    "This does not verify the ceremony transcript or final keys."
+  ],
+  "first_snapshot_request": {
+    "requested_at": "2026-10-28T17:42:00.372586+00:00",
+    "snapshot_id": "snap-02e0abd5103657928",
+    "volume_id": "vol-05abf844398d14e6a",
+    "state": "pending at request time; inspect AWS for current state",
+    "encrypted": true,
+    "size_gib": 100,
+    "backup_policy_created": "2026-10-28T07:44:49.637000+00:00",
+    "backup_policy_modified": "2026-10-28T07:44:49.722000+00:00"
+  },
+  "daily_policy_first_run": "Policy was created 2026-10-28 after its 03:00 UTC schedule; first scheduled backup is still pending.",
+  "private_snapshot_permissions_checked": true
+}

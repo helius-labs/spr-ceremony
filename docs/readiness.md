@@ -315,3 +315,14 @@ circuits in parallel while preserving deterministic output order. The live core
 campaign has not been finalized; no full-core finalization runtime is claimed.
 The first-two-contributor audit continued across deployment on its original
 snapshot and binary. It does not cover Tilo's later contributions.
+
+The [October 28 AWS operations check](evidence/aws-operations-2026-10-28.json)
+confirmed private versioned S3 storage, encrypted EBS, healthy disk/service alarms,
+an enabled daily snapshot policy and a current signing-key backup version in
+Secrets Manager. No private key value was read. It also found no confirmed alarm
+recipient and no completed EBS snapshot. The daily policy was created after its
+03:00 UTC schedule; a first private encrypted snapshot was requested separately
+and was still pending when this report was recorded. Alert delivery and disk
+snapshot restoration remain unverified. Use `scripts/check-aws-operations.py` for
+current configuration checks; it exits nonzero while these configuration gaps
+remain and does not send notifications.

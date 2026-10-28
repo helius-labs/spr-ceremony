@@ -242,6 +242,25 @@ above 80%; health/metric gaps alarm after two five-minute periods. Preserve
 independently witnessed manifest/checkpoint hashes outside the coordinator.
 Engineering readiness and a deployed HTTPS site do not replace independent review.
 
+Check the deployed backup and alert configuration with your AWS operator login:
+
+```sh
+AWS_PROFILE=YOUR_PROFILE python3 scripts/check-aws-operations.py
+```
+
+Use the same `TF_WORKSPACE` as deployment (`internal-test` for the current hosted
+campaign). This read-only check exits nonzero if a completed encrypted backup is
+missing or older than 48 hours, snapshot access is shared, alarms are unhealthy,
+or no alert recipient has confirmed their subscription. It also checks S3
+versioning/public-access blocking, the daily backup policy and signing-key backup
+metadata. It never reads private key values, prints recipient addresses or sends
+messages. A passing report does not prove that restoration or alert delivery works.
+
+The daily snapshot schedule does not provide an immediate first backup. After
+initial deployment, create a private encrypted snapshot of the Terraform
+`data_volume` output and wait for completion. Keep it until a newer backup has
+been verified; manually created snapshots are not removed by the daily policy.
+
 ## Upgrade the internal unsigned prototype
 
 Old prototype invitations and receipts predate signatures and unique IDs. They
