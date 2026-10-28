@@ -66,6 +66,7 @@ def main():
                 output += cli('operator', 'audit')
                 assert 'Transcript verified: core' in output
                 output += cli('operator', 'audit')
+                output += cli('operator', 'audit', '--workers', '2')
                 cli('operator', 'invite', 'bob', '--out', 'duplicate.json', success=False)
                 assert not (root / 'duplicate.json').exists()
                 output += cli('operator', 'reissue', 'bob', '--out', 'renewed.json')
