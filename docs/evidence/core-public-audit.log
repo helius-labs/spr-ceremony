@@ -1,0 +1,87 @@
+Downloading the public transcript…
+Verifying 41 circuits, signatures and checkpoint history…
+Audit started: merge_8_1 · domain 262144
+Audit started: transfer_confidential_16_2 · domain 524288
+Audit started: transfer_confidential_32_2 · domain 1048576
+Audit started: transfer_confidential_5_16 · domain 262144
+Audit started: transfer_confidential_8_4 · domain 262144
+Audit started: transfer_confidential_8_2 · domain 262144
+Audit started: merge_52_1 · domain 2097152
+Audit started: transfer_confidential_24_2 · domain 1048576
+Audit started: transfer_confidential_5_8 · domain 262144
+Audit started: transfer_confidential_6_2 · domain 262144
+Audit started: transfer_confidential_6_4 · domain 262144
+Audit started: transfer_confidential_24_4 · domain 1048576
+Audit started: transfer_confidential_48_2 · domain 2097152
+Audit started: transfer_confidential_16_4 · domain 524288
+Audit started: transfer_confidential_16_8 · domain 524288
+Audit started: transfer_confidential_12_4 · domain 524288
+Audit started: transfer_confidential_12_8 · domain 524288
+Audit started: transfer_confidential_49_2 · domain 2097152
+Audit started: transfer_confidential_12_2 · domain 524288
+Audit started: transfer_confidential_40_2 · domain 1048576
+Audit started: merge_24_1 · domain 1048576
+Audit started: transfer_confidential_8_16 · domain 262144
+Audit started: transfer_confidential_6_8 · domain 262144
+Audit started: transfer_confidential_8_8 · domain 262144
+Audit verified: 1/41 · transfer_confidential_5_8 · 13m22s
+Audit started: transfer_confidential_2_8 · domain 131072
+Audit verified: 2/41 · transfer_confidential_6_2 · 13m50s
+Audit started: transfer_confidential_3_2 · domain 131072
+Audit verified: 3/41 · transfer_confidential_6_4 · 14m2s
+Audit started: transfer_confidential_3_4 · domain 131072
+Audit verified: 4/41 · transfer_confidential_5_16 · 14m44s
+Audit started: transfer_confidential_2_16 · domain 131072
+Audit verified: 5/41 · transfer_confidential_6_8 · 15m4s
+Audit started: transfer_confidential_3_8 · domain 131072
+Audit verified: 6/41 · merge_8_1 · 16m13s
+Audit started: transfer_confidential_4_2 · domain 131072
+Audit verified: 7/41 · transfer_confidential_8_2 · 16m45s
+Audit started: transfer_confidential_4_4 · domain 131072
+Audit verified: 8/41 · transfer_confidential_8_4 · 16m54s
+Audit started: transfer_confidential_4_8 · domain 131072
+Audit verified: 9/41 · transfer_confidential_8_8 · 17m27s
+Audit started: transfer_confidential_5_2 · domain 131072
+Audit verified: 10/41 · transfer_confidential_2_8 · 4m38s
+Audit started: transfer_confidential_5_4 · domain 131072
+Audit verified: 11/41 · transfer_confidential_8_16 · 18m14s
+Audit started: transfer_confidential_4_16 · domain 131072
+Audit verified: 12/41 · transfer_confidential_3_2 · 5m13s
+Audit started: transfer_confidential_1_4 · domain 65536
+Audit verified: 13/41 · transfer_confidential_3_4 · 5m23s
+Audit started: transfer_confidential_1_8 · domain 65536
+Audit verified: 14/41 · transfer_confidential_2_16 · 5m6s
+Audit started: transfer_confidential_2_2 · domain 65536
+Audit verified: 15/41 · transfer_confidential_3_8 · 5m22s
+Audit started: transfer_confidential_2_4 · domain 65536
+Audit verified: 16/41 · transfer_confidential_1_4 · 2m8s
+Audit started: transfer_confidential_1_16 · domain 65536
+Audit verified: 17/41 · transfer_confidential_1_8 · 2m35s
+Audit started: transfer_confidential_1_2 · domain 32768
+Audit verified: 18/41 · transfer_confidential_4_2 · 5m50s
+Audit verified: 19/41 · transfer_confidential_12_2 · 22m40s
+Audit verified: 20/41 · transfer_confidential_4_4 · 6m1s
+Audit verified: 21/41 · transfer_confidential_12_4 · 22m46s
+Audit verified: 22/41 · transfer_confidential_2_2 · 3m7s
+Audit verified: 23/41 · transfer_confidential_12_8 · 23m19s
+Audit verified: 24/41 · transfer_confidential_4_8 · 6m28s
+Audit verified: 25/41 · transfer_confidential_2_4 · 3m18s
+Audit verified: 26/41 · transfer_confidential_1_2 · 1m46s
+Audit verified: 27/41 · transfer_confidential_5_2 · 6m57s
+Audit verified: 28/41 · transfer_confidential_1_16 · 3m25s
+Audit verified: 29/41 · transfer_confidential_5_4 · 7m8s
+Audit verified: 30/41 · transfer_confidential_4_16 · 7m14s
+Audit verified: 31/41 · transfer_confidential_16_2 · 27m9s
+Audit verified: 32/41 · transfer_confidential_16_4 · 27m30s
+Audit verified: 33/41 · transfer_confidential_16_8 · 27m57s
+Audit verified: 34/41 · merge_24_1 · 37m43s
+Audit verified: 35/41 · transfer_confidential_24_2 · 38m51s
+Audit verified: 36/41 · transfer_confidential_24_4 · 39m4s
+Audit verified: 37/41 · transfer_confidential_32_2 · 48m5s
+Audit verified: 38/41 · transfer_confidential_40_2 · 57m0s
+Audit verified: 39/41 · transfer_confidential_48_2 · 1h10m39s
+Audit verified: 40/41 · transfer_confidential_49_2 · 1h11m40s
+Audit verified: 41/41 · merge_52_1 · 1h13m31s
+Transcript verified: core
+Checkpoint: 8ce40de71626f9754b8019f1980be5afe9c416b00aa5d887ed7ecebe79fefe23
+Public snapshot: /var/lib/spr/public-audit-rc13/4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079/8ce40de71626f9754b8019f1980be5afe9c416b00aa5d887ed7ecebe79fefe23

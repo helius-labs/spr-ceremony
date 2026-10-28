@@ -371,7 +371,7 @@ pinned checkpoint with rc.13. All 342 cached objects (6,186,217,858 bytes) retai
 their files and passed another SHA256 check. The full live operator status was
 unchanged. No partial object transfer was present at interruption, so this checks
 workspace recovery rather than a mid-object Range resume. The resumed full-core
-audit remains a separate, unfinished verification result.
+audit subsequently [passed](evidence/core-public-audit.json).
 
 That check exposed repeated hashing of shared artifacts while restoring historical
 checkpoints. Restore now verifies each unique object on arrival and checks the
@@ -389,7 +389,7 @@ native platform checks passed. The public installer and binaries match the
 attested release, and live Chromium/WebKit checks passed. Deployment preserved
 the complete operator status, all 140 accepted contributions and the beacon plan.
 The separate full-core audit continued on its immutable rc.13 executable without
-restarting; its result is still pending.
+restarting; it subsequently [passed](evidence/core-public-audit.json).
 
 A [production signing-key recovery check](evidence/signing-key-recovery.json)
 retrieved the manifest-specific Secrets Manager backup into a private temporary
@@ -400,3 +400,13 @@ GnuPG homes were removed. No private material was printed, returned from AWS or
 placed in the repository. The live key and full operator status were unchanged.
 This verifies recovery of the coordinator identity, separately from transcript
 verification and without asserting secure memory erasure.
+
+The [full public transcript audit](evidence/core-public-audit.json) passed all 41
+core circuits and 140 contribution transitions at checkpoint
+`8ce40de71626f9754b8019f1980be5afe9c416b00aa5d887ed7ecebe79fefe23`.
+It downloaded public artifacts without AWS credentials or invitations and used
+24 verification workers. The collector additionally checked the SHA256 hashes
+of all 554 restored objects (6,187,060,783 bytes). The [complete log](evidence/core-public-audit.log)
+and [collector source](evidence/core-public-audit-collector.py.txt) are retained.
+This result covers the pinned snapshot only; subsequent contributions, final
+keys and independent security review remain separate. The ceremony stayed open.

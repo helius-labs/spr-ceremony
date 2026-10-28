@@ -1,0 +1,69 @@
+import datetime,hashlib,json,re,subprocess,time
+from pathlib import Path
+
+UNIT='spr-public-audit-8ce40de71626f975.service'
+MANIFEST='4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079'
+CHECKPOINT='8ce40de71626f9754b8019f1980be5afe9c416b00aa5d887ed7ecebe79fefe23'
+REVISION='de4291f9451f99c0ab90522ed004209b2938f213'
+BINARY=Path('/opt/spr/releases/v0.1.0-rc.13-'+REVISION+'/native/spr-ceremony-linux-amd64')
+BINARY_SHA='3314b7d6c84c2c956c9062b5a41bdbd8fe69b7edb4d5974989558528f8d666d8'
+SNAPSHOT=Path('/var/lib/spr/public-audit-rc13')/MANIFEST/CHECKPOINT
+
+def state():
+    fields=['LoadState','ActiveState','SubState','MainPID','Result','ExecMainCode','ExecMainStatus','ExecMainStartTimestamp','ExecMainExitTimestamp','InvocationID','MemoryPeak','CPUUsageNSec']
+    args=['systemctl','show',UNIT]
+    for field in fields: args+=['-p',field]
+    return dict(line.split('=',1) for line in subprocess.check_output(args,text=True).splitlines())
+
+def digest(path):
+    with path.open('rb') as f: return hashlib.file_digest(f,'sha256').hexdigest()
+
+def object_json(ref):
+    path=SNAPSHOT/'objects'/ref['sha256']
+    assert path.stat().st_size==ref['size'] and digest(path)==ref['sha256']
+    return json.loads(path.read_text())
+
+def main():
+    original=state()
+    assert original['LoadState']=='loaded'
+    invocation=original['InvocationID']
+    deadline=time.monotonic()+6600
+    while True:
+        current=state()
+        assert current['InvocationID']==invocation, 'Audit invocation changed; inspect before collecting'
+        if current['MainPID']=='0': break
+        assert current['ActiveState']=='activating' and current['SubState']=='start'
+        if time.monotonic()>deadline: raise RuntimeError('Audit still running; inspect the existing unit')
+        time.sleep(30)
+    assert current['Result']=='success' and current['ExecMainStatus']=='0' and current['ExecMainExitTimestamp']
+    assert current['ActiveState']=='active' and current['SubState']=='exited'
+    log=subprocess.check_output(['journalctl','_SYSTEMD_INVOCATION_ID='+invocation,'--no-pager','-o','cat'],text=True)
+    assert 'Transcript verified: core' in log and 'Checkpoint: '+CHECKPOINT in log
+    assert digest(BINARY)==BINARY_SHA and digest(SNAPSHOT/'manifest.json')==MANIFEST
+    info=json.loads(subprocess.check_output([str(BINARY),'version'],text=True))['build']
+    settings={x['Key']:x['Value'] for x in info['Settings']}
+    assert settings['vcs.revision']==REVISION and settings['vcs.modified']=='false'
+    manifest=json.loads((SNAPSHOT/'manifest.json').read_text())
+    ids={c['spec']['id'] for c in manifest['circuits']}
+    assert len(ids)==41 and all(c['spec']['track']=='core' for c in manifest['circuits'])
+    matches=re.findall(r'^Audit verified: (\d+)/41 · ([a-zA-Z0-9_]+) · (.+)$',log,re.MULTILINE)
+    assert len(matches)==41 and {m[1] for m in matches}==ids and {int(m[0]) for m in matches}==set(range(1,42))
+    ref=json.loads((SNAPSHOT/'checkpoint.json').read_text());assert ref['sha256']==CHECKPOINT
+    cp=object_json(ref)
+    assert cp['manifest']['sha256']==MANIFEST and set(cp['states'])==ids
+    counts={}
+    for name,state_ref in cp['states'].items():
+        circuit=object_json(state_ref);assert circuit['circuit']==name
+        for receipt in circuit['history']:
+            counts[receipt['contributor']]=counts.get(receipt['contributor'],0)+1
+    assert sum(counts.values())==140
+    assert {p.name for p in SNAPSHOT.iterdir()}=={'objects','manifest.json','checkpoint.json'}
+    object_count=total_bytes=0
+    for path in (SNAPSHOT/'objects').iterdir():
+        assert re.fullmatch('[a-f0-9]{64}',path.name) and digest(path)==path.name
+        object_count+=1;total_bytes+=path.stat().st_size
+    deps={x['Path']:x['Version'] for x in info['Deps']}
+    report={'checked_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'unit':UNIT,'completion':current,'source_revision':REVISION,'release':'v0.1.0-rc.13','binary_sha256':BINARY_SHA,'go':info['GoVersion'],'gnark_crypto':deps['github.com/consensys/gnark-crypto'],'manifest':cp['manifest'],'checkpoint':ref,'circuits_verified':41,'contributions_verified':sum(counts.values()),'accepted_counts':counts,'restored_objects_hash_verified':object_count,'restored_object_bytes':total_bytes,'workers':24,'gomaxprocs':96,'memory_max_bytes':96*(1<<30),'public_downloads_without_credentials':True,'log':'core-public-audit.log','limits':['This result applies only to the pinned checkpoint, not future contributions.','An intentional download interruption preceded this invocation; see public-audit-recovery.json.','The active ceremony was not closed or finalized by this check; final-key verification and independent security review remain separate.']}
+    print(json.dumps({'report':report,'log':log}))
+
+if __name__=='__main__': main()
