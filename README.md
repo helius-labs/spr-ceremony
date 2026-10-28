@@ -1,75 +1,101 @@
 # Solana Privacy Rings
 
-A trusted setup for **41 core circuits**. Browser or terminal. Private invitations.
-Verified contributions. Signed invitations and receipts. Public final keys.
+A trusted setup for **41 core circuits**. Signed invitations and receipts.
+Verified contributions. Public final keys.
 
-Download the latest [release candidate](https://github.com/helius-labs/spr-ceremony/releases).
-Operate and contribute with the CLI; no SSM tunnel is needed.
-
-Custom rings, batch 10 and batch 4999 are excluded. The cryptographic engine is
-pinned to gnark `v0.16.4` and gnark-crypto `v0.21.1-0.20260913224755-1409fe592052`.
+[Participant site](https://d3gz3drevfa8mb.cloudfront.net) ·
+[Control panel](https://1q82ow4q4c.execute-api.eu-north-1.amazonaws.com) ·
+[CLI releases](https://github.com/helius-labs/spr-ceremony/releases)
 
 ## Contribute
 
-Open your private invitation and click **Contribute**. Keep the tab open.
-For faster contributions, choose **Use terminal** and copy the one-line command.
-It downloads the matching Mac/Linux binary, checks its pinned SHA256, then asks
-for your invitation with input hidden. No Go, npm, AWS account or sudo required.
-
-Already have the [release binary](https://github.com/helius-labs/spr-ceremony/releases)?
+Get a private invitation link from the operator. Run this in your terminal:
 
 ```sh
-./spr-ceremony join
+curl --proto '=https' --tlsv1.2 -fsS https://d3gz3drevfa8mb.cloudfront.net/join.sh | SPR_CEREMONY_DOWNLOAD_BASE=https://d3gz3drevfa8mb.cloudfront.net/native bash
 ```
 
-Rerun after interruption. Accepted work is skipped; completed public output is
-reused while its parent is current. Save your receipts. Share invitations privately.
+Paste your invitation link at the hidden prompt. The command downloads the
+matching Mac/Linux binary, checks its pinned SHA256 and contributes to all 41
+circuits. **No compilation, Go, AWS account, GitHub access or sudo.** Requires
+Bash, curl and a SHA256 utility, included on macOS and common Linux installations.
 
-The hosted code is part of your trust boundary. For independent verification,
-check the release's signed provenance and reviewed source commit before running
-it. [Verification instructions](docs/releases.md).
+Keep the computer awake. Progress shows `[1/41]` through `[41/41]`. Rerun the
+same command after interruption; accepted work is skipped. Public work and
+receipts stay in `~/.local/share/spr-ceremony/work`.
+
+Alternatively, open the invitation link and click **Contribute** in your browser.
+Choose **Use terminal** to copy the same one-liner. With an existing binary, run
+`./spr-ceremony join` and paste the link at its prompt. If you received an
+invitation file instead:
+
+```sh
+./spr-ceremony contribute --invitation bob.json
+```
+
+The one-liner trusts the hosted installer. For independent release provenance
+verification, follow the [verification guide](docs/releases.md).
+
+## Operate
+
+Download the latest release binary for your platform, rename it `spr-ceremony`,
+and run `chmod +x spr-ceremony`. Operators also need the AWS CLI and their
+configured SSO profile. Connect once:
+
+```sh
+aws sso login --profile YOUR_PROFILE
+./spr-ceremony operator connect --operator-url https://1q82ow4q4c.execute-api.eu-north-1.amazonaws.com --profile YOUR_PROFILE
+```
+
+**Create an invitation link:** open the control panel, click **Sign in**, and run
+its displayed `./spr-ceremony operator login CODE` command. Enter a contributor
+name, click **Create invitation**, then **Copy link**. Send the link and the
+contributor one-liner privately. No SSM tunnel is needed.
+
+**Create an invitation file from the CLI:**
+
+```sh
+./spr-ceremony operator invite bob --out invitations/bob.json
+```
+
+Send the file and the printed contributor command privately. This command saves
+a file; it does not print a secret link. Invitations expire after 24 hours by
+default; use `--hours 72` to change that.
+
+**Check or manage contributions:**
+
+```sh
+./spr-ceremony operator status
+./spr-ceremony operator audit --workers 4
+./spr-ceremony operator reissue bob
+./spr-ceremony operator revoke bob
+```
+
+Audit downloads and verifies the full transcript locally; parallel workers need
+additional RAM. Reissue preserves accepted work and invalidates previous access.
+Revoke also preserves accepted work. The current ceremony is already open.
+
+**Finish:** close before the announced beacon time, finalize after it, then
+independently reproduce the published keys:
+
+```sh
+./spr-ceremony operator close
+# After the beacon time shown by operator status:
+./spr-ceremony operator finalize
+./spr-ceremony operator export --out final-keys
+```
+
+[Operator guide](docs/operator-cli.md) · [Preparation and recovery](docs/operations.md) ·
+[AWS deployment](docs/aws.md) · [Validation status](docs/readiness.md)
 
 ## Build from source
 
-Requires Go 1.27.3. Prebuilt releases need no Go installation.
+Optional; requires Go 1.27.3:
 
 ```sh
 go build -o spr-ceremony ./cmd/spr-ceremony
 ```
 
-For a local browser demo, see the [testing guide](docs/hosted-ui.md).
-
-## Operate
-
-Use your AWS SSO profile; no SSM tunnel is needed:
-
-```sh
-aws sso login --profile YOUR_PROFILE
-./spr-ceremony operator connect --operator-url OPERATOR_URL --profile YOUR_PROFILE
-./spr-ceremony operator open --hours 24
-./spr-ceremony operator invite bob
-./spr-ceremony operator status
-./spr-ceremony operator audit
-```
-
-`invite` saves a private invitation file and prints the contributor's command.
-Send both privately. `audit` downloads and verifies the current public transcript.
-[CLI guide](docs/operator-cli.md) · [Mac-to-AWS ceremony guide](docs/rehearsal.md).
-
-[Deploy to AWS and invite contributors](docs/aws.md). Terraform provisions HTTPS,
-private versioned S3, encrypted storage, backups and alarms. The control panel is
-available through an AWS-authenticated operator gateway, with SSM as a private
-fallback. The participant site has no administration API.
-[Internal testing](docs/aws.md#internal-test-deployment) uses SSM for both interfaces
-and needs no public hostname.
-
-Every acceptance and phase transition publishes its S3 checkpoint before success.
-Final keys appear only after closure and signed-beacon finalization.
-[Prepare, finish, audit and recover](docs/operations.md).
-
-Releases include four native binaries, the browser bundle, a pinned installer,
-checksums and signed provenance. The repository is internal; the deployed site
-mirrors the verified participant downloads without requiring GitHub access.
-
-[Validation status and remaining checks](docs/readiness.md), including independent
-review and final-key verification.
+[Local browser demo](docs/hosted-ui.md). Custom rings, batch 10 and batch 4999 are
+excluded. The engine is pinned to gnark `v0.16.4` and gnark-crypto
+`v0.21.1-0.20260913224755-1409fe592052`.

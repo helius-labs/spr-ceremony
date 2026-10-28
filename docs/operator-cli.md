@@ -27,6 +27,13 @@ For someone else, run `operator invite bob` and privately send the generated
 file and printed command. The file has mode 0600; its secret never appears in
 the command. Invitations last 24 hours by default; `--hours 72` changes that.
 
+For a copyable invitation **link**, open the hosted control panel, sign in by
+running its displayed `operator login CODE` command, then enter the contributor
+name and choose **Create invitation → Copy link**. Send the link privately with
+the [README contributor one-liner](../README.md#contribute). It downloads the
+native client and prompts for the link; no compilation or AWS login is needed.
+`operator invite` itself saves a JSON file and does not print a bearer link.
+
 The client queues, contributes, verifies, uploads and waits for acceptance for
 each circuit. Rerun after interruption. Accepted work is skipped. Contributors
 may run concurrently; each circuit accepts one contributor at a time.
