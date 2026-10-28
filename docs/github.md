@@ -52,6 +52,11 @@ python3 scripts/configure-github-oauth.py \
   --profile AdministratorAccess-558215002830 --region eu-north-1
 ```
 
+The helper checks AWS login and secret metadata before asking for credentials.
+If SSO has expired, run `aws sso login --profile AdministratorAccess-558215002830`
+and retry. Add `--check` to diagnose AWS access without prompting for or changing
+any secrets. Existing secret names are never overwritten.
+
 It creates a Secrets Manager secret and prints only its ARN. It does not deploy
 or restart anything. Add that ARN as `github_oauth_secret_arn` in the private AWS
 Terraform configuration. Review/apply the infrastructure plan, then deploy a
