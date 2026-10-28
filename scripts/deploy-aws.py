@@ -204,10 +204,12 @@ def main():
             # recovery pin separate from any earlier deployment of that release.
             release_dir += '-' + recovery['manifest']['sha256']
         q = shlex.quote
+        proxy_prepare = 'mkdir -p /etc/caddy\nif ! command -v caddy >/dev/null; then DEBIAN_FRONTEND=noninteractive apt-get install -y caddy; fi' if access_mode == 'cloudfront' else ''
         proxy_start = 'caddy validate --config /etc/caddy/Caddyfile\nsystemctl enable --now caddy\nsystemctl reload caddy' if access_mode == 'cloudfront' else ''
         commands = f'''#!/usr/bin/env bash
 set -euo pipefail
 umask 077
+{proxy_prepare}
 test -f /etc/spr/s3.json
 mountpoint -q /var/lib/spr
 stage=$(mktemp -d /opt/spr/releases/.stage-XXXXXXXX)
