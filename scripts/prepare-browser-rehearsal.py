@@ -93,6 +93,18 @@ def main():
         private, public = root / 'coordinator.private.asc', root / 'coordinator.asc'
         subprocess.run([binary, 'keygen', '--out', private, '--public-out', public], check=True, capture_output=True)
         subprocess.run([binary, 'bind-key', '--dir', unsigned, '--public-key', public, '--out', out], check=True, capture_output=True)
+        if args.prepared:
+            # Binding a marked demo initializes it open by default. Preserve the
+            # explicit prepared request before this fresh campaign is published.
+            bound_ref = json.loads((out / 'checkpoint.json').read_text())
+            bound = json.loads((out / 'objects' / bound_ref['sha256']).read_text())
+            if bound['sequence'] != 0 or bound.get('previous'):
+                raise ValueError('Expected an untouched bound campaign')
+            bound['lifecycle'] = {'phase': 'prepared'}
+            write_json(root / 'prepared-checkpoint.json', bound)
+            prepared_ref = reference(root / 'prepared-checkpoint.json')
+            shutil.copyfile(root / 'prepared-checkpoint.json', out / 'objects' / prepared_ref['sha256'])
+            write_json(out / 'checkpoint.json', prepared_ref)
         (out / 'private').mkdir(mode=0o700)
         os.rename(private, out / 'private/coordinator.private.asc')
         subprocess.run([binary, 'check-signing-key', '--dir', out], check=True, capture_output=True)
