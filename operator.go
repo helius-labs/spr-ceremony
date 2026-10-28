@@ -452,12 +452,21 @@ func (o *Operator) Revoke(ctx context.Context, id string) error {
 // its public contributions. Public object caching makes interrupted downloads
 // reusable; no S3 credentials, invitations or signing keys enter the cache.
 func (o *Operator) Audit(ctx context.Context, work string, maxDomain uint64, progress io.Writer) (RecoveryPoint, string, error) {
+	return o.AuditWithOptions(ctx, work, maxDomain, AuditOptions{Workers: 1, Progress: progress})
+}
+
+func (o *Operator) AuditWithOptions(ctx context.Context, work string, maxDomain uint64, options AuditOptions) (RecoveryPoint, string, error) {
+	if options.Workers < 1 || options.Workers > 41 {
+		return RecoveryPoint{}, "", fmt.Errorf("audit workers must be 1–41")
+	}
+	progress := options.Progress
 	if progress == nil {
 		progress = io.Discard
 	}
 	return o.withSnapshot(ctx, work, progress, func(s *Store) error {
 		fmt.Fprintf(progress, "Verifying %d circuits, signatures and checkpoint history…\n", len(s.Manifest.Circuits))
-		return s.Audit(Core, maxDomain)
+		options.Progress = progress
+		return s.AuditWithOptions(Core, maxDomain, options)
 	})
 }
 

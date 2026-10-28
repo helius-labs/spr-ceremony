@@ -49,6 +49,10 @@ objects and independently checks signatures, Phase 1 derivation, initialization,
 contributions and checkpoint history. **Full-core audits can take hours.** Keep
 `audit/` to reuse downloads. It contains no private invitations or signing keys.
 
+For parallel verification, use `operator audit --workers 4`. Each worker needs
+additional RAM. Audit prints circuit starts, completed counts and elapsed times;
+it checks every circuit with the same pinned engine and initialization rules.
+
 ## Finish
 
 ```sh

@@ -77,7 +77,7 @@ func TestOperatorInvitesAuditsAndRevokesThroughControlTunnel(t *testing.T) {
 		t.Fatal("native resume did not complete remaining work")
 	}
 	work := t.TempDir()
-	point, snapshot, err := operator.Audit(ctx, work, 64, io.Discard)
+	point, snapshot, err := operator.AuditWithOptions(ctx, work, 64, AuditOptions{Workers: 2, Progress: io.Discard})
 	must(t, err)
 	if point.Manifest != s.ManifestArtifact || point.Checkpoint != status.Checkpoint {
 		t.Fatal("audit changed snapshot")

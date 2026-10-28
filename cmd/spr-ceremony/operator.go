@@ -38,6 +38,7 @@ func runOperator(args []string) error {
 	var gatewayURL, awsProfile *string
 	var hours *int
 	var maxDomain *uint64
+	var workers *int
 	var asJSON *bool
 	var reason *string
 	switch command {
@@ -61,6 +62,9 @@ func runOperator(args []string) error {
 	case "audit", "export":
 		work = f.String("work", "audit", "reusable public audit workspace")
 		maxDomain = f.Uint64("max-domain", 1<<22, "maximum in-memory SRS domain")
+		if command == "audit" {
+			workers = f.Int("workers", 1, "parallel circuit audits, 1–41; allow RAM for each worker")
+		}
 		if command == "export" {
 			out = f.String("out", "final-keys", "final key directory; existing keys are verified, never replaced")
 		}
@@ -232,7 +236,7 @@ func runOperator(args []string) error {
 		if command == "export" {
 			point, directory, err = operator.Export(ctx, *work, *out, *maxDomain, os.Stderr)
 		} else {
-			point, directory, err = operator.Audit(ctx, *work, *maxDomain, os.Stderr)
+			point, directory, err = operator.AuditWithOptions(ctx, *work, *maxDomain, ceremony.AuditOptions{Workers: *workers, Progress: os.Stderr})
 		}
 		if err != nil {
 			return err
