@@ -14,4 +14,9 @@
 *.tfstate
 *.tfstate.*
 *.tfvars
+*.tfplan
+*.tfvars.json
+.env
+.env.*
+*.pem
 __pycache__/

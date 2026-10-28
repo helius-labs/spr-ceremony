@@ -356,6 +356,10 @@ func (s *Store) Accept(token, id, path string) (Receipt, error) {
 		return Receipt{}, e
 	}
 	defer unlock()
+	// Recheck authorization after waiting for another commit or revocation.
+	if _, e = s.invitation(token); e != nil {
+		return Receipt{}, e
+	}
 	cp, checkpoint, e := s.checkpoint()
 	if e != nil {
 		return Receipt{}, e

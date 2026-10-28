@@ -1,32 +1,103 @@
-name: Build participant binaries
+name: Release
 on:
   workflow_dispatch:
+    inputs:
+      version:
+        description: "Immutable version (vMAJOR.MINOR.PATCH or vMAJOR.MINOR.PATCH-rc.N)"
+        required: true
+        type: string
 permissions:
   contents: read
-  id-token: write
-  attestations: write
+concurrency:
+  group: release
+  cancel-in-progress: false
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+      id-token: write
+      attestations: write
+    env:
+      SPR_RELEASE_VERSION: ${{ inputs.version }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5
         with:
           go-version-file: go.mod
+      - name: Require checked main revision and a new version
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          test "$GITHUB_REF" = refs/heads/main
+          python3 -c 'import os,re; assert re.fullmatch(r"v[0-9]+\.[0-9]+\.[0-9]+(?:-rc\.[0-9]+)?",os.environ["SPR_RELEASE_VERSION"])'
+          gh run list --workflow check.yml --commit "$GITHUB_SHA" --json conclusion,event \
+            --jq 'any(.[]; .event == "push" and .conclusion == "success")' | grep -qx true
+          gh api "repos/$GITHUB_REPOSITORY/git/matching-refs/tags/$SPR_RELEASE_VERSION" \
+            --jq "[.[] | select(.ref == \"refs/tags/$SPR_RELEASE_VERSION\")] | length" | grep -qx 0
       - run: bash scripts/build-release.sh
       - name: Build browser bundle
         run: |
           bash scripts/build-browser.sh
           tar -C dist/browser -czf "dist/browser-${GITHUB_SHA}.tar.gz" .
+          sha256sum "dist/browser-${GITHUB_SHA}.tar.gz" | sed 's@  dist/@  @' >> "dist/$GITHUB_SHA/SHA256SUMS"
       - uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4
+        id: provenance
         with:
           subject-path: |
             dist/**/spr-ceremony-*
+            dist/**/join.sh
+            dist/**/build.json
+            dist/**/SHA256SUMS
             dist/browser-*.tar.gz
           create-storage-record: false
+      - name: Include offline provenance
+        env:
+          BUNDLE: ${{ steps.provenance.outputs.bundle-path }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cp "$BUNDLE" "dist/$GITHUB_SHA/provenance.json"
+          gh attestation verify "dist/$GITHUB_SHA/join.sh" --repo "$GITHUB_REPOSITORY" \
+            --bundle "$BUNDLE" --source-digest "$GITHUB_SHA" \
+            --signer-workflow "$GITHUB_REPOSITORY/.github/workflows/binaries.yml" --deny-self-hosted-runners
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: participant-binaries-${{ github.sha }}
           path: dist/
           if-no-files-found: error
           retention-days: 30
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      attestations: read
+    env:
+      GH_TOKEN: ${{ github.token }}
+      SPR_RELEASE_VERSION: ${{ inputs.version }}
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: participant-binaries-${{ github.sha }}
+          path: dist
+      - name: Verify and publish immutable release
+        run: |
+          cd "dist/$GITHUB_SHA"
+          cp "../browser-$GITHUB_SHA.tar.gz" .
+          sha256sum --check SHA256SUMS
+          for artifact in spr-ceremony-* join.sh build.json SHA256SUMS "browser-$GITHUB_SHA.tar.gz"; do
+            gh attestation verify "$artifact" --repo "$GITHUB_REPOSITORY" --bundle provenance.json \
+              --source-digest "$GITHUB_SHA" --signer-workflow "$GITHUB_REPOSITORY/.github/workflows/binaries.yml" \
+              --deny-self-hosted-runners
+          done
+          printf 'Solana Privacy Rings ceremony client and hosted UI.\n\nSource: `%s`. Includes macOS/Linux binaries, pinned installer, checksums and signed build provenance.\n\nFinal ceremony keys are published separately after contributions, closure and verified finalization.\n' "$GITHUB_SHA" > "$RUNNER_TEMP/notes.md"
+          gh release create "$SPR_RELEASE_VERSION" --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
+            --draft --title "$SPR_RELEASE_VERSION" --notes-file "$RUNNER_TEMP/notes.md" \
+            spr-ceremony-* join.sh build.json SHA256SUMS provenance.json "browser-$GITHUB_SHA.tar.gz"
+          if [[ "$SPR_RELEASE_VERSION" == *-rc.* ]]; then
+            gh release edit "$SPR_RELEASE_VERSION" --repo "$GITHUB_REPOSITORY" --draft=false --prerelease
+          else
+            gh release edit "$SPR_RELEASE_VERSION" --repo "$GITHUB_REPOSITORY" --draft=false --latest
+          fi
+          gh release verify "$SPR_RELEASE_VERSION" --repo "$GITHUB_REPOSITORY"

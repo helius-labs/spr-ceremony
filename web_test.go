@@ -2,6 +2,7 @@ package ceremony
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -11,6 +12,67 @@ import (
 	"testing"
 	"time"
 )
+
+func TestPublicRateLimitCannotBeBypassedWithForwardedHeaders(t *testing.T) {
+	for _, trust := range []bool{false, true} {
+		handler := limitWeb(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) { w.WriteHeader(204) }), trust)
+		limited := false
+		for n := range 500 {
+			r := httptest.NewRequest("GET", "https://ceremony.example/", nil)
+			r.RemoteAddr = "192.0.2.1:1"
+			r.Header.Set("X-Forwarded-For", fmt.Sprintf("198.51.%d.%d", n/250, n%250))
+			w := httptest.NewRecorder()
+			handler.ServeHTTP(w, r)
+			if w.Code == 429 {
+				limited = true
+				break
+			}
+		}
+		if !limited {
+			t.Fatal("direct peer bypassed limits with an untrusted forwarded header")
+		}
+		r := httptest.NewRequest("GET", "https://ceremony.example/", nil)
+		r.RemoteAddr = "192.0.2.2:1"
+		w := httptest.NewRecorder()
+		handler.ServeHTTP(w, r)
+		if w.Code != 204 {
+			t.Fatal("rate limit leaked to another peer")
+		}
+	}
+}
+
+func TestReleaseInstallerAndNativeAssetsArePinned(t *testing.T) {
+	web, build := testBrowserBundle(t)
+	dir := t.TempDir()
+	hashes := map[string]string{}
+	for _, platform := range []string{"darwin-arm64", "darwin-amd64", "linux-arm64", "linux-amd64"} {
+		name := "spr-ceremony-" + platform
+		body := []byte(name)
+		must(t, os.WriteFile(filepath.Join(dir, name), body, 0600))
+		hashes[name] = hashBytes(body)
+	}
+	installer := []byte("#!/bin/bash\n# pinned installer\n")
+	must(t, os.WriteFile(filepath.Join(dir, "join.sh"), installer, 0600))
+	metadata := map[string]any{"source_revision": build.SourceRevision, "go": "test", "sha256": hashes, "version": "v0.1.0-rc.1", "installer": Artifact{SHA256: hashBytes(installer), Size: int64(len(installer))}}
+	must(t, WriteJSON(filepath.Join(dir, "build.json"), metadata))
+	options := WebOptions{Directory: web, NativeDirectory: dir, Origin: "https://ceremony.example"}
+	handler, err := WebHandler(http.NotFoundHandler(), options)
+	must(t, err)
+	w := httptest.NewRecorder()
+	handler.ServeHTTP(w, httptest.NewRequest("GET", options.Origin+"/join.sh", nil))
+	if w.Code != 200 || w.Body.String() != string(installer) {
+		t.Fatal("wrong installer served")
+	}
+	must(t, os.WriteFile(filepath.Join(dir, "join.sh"), []byte("tampered"), 0600))
+	if _, err = WebHandler(http.NotFoundHandler(), options); err == nil {
+		t.Fatal("changed installer accepted")
+	}
+	w = httptest.NewRecorder()
+	handler.ServeHTTP(w, httptest.NewRequest("GET", options.Origin+"/join.sh", nil))
+	if w.Body.String() != string(installer) {
+		t.Fatal("running host served changed installer")
+	}
+}
 
 func testBrowserBundle(t *testing.T) (string, BrowserBuild) {
 	t.Helper()

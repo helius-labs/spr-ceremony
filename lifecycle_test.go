@@ -106,6 +106,18 @@ func TestCloseAndVerifiedFinalization(t *testing.T) {
 	out := filepath.Join(t.TempDir(), "final")
 	final, err := s.Finalize(out, proof, 64)
 	must(t, err)
+	view, err := s.PublicView()
+	must(t, err)
+	if view.Phase != "finalized" || view.FinalExport == nil || *view.FinalExport != final || view.Participants != 1 {
+		t.Fatal("final public view does not match checkpoint")
+	}
+	for _, circuit := range view.Circuits {
+		if circuit.PK == nil || circuit.VK == nil {
+			t.Fatal("missing final keys")
+		}
+		must(t, Check(s.Object(*circuit.PK), *circuit.PK))
+		must(t, Check(s.Object(*circuit.VK), *circuit.VK))
+	}
 	must(t, s.Audit(Core, 64))
 	must(t, s.VerifyExport(out, 64))
 	repeated, err := s.Finalize(out, proof, 64)

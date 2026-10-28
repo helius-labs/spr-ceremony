@@ -41,6 +41,14 @@ func (s *Store) HandlerWithOptions(options ServerOptions) http.Handler {
 	uploads := make(chan struct{}, options.MaxUploads)
 	var active sync.Map
 	mux := http.NewServeMux()
+	mux.HandleFunc("GET /v1/ceremony", func(w http.ResponseWriter, r *http.Request) {
+		view, err := s.PublicView()
+		if err != nil {
+			http.Error(w, "Ceremony information unavailable", 503)
+			return
+		}
+		respond(w, view)
+	})
 	mux.HandleFunc("GET /v1/invitation", func(w http.ResponseWriter, r *http.Request) {
 		i, err := s.invitation(strings.TrimPrefix(r.Header.Get("Authorization"), "Bearer "))
 		w.Header().Set("Cache-Control", "no-store")

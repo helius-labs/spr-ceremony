@@ -1,0 +1,72 @@
+{
+  "date": "2026-10-28",
+  "source_base": "44b7f30279fdb2158d0bcbeb029a51256d1ccc0b",
+  "working_tree_modified": true,
+  "scope": "Local validation of the control panel, release installer, native join, public artifacts and AWS configuration. Exact committed revisions are checked by GitHub Check.",
+  "go": {
+    "toolchain": "go1.27.3",
+    "race_suite_with_s3_emulator": "passed",
+    "vet": "passed",
+    "govulncheck": "0 called or imported-package vulnerabilities; 3 module-only advisories"
+  },
+  "browser": {
+    "hosted_s3_checks": {
+      "checks": [
+        "chromium: real queued contribution, checkpoint inclusion, receipts export, credential isolation",
+        "webkit: real queued contribution, checkpoint inclusion, receipts export, credential isolation",
+        "lost acceptance response: idempotent upload and receipt recovery",
+        "reload after failed publication: retained output reused, no repeated entropy computation",
+        "short leases renewed; concurrent contributors on separate circuits; duplicate tab refused",
+        "advanced circuit head: stale saved output discarded and freshly recomputed",
+        "altered acceptance receipt rejected; authentic checkpoint recovers response",
+        "pause cancels transfer and releases the circuit; resume completes",
+        "multi-chunk download resumes saved ranges; malformed Content-Range rejected",
+        "native invitation handoff and accepted progress displayed",
+        "manifest substitution rejected before claiming",
+        "closed ceremony retains accepted progress and disables unfinished work",
+        "native audit replays every browser transition; no duplicate accepted entries",
+        "S3 presigned range downloads, no browser AWS credentials, accepted transcript restored and audited"
+      ],
+      "safari_tested": false
+    },
+    "control_panel": {
+      "passed": [
+        "Chromium and WebKit: create invitation, hidden native join, resume progress, revoke, private API isolation, public parameters, mobile layout, no persisted tokens"
+      ]
+    },
+    "engines": [
+      "Chromium",
+      "WebKit"
+    ],
+    "actual_macos_safari_tested": false
+  },
+  "terminal": {
+    "hidden_input_and_interrupt_restore": "passed",
+    "installer_platforms": [
+      "darwin-arm64",
+      "darwin-amd64",
+      "linux-arm64",
+      "linux-amd64"
+    ],
+    "corrupt_binary_rejected_before_execution": true,
+    "independent_provenance_without_github_login": "passed using prior attested 81be50f release artifacts"
+  },
+  "deployment": {
+    "terraform_validation": "passed",
+    "read_only_aws_plan": {
+      "region": "eu-north-1",
+      "create": 31,
+      "change": 0,
+      "destroy": 0
+    },
+    "caddy_validation": "2.11.7 passed",
+    "live_aws_resources_applied": false,
+    "real_aws_restore_drill": false
+  },
+  "limitations": [
+    "No independent security audit",
+    "No finalized production campaign or final keys",
+    "Live deployment awaits hostname and budget",
+    "Production parameter preparation is separate from this evidence"
+  ]
+}

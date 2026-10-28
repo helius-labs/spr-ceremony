@@ -66,11 +66,12 @@ export async function request(path, { token, method = "GET", body, signal, timeo
   if (body) headers["Content-Type"] = "application/octet-stream";
   const response = await fetch(path, { method, body, headers, credentials: "omit", redirect: "error", cache: "no-store", signal: deadline(signal, timeout) });
   if (!response.ok) {
-    const bytes = await readBounded(response, 4096).catch(() => new Uint8Array());
-    const message = new TextDecoder().decode(bytes).trim();
-    throw new HTTPError(response.status, message || `Coordinator returned HTTP ${response.status}`);
+    await response.body?.cancel().catch(() => {});
+    throw new HTTPError(response.status, response.status === 401 ? "Invitation expired or revoked. Request a new link." : `Coordinator returned HTTP ${response.status}`);
   }
-  return JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(await readBounded(response, MAX_JSON)));
+  const bytes = await readBounded(response, MAX_JSON);
+  try { return JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(bytes)); }
+  catch { throw new Error("Invalid coordinator response"); }
 }
 const metadata = new Map();
 let metadataBytes = 0;

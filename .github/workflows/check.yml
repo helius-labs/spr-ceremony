@@ -26,6 +26,7 @@ jobs:
       - run: go test -race -count=1 ./...
       - run: go build ./cmd/spr-ceremony
       - run: python3 scripts/smoke-cli.py ./spr-ceremony
+      - run: python3 scripts/test-terminal.py ./spr-ceremony
       - run: python3 -m unittest discover -s scripts -p 'test_*.py'
   rust:
     runs-on: ubuntu-latest
@@ -84,6 +85,8 @@ jobs:
         run: |
           "$RUNNER_TEMP/browser-tools/bin/python" scripts/test-hosted-browser.py \
             --binary "$RUNNER_TEMP/spr-ceremony" --out "$RUNNER_TEMP/browser-results/hosted"
+          "$RUNNER_TEMP/browser-tools/bin/python" scripts/test-admin-browser.py \
+            --binary "$RUNNER_TEMP/spr-ceremony" --out "$RUNNER_TEMP/browser-results/admin"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:

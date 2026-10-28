@@ -10,6 +10,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"time"
 )
@@ -26,11 +27,12 @@ type BrowserBuild struct {
 }
 
 type WebOptions struct {
-	Directory         string
-	Origin            string
-	DownloadOrigin    string
-	NativeDirectory   string
-	InsecureTestSetup bool
+	Directory          string
+	Origin             string
+	DownloadOrigin     string
+	NativeDirectory    string
+	InsecureTestSetup  bool
+	TrustLoopbackProxy bool
 }
 
 type nativeDownload struct {
@@ -106,17 +108,55 @@ func WebHandler(api http.Handler, options WebOptions) (http.Handler, error) {
 		_, _ = w.Write(buildJSON)
 	})
 	downloads := []nativeDownload{}
+	version, installerURL, provenanceURL := "", "", ""
 	if options.NativeDirectory != "" {
 		var native struct {
 			SourceRevision string            `json:"source_revision"`
 			Go             string            `json:"go"`
 			SHA256         map[string]string `json:"sha256"`
+			Version        string            `json:"version,omitempty"`
+			Installer      *Artifact         `json:"installer,omitempty"`
 		}
 		if err = ReadJSON(filepath.Join(options.NativeDirectory, "build.json"), &native); err != nil {
 			return nil, err
 		}
 		if native.SourceRevision != build.SourceRevision {
 			return nil, fmt.Errorf("native binaries and browser bundle must use the same source revision")
+		}
+		// Signature verification authenticates this bundle independently of its
+		// transport. It contains public build provenance, not signing material.
+		if st, e := os.Stat(filepath.Join(options.NativeDirectory, "provenance.json")); e == nil {
+			if st.Size() <= 0 || st.Size() > 4<<20 {
+				return nil, fmt.Errorf("invalid provenance bundle size")
+			}
+			body, e := readAsset(filepath.Join(options.NativeDirectory, "provenance.json"), st.Size())
+			if e != nil {
+				return nil, e
+			}
+			provenanceURL = "/native/provenance.json"
+			mux.HandleFunc("GET /native/provenance.json", func(w http.ResponseWriter, r *http.Request) {
+				w.Header().Set("Content-Type", "application/json")
+				_, _ = w.Write(body)
+			})
+		} else if !os.IsNotExist(e) {
+			return nil, e
+		}
+		if native.Version != "" || native.Installer != nil {
+			if !regexp.MustCompile(`^v[0-9]+\.[0-9]+\.[0-9]+(-rc\.[0-9]+)?$`).MatchString(native.Version) || native.Installer == nil || native.Installer.Validate() != nil || native.Installer.Size > 64<<10 {
+				return nil, fmt.Errorf("invalid release installer metadata")
+			}
+			body, e := readAsset(filepath.Join(options.NativeDirectory, "join.sh"), native.Installer.Size)
+			if e != nil {
+				return nil, e
+			}
+			if hashBytes(body) != native.Installer.SHA256 {
+				return nil, fmt.Errorf("installer checksum mismatch")
+			}
+			version, installerURL = native.Version, "/join.sh"
+			mux.HandleFunc("GET /join.sh", func(w http.ResponseWriter, r *http.Request) {
+				w.Header().Set("Content-Type", "text/x-shellscript")
+				_, _ = w.Write(body)
+			})
 		}
 		for _, platform := range []string{"darwin-arm64", "darwin-amd64", "linux-arm64", "linux-amd64"} {
 			name := "spr-ceremony-" + platform
@@ -144,11 +184,12 @@ func WebHandler(api http.Handler, options WebOptions) (http.Handler, error) {
 		}
 	}
 	mux.HandleFunc("GET /ui-config.json", func(w http.ResponseWriter, r *http.Request) {
-		respond(w, map[string]any{"format": "spr-hosted-ui-v1", "origin": origin, "download_origin": downloadOrigin, "native": downloads})
+		respond(w, map[string]any{"format": "spr-hosted-ui-v1", "origin": origin, "download_origin": downloadOrigin, "native": downloads, "version": version, "installer": installerURL, "provenance": provenanceURL})
 	})
 	mux.Handle("/v1/", api)
 	mux.Handle("/healthz", api)
 	parsed, _ := url.Parse(origin)
+	limited := limitWeb(mux, options.TrustLoopbackProxy)
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Security-Policy", browserCSP(downloadOrigin))
 		w.Header().Set("X-Content-Type-Options", "nosniff")
@@ -173,7 +214,7 @@ func WebHandler(api http.Handler, options WebOptions) (http.Handler, error) {
 			http.Error(w, "cross-site API request rejected", 403)
 			return
 		}
-		mux.ServeHTTP(w, r)
+		limited.ServeHTTP(w, r)
 	}), nil
 }
 

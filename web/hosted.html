@@ -14,6 +14,7 @@
   <p class="eyebrow"><span class="mark" aria-hidden="true"></span> TRUSTED SETUP</p>
   <h1>Solana Privacy<br><span>Rings.</span></h1>
   <noscript><p class="notice">Enable JavaScript or use the terminal client.</p></noscript>
+  <p id="public-summary" class="detail"></p>
   <p id="notice" class="notice" hidden></p>
   <section id="join" aria-labelledby="join-title">
     <h2 id="join-title">Your invitation</h2>
@@ -38,7 +39,8 @@
   <p id="status" role="status" aria-live="polite">Loading…</p>
   <section id="native-panel" aria-labelledby="native-title" hidden>
     <h2 id="native-title">Use your terminal.</h2>
-    <p>Download. Verify. Contribute.</p>
+    <div id="one-liner" hidden><p>One command. Paste your invitation when asked.</p><pre id="join-command"></pre><div class="buttons"><button id="copy-command">Copy command</button><button id="copy-invitation" class="secondary">Copy invitation</button></div><p class="detail">The command contains no invitation. Input is hidden in your terminal.</p></div>
+    <details id="manual-downloads"><summary>Download manually</summary>
     <div id="downloads" class="downloads"></div>
     <p id="native-unavailable" class="detail" hidden>Downloads aren’t configured on this host. Use your existing binary.</p>
     <div class="buttons"><button id="save-invitation">Save invitation</button></div>
@@ -46,6 +48,7 @@
     <select id="platform"><option value="darwin-arm64">Mac · Apple silicon</option><option value="darwin-amd64">Mac · Intel</option><option value="linux-amd64">Linux · x86-64</option><option value="linux-arm64">Linux · ARM64</option></select>
     <p class="detail">Run from your downloads folder:</p>
     <pre id="native-command"></pre>
+    </details>
     <details><summary>Verify your download</summary>
       <p>Check the release hash and build attestation against the published source commit. A checksum from this website alone cannot authenticate it.</p>
       <pre id="verify-command"></pre>
@@ -53,6 +56,7 @@
       <a href="https://github.com/helius-labs/spr-ceremony" target="_blank" rel="noopener noreferrer">Source</a>
     </details>
   </section>
+  <details id="artifacts"><summary>Parameters &amp; keys</summary><p id="keys-status"></p><div id="parameter-links"></div><p id="public-pins" class="detail"></p><div id="keys"></div><p class="detail">Authenticate the manifest and checkpoint hashes independently. Verify the full transcript and export before using final keys.</p></details>
   <details>
     <summary>How it works</summary>
     <p>Your computer adds fresh randomness and verifies the result. Only public data is uploaded. The coordinator verifies it again before acceptance.</p>

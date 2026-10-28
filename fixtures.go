@@ -51,6 +51,13 @@ func TestSRS(path string, power uint) error {
 }
 
 func Demo(dir string) error {
+	return demo(dir, true)
+}
+
+// DemoCore keeps the participant rehearsal within the same core-only scope.
+func DemoCore(dir string) error { return demo(dir, false) }
+
+func demo(dir string, withLarge bool) error {
 	tmp, e := os.MkdirTemp("", "spr-demo-*")
 	if e != nil {
 		return e
@@ -61,6 +68,9 @@ func Demo(dir string) error {
 		id, track string
 		commit    bool
 	}{{"demo_plain", Core, false}, {"demo_commitment", Core, true}, {"demo_large_track", Large, true}} {
+		if item.track == Large && !withLarge {
+			continue
+		}
 		c, e := frontend.Compile(ecc.BN254.ScalarField(), r1cs.NewBuilder, &DemoCircuit{WithCommitment: item.commit})
 		if e != nil {
 			return e

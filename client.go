@@ -10,6 +10,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"syscall"
 	"time"
 )
 
@@ -69,7 +70,7 @@ func (c *Client) Run(ctx context.Context, i Invitation, track string) error {
 		return fmt.Errorf("coordinator manifest does not match invitation")
 	}
 	var m Manifest
-	if e = decodeJSON(strings.NewReader(string(b)), &m); e != nil {
+	if e = decodeRemoteJSON(strings.NewReader(string(b)), &m); e != nil {
 		return e
 	}
 	if m.Engine != Engine || m.Format != Format || m.Phase1.InsecureTestSetup != i.InsecureTestSetup {
@@ -102,6 +103,20 @@ func (c *Client) Run(ctx context.Context, i Invitation, track string) error {
 	if i.InsecureTestSetup {
 		fmt.Fprintln(c.Progress, "REHEARSAL: coordinator-generated test SRS; outputs are not production keys")
 	}
+	// Reusing one public workspace is safe across reruns, not concurrent writers.
+	workspace := filepath.Join(c.Work, i.ManifestSHA256, i.Contributor)
+	if e = os.MkdirAll(workspace, 0700); e != nil {
+		return e
+	}
+	lock, e := os.OpenFile(filepath.Join(workspace, ".participant.lock"), os.O_CREATE|os.O_RDWR, 0600)
+	if e != nil {
+		return e
+	}
+	defer lock.Close()
+	if e = syscall.Flock(int(lock.Fd()), syscall.LOCK_EX|syscall.LOCK_NB); e != nil {
+		return fmt.Errorf("another client is using this participant workspace")
+	}
+	defer syscall.Flock(int(lock.Fd()), syscall.LOCK_UN)
 	if i.Mode == "queue" {
 		return c.runQueue(ctx, i, track)
 	}
@@ -173,14 +188,13 @@ func (c *Client) runJob(ctx context.Context, i Invitation, job Job, track string
 		}
 		defer resp.Body.Close()
 		if resp.StatusCode != 200 {
-			msg, _ := io.ReadAll(io.LimitReader(resp.Body, 2048))
-			err := fmt.Errorf("upload rejected (%d): %s", resp.StatusCode, strings.TrimSpace(string(msg)))
+			err := fmt.Errorf("upload rejected (HTTP %d); rerun to recover or request invitation renewal", resp.StatusCode)
 			if resp.StatusCode >= 500 || resp.StatusCode == 429 {
 				return err
 			}
 			return permanentError{err}
 		}
-		return decodeJSON(io.LimitReader(resp.Body, 1<<20), &receipt)
+		return decodeRemoteJSON(io.LimitReader(resp.Body, 1<<20), &receipt)
 	}); e != nil {
 		return e
 	}
@@ -227,14 +241,14 @@ func (c *Client) downloadWithURL(ctx context.Context, resolve func(context.Conte
 		}
 		req, e := http.NewRequestWithContext(ctx, "GET", raw, nil)
 		if e != nil {
-			return e
+			return fmt.Errorf("invalid artifact request")
 		}
 		if offset > 0 {
 			req.Header.Set("Range", fmt.Sprintf("bytes=%d-", offset))
 		}
 		resp, e := c.HTTP.Do(req)
 		if e != nil {
-			return e
+			return safeRequestError(e)
 		}
 		defer resp.Body.Close()
 		if resp.StatusCode == 200 {

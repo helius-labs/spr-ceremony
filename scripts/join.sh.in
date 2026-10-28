@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+# Solana Privacy Rings. Generated for one immutable release.
+spr_main() {
+set -euo pipefail
+umask 077
+spr_version='@VERSION@'
+spr_revision='@REVISION@'
+spr_base="${SPR_CEREMONY_DOWNLOAD_BASE:-https://github.com/helius-labs/spr-ceremony/releases/download/$spr_version}"
+case "$spr_base" in https://*) ;; *) echo 'Download origin must use HTTPS.' >&2; exit 1 ;; esac
+spr_os="$(uname -s)"
+spr_arch="$(uname -m)"
+case "$spr_os/$spr_arch" in
+  Darwin/arm64) spr_platform=darwin-arm64; spr_expected='@DARWIN_ARM64@' ;;
+  Darwin/x86_64) spr_platform=darwin-amd64; spr_expected='@DARWIN_AMD64@' ;;
+  Linux/aarch64|Linux/arm64) spr_platform=linux-arm64; spr_expected='@LINUX_ARM64@' ;;
+  Linux/x86_64) spr_platform=linux-amd64; spr_expected='@LINUX_AMD64@' ;;
+  *) echo 'Supported: Mac and Linux, Apple silicon/ARM64 and x86-64.' >&2; exit 1 ;;
+esac
+command -v curl >/dev/null || { echo 'curl is required.' >&2; exit 1; }
+spr_download_dir="$(mktemp -d "${TMPDIR:-/tmp}/spr-ceremony.XXXXXXXX")"
+trap 'rm -rf -- "$spr_download_dir"' EXIT
+spr_binary="$spr_download_dir/spr-ceremony"
+printf 'Solana Privacy Rings · %s\n' "$spr_version"
+printf 'Source: %s\n' "$spr_revision"
+curl --fail --silent --show-error --location --proto '=https' --proto-redir '=https' \
+  --tlsv1.2 --connect-timeout 15 --max-time 600 --retry 3 \
+  "$spr_base/spr-ceremony-$spr_platform" --output "$spr_binary"
+if command -v sha256sum >/dev/null; then
+  spr_actual="$(sha256sum "$spr_binary")"; spr_actual="${spr_actual%% *}"
+elif command -v shasum >/dev/null; then
+  spr_actual="$(shasum -a 256 "$spr_binary")"; spr_actual="${spr_actual%% *}"
+else
+  echo 'sha256sum or shasum is required.' >&2; exit 1
+fi
+if [[ "$spr_actual" != "$spr_expected" ]]; then
+  echo 'Download checksum mismatch. Nothing was executed.' >&2
+  exit 1
+fi
+chmod 700 "$spr_binary"
+# stdin may be the installer pipe. Read the invitation from a terminal with echo
+# disabled by the native client; never accept or print a bearer token in argv.
+if [[ ! -r /dev/tty ]]; then
+  echo 'Open an interactive terminal to enter your private invitation.' >&2
+  exit 1
+fi
+spr_work="${SPR_CEREMONY_WORK:-$HOME/.local/share/spr-ceremony/work}"
+"$spr_binary" join --work "$spr_work" </dev/tty
+}
+spr_main

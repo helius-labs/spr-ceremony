@@ -22,10 +22,9 @@ func (c *Client) queueRequest(ctx context.Context, i Invitation, path string) (C
 	}
 	defer res.Body.Close()
 	if res.StatusCode != 200 {
-		body, _ := io.ReadAll(io.LimitReader(res.Body, 2048))
-		return claim, fmt.Errorf("scheduling request rejected (%d): %s", res.StatusCode, strings.TrimSpace(string(body)))
+		return claim, fmt.Errorf("scheduling request rejected (HTTP %d); check invitation expiry and ceremony status", res.StatusCode)
 	}
-	err = decodeJSON(io.LimitReader(res.Body, 4<<20), &claim)
+	err = decodeRemoteJSON(io.LimitReader(res.Body, 4<<20), &claim)
 	return claim, err
 }
 

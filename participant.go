@@ -40,6 +40,9 @@ func (s *Store) Release(token, id string) error {
 		return err
 	}
 	defer unlock()
+	if _, err = s.invitation(token); err != nil {
+		return err
+	}
 	var l Lease
 	if err = ReadJSON(s.leasePath(id), &l); os.IsNotExist(err) {
 		return nil

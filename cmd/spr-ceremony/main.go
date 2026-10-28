@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"context"
 	"encoding/hex"
 	"encoding/json"
@@ -12,11 +13,13 @@ import (
 	"os/signal"
 	"path/filepath"
 	"runtime/debug"
+	"strings"
 	"syscall"
 	"time"
 
 	ceremony "github.com/helius-labs/spr-ceremony"
 	"github.com/helius-labs/spr-ceremony/storage"
+	"golang.org/x/term"
 )
 
 func main() {
@@ -27,7 +30,7 @@ func main() {
 }
 func run(args []string) error {
 	if len(args) == 0 {
-		return fmt.Errorf("usage: spr-ceremony <version|catalog|demo|test-srs|phase1|import-ph1|prepare|open|close|finalize|serve|invite|contribute|verify-contribution|verify-attestation|status|checkpoint|sync|restore|fetch-export|audit|export|verify-export> [flags]")
+		return fmt.Errorf("usage: spr-ceremony <version|catalog|demo|test-srs|phase1|import-ph1|prepare|open|close|finalize|serve|admin|invite|join|contribute|verify-contribution|verify-attestation|status|checkpoint|sync|restore|fetch-export|audit|export|verify-export> [flags]")
 	}
 	f := flag.NewFlagSet(args[0], flag.ContinueOnError)
 	dir := f.String("dir", "ceremony-data", "coordinator ceremony directory")
@@ -235,11 +238,16 @@ func run(args []string) error {
 			return print(specs)
 		}
 	case "demo":
+		largeFixture := f.Bool("with-large-fixture", false, "include the tiny excluded-track scheduling test fixture")
 		action = func() error {
 			if e := requireOut(); e != nil {
 				return e
 			}
-			if e := ceremony.Demo(*out); e != nil {
+			create := ceremony.DemoCore
+			if *largeFixture {
+				create = ceremony.Demo
+			}
+			if e := create(*out); e != nil {
 				return e
 			}
 			s, e := ceremony.Open(*out)
@@ -333,6 +341,7 @@ func run(args []string) error {
 		publicURL := f.String("public-url", "", "exact HTTPS origin of the hosted UI")
 		downloadOrigin := f.String("browser-download-origin", "", "optional exact S3 HTTPS origin with CORS; default downloads through coordinator")
 		nativeDir := f.String("native-dir", "", "optional verified participant binary bundle from the same source revision")
+		trustProxy := f.Bool("trust-loopback-proxy", false, "use a loopback reverse proxy's last X-Forwarded-For address for request limits")
 		maxUploads := f.Int("max-uploads", 2, "maximum concurrent staged contributions")
 		leaseTTL := f.Duration("lease-ttl", 30*time.Minute, "renewable circuit reservation lifetime")
 		reserve := f.Uint64("reserve-disk-bytes", 2<<30, "minimum free disk retained after staging an upload")
@@ -354,11 +363,11 @@ func run(args []string) error {
 			fmt.Fprintln(os.Stderr, "Serving", *listen, "manifest", s.ManifestArtifact.SHA256)
 			handler := s.HandlerWithOptions(ceremony.ServerOptions{MaxUploads: *maxUploads, LeaseTTL: *leaseTTL, UploadTimeout: 30 * time.Minute, MinFreeBytes: *reserve})
 			if *webDir != "" {
-				handler, e = ceremony.WebHandler(handler, ceremony.WebOptions{Directory: *webDir, Origin: *publicURL, DownloadOrigin: *downloadOrigin, NativeDirectory: *nativeDir, InsecureTestSetup: s.Manifest.Phase1.InsecureTestSetup})
+				handler, e = ceremony.WebHandler(handler, ceremony.WebOptions{Directory: *webDir, Origin: *publicURL, DownloadOrigin: *downloadOrigin, NativeDirectory: *nativeDir, InsecureTestSetup: s.Manifest.Phase1.InsecureTestSetup, TrustLoopbackProxy: *trustProxy})
 				if e != nil {
 					return e
 				}
-			} else if *publicURL != "" || *downloadOrigin != "" || *nativeDir != "" {
+			} else if *publicURL != "" || *downloadOrigin != "" || *nativeDir != "" || *trustProxy {
 				return fmt.Errorf("browser options require --web-dir")
 			}
 			server := &http.Server{Addr: *listen, Handler: handler, ReadHeaderTimeout: 10 * time.Second, ReadTimeout: 30 * time.Minute, WriteTimeout: 2 * time.Hour, IdleTimeout: 2 * time.Minute, MaxHeaderBytes: 16 << 10}
@@ -371,6 +380,33 @@ func run(args []string) error {
 				return e
 			case <-ctx.Done():
 				shutdown, cancel := context.WithTimeout(context.Background(), time.Minute)
+				defer cancel()
+				return server.Shutdown(shutdown)
+			}
+		}
+	case "admin":
+		listen := f.String("listen", "127.0.0.1:8081", "private numeric loopback address; reach through AWS SSM")
+		publicURL := f.String("public-url", "", "exact participant HTTPS origin")
+		action = func() error {
+			s, err := open()
+			if err != nil {
+				return err
+			}
+			handler, err := s.AdminHandler("http://"+*listen, *publicURL)
+			if err != nil {
+				return err
+			}
+			server := &http.Server{Addr: *listen, Handler: handler, ReadHeaderTimeout: 5 * time.Second, ReadTimeout: 10 * time.Second, WriteTimeout: time.Minute, IdleTimeout: time.Minute, MaxHeaderBytes: 8 << 10}
+			ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+			defer stop()
+			result := make(chan error, 1)
+			go func() { result <- server.ListenAndServe() }()
+			fmt.Fprintln(os.Stderr, "Private control panel on", *listen)
+			select {
+			case err := <-result:
+				return err
+			case <-ctx.Done():
+				shutdown, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 				defer cancel()
 				return server.Shutdown(shutdown)
 			}
@@ -412,6 +448,22 @@ func run(args []string) error {
 			}
 			fmt.Fprintf(os.Stdout, "Wrote invitation for %d %s circuits to %s\n", len(i.Jobs), i.Track, *out)
 			return nil
+		}
+	case "join":
+		work := f.String("work", "work", "reusable public participant workspace")
+		action = func() error {
+			if *track != ceremony.Core {
+				return fmt.Errorf("join supports core only")
+			}
+			ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+			defer stop()
+			secret, err := readPrivateInvitation(ctx)
+			if err != nil {
+				return err
+			}
+			defer clear(secret)
+			client := ceremony.NewClient(*work)
+			return client.Join(ctx, strings.TrimSpace(string(secret)))
 		}
 	case "contribute":
 		invite := f.String("invitation", "", "private invitation JSON file")
@@ -600,4 +652,44 @@ func run(args []string) error {
 		return fmt.Errorf("unexpected positional arguments")
 	}
 	return action()
+}
+
+// Restore terminal echo even when Ctrl-C interrupts the hidden invitation prompt.
+func readPrivateInvitation(ctx context.Context) ([]byte, error) {
+	if term.IsTerminal(int(os.Stdin.Fd())) {
+		fd := int(os.Stdin.Fd())
+		state, err := term.GetState(fd)
+		if err != nil {
+			return nil, fmt.Errorf("cannot read terminal state")
+		}
+		defer term.Restore(fd, state)
+		fmt.Fprint(os.Stderr, "Invitation link (hidden): ")
+		defer fmt.Fprintln(os.Stderr)
+		type result struct {
+			data []byte
+			err  error
+		}
+		done := make(chan result, 1)
+		go func() { data, err := term.ReadPassword(fd); done <- result{data, err} }()
+		select {
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		case r := <-done:
+			if r.err != nil || len(r.data) > 8192 {
+				clear(r.data)
+				return nil, fmt.Errorf("cannot read invitation link")
+			}
+			return r.data, nil
+		}
+	}
+	reader := bufio.NewReader(io.LimitReader(os.Stdin, 8193))
+	secret, err := reader.ReadBytes('\n')
+	if err == io.EOF && len(secret) > 0 {
+		err = nil
+	}
+	if err != nil || len(secret) > 8192 {
+		clear(secret)
+		return nil, fmt.Errorf("cannot read invitation link")
+	}
+	return secret, nil
 }

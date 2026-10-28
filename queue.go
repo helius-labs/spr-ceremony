@@ -52,6 +52,9 @@ func (s *Store) Claim(token string, ttl time.Duration) (Claim, error) {
 		return result, err
 	}
 	defer unlock()
+	if _, err = s.invitation(token); err != nil {
+		return result, err
+	}
 	cp, _, err := s.checkpoint()
 	if err != nil {
 		return result, err
@@ -146,6 +149,9 @@ func (s *Store) Renew(token, id string, ttl time.Duration) (Claim, error) {
 		return result, err
 	}
 	defer unlock()
+	if _, err = s.invitation(token); err != nil {
+		return result, err
+	}
 	cp, _, err := s.checkpoint()
 	if err != nil {
 		return result, err

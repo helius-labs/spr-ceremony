@@ -1,0 +1,148 @@
+#!/usr/bin/env bash
+set -euo pipefail
+umask 077
+export DEBIAN_FRONTEND=noninteractive
+apt-get update
+apt-get install -y ca-certificates curl gnupg debian-keyring debian-archive-keyring apt-transport-https awscli unattended-upgrades
+curl --proto '=https' --tlsv1.2 -fsS https://dl.cloudsmith.io/public/caddy/stable/gpg.key | gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+curl --proto '=https' --tlsv1.2 -fsS https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt -o /etc/apt/sources.list.d/caddy-stable.list
+chmod 644 /usr/share/keyrings/caddy-stable-archive-keyring.gpg /etc/apt/sources.list.d/caddy-stable.list
+apt-get update
+apt-get install -y caddy
+systemctl stop caddy
+id spr >/dev/null 2>&1 || useradd --system --home /var/lib/spr --shell /usr/sbin/nologin spr
+device=/dev/disk/by-id/nvme-Amazon_Elastic_Block_Store_${volume_id}
+for attempt in $(seq 1 120); do [ -b "$device" ] && break; sleep 5; done
+test -b "$device"
+if ! blkid "$device"; then
+  # Only the explicitly attached ceremony volume is eligible for initialization.
+  test -z "$(wipefs --no-act --noheadings --output TYPE "$device")"
+  mkfs.ext4 -L spr-data "$device"
+fi
+mkdir -p /var/lib/spr /opt/spr/releases /etc/spr
+chmod 755 /opt/spr /opt/spr/releases
+chown root:spr /etc/spr
+chmod 750 /etc/spr
+uuid=$(blkid -s UUID -o value "$device")
+printf 'UUID=%s /var/lib/spr ext4 defaults,nodev,nosuid 0 2\n' "$uuid" >> /etc/fstab
+mount /var/lib/spr
+chown spr:spr /var/lib/spr
+chmod 700 /var/lib/spr
+cat > /etc/spr/s3.json <<'CONFIG'
+${s3_config}
+CONFIG
+chown root:spr /etc/spr/s3.json
+chmod 640 /etc/spr/s3.json
+cat > /etc/caddy/Caddyfile <<'CADDY'
+{
+  admin off
+}
+${domain} {
+  @private path /admin /admin/* /admin.js
+  respond @private 404
+  request_body {
+    max_size 128MB
+  }
+  reverse_proxy 127.0.0.1:8080 {
+    transport http {
+      response_header_timeout 30m
+      read_timeout 30m
+      write_timeout 30m
+    }
+  }
+}
+CADDY
+chmod 644 /etc/caddy/Caddyfile
+cat > /etc/systemd/system/spr-ceremony.service <<'SERVICE'
+[Unit]
+Description=Solana Privacy Rings coordinator
+After=network-online.target
+Wants=network-online.target
+RequiresMountsFor=/var/lib/spr
+ConditionPathExists=/var/lib/spr/core/manifest.json
+[Service]
+User=spr
+Group=spr
+WorkingDirectory=/var/lib/spr
+Environment=AWS_REGION=${region}
+Environment=GOMAXPROCS=4
+ExecStart=/opt/spr/current/native/spr-ceremony-linux-amd64 serve --dir /var/lib/spr/core --s3-config /etc/spr/s3.json --listen 127.0.0.1:8080 --public-url https://${domain} --web-dir /opt/spr/current/browser --native-dir /opt/spr/current/native --browser-download-origin https://${jsondecode(s3_config).bucket}.s3.${region}.amazonaws.com --trust-loopback-proxy
+Restart=on-failure
+RestartSec=10
+TimeoutStopSec=75
+UMask=0077
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+ReadWritePaths=/var/lib/spr
+LimitCORE=0
+MemoryMax=12G
+[Install]
+WantedBy=multi-user.target
+SERVICE
+cat > /etc/systemd/system/spr-admin.service <<'SERVICE'
+[Unit]
+Description=Solana Privacy Rings private control panel
+After=network-online.target
+RequiresMountsFor=/var/lib/spr
+ConditionPathExists=/var/lib/spr/core/manifest.json
+[Service]
+User=spr
+Group=spr
+Environment=AWS_REGION=${region}
+ExecStart=/opt/spr/current/native/spr-ceremony-linux-amd64 admin --dir /var/lib/spr/core --s3-config /etc/spr/s3.json --listen 127.0.0.1:8081 --public-url https://${domain}
+Restart=on-failure
+RestartSec=10
+UMask=0077
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+ReadWritePaths=/var/lib/spr
+LimitCORE=0
+MemoryMax=1G
+[Install]
+WantedBy=multi-user.target
+SERVICE
+cat > /usr/local/bin/spr-health <<'HEALTH'
+#!/usr/bin/env bash
+set -euo pipefail
+disk=$(df -P /var/lib/spr | awk 'NR==2 {gsub(/%/, "", $5); print $5}')
+healthy=0
+if systemctl is-active --quiet spr-ceremony && curl -fsS --max-time 20 -H 'Host: ${domain}' http://127.0.0.1:8080/healthz >/dev/null && aws s3api head-bucket --bucket '${jsondecode(s3_config).bucket}' --region '${region}' --cli-connect-timeout 5 --cli-read-timeout 10 >/dev/null 2>&1; then healthy=1; fi
+aws cloudwatch put-metric-data --region '${region}' --namespace SPR/Ceremony --metric-data \
+  "MetricName=DiskUsedPercent,Dimensions=[{Name=Deployment,Value=${name}}],Value=$disk,Unit=Percent" \
+  "MetricName=Healthy,Dimensions=[{Name=Deployment,Value=${name}}],Value=$healthy,Unit=Count"
+HEALTH
+chmod 755 /usr/local/bin/spr-health
+cat > /etc/systemd/system/spr-health.service <<'SERVICE'
+[Unit]
+Description=Ceremony health metrics
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/spr-health
+SERVICE
+cat > /etc/systemd/system/spr-health.timer <<'TIMER'
+[Unit]
+Description=Check ceremony health every minute
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=1min
+[Install]
+WantedBy=timers.target
+TIMER
+systemctl daemon-reload
+systemctl enable spr-ceremony spr-admin
+systemctl enable --now caddy spr-health.timer

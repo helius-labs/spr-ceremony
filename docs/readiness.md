@@ -29,6 +29,15 @@ Batch 4999 is deferred. Custom rings and batch 10 remain excluded.
   public download/output recovery, checked receipts, and native-client handoff.
   Fixed checked assets, same-origin APIs, bounded downloads, and optional S3 CORS
   support dedicated HTTPS hosting. [Hosting and browser checks](hosted-ui.md).
+- Separate SSM control panel for invitation creation, revocation and progress;
+  peer/Host/Origin checks and strict JSON requests protect its loopback boundary.
+  Invitation tokens are absent from status, logs and participant workspaces.
+- Native hidden-input `join`, pinned one-line installer, immutable GitHub releases
+  and signed provenance bundles usable without repository access. Public artifact
+  links derive from one checkpoint; final keys require finalized lifecycle state.
+- AWS deployment code for HTTPS, isolated networking, SSM, persistent encrypted
+  EBS, daily snapshots, private S3 and health/disk alarms. Deployment verifies
+  release provenance and restores/audits the prepared campaign before serving.
 
 ## Validation performed
 
@@ -49,7 +58,9 @@ competing coordinators, corruption, and restore against Moto 5.1.14 pinned by
 container digest. Moto is an emulator, not proof of AWS policy behavior.
 
 Terraform formatting and configuration validation pass; no production account
-resources have been applied. Rust verifier code is pinned to Zolana's actual
+resources have been applied. A read-only plan in eu-north-1 creates 31 isolated
+resources and modifies none; hostname, budget and live recovery validation remain
+outstanding. Rust verifier code is pinned to Zolana's actual
 `groth16-solana` revision `70a93803e5f55b8425301d506c625169ef557c9d`.
 
 The actual 41 core circuits compiled from Zolana
@@ -144,7 +155,8 @@ its keys in Zolana.
    interrupted transfer, response loss/retry, coordinator crash, restore/audit,
    competing coordinator rejection, and final-key recovery. Confirm encryption,
    version retention, alarm routing, fencing, and backup ownership. No actual
-   bucket/region has been selected or deployed in this work yet.
+   production resources have been deployed yet; eu-north-1 access and the
+   proposed Terraform plan have been checked.
 4. Freeze and independently reproduce the chosen public Phase 1 transcript and
    circuit compilation. Announce and externally witness the manifest, beacon
    network/round, and closure checkpoint before the beacon is revealed.
@@ -157,8 +169,11 @@ its keys in Zolana.
 
 One active coordinator; no automatic failover. S3 is the archive/commit boundary,
 not a distributed scheduler. Local locking serializes mutations and publication.
-Invitations are issued administratively; public endpoints need proxy rate limits.
-The built-in health endpoint does not probe S3. JSON metadata reads are capped at
+Invitations are issued administratively. Hosted requests have bounded concurrency
+and per-peer burst limits; distributed network attack protection is separate.
+Forwarded addresses are trusted only from an explicitly configured loopback proxy.
+The built-in health endpoint does not probe S3; the AWS health timer also checks
+bucket access. JSON metadata reads are capped at
 4 MiB (including an individual circuit history); plan a bounded campaign and
 measure metadata growth before expanding to thousands of participants.
 

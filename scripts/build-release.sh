@@ -2,7 +2,7 @@
 set -euo pipefail
 repo_dir="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$repo_dir"
-if [[ -n "$(git status --porcelain --untracked-files=no)" ]]; then
+if [[ -n "$(git status --porcelain)" ]]; then
     echo 'Release builds require a clean committed checkout.' >&2
     exit 1
 fi
@@ -20,10 +20,4 @@ for os in linux darwin; do
             -o "$output/$target" ./cmd/spr-ceremony
     done
 done
-python3 - "$output" "$revision" <<'PY'
-import hashlib, json, pathlib, subprocess, sys
-out = pathlib.Path(sys.argv[1])
-hashes = {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(out.glob('spr-ceremony-*'))}
-(out / 'SHA256SUMS').write_text(''.join(f'{digest}  {name}\n' for name, digest in hashes.items()))
-(out / 'build.json').write_text(json.dumps({'source_revision': sys.argv[2], 'go': subprocess.check_output(['go', 'version'], text=True).strip(), 'sha256': hashes}, indent=2) + '\n')
-PY
+python3 scripts/package-release.py "$output" "$revision" "${SPR_RELEASE_VERSION:-}"

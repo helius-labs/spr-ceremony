@@ -23,7 +23,7 @@ func (c *Client) downloadTicket(ctx context.Context, base string, a Artifact) (s
 		return "", fmt.Errorf("download ticket unavailable: HTTP %d", res.StatusCode)
 	}
 	var ticket DownloadTicket
-	if err = decodeJSON(io.LimitReader(res.Body, 64<<10), &ticket); err != nil {
+	if err = decodeRemoteJSON(io.LimitReader(res.Body, 64<<10), &ticket); err != nil {
 		return "", err
 	}
 	if ticket.Artifact != a {

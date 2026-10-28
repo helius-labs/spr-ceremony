@@ -292,6 +292,7 @@ async def main():
                 await context.unroute('**/v1/contributions/**', reject_upload)
                 await page.locator('#native').click()
                 async with page.expect_download() as downloaded:
+                    await page.locator('#manual-downloads summary').click()
                     await page.locator('#save-invitation').click()
                 native_invite = root / 'native-download.json'
                 await (await downloaded.value).save_as(native_invite)
@@ -315,10 +316,6 @@ async def main():
                 checks.append('manifest substitution rejected before claiming')
                 await context.close()
                 pending, _, pending_path = invite('closed_pending')
-                # The tiny demo also includes an excluded-track sentinel. Close
-                # requires every manifest entry; this is not the real 4999 circuit.
-                cli('invite', '--dir', 'ceremony', '--url', origin, '--name', 'sentinel', '--track', 'batch-4999', '--out', 'sentinel.json')
-                await asyncio.to_thread(cli, 'contribute', '--invitation', 'sentinel.json', '--track', 'batch-4999', '--work', 'sentinel-work')
                 cli('close', '--dir', 'ceremony')
                 context = await browser.new_context()
                 page = await context.new_page()

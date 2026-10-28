@@ -6,7 +6,7 @@ uses private invitations without accounts. Core only: batch 4999 is deferred;
 custom rings and batch 10 remain excluded.
 
 Participants need a current desktop browser. The native option needs only the
-platform binary and an invitation file. Building the browser bundle requires Go
+platform binary or the hosted installer. Building the browser bundle requires Go
 and a shell, with no Node, npm, CDN, framework, or external runtime scripts.
 
 ## Local rehearsal
@@ -107,11 +107,11 @@ manifest_sha=$(shasum -a 256 ceremony-data/web-demo/manifest.json | awk '{print 
 ```
 
 The fixed beacon here is **test data**. The export is explicitly marked insecure;
-these keys must never be used for production. This legacy demo also contains an
-unused excluded-track sentinel, so `close` requires more than the two core demo
-circuits. The test export above intentionally verifies only core and does not
-claim a production lifecycle closure. Do not change a frozen manifest to remove
-circuits.
+these keys must never be used for production. New demos contain only two core
+circuits. Older demos also contain an excluded-track scheduling fixture, so their
+`close` requires more than the two core circuits. Recreate those demos to use the
+new scope; never change a frozen manifest. The test export above does not claim
+a production lifecycle closure.
 
 For a real core-only campaign, [close and finalize](operations.md#close-finalize-and-independently-verify)
 freezes all 41 heads before the preannounced beacon round. Then verify the signed
@@ -159,9 +159,9 @@ that secret material has been erased from operating-system memory.
 
 ## Native client handoff
 
-**Use terminal** offers configured platform binaries, their hashes, the
-source revision, provenance verification commands, and a private invitation
-JSON download. The participant then runs:
+**Use terminal** offers a one-line launcher with hidden invitation input and
+independently verifiable release provenance. See [terminal instructions](releases.md).
+The **Download manually** option also offers a private invitation JSON download:
 
 ```sh
 chmod +x spr-ceremony-darwin-arm64
@@ -174,7 +174,7 @@ switching clients. Native work uses the same pseudonym and skips already accepte
 circuits; an unaccepted browser output is not imported into the native workspace.
 
 Serve the four platform binaries by passing `--native-dir` pointing at a verified
-bundle from `Build participant binaries`. Its `build.json` revision must match
+bundle from the `Release` workflow. Its `build.json` revision must match
 the web bundle. Startup verifies all hashes. This workflow also publishes an
 attested browser archive. Verify release artifacts against the frozen commit:
 
@@ -208,7 +208,9 @@ forwarded-host headers are not trusted. Use a dedicated origin with no unrelated
 applications or scripts. The handler supplies a restrictive CSP, no-referrer,
 no-store for private metadata/code, MIME protections, cross-origin isolation,
 and HSTS on HTTPS deployments. API requests from other origins are rejected.
-There is no browser admin API, public signup, or cookie authentication.
+There is no public admin API, public signup, or cookie authentication. The
+[private control panel](aws.md#invite-from-the-control-panel) uses a separate
+loopback listener accessed through SSM.
 
 Configure proxy request limits to accommodate a 128 MiB input plus the small
 contribution overhead, and response timeouts to accommodate upload/verification
