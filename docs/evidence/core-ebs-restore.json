@@ -1,0 +1,66 @@
+{
+  "accepted_counts": {
+    "alexatamanov": 41,
+    "jorrit": 2,
+    "sergeytimoshin": 41,
+    "tilo": 41
+  },
+  "bytes_verified": 6091537809,
+  "checkpoint": {
+    "sha256": "a712f5543ca27370ae78ec7063592939031fa1659b5ddf9cbb9617be1dca9da2",
+    "size": 7065
+  },
+  "checkpoint_history_and_signatures_verified": true,
+  "checkpoints_verified": 127,
+  "completed_counts": {
+    "alexatamanov": 41,
+    "sergeytimoshin": 41,
+    "tilo": 41
+  },
+  "elapsed_seconds": 626.050970462,
+  "full_mpc_replay": false,
+  "manifest": {
+    "sha256": "4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079",
+    "size": 31586
+  },
+  "objects_verified": 509,
+  "private_files_read": false,
+  "private_key_present_and_restricted": true,
+  "snapshot_id": "snap-02e0abd5103657928",
+  "restored_volume": "vol-05db6be4bed007c91",
+  "checked_at": "2026-10-28T18:18:51.798Z",
+  "ssm_command": "d0d3d6ef-05ef-4fe8-b1a2-0dcf4d0c5a9e",
+  "checkpoint_authentication": {
+    "authenticated_operator_checkpoint": {
+      "sha256": "8ce40de71626f9754b8019f1980be5afe9c416b00aa5d887ed7ecebe79fefe23",
+      "size": 7065
+    },
+    "restored_checkpoint": {
+      "sha256": "a712f5543ca27370ae78ec7063592939031fa1659b5ddf9cbb9617be1dca9da2",
+      "size": 7065
+    },
+    "manifest": {
+      "sha256": "4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079",
+      "size": 31586
+    },
+    "checkpoint_links_checked": 16,
+    "restored_phase": "open"
+  },
+  "checker": {
+    "sha256": "f605e0173647371eabeabf30b0cabe945529ff87a9f2e7419f4dd03f179f6f26",
+    "size": 23910477,
+    "s3_key": "deployment/drills/f605e0173647371eabeabf30b0cabe945529ff87a9f2e7419f4dd03f179f6f26/restore-check",
+    "source_revision": "99054d72ee268d8755e514883236ff5602f529a4"
+  },
+  "cleanup": {
+    "deleted_temporary_volume": "vol-05db6be4bed007c91",
+    "retained_backup_snapshot": "snap-02e0abd5103657928",
+    "original_volume_unchanged": "vol-05abf844398d14e6a"
+  },
+  "limits": [
+    "Restored the snapshot created while Jorrit had 2 accepted contributions; later contributions are outside this snapshot.",
+    "Verified object hashes, checkpoint history and receipt signatures; this was not a full MPC replay or live failover.",
+    "Checked private-key file existence and permissions only; no private key or invitation contents were read.",
+    "Live coordinator services and original volume were not stopped or replaced."
+  ]
+}

@@ -242,7 +242,7 @@ manifests, invitations and receipts retain their original bytes. New final expor
 classify parameter provenance consistently with independent export verification.
 
 The initialization audit passed all 41 circuits on the original prepared snapshot.
-The first contributor's full transcript audit also passed all 41 circuits.
+The first two contributors' full transcript audit also passed all 41 circuits.
 Later contributions, final-key verification and independent review remain
 separately verifiable requirements. The current display identifies the
 actual public parameters instead of claiming that they were generated locally.
@@ -299,7 +299,7 @@ first contributor's existing record. Both completed records are visible through
 the public endpoint. The full audit above remains scoped to the earlier first
 contributor checkpoint.
 
-[v0.1.0-rc.11](evidence/release-v0.1.0-rc.11.json) is deployed from
+[v0.1.0-rc.11](evidence/release-v0.1.0-rc.11.json) was deployed from
 `29249c8f989091163d7dbdeeef02d921945891e1`, with Go 1.27.3 and gnark-crypto
 v0.22.0. All four native release checks passed. The public installer and all
 four hosted binaries match the attested release; live Chromium and WebKit checks
@@ -318,13 +318,35 @@ campaign has not been finalized; no full-core finalization runtime is claimed.
 The first-two-contributor audit continued across deployment on its original
 snapshot and binary. It does not cover Tilo's later contributions.
 
+That [two-contributor audit](evidence/core-two-contributor-audit.json) has now
+passed all 41 initializations and 82 contribution transitions. Its
+[full log](evidence/core-two-contributor-audit.log) records each circuit. Later
+contributions remain outside that pinned checkpoint.
+
 The [October 28 AWS operations check](evidence/aws-operations-2026-10-28.json)
 confirmed private versioned S3 storage, encrypted EBS, healthy disk/service alarms,
 an enabled daily snapshot policy and a current signing-key backup version in
-Secrets Manager. No private key value was read. It also found no confirmed alarm
-recipient and no completed EBS snapshot. The daily policy was created after its
-03:00 UTC schedule; a first private encrypted snapshot was requested separately
-and was still pending when this report was recorded. Alert delivery and disk
-snapshot restoration remain unverified. Use `scripts/check-aws-operations.py` for
-current configuration checks; it exits nonzero while these configuration gaps
-remain and does not send notifications.
+Secrets Manager. No private key value was read. The first private encrypted
+snapshot completed and passed an [isolated disk restore](evidence/core-ebs-restore.json):
+509 referenced public objects (6,091,537,809 bytes), 127 checkpoints and 125
+signed receipts were verified. The restored checkpoint was authenticated against
+the operator-pinned live history. The private signing-key file was present with
+mode 0600; its contents were not read. The temporary restored volume was unmounted
+and deleted, retaining the original disk and backup snapshot. This was not a live
+failover or final-key recovery drill.
+
+No confirmed alarm recipient is configured, so alert delivery remains unverified.
+Use `scripts/check-aws-operations.py` for current configuration checks; it exits
+nonzero while that configuration gap remains and does not send notifications.
+
+[v0.1.0-rc.12](evidence/release-v0.1.0-rc.12.json) is deployed from
+`454bf6bb8184be32cd6ba8f85af264817d0095e4`. The participant page is CLI-only:
+it shows the terminal command, private invitation copying and native downloads.
+Browser contribution controls and invitation-file upload are removed. The page
+does not load the contribution engine, use browser storage or send invitation
+credentials to the coordinator. Native clients perform invitation validation.
+
+CI and all four native release checks passed. Live Chromium/WebKit checks and
+public binary/installer hashes match the release. Deployment preserved the full
+operator status, including 140 accepted circuit contributions: 41 each from
+Sergei, Alex and Tilo, and 17 from Jorrit. The manifest and beacon plan are unchanged.

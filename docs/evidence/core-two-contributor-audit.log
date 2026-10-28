@@ -1,0 +1,85 @@
+Starting spr-contribution-audit-03f11b8310922a9e.service - /opt/spr/releases/v0.1.0-rc.10-23bee5ff6dd09fa77372112f55907b438e61c7af/native/spr-ceremony-linux-amd64 audit --dir /var/lib/spr/contribution-audit-03f11b8310922a9e66d62462287bbc363dfeec4bcb70399d385079d8061a15d1 --manifest-sha256 4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079 --checkpoint-sha256 03f11b8310922a9e66d62462287bbc363dfeec4bcb70399d385079d8061a15d1 --workers 24...
+Audit started: merge_8_1 · domain 262144
+Audit started: transfer_confidential_8_2 · domain 262144
+Audit started: transfer_confidential_8_8 · domain 262144
+Audit started: transfer_confidential_8_16 · domain 262144
+Audit started: transfer_confidential_16_2 · domain 524288
+Audit started: transfer_confidential_48_2 · domain 2097152
+Audit started: transfer_confidential_49_2 · domain 2097152
+Audit started: merge_52_1 · domain 2097152
+Audit started: transfer_confidential_24_2 · domain 1048576
+Audit started: transfer_confidential_24_4 · domain 1048576
+Audit started: transfer_confidential_32_2 · domain 1048576
+Audit started: transfer_confidential_40_2 · domain 1048576
+Audit started: merge_24_1 · domain 1048576
+Audit started: transfer_confidential_12_2 · domain 524288
+Audit started: transfer_confidential_12_4 · domain 524288
+Audit started: transfer_confidential_12_8 · domain 524288
+Audit started: transfer_confidential_5_16 · domain 262144
+Audit started: transfer_confidential_16_4 · domain 524288
+Audit started: transfer_confidential_16_8 · domain 524288
+Audit started: transfer_confidential_5_8 · domain 262144
+Audit started: transfer_confidential_6_2 · domain 262144
+Audit started: transfer_confidential_6_4 · domain 262144
+Audit started: transfer_confidential_8_4 · domain 262144
+Audit started: transfer_confidential_6_8 · domain 262144
+Audit verified: 1/41 · transfer_confidential_5_8 · 12m7s
+Audit started: transfer_confidential_2_8 · domain 131072
+Audit verified: 2/41 · transfer_confidential_6_2 · 12m49s
+Audit started: transfer_confidential_3_2 · domain 131072
+Audit verified: 3/41 · transfer_confidential_6_4 · 12m57s
+Audit started: transfer_confidential_3_4 · domain 131072
+Audit verified: 4/41 · transfer_confidential_5_16 · 13m25s
+Audit started: transfer_confidential_2_16 · domain 131072
+Audit verified: 5/41 · transfer_confidential_6_8 · 13m39s
+Audit started: transfer_confidential_3_8 · domain 131072
+Audit verified: 6/41 · merge_8_1 · 15m2s
+Audit started: transfer_confidential_4_2 · domain 131072
+Audit verified: 7/41 · transfer_confidential_8_2 · 15m29s
+Audit started: transfer_confidential_4_4 · domain 131072
+Audit verified: 8/41 · transfer_confidential_8_4 · 15m39s
+Audit started: transfer_confidential_4_8 · domain 131072
+Audit verified: 9/41 · transfer_confidential_8_8 · 16m12s
+Audit started: transfer_confidential_5_2 · domain 131072
+Audit verified: 10/41 · transfer_confidential_2_8 · 4m29s
+Audit started: transfer_confidential_5_4 · domain 131072
+Audit verified: 11/41 · transfer_confidential_8_16 · 17m0s
+Audit started: transfer_confidential_4_16 · domain 131072
+Audit verified: 12/41 · transfer_confidential_3_2 · 5m2s
+Audit started: transfer_confidential_1_4 · domain 65536
+Audit verified: 13/41 · transfer_confidential_3_4 · 5m14s
+Audit started: transfer_confidential_1_8 · domain 65536
+Audit verified: 14/41 · transfer_confidential_2_16 · 5m5s
+Audit started: transfer_confidential_2_2 · domain 65536
+Audit verified: 15/41 · transfer_confidential_3_8 · 5m19s
+Audit started: transfer_confidential_2_4 · domain 65536
+Audit verified: 16/41 · transfer_confidential_1_4 · 2m8s
+Audit started: transfer_confidential_1_16 · domain 65536
+Audit verified: 17/41 · transfer_confidential_1_8 · 2m35s
+Audit started: transfer_confidential_1_2 · domain 32768
+Audit verified: 18/41 · transfer_confidential_4_2 · 5m47s
+Audit verified: 19/41 · transfer_confidential_12_2 · 21m23s
+Audit verified: 20/41 · transfer_confidential_4_4 · 5m59s
+Audit verified: 21/41 · transfer_confidential_12_4 · 21m30s
+Audit verified: 22/41 · transfer_confidential_2_2 · 3m6s
+Audit verified: 23/41 · transfer_confidential_12_8 · 21m56s
+Audit verified: 24/41 · transfer_confidential_4_8 · 6m26s
+Audit verified: 25/41 · transfer_confidential_2_4 · 3m18s
+Audit verified: 26/41 · transfer_confidential_1_2 · 1m46s
+Audit verified: 27/41 · transfer_confidential_5_2 · 6m56s
+Audit verified: 28/41 · transfer_confidential_1_16 · 3m25s
+Audit verified: 29/41 · transfer_confidential_5_4 · 7m7s
+Audit verified: 30/41 · transfer_confidential_4_16 · 7m13s
+Audit verified: 31/41 · transfer_confidential_16_2 · 25m58s
+Audit verified: 32/41 · transfer_confidential_16_4 · 26m8s
+Audit verified: 33/41 · transfer_confidential_16_8 · 26m33s
+Audit verified: 34/41 · merge_24_1 · 36m23s
+Audit verified: 35/41 · transfer_confidential_24_2 · 37m30s
+Audit verified: 36/41 · transfer_confidential_24_4 · 37m40s
+Audit verified: 37/41 · transfer_confidential_32_2 · 46m42s
+Audit verified: 38/41 · transfer_confidential_40_2 · 55m42s
+Audit verified: 39/41 · transfer_confidential_48_2 · 1h9m12s
+Audit verified: 40/41 · transfer_confidential_49_2 · 1h10m18s
+Audit verified: 41/41 · merge_52_1 · 1h12m0s
+Transcript verified: core
+Finished spr-contribution-audit-03f11b8310922a9e.service - /opt/spr/releases/v0.1.0-rc.10-23bee5ff6dd09fa77372112f55907b438e61c7af/native/spr-ceremony-linux-amd64 audit --dir /var/lib/spr/contribution-audit-03f11b8310922a9e66d62462287bbc363dfeec4bcb70399d385079d8061a15d1 --manifest-sha256 4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079 --checkpoint-sha256 03f11b8310922a9e66d62462287bbc363dfeec4bcb70399d385079d8061a15d1 --workers 24.

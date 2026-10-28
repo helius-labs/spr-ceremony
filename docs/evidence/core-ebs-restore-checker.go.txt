@@ -1,0 +1,46 @@
+package main
+
+import (
+ "encoding/json"
+ "fmt"
+ "os"
+ "time"
+ ceremony "github.com/helius-labs/spr-ceremony"
+)
+func must(err error) { if err != nil { panic(err) } }
+func main() {
+ if len(os.Args)!=4 { panic("directory, manifest and checkpoint pins required") }
+ start:=time.Now()
+ s,err:=ceremony.Open(os.Args[1]);must(err)
+ if s.ManifestArtifact.SHA256!=os.Args[2] { panic("manifest pin mismatch") }
+ life,head,err:=s.Lifecycle();must(err)
+ if head.SHA256!=os.Args[3] || life.Phase!="open" { panic("checkpoint or phase mismatch") }
+ must(s.AuditCheckpoints())
+ records,err:=s.ContributionRecords();must(err)
+ counts:=map[string]int{}
+ for _,r:=range records { counts[r.Contributor]=len(r.Receipts) }
+ if len(counts)!=3 || counts["sergeytimoshin"]!=41 || counts["alexatamanov"]!=41 || counts["tilo"]!=41 { panic("unexpected restored contributions") }
+ allCounts:=map[string]int{}
+ for _,c:=range s.Manifest.Circuits { state,err:=s.State(c.Spec.ID);must(err);for _,r:=range state.History {allCounts[r.Contributor]++} }
+ refs:=map[string]ceremony.Artifact{}
+ add:=func(a ceremony.Artifact) { must(a.Validate());if old,ok:=refs[a.SHA256];ok && old!=a { panic("conflicting sizes") };refs[a.SHA256]=a }
+ add(s.ManifestArtifact);add(s.Manifest.Phase1.Artifact);add(*s.Manifest.CoordinatorKey)
+ for _,c:=range s.Manifest.Circuits { add(c.R1CS);add(c.SRS);add(c.Initial) }
+ ref:=head
+ checkpoints:=0
+ for {
+  add(ref)
+  var cp ceremony.Checkpoint;must(ceremony.ReadJSON(s.Object(ref),&cp));checkpoints++
+  if len(cp.Exports)!=0 { panic("unexpected exports in open snapshot") }
+  for _,stateRef:=range cp.States {
+   add(stateRef)
+   var state ceremony.State;must(ceremony.ReadJSON(s.Object(stateRef),&state));add(state.Head)
+   for _,r:=range state.History { add(r.Parent);add(r.Output) }
+  }
+  if cp.Previous==nil { break };ref=*cp.Previous
+ }
+ var bytes int64
+ for _,ref:=range refs { must(ceremony.Check(s.Object(ref),ref));bytes+=ref.Size }
+ must(json.NewEncoder(os.Stdout).Encode(map[string]any{"manifest":s.ManifestArtifact,"checkpoint":head,"completed_counts":counts,"accepted_counts":allCounts,"checkpoint_history_and_signatures_verified":true,"objects_verified":len(refs),"bytes_verified":bytes,"checkpoints_verified":checkpoints,"elapsed_seconds":time.Since(start).Seconds(),"private_files_read":false,"full_mpc_replay":false}))
+ fmt.Fprintln(os.Stderr,"Restored public objects, checkpoint history and signed receipts verified.")
+}
