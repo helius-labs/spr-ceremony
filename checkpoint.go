@@ -337,11 +337,25 @@ func Restore(ctx context.Context, remote BlobStore, out string, manifest, checkp
 	}
 	defer os.RemoveAll(tmp)
 	s := &Store{Dir: tmp, ManifestArtifact: manifest}
+	// Historical checkpoints share most artifacts. Authenticate each unique
+	// object on arrival, then check the complete staged set before publication.
+	// This map belongs only to this restore; it never trusts a previous run.
+	verified := make(map[string]Artifact)
 	fetch := func(a Artifact) error {
+		if err := ctx.Err(); err != nil {
+			return err
+		}
 		if a.Validate() != nil {
 			return fmt.Errorf("invalid remote artifact")
 		}
+		if previous, ok := verified[a.SHA256]; ok {
+			if previous != a {
+				return fmt.Errorf("inconsistent remote artifact metadata")
+			}
+			return nil
+		}
 		if Check(s.Object(a), a) == nil {
+			verified[a.SHA256] = a
 			return nil
 		}
 		if err := os.MkdirAll(filepath.Dir(s.Object(a)), 0700); err != nil {
@@ -350,7 +364,11 @@ func Restore(ctx context.Context, remote BlobStore, out string, manifest, checkp
 		if err := remote.GetObject(ctx, objectKey(a), s.Object(a), a); err != nil {
 			return err
 		}
-		return Check(s.Object(a), a)
+		if err := Check(s.Object(a), a); err != nil {
+			return err
+		}
+		verified[a.SHA256] = a
+		return nil
 	}
 	if err = fetch(manifest); err != nil {
 		return err
@@ -421,6 +439,14 @@ func Restore(ctx context.Context, remote BlobStore, out string, manifest, checkp
 	}
 	if err = s.AuditCheckpoints(); err != nil {
 		return err
+	}
+	for _, a := range verified {
+		if err = ctx.Err(); err != nil {
+			return err
+		}
+		if err = Check(s.Object(a), a); err != nil {
+			return err
+		}
 	}
 	return os.Rename(tmp, out)
 }

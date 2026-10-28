@@ -372,3 +372,13 @@ their files and passed another SHA256 check. The full live operator status was
 unchanged. No partial object transfer was present at interruption, so this checks
 workspace recovery rather than a mid-object Range resume. The resumed full-core
 audit remains a separate, unfinished verification result.
+
+That check exposed repeated hashing of shared artifacts while restoring historical
+checkpoints. Restore now verifies each unique object on arrival and checks the
+complete staged set again before publication. A [saved-checkpoint comparison](evidence/restore-performance.json)
+on AWS restored the same 380 objects (5.1 GB) in 7.7 seconds instead of 281 seconds;
+reads fell from 325 GB to 10.2 GB. Both outputs matched and the temporary restored
+directories were removed. This used warm cached files and local hard links,
+excludes download time, and does not measure cryptographic audit performance.
+Tests reject corrupt downloads, objects altered after their first check,
+conflicting size metadata and cancellation without publishing a failed restore.

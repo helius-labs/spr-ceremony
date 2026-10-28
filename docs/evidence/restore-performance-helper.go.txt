@@ -1,0 +1,43 @@
+package main
+
+import (
+ "context"
+ "encoding/json"
+ "fmt"
+ "os"
+ "path/filepath"
+ "strconv"
+ "strings"
+ "time"
+
+ ceremony "github.com/helius-labs/spr-ceremony"
+)
+
+type archive struct{ root string }
+func (a archive) GetObject(_ context.Context, key, path string, ref ceremony.Artifact) error {
+ if key != "objects/"+ref.SHA256 { return fmt.Errorf("unexpected object") }
+ return os.Link(filepath.Join(a.root,key),path)
+}
+func (archive) PutObject(context.Context,string,string,ceremony.Artifact) error {return fmt.Errorf("read only")}
+func (archive) ReadPointer(context.Context,string)(ceremony.Artifact,string,error){return ceremony.Artifact{},"",fmt.Errorf("pinned only")}
+func (archive) ConditionalPut(context.Context,string,ceremony.Artifact,string)error{return fmt.Errorf("read only")}
+func (archive) DownloadURL(context.Context,string,time.Duration)(string,error){return "",fmt.Errorf("local only")}
+func rchar() uint64 {
+ b,e:=os.ReadFile("/proc/self/io");if e!=nil {panic(e)}
+ for _,line:=range strings.Split(string(b),"\n") {if strings.HasPrefix(line,"rchar:") {n,e:=strconv.ParseUint(strings.TrimSpace(strings.TrimPrefix(line,"rchar:")),10,64);if e!=nil {panic(e)};return n}}
+ panic("missing rchar")
+}
+func main(){
+ if len(os.Args)!=3 {panic("source snapshot and new destination required")}
+ source,e:=ceremony.Open(os.Args[1]);if e!=nil {panic(e)}
+ _,checkpoint,e:=source.Lifecycle();if e!=nil {panic(e)}
+ before:=rchar();start:=time.Now()
+ if e=ceremony.Restore(context.Background(),archive{source.Dir},os.Args[2],source.ManifestArtifact,checkpoint);e!=nil {panic(e)}
+ elapsed:=time.Since(start);bytes:=rchar()-before
+ restored,e:=ceremony.Open(os.Args[2]);if e!=nil {panic(e)}
+ _,actual,e:=restored.Lifecycle();if e!=nil||actual!=checkpoint {panic("wrong restored checkpoint")}
+ entries,e:=os.ReadDir(filepath.Join(os.Args[2],"objects"));if e!=nil {panic(e)}
+ var total int64
+ for _,entry:=range entries {info,e:=entry.Info();if e!=nil {panic(e)};total+=info.Size()}
+ json.NewEncoder(os.Stdout).Encode(map[string]any{"manifest":source.ManifestArtifact,"checkpoint":checkpoint,"elapsed_seconds":elapsed.Seconds(),"bytes_read":bytes,"objects":len(entries),"object_bytes":total,"scope":"public object integrity and checkpoint restore; no full MPC replay"})
+}

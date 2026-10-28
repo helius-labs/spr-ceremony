@@ -1,0 +1,67 @@
+{
+  "checked_at": "2026-10-28T19:19:23.167110+00:00",
+  "baseline_source_revision": "635607d159e6d3d14db6ae5c65589ef5c42bed49",
+  "optimized_checkpoint_go_sha256": "9999187c7929a1c1153b5b7b722c73d5f510779204e6e3b27b74022b148e6ec7",
+  "optimized_patch_sha256": "212382d489975ac812c918078f9ab2c8ee3d98e6189348bdd879e525fe5593a2",
+  "helper_source": "restore-performance-helper.go.txt",
+  "helper_sha256": "b6d277c264336b1bc080e92d0eddeff1fa9d8148b4dff980c104b249391fcdd0",
+  "binaries": {
+    "before": {
+      "sha256": "d0ada2bffcb2a8efbd1988c35cfa87e783b4f357160a45fd901aabb3302f5633",
+      "size": 23958198,
+      "s3_key": "deployment/drills/d0ada2bffcb2a8efbd1988c35cfa87e783b4f357160a45fd901aabb3302f5633/restore-benchmark"
+    },
+    "after": {
+      "sha256": "1f0a0ff46079a8c831d4460652acc92f0c27d02458546dd1ad64e330147ab610",
+      "size": 23958630,
+      "s3_key": "deployment/drills/1f0a0ff46079a8c831d4460652acc92f0c27d02458546dd1ad64e330147ab610/restore-benchmark"
+    }
+  },
+  "instance_type": "c7i.48xlarge",
+  "gomaxprocs": 2,
+  "before": {
+    "bytes_read": 325328875720,
+    "checkpoint": {
+      "sha256": "03f11b8310922a9e66d62462287bbc363dfeec4bcb70399d385079d8061a15d1",
+      "size": 7064
+    },
+    "elapsed_seconds": 281.303256289,
+    "manifest": {
+      "sha256": "4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079",
+      "size": 31586
+    },
+    "object_bytes": 5106083286,
+    "objects": 380,
+    "scope": "public object integrity and checkpoint restore; no full MPC replay"
+  },
+  "after": {
+    "bytes_read": 10221635954,
+    "checkpoint": {
+      "sha256": "03f11b8310922a9e66d62462287bbc363dfeec4bcb70399d385079d8061a15d1",
+      "size": 7064
+    },
+    "elapsed_seconds": 7.669264109,
+    "manifest": {
+      "sha256": "4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079",
+      "size": 31586
+    },
+    "object_bytes": 5106083286,
+    "objects": 380,
+    "scope": "public object integrity and checkpoint restore; no full MPC replay"
+  },
+  "elapsed_ratio": 36.67930224998853,
+  "bytes_read_ratio": 31.827476265449477,
+  "ssm_evidence_command": "e1ae5890-7813-4d17-82cc-c90a6e8e585a",
+  "cleanup": {
+    "restored_object_sets_identical": true,
+    "objects_compared": 380,
+    "isolated_restore_directories_removed": true,
+    "source_snapshot_preserved": true
+  },
+  "limits": [
+    "One comparison with warm cached files and local hard links; excludes network download time.",
+    "Both jobs used low CPU priority while the separate full-core cryptographic audit was running.",
+    "This measures object integrity and checkpoint restore, not the full cryptographic audit or final-key reproduction.",
+    "Every unique object is hashed on arrival and again before publishing the restored directory."
+  ]
+}
