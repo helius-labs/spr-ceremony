@@ -1,11 +1,10 @@
-# Full-core rehearsal
+# Core ceremony
 
 41 real core circuits, public Phase 1 parameters, and a fresh coordinator signing
 key. You operate and contribute from your Mac. No SSM sessions are needed.
-This campaign is explicitly marked as a test; its keys are not for production.
-Deployment may run the initialization audit separately on a frozen prepared
-snapshot. Contributions made before it passes are provisional; a failed audit
-invalidates the rehearsal. Finalization always verifies the complete transcript.
+The campaign uses the pinned public Phase 1 parameters. The initialization audit
+runs on a frozen prepared snapshot while contributors participate. Finalization
+verifies the complete transcript before publishing keys.
 
 - Participants: https://d3gz3drevfa8mb.cloudfront.net
 - Control: https://1q82ow4q4c.execute-api.eu-north-1.amazonaws.com
@@ -15,8 +14,8 @@ invalidates the rehearsal. Finalization always verifies the complete transcript.
 For Apple silicon, use a fresh working folder:
 
 ```sh
-mkdir -p ~/spr-core-rehearsal
-cd ~/spr-core-rehearsal
+mkdir -p ~/spr-ceremony
+cd ~/spr-ceremony
 curl --proto '=https' --tlsv1.2 -fsS https://d3gz3drevfa8mb.cloudfront.net/native/spr-ceremony-darwin-arm64 -o spr-ceremony
 chmod +x spr-ceremony
 ./spr-ceremony version

@@ -57,7 +57,7 @@ async def main():
             await visitor.goto(invitation)
             await visitor.wait_for_function('() => !document.querySelector("#start").disabled')
             assert urllib.parse.urlsplit(visitor.url).fragment == '', 'Invitation was not removed from the address bar'
-            assert 'Test ceremony' in await visitor.locator('#notice').inner_text()
+            assert 'Locally generated parameters' in await visitor.locator('#notice').inner_text()
             await visitor.locator('#start').click()
             await visitor.wait_for_function('() => document.querySelector("#count").textContent === "2 / 2 accepted"', timeout=300000)
             await visitor.wait_for_function('() => document.documentElement.dataset.stage === "complete" && !document.querySelector("#native").disabled')

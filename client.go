@@ -82,6 +82,7 @@ func (c *Client) Run(ctx context.Context, i Invitation, track string) error {
 	seen := map[string]bool{}
 	for _, job := range i.Jobs {
 		id := job.Circuit.Spec.ID
+
 		if !safeID.MatchString(id) || seen[id] || job.Circuit.Spec.Track != track {
 			return fmt.Errorf("invalid circuit in invitation")
 		}
@@ -103,8 +104,8 @@ func (c *Client) Run(ctx context.Context, i Invitation, track string) error {
 			return fmt.Errorf("%s input is %d bytes, above --max-file-bytes %d", id, job.Input.Size, c.MaxFileBytes)
 		}
 	}
-	if i.InsecureTestSetup {
-		fmt.Fprintln(c.Progress, "REHEARSAL: coordinator-generated test SRS; outputs are not production keys")
+	if m.Phase1.UsesTestParameters() {
+		fmt.Fprintln(c.Progress, "Locally generated parameters. Do not use these keys in production.")
 	}
 	// Reusing one public workspace is safe across reruns, not concurrent writers.
 	workspace := filepath.Join(c.Work, i.ManifestSHA256, i.ID)
@@ -138,7 +139,18 @@ func (c *Client) runJob(ctx context.Context, i Invitation, job Job, track string
 	var e error
 	base := strings.TrimRight(i.URL, "/")
 	id := job.Circuit.Spec.ID
-	fmt.Fprintf(c.Progress, "[%s] %s: downloading parent %s\n", track, id, job.Input.SHA256[:12])
+	index := 0
+	for n, scope := range i.Jobs {
+		if scope.Circuit.Spec.ID == id {
+			index = n + 1
+			break
+		}
+	}
+	if index == 0 {
+		return fmt.Errorf("circuit is outside the invitation")
+	}
+	progress := fmt.Sprintf("%d/%d", index, len(i.Jobs))
+	fmt.Fprintf(c.Progress, "[%s] %s: downloading parent %s\n", progress, id, job.Input.SHA256[:12])
 	dir := filepath.Join(c.Work, i.ManifestSHA256, i.ID, id, job.Input.SHA256)
 	if e = os.MkdirAll(dir, 0700); e != nil {
 		return e
@@ -157,7 +169,7 @@ func (c *Client) runJob(ctx context.Context, i Invitation, job Job, track string
 	}
 	reuse := ReadJSON(output+".json", &cached) == nil && cached.Input == job.Input && Check(output, cached.Output) == nil
 	if !reuse {
-		fmt.Fprintf(c.Progress, "[%s] %s: contributing fresh randomness\n", track, id)
+		fmt.Fprintf(c.Progress, "[%s] %s: contributing fresh randomness\n", progress, id)
 		if e = Contribute(input, output, job.Circuit.Shape); e != nil {
 			return e
 		}
@@ -170,7 +182,7 @@ func (c *Client) runJob(ctx context.Context, i Invitation, job Job, track string
 			return e
 		}
 	}
-	fmt.Fprintf(c.Progress, "[%s] %s: uploading and awaiting verification\n", track, id)
+	fmt.Fprintf(c.Progress, "[%s] %s: uploading and awaiting verification\n", progress, id)
 	var receipt Receipt
 	if e = retry(ctx, func() error {
 		f, e := os.Open(output)
@@ -210,7 +222,7 @@ func (c *Client) runJob(ctx context.Context, i Invitation, job Job, track string
 	if e = WriteJSON(filepath.Join(dir, "receipt.json"), receipt); e != nil {
 		return e
 	}
-	fmt.Fprintf(c.Progress, "[%s] %s: accepted #%d, SHA256 %s\n", track, id, receipt.Sequence, receipt.Output.SHA256)
+	fmt.Fprintf(c.Progress, "[%s] %s: accepted #%d, SHA256 %s\n", progress, id, receipt.Sequence, receipt.Output.SHA256)
 	return nil
 }
 

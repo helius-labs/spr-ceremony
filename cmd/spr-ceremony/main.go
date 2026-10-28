@@ -65,7 +65,7 @@ func run(args []string) error {
 			return nil, e
 		}
 		s.Remote, e = storage.New(context.Background(), cfg)
-		if e == nil && !s.Manifest.Phase1.InsecureTestSetup {
+		if e == nil && !s.Manifest.Phase1.UsesTestParameters() {
 			e = s.Remote.(*storage.S3).CheckBucket(context.Background())
 		}
 		return s, e
@@ -301,7 +301,7 @@ func run(args []string) error {
 			if e != nil {
 				return e
 			}
-			fmt.Fprintln(os.Stdout, "REHEARSAL manifest SHA256:", s.ManifestArtifact.SHA256)
+			fmt.Fprintln(os.Stdout, "Local manifest SHA256:", s.ManifestArtifact.SHA256)
 			return nil
 		}
 	case "test-srs":
@@ -413,7 +413,7 @@ func run(args []string) error {
 			fmt.Fprintln(os.Stderr, "Serving", *listen, "manifest", s.ManifestArtifact.SHA256)
 			handler := s.HandlerWithOptions(ceremony.ServerOptions{MaxUploads: *maxUploads, LeaseTTL: *leaseTTL, UploadTimeout: 30 * time.Minute, MinFreeBytes: *reserve})
 			if *webDir != "" {
-				handler, e = ceremony.WebHandler(handler, ceremony.WebOptions{Directory: *webDir, Origin: *publicURL, DownloadOrigin: *downloadOrigin, NativeDirectory: *nativeDir, InsecureTestSetup: s.Manifest.Phase1.InsecureTestSetup, TrustLoopbackProxy: *trustProxy})
+				handler, e = ceremony.WebHandler(handler, ceremony.WebOptions{Directory: *webDir, Origin: *publicURL, DownloadOrigin: *downloadOrigin, NativeDirectory: *nativeDir, InsecureTestSetup: s.Manifest.Phase1.UsesTestParameters(), TrustLoopbackProxy: *trustProxy})
 				if e != nil {
 					return e
 				}
@@ -617,7 +617,7 @@ func run(args []string) error {
 			if e != nil {
 				return e
 			}
-			if !s.Manifest.Phase1.InsecureTestSetup || *checkpoint != "" {
+			if !s.Manifest.Phase1.UsesTestParameters() || *checkpoint != "" {
 				_, ref, e := s.Lifecycle()
 				if e != nil {
 					return e
@@ -682,7 +682,7 @@ func run(args []string) error {
 			if e != nil {
 				return e
 			}
-			if !s.Manifest.Phase1.InsecureTestSetup || *checkpoint != "" {
+			if !s.Manifest.Phase1.UsesTestParameters() || *checkpoint != "" {
 				_, ref, e := s.Lifecycle()
 				if e != nil {
 					return e

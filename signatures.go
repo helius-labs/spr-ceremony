@@ -59,7 +59,7 @@ func GenerateSigningKey(privatePath, publicPath string) error {
 func (s *Store) PublicSigningKey() ([]byte, error) {
 	ref := s.Manifest.CoordinatorKey
 	if ref == nil {
-		if s.Manifest.Phase1.InsecureTestSetup {
+		if s.Manifest.Phase1.UsesTestParameters() {
 			return nil, nil
 		}
 		return nil, fmt.Errorf("production ceremony requires a manifest-bound coordinator signing key")
@@ -108,7 +108,7 @@ func (s *Store) LoadSigningKey(path string) error {
 }
 
 func (s *Store) RequireSigningKey() error {
-	if s.Manifest.CoordinatorKey == nil && s.Manifest.Phase1.InsecureTestSetup {
+	if s.Manifest.CoordinatorKey == nil && s.Manifest.Phase1.UsesTestParameters() {
 		return nil
 	}
 	public, err := s.PublicSigningKey()
@@ -179,7 +179,7 @@ func (s *Store) BindSigningKey(out string, public []byte) error {
 	if err != nil {
 		return err
 	}
-	if cp.Sequence != 0 || cp.Previous != nil || cp.Lifecycle.Phase != "prepared" && !s.Manifest.Phase1.InsecureTestSetup || len(cp.Exports) != 0 {
+	if cp.Sequence != 0 || cp.Previous != nil || cp.Lifecycle.Phase != "prepared" && !s.Manifest.Phase1.UsesTestParameters() || len(cp.Exports) != 0 {
 		return fmt.Errorf("signing identity can only be bound to untouched parameters in a new directory")
 	}
 	if s.Remote != nil {

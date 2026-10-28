@@ -28,14 +28,14 @@ func (s *Store) verifyExport(dir string, maxDomain uint64) error {
 	if e := ReadJSON(filepath.Join(dir, "export.json"), &m); e != nil {
 		return e
 	}
-	if m.Format != Format || m.Engine != Engine || m.ManifestSHA256 != s.ManifestArtifact.SHA256 || m.InsecureTestSetup != s.Manifest.Phase1.InsecureTestSetup {
+	if m.Format != Format || m.Engine != Engine || m.ManifestSHA256 != s.ManifestArtifact.SHA256 || m.InsecureTestSetup != s.Manifest.Phase1.UsesTestParameters() {
 		return fmt.Errorf("export provenance mismatch")
 	}
 	if !m.InsecureTestSetup || m.BeaconProof != nil {
 		if m.BeaconPlan == nil || m.BeaconProof == nil || m.Closure == nil {
 			return fmt.Errorf("final export requires a verified beacon and closure")
 		}
-		if err := validateBeaconPolicy(s.Manifest.Phase1.InsecureTestSetup, m.BeaconPlan); err != nil {
+		if err := validateBeaconPolicy(s.Manifest.Phase1.UsesTestParameters(), m.BeaconPlan); err != nil {
 			return err
 		}
 		current, _, e := s.checkpoint()
@@ -156,7 +156,7 @@ type ExportManifest struct {
 // Export creates a reproducible key snapshot. It does not deploy keys or rotate
 // any Zolana lockfile. Further contributions need a new snapshot and beacon.
 func (s *Store) Export(track, out string, beacon []byte, maxDomain uint64) error {
-	if !s.Manifest.Phase1.InsecureTestSetup {
+	if !s.Manifest.Phase1.UsesTestParameters() {
 		return fmt.Errorf("production keys require close and finalize with the announced beacon")
 	}
 	view, err := s.snapshot()
@@ -181,7 +181,7 @@ func (s *Store) export(track, out string, beacon []byte, maxDomain uint64, proof
 		return e
 	}
 	defer os.RemoveAll(tmp)
-	m := ExportManifest{Format: Format, Engine: Engine, ManifestSHA256: s.ManifestArtifact.SHA256, Track: track, Beacon: fmt.Sprintf("%x", beacon), InsecureTestSetup: s.Manifest.Phase1.InsecureTestSetup}
+	m := ExportManifest{Format: Format, Engine: Engine, ManifestSHA256: s.ManifestArtifact.SHA256, Track: track, Beacon: fmt.Sprintf("%x", beacon), InsecureTestSetup: s.Manifest.Phase1.UsesTestParameters()}
 	if proof != nil {
 		cp, ref, e := s.checkpoint()
 		if e != nil {

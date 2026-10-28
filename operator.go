@@ -35,13 +35,15 @@ type OperatorConfig struct {
 }
 
 type OperatorStatus struct {
-	Protocol     int               `json:"operator_protocol"`
-	Phase        string            `json:"phase"`
-	Beacon       *BeaconPlan       `json:"beacon"`
-	Manifest     Artifact          `json:"manifest"`
-	Checkpoint   Artifact          `json:"checkpoint"`
-	Invitations  []AdminInvitation `json:"invitations"`
-	Reservations []struct {
+	UsesTestParameters bool              `json:"uses_test_parameters"`
+	Phase1             Artifact          `json:"phase1"`
+	Protocol           int               `json:"operator_protocol"`
+	Phase              string            `json:"phase"`
+	Beacon             *BeaconPlan       `json:"beacon"`
+	Manifest           Artifact          `json:"manifest"`
+	Checkpoint         Artifact          `json:"checkpoint"`
+	Invitations        []AdminInvitation `json:"invitations"`
+	Reservations       []struct {
 		Circuit string    `json:"circuit"`
 		Expires time.Time `json:"expires"`
 	} `json:"reservations"`
@@ -367,7 +369,7 @@ func (o *Operator) manifest(ctx context.Context) (Manifest, []byte, error) {
 			return manifest, nil, fmt.Errorf("invalid core circuit set")
 		}
 		seen[circuit.Spec.ID] = true
-		if !manifest.Phase1.InsecureTestSetup && (!IsCatalogSpec(circuit.Spec) || len(manifest.Circuits) != 41) {
+		if !manifest.Phase1.UsesTestParameters() && (!IsCatalogSpec(circuit.Spec) || len(manifest.Circuits) != 41) {
 			return manifest, nil, fmt.Errorf("production campaign must contain all 41 core circuits")
 		}
 	}

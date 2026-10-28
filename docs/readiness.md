@@ -216,3 +216,19 @@ S3 artifacts use single PUTs up to 5 GiB. There is no transcript garbage collect
 account-wide deletion protection, attested participant host, or automatic secret
 erasure guarantee. Checkpoint timestamps require external witnessing; signatures
 and hashes alone cannot prove when the operator announced or closed a ceremony.
+
+## Current public-parameter campaign
+
+The operator opened the 41-circuit campaign with manifest
+`4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079`.
+It uses the pinned public power-21 SRS. Its original signed metadata contains a
+legacy test marker; the source parameter digest determines which security checks
+apply. Public parameters require quicknet, coordinator signatures, complete core
+scope and planned-beacon finalization even when this marker is present. Signed
+manifests, invitations and receipts retain their original bytes. New final exports
+classify parameter provenance consistently with independent export verification.
+
+The initialization audit runs independently on the original prepared snapshot.
+Its completion, final-key verification and the independent review gates above
+remain separately verifiable requirements. The current display identifies the
+actual public parameters instead of claiming that they were generated locally.

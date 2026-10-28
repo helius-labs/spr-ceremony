@@ -1,7 +1,7 @@
 # Operator CLI
 
 Use a verified release binary and your existing AWS SSO profile. Participants
-need neither AWS access nor build tools. [Full Mac rehearsal](rehearsal.md).
+need neither AWS access nor build tools. [Mac ceremony guide](rehearsal.md).
 
 ## Connect and open
 

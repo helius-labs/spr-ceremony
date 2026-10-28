@@ -1,5 +1,5 @@
 import { configureSignatures } from "./signatures.js";
-import { ENGINE, hex, require, authenticate, request, deadline, MAX_JSON } from "./protocol.js";
+import { usesPublicPhase1, ENGINE, hex, require, authenticate, request, deadline, MAX_JSON } from "./protocol.js";
 import { PublicCache } from "./cache.js";
 import { Session } from "./session.js";
 
@@ -70,7 +70,7 @@ async function connect(value, pin) {
   const bytes = invitation.jobs.reduce((sum, j) => sum + j.input.size, 0);
   $("scope").textContent = `${invitation.jobs.length} circuit${invitation.jobs.length === 1 ? "" : "s"} · ${formatBytes(bytes)} each way`;
   $("manifest").textContent = `Manifest SHA256: ${manifestRef.sha256}`;
-  if (invitation.insecure_test_setup) { $("notice").hidden = false; $("notice").textContent = "Test ceremony. These keys are not for production."; }
+  if (invitation.insecure_test_setup && !usesPublicPhase1(authenticated.manifest.phase1.artifact)) { $("notice").hidden = false; $("notice").textContent = "Locally generated parameters. Do not use these keys in production."; }
   $("start").disabled = true;
   await refresh();
 }
@@ -102,7 +102,7 @@ async function publicView() {
   require(view.format === "spr-public-ceremony-v1" && hex(view.manifest?.sha256) && hex(view.checkpoint?.sha256) && Array.isArray(view.circuits) && view.circuits.length <= 41, "Invalid public ceremony metadata");
   $("public-summary").textContent = `${view.phase[0].toUpperCase() + view.phase.slice(1)} · ${view.circuits.length} circuits · ${view.participants} contributors`;
   $("keys-status").textContent = view.phase === "finalized" ? "Final keys. Verify before use." : "Final keys will appear after the ceremony is finalized.";
-  if (view.insecure_test_setup) { $("notice").hidden = false; $("notice").textContent = "Test ceremony. These keys are not for production."; }
+  if (view.insecure_test_setup && !usesPublicPhase1(view.phase1)) { $("notice").hidden = false; $("notice").textContent = "Locally generated parameters. Do not use these keys in production."; }
   function link(parent, label, ref) {
     require(hex(ref?.sha256) && Number.isSafeInteger(ref.size) && ref.size > 0, "Invalid public artifact");
     const a = document.createElement("a"); a.href = `/v1/objects/${ref.sha256}`; a.textContent = label; a.title = `SHA256: ${ref.sha256}`; a.download = ref.sha256; parent.append(a);
@@ -127,7 +127,7 @@ async function initialize() {
   configureSignatures(build);
   config = JSON.parse(new TextDecoder().decode(await sprFetch("/ui-config.json", 64 << 10, undefined, undefined, deadline())));
   require(build.format === "spr-browser-build-v1" && build.engine === ENGINE && /^[a-f0-9]{40}$/.test(build.source_revision) && config.format === "spr-hosted-ui-v1" && config.origin === location.origin, "Hosted configuration or engine mismatch");
-  $("build").textContent = `Engine ${build.engine} · ${build.go_version} · source ${build.source_revision}${build.source_modified ? " (modified rehearsal build)" : ""}`;
+  $("build").textContent = `Engine ${build.engine} · ${build.go_version} · source ${build.source_revision}${build.source_modified ? " (modified build)" : ""}`;
   $("revision").textContent = `Expected source revision: ${build.source_revision}`;
   for (const item of config.native) {
     require(/^spr-ceremony-(darwin|linux)-(arm64|amd64)$/.test(item.name) && item.url === `/native/${item.name}` && hex(item.sha256), "Invalid native download metadata");

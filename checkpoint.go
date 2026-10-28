@@ -108,7 +108,7 @@ func (s *Store) checkpoint() (Checkpoint, Artifact, error) {
 
 func (s *Store) initializeCheckpoint() error {
 	cp := Checkpoint{Format: Format, Manifest: s.ManifestArtifact, States: map[string]Artifact{}, Lifecycle: Lifecycle{Phase: "prepared"}}
-	if s.Manifest.Phase1.InsecureTestSetup {
+	if s.Manifest.Phase1.UsesTestParameters() {
 		cp.Lifecycle.Phase = "open"
 	}
 	for _, c := range s.Manifest.Circuits {

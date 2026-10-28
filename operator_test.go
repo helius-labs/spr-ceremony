@@ -69,8 +69,12 @@ func TestOperatorInvitesAuditsAndRevokesThroughControlTunnel(t *testing.T) {
 		t.Fatal("old invitation remained active")
 	}
 	participant := NewClient(t.TempDir())
-	participant.Progress = io.Discard
+	var participantProgress bytes.Buffer
+	participant.Progress = &participantProgress
 	must(t, participant.Run(ctx, renewed, Core))
+	if !strings.Contains(participantProgress.String(), "[2/2]") || strings.Contains(participantProgress.String(), "[1/2]") {
+		t.Fatal("resumed contribution did not report its correct circuit index")
+	}
 	status, err = operator.Status(ctx)
 	must(t, err)
 	if status.Invitations[0].Accepted != 2 {

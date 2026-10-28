@@ -202,7 +202,7 @@ func Prepare(dir, source, srsPath string, info SRSInfo, inputs []Input, maxDomai
 			return fmt.Errorf("invalid or duplicate circuit ID")
 		}
 		seen[in.Spec.ID] = true
-		if !info.InsecureTestSetup {
+		if !info.UsesTestParameters() {
 			if !IsCatalogSpec(in.Spec) {
 				return fmt.Errorf("circuit is outside the agreed ceremony scope")
 			}

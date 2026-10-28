@@ -25,3 +25,13 @@ func validateBeaconPolicy(rehearsal bool, plan *BeaconPlan) error {
 	}
 	return nil
 }
+
+// UsesPublicPhase1 identifies the pinned public parameters independently of
+// legacy campaign markers. The digest and size are authenticated by the manifest.
+func (info SRSInfo) UsesPublicPhase1() bool { return info.Artifact == publicPower21().SRS }
+
+// UsesTestParameters allows fixture-only shortcuts solely for non-public SRS.
+// A legacy test marker must never disable checks for the public parameter set.
+func (info SRSInfo) UsesTestParameters() bool {
+	return info.InsecureTestSetup && !info.UsesPublicPhase1()
+}

@@ -51,7 +51,7 @@ function showControl() {
 async function refresh() {
   view = await api("status");
   $("phase").textContent = view.phase[0].toUpperCase() + view.phase.slice(1);
-  $("test").hidden = !view.insecure_test_setup;
+  $("test").hidden = !view.uses_test_parameters;
   $("storage").textContent = view.s3 ? "S3 archive connected." : "Local storage. Connect S3 before launch.";
   $("beacon").textContent = view.beacon ? `Close before ${new Date(view.beacon.round_time).toLocaleString()} · beacon round ${view.beacon.round}` : "No beacon planned.";
   $("leases").textContent = `${view.reservations.length} active reservations`;

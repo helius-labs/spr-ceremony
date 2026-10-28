@@ -170,11 +170,7 @@ func runOperator(args []string) error {
 		if *asJSON {
 			return json.NewEncoder(os.Stdout).Encode(status)
 		}
-		marker := ""
-		if status.InsecureTestSetup {
-			marker = " · test ceremony"
-		}
-		fmt.Fprintf(os.Stdout, "%s%s · %d active reservations\n", status.Phase, marker, len(status.Reservations))
+		fmt.Fprintf(os.Stdout, "%s · %d active reservations\n", status.Phase, len(status.Reservations))
 		if status.Beacon != nil {
 			fmt.Fprintf(os.Stdout, "Beacon: %s · quicknet round %d\n", status.Beacon.RoundTime.UTC().Format(time.RFC3339), status.Beacon.Round)
 		}

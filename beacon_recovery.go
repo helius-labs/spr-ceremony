@@ -48,7 +48,7 @@ func (s *Store) RecoverBeacon(round uint64, expectedCheckpoint, reason string) (
 	if !now.Add(time.Hour).Before(next.RoundTime) {
 		return ref, fmt.Errorf("recovery beacon must be more than one hour in the future")
 	}
-	if err = validateBeaconPolicy(s.Manifest.Phase1.InsecureTestSetup, &next); err != nil {
+	if err = validateBeaconPolicy(s.Manifest.Phase1.UsesTestParameters(), &next); err != nil {
 		return ref, err
 	}
 	if len(cp.Lifecycle.Recoveries) >= 16 {
@@ -91,7 +91,7 @@ func (s *Store) auditBeaconRecovery(previous, current Checkpoint) error {
 	if err != nil || !samePlan(after.Beacon, &checked) {
 		return fmt.Errorf("beacon recovery changed the network")
 	}
-	if err = validateBeaconPolicy(s.Manifest.Phase1.InsecureTestSetup, after.Beacon); err != nil {
+	if err = validateBeaconPolicy(s.Manifest.Phase1.UsesTestParameters(), after.Beacon); err != nil {
 		return err
 	}
 	after.Beacon, after.Recoveries = before.Beacon, before.Recoveries

@@ -18,7 +18,7 @@ func (s *Store) AuditCheckpoints() error {
 		return err
 	}
 	if current.Lifecycle.Phase != "prepared" {
-		if err = validateBeaconPolicy(s.Manifest.Phase1.InsecureTestSetup, current.Lifecycle.Beacon); err != nil {
+		if err = validateBeaconPolicy(s.Manifest.Phase1.UsesTestParameters(), current.Lifecycle.Beacon); err != nil {
 			return err
 		}
 	}
@@ -91,7 +91,7 @@ func (s *Store) AuditCheckpoints() error {
 				return fmt.Errorf("invalid opening checkpoint")
 			}
 			p := current.Lifecycle.Beacon
-			if err := validateBeaconPolicy(s.Manifest.Phase1.InsecureTestSetup, p); err != nil {
+			if err := validateBeaconPolicy(s.Manifest.Phase1.UsesTestParameters(), p); err != nil {
 				return err
 			}
 			checked, e := NewBeaconPlan(p.ChainInfo, p.ChainHash, p.Round)
@@ -135,7 +135,7 @@ func (s *Store) AuditCheckpoints() error {
 	if current.Lifecycle.OpenedAt != nil || current.Lifecycle.ClosedAt != nil || len(current.Lifecycle.ClosedHeads) != 0 || current.Sequence != 0 || len(current.Exports) != 0 || current.Lifecycle.Beacon != nil || current.Lifecycle.FinalExport != nil || len(current.Lifecycle.Recoveries) != 0 {
 		return fmt.Errorf("invalid initial checkpoint")
 	}
-	if current.Lifecycle.Phase != "prepared" && !(s.Manifest.Phase1.InsecureTestSetup && current.Lifecycle.Phase == "open") {
+	if current.Lifecycle.Phase != "prepared" && !(s.Manifest.Phase1.UsesTestParameters() && current.Lifecycle.Phase == "open") {
 		return fmt.Errorf("invalid initial ceremony phase")
 	}
 	for _, c := range s.Manifest.Circuits {

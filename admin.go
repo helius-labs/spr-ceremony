@@ -125,7 +125,7 @@ func (s *Store) adminStatus() (any, error) {
 			reservations = append(reservations, map[string]any{"circuit": c.Spec.ID, "expires": lease.Expires})
 		}
 	}
-	return map[string]any{"operator_protocol": 1, "phase": cp.Lifecycle.Phase, "beacon": cp.Lifecycle.Beacon, "manifest": s.ManifestArtifact, "checkpoint": ref, "invitations": invitations, "reservations": reservations, "insecure_test_setup": s.Manifest.Phase1.InsecureTestSetup, "s3": s.Remote != nil, "coordinator_key": s.Manifest.CoordinatorKey, "beacon_recoveries": cp.Lifecycle.Recoveries}, nil
+	return map[string]any{"operator_protocol": 1, "phase": cp.Lifecycle.Phase, "beacon": cp.Lifecycle.Beacon, "manifest": s.ManifestArtifact, "checkpoint": ref, "invitations": invitations, "reservations": reservations, "insecure_test_setup": s.Manifest.Phase1.InsecureTestSetup, "phase1": s.Manifest.Phase1.Artifact, "uses_test_parameters": s.Manifest.Phase1.UsesTestParameters(), "s3": s.Remote != nil, "coordinator_key": s.Manifest.CoordinatorKey, "beacon_recoveries": cp.Lifecycle.Recoveries}, nil
 }
 
 // AdminHandler serves the separate loopback control listener. Host, peer,

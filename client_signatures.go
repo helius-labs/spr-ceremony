@@ -24,7 +24,7 @@ func verifySignedJSON(public []byte, kind, manifest string, value any) error {
 func (c *Client) authenticateSigningKey(ctx context.Context, i *Invitation, m Manifest, manifestBytes []byte) error {
 	i.signingPublicKey = nil
 	if m.CoordinatorKey == nil {
-		if !m.Phase1.InsecureTestSetup || i.Signature != "" {
+		if !m.Phase1.UsesTestParameters() || i.Signature != "" {
 			return fmt.Errorf("manifest has no coordinator signing key")
 		}
 		return nil

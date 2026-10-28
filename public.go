@@ -32,7 +32,7 @@ func (s *Store) PublicView() (PublicCeremony, error) {
 	if err != nil {
 		return view, err
 	}
-	view = PublicCeremony{Format: "spr-public-ceremony-v1", Manifest: cp.Manifest, Checkpoint: ref, Phase: cp.Lifecycle.Phase, InsecureTestSetup: s.Manifest.Phase1.InsecureTestSetup, Phase1: s.Manifest.Phase1.Artifact, CoordinatorKey: s.Manifest.CoordinatorKey, Circuits: []PublicCircuit{}}
+	view = PublicCeremony{Format: "spr-public-ceremony-v1", Manifest: cp.Manifest, Checkpoint: ref, Phase: cp.Lifecycle.Phase, InsecureTestSetup: s.Manifest.Phase1.UsesTestParameters(), Phase1: s.Manifest.Phase1.Artifact, CoordinatorKey: s.Manifest.CoordinatorKey, Circuits: []PublicCircuit{}}
 	keys := map[string]ExportedCircuit{}
 	if cp.Lifecycle.Phase == "finalized" {
 		if cp.Lifecycle.FinalExport == nil {

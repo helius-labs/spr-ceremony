@@ -1,6 +1,7 @@
 import { setSigningKey, verifyMessage } from "./signatures.js";
 // Public metadata checks shared by queue, recovery, and transfer paths.
 export const FORMAT = "spr-ceremony-v1";
+export const usesPublicPhase1 = a => a?.sha256 === "f75bd40496b046942e62cdd2e0a2c3a580c68f789e705e97fa8e3a9db7c36780" && a.size === 402653128;
 export const ENGINE = "gnark-v0.16.4-bn254-mpcsetup";
 export const MAX_INPUT = 128 << 20;
 export const MAX_JSON = 4 << 20;
@@ -100,7 +101,7 @@ export async function authenticate(invitation, pin, signal) {
   const bytes = await sprFetch("/v1/manifest", MAX_JSON, undefined, undefined, deadline(signal));
   require(await sprSHA256(bytes) === pin, "Coordinator manifest does not match the private invitation");
   const manifest = JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(bytes));
-  require(manifest.format === FORMAT && manifest.engine === ENGINE && manifest.phase1?.insecure_test_setup === invitation.insecure_test_setup, "Manifest engine or rehearsal marker mismatch");
+  require(manifest.format === FORMAT && manifest.engine === ENGINE && manifest.phase1?.insecure_test_setup === invitation.insecure_test_setup, "Manifest metadata mismatch");
   artifact(manifest.coordinator_key, 16384);
   const keyBytes = await sprFetch(`/v1/objects/${manifest.coordinator_key.sha256}`, 16384, manifest.coordinator_key.size, undefined, deadline(signal));
   require(await sprSHA256(keyBytes) === manifest.coordinator_key.sha256, "Coordinator signing key checksum mismatch");
@@ -111,7 +112,7 @@ export async function authenticate(invitation, pin, signal) {
     const c = job.circuit;
     require(c?.spec?.track === "core" && id(c.spec.id) && !seen.has(c.spec.id), "Invalid or duplicate invitation circuit");
     require(manifest.circuits.some(x => equal(x, c)), "Invitation circuit differs from authenticated manifest");
-    if (!invitation.insecure_test_setup) {
+    if (!invitation.insecure_test_setup || usesPublicPhase1(manifest.phase1.artifact)) {
       const s = c.spec;
       require((s.family === "transfer-confidential" && s.id === `transfer_confidential_${s.inputs}_${s.outputs}`) || (s.family === "merge" && [8, 24, 52].includes(s.inputs) && s.outputs === 1 && s.id === `merge_${s.inputs}_1`), "Unsupported core circuit family");
     }

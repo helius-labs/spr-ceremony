@@ -61,7 +61,7 @@ func (s *Store) CloseCeremony() (Artifact, error) {
 		return ref, fmt.Errorf("ceremony is not open")
 	}
 	now := s.nowUTC()
-	if cp.Lifecycle.Beacon == nil && !s.Manifest.Phase1.InsecureTestSetup {
+	if cp.Lifecycle.Beacon == nil && !s.Manifest.Phase1.UsesTestParameters() {
 		return ref, fmt.Errorf("beacon plan is required")
 	}
 	if cp.Lifecycle.Beacon != nil && !now.Before(cp.Lifecycle.Beacon.RoundTime) {

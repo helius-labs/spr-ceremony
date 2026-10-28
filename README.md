@@ -4,7 +4,7 @@ A trusted setup for **41 core circuits**. Browser or terminal. Private invitatio
 Verified contributions. Signed invitations and receipts. Public final keys.
 
 Download the latest [release candidate](https://github.com/helius-labs/spr-ceremony/releases).
-The public campaign is not open; launch gates are below.
+Operate and contribute with the CLI; no SSM tunnel is needed.
 
 Custom rings, batch 10 and batch 4999 are excluded. The cryptographic engine is
 pinned to gnark `v0.16.4` and gnark-crypto `v0.21.1-0.20260913224755-1409fe592052`.
@@ -65,7 +65,7 @@ aws sso login --profile YOUR_PROFILE
 
 `invite` saves a private invitation file and prints the contributor's command.
 Send both privately. `audit` downloads and verifies the current public transcript.
-[CLI guide](docs/operator-cli.md) · [Full Mac-to-AWS rehearsal](docs/rehearsal.md).
+[CLI guide](docs/operator-cli.md) · [Mac-to-AWS ceremony guide](docs/rehearsal.md).
 
 [Deploy to AWS and invite contributors](docs/aws.md). Terraform provisions HTTPS,
 private versioned S3, encrypted storage, backups and alarms. The control panel is

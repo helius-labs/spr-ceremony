@@ -96,3 +96,22 @@ func TestProductionRequiresQuicknet(t *testing.T) {
 	_, err = VerifyBeacon(quicknet, fixture.Proof)
 	must(t, err)
 }
+
+func TestLegacyMarkerCannotDisablePublicParameterChecks(t *testing.T) {
+	s := demoStore(t)
+	s.Manifest.Phase1.Artifact = publicPower21().SRS
+	if !s.Manifest.Phase1.InsecureTestSetup || s.Manifest.Phase1.UsesTestParameters() {
+		t.Fatal("legacy marker changed public parameter classification")
+	}
+	plan, _ := testBeacon(t, time.Now().Add(2*time.Hour))
+	if _, err := s.OpenCeremony(plan); err == nil || !strings.Contains(err.Error(), "pinned quicknet") {
+		t.Fatal("legacy marker bypassed quicknet pin")
+	}
+	s.Manifest.CoordinatorKey = nil
+	if s.RequireSigningKey() == nil {
+		t.Fatal("legacy marker bypassed coordinator signatures")
+	}
+	if s.Export(Core, t.TempDir(), make([]byte, 32), 64) == nil {
+		t.Fatal("legacy marker allowed unplanned export")
+	}
+}
