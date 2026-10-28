@@ -153,6 +153,13 @@ backup and restrict Secrets Manager/SSM administration.
 Initial preparation and audit can take substantial time. Monitor the
 reported SSM command; do not start another deployment while it is running.
 
+For a **prepared, marked rehearsal only**, `--rehearsal-background-audit` freezes
+the restored snapshot and starts its initialization audit as a separate systemd
+unit. Hash checks still complete before activation. Contributions are provisional
+until this audit passes; inspect the reported unit with `systemctl status` and
+`journalctl -u`. Production deployments cannot use this option. Finalization
+still independently verifies all initialization and contribution mathematics.
+
 For software updates, omit `--ceremony`. Existing invitations and accepted work
 remain on EBS. Update during a planned pause: a service restart interrupts active
 uploads, which clients retry from saved public output. Retain the prior version

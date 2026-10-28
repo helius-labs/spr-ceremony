@@ -81,6 +81,10 @@ class DeploymentTests(unittest.TestCase):
         prepared, opened = {'lifecycle': {'phase': 'prepared'}}, {'lifecycle': {'phase': 'open'}}
         deploy.check_initial_campaign(manifest(True, 2), opened, True, 'ssm')
         deploy.check_initial_campaign(manifest(True, 41), prepared, True, 'cloudfront')
+        deploy.check_initial_campaign(manifest(True, 41), prepared, True, 'cloudfront', background_audit=True)
+        for m, cp, rehearsal in [(manifest(False, 41), prepared, False), (manifest(True, 41), opened, True)]:
+            with self.assertRaises(ValueError):
+                deploy.check_initial_campaign(m, cp, rehearsal, 'cloudfront', background_audit=True)
         deploy.check_initial_campaign(manifest(False, 41), prepared, False, 'public')
         deploy.check_initial_campaign(manifest(False, 41), prepared, False, 'ssm')
         for m, cp, rehearsal, mode in [
@@ -95,6 +99,22 @@ class DeploymentTests(unittest.TestCase):
         ]:
             with self.subTest(rehearsal=rehearsal, mode=mode), self.assertRaises(ValueError):
                 deploy.check_initial_campaign(m, cp, rehearsal, mode)
+
+    def test_background_audit_freezes_initial_snapshot(self):
+        recovery = {'manifest': {'sha256': 'a' * 64}, 'checkpoint': {'sha256': 'b' * 64}}
+        for background in [False, True]:
+            script = deploy.initial_audit_command('/opt/release/spr-ceremony', '/var/lib/spr/incoming', recovery, background)
+            result = subprocess.run(['bash', '-n'], input=script, capture_output=True, text=True)
+            self.assertEqual(result.returncode, 0)
+            self.assertIn('--manifest-sha256 ' + 'a' * 64, script)
+            self.assertIn('--checkpoint-sha256 ' + 'b' * 64, script)
+            if background:
+                self.assertIn('cp -al /var/lib/spr/incoming /var/lib/spr/initial-audit-', script)
+                self.assertIn('systemd-run', script)
+                self.assertNotIn('audit --dir /var/lib/spr/incoming', script)
+            else:
+                self.assertIn('audit --dir /var/lib/spr/incoming', script)
+                self.assertNotIn('systemd-run', script)
 
     def test_rejects_archive_traversal_links_and_duplicates(self):
         for name, kind in [('../escape', 'file'), ('hosted.html', 'link'), ('hosted.html', 'duplicate')]:

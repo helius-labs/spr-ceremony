@@ -3,6 +3,9 @@
 41 real core circuits, public Phase 1 parameters, and a fresh coordinator signing
 key. You operate and contribute from your Mac. No SSM sessions are needed.
 This campaign is explicitly marked as a test; its keys are not for production.
+Deployment may run the initialization audit separately on a frozen prepared
+snapshot. Contributions made before it passes are provisional; a failed audit
+invalidates the rehearsal. Finalization always verifies the complete transcript.
 
 - Participants: https://d3gz3drevfa8mb.cloudfront.net
 - Control: https://1q82ow4q4c.execute-api.eu-north-1.amazonaws.com

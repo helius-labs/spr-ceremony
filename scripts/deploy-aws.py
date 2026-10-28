@@ -64,7 +64,7 @@ def checked_release(directory, revision):
         raise ValueError('Incomplete checksum manifest')
 
 
-def check_initial_campaign(manifest, checkpoint, rehearsal, access_mode):
+def check_initial_campaign(manifest, checkpoint, rehearsal, access_mode, background_audit=False):
     circuits = manifest.get('circuits', [])
     marked_test = manifest.get('phase1', {}).get('insecure_test_setup')
     phase = checkpoint.get('lifecycle', {}).get('phase')
@@ -78,6 +78,26 @@ def check_initial_campaign(manifest, checkpoint, rehearsal, access_mode):
             raise ValueError('Rehearsals require SSM administration and an explicitly marked test campaign')
     elif marked_test is not False or len(circuits) != 41 or phase != 'prepared':
         raise ValueError('Initial deployment requires 41 production core circuits in prepared phase')
+    if background_audit and (not rehearsal or marked_test is not True or phase != 'prepared'):
+        raise ValueError('Background initialization audit is only allowed for a prepared, explicitly marked rehearsal')
+
+
+def initial_audit_command(binary, incoming, recovery, background):
+    q = shlex.quote
+    manifest, checkpoint = recovery['manifest']['sha256'], recovery['checkpoint']['sha256']
+    arguments = f'--manifest-sha256 {q(manifest)} --checkpoint-sha256 {q(checkpoint)}'
+    if not background:
+        return f'runuser -u spr -- env GOMAXPROCS=4 {q(binary)} audit --dir {q(incoming)} {arguments}\n'
+    snapshot = '/var/lib/spr/initial-audit-' + manifest
+    unit = 'spr-initial-audit-' + manifest[:16]
+    # Restore has already authenticated every downloaded object's hash. Freeze
+    # the prepared snapshot before the live store can accept any contributions.
+    # CAS objects and metadata use atomic replacement, so hard links stay fixed.
+    return f'''test ! -e {q(snapshot)}
+cp -al {q(incoming)} {q(snapshot)}
+systemd-run --unit={q(unit)} --property=Type=oneshot --property=RemainAfterExit=yes --property=User=spr --property=Group=spr --property=MemoryMax=8G --property=NoNewPrivileges=yes --setenv=GOMAXPROCS=2 {q(binary)} audit --dir {q(snapshot)} {arguments}
+printf '%s\\n' {q('REHEARSAL: initial audit continues separately in ' + unit + '. Contributions are provisional until it passes.')}
+'''
 
 
 def ssm(aws, instance, commands, tmp):
@@ -108,7 +128,8 @@ def main():
     parser.add_argument('--release', required=True)
     parser.add_argument('--source-sha', required=True, help='independently reviewed source commit')
     parser.add_argument('--ceremony', type=Path, help='first deployment only: prepared production core store')
-    parser.add_argument('--rehearsal', action='store_true', help='allow a marked test campaign with SSM-only administration')
+    parser.add_argument('--rehearsal', action='store_true', help='allow an explicitly marked test campaign')
+    parser.add_argument('--rehearsal-background-audit', action='store_true', help='prepared rehearsal only: activate after hash-checked restore while initialization audit runs on a frozen snapshot')
     parser.add_argument('--signing-key', type=Path, help='initial deployment: private key file; defaults to ceremony/private/coordinator.private.asc')
     parser.add_argument('--replace-test-manifest', help='internal rehearsal only: archive and replace this exact existing test manifest')
     args = parser.parse_args()
@@ -124,6 +145,8 @@ def main():
         run('git', 'cat-file', '-e', args.source_sha + ':operator_gateway.go')
     if args.rehearsal and (access_mode not in ['ssm', 'cloudfront'] or not args.ceremony):
         parser.error('--rehearsal requires --ceremony and access_mode = ssm or cloudfront')
+    if args.rehearsal_background_audit and (not args.rehearsal or not args.ceremony):
+        parser.error('--rehearsal-background-audit requires --rehearsal and --ceremony')
     if args.replace_test_manifest and (not args.rehearsal or not re.fullmatch('[a-f0-9]{64}', args.replace_test_manifest)):
         parser.error('--replace-test-manifest requires --rehearsal and a current manifest digest')
     if args.signing_key and not args.ceremony:
@@ -154,7 +177,7 @@ def main():
             manifest = json.loads((args.ceremony / 'manifest.json').read_text())
             cp_ref = json.loads((args.ceremony / 'checkpoint.json').read_text())
             checkpoint = json.loads((args.ceremony / 'objects' / cp_ref['sha256']).read_text())
-            check_initial_campaign(manifest, checkpoint, args.rehearsal, access_mode)
+            check_initial_campaign(manifest, checkpoint, args.rehearsal, access_mode, args.rehearsal_background_audit)
             config_path = tmp / 's3.json'; config_path.write_text(json.dumps(config))
             platform = 'darwin' if os.uname().sysname == 'Darwin' else 'linux'
             arch = 'arm64' if os.uname().machine in ['arm64', 'aarch64'] else 'amd64'
@@ -202,8 +225,8 @@ if [ ! -d {q(release_dir)} ]; then mv "$stage/release" {q(release_dir)}; fi
             commands += f'''
 test ! -e {q(incoming)}
 runuser -u spr -- env GOMAXPROCS=4 {q(release_dir + '/native/spr-ceremony-linux-amd64')} restore --out {q(incoming)} --s3-config /etc/spr/s3.json --recovery-file {q(release_dir + '/recovery.json')} --recovery-sha256 {q(digest(bundle / 'recovery.json'))}
-runuser -u spr -- env GOMAXPROCS=4 {q(release_dir + '/native/spr-ceremony-linux-amd64')} audit --dir {q(incoming)} --manifest-sha256 {q(recovery['manifest']['sha256'])} --checkpoint-sha256 {q(recovery['checkpoint']['sha256'])}
 '''
+            commands += initial_audit_command(release_dir + '/native/spr-ceremony-linux-amd64', incoming, recovery, args.rehearsal_background_audit)
             if args.replace_test_manifest:
                 guard = 'import hashlib,json,sys; b=open("/var/lib/spr/core/manifest.json","rb").read(); m=json.loads(b); assert hashlib.sha256(b).hexdigest()==sys.argv[1] and m["phase1"]["insecure_test_setup"] is True, "Existing test campaign mismatch"'
                 commands += f'''
