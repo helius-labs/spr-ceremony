@@ -269,8 +269,9 @@ directory and preserved the live campaign. No invitation tokens, private key,
 leases or S3 configuration were restored. This verifies archive recovery, not
 live failover or finalized-key recovery.
 
-[GnuPG independently verified all 41 acceptance receipts](evidence/core-receipt-signatures.json)
-against the manifest-bound public key and rejected all 41 altered payloads.
+[GnuPG independently verified all 82 acceptance receipts](evidence/core-receipt-signatures.json)
+for the first two contributors against the manifest-bound public key and rejected
+all 82 altered payloads.
 This validates coordinator receipt authentication, separately from the completed
 cryptographic transcript audit.
 
@@ -283,3 +284,11 @@ the completed first contributor and exclude the partial second contributor.
 Deployment followed the operator-confirmed pause and preserved both contributors'
 accepted work. GitHub publication is independent of S3 acceptance and labels
 records as accepted, without claiming completion of the full MPC audit.
+
+The second contributor completed all 41 circuits at checkpoint
+`03f11b8310922a9e66d62462287bbc363dfeec4bcb70399d385079d8061a15d1`.
+Scheduled [publication run 40728227669](https://github.com/helius-labs/spr-ceremony/actions/runs/40728227669)
+verified and archived that completed record in commit `77fed95`, preserving the
+first contributor's existing record. Both completed records are visible through
+the public endpoint. The full audit above remains scoped to the earlier first
+contributor checkpoint.
