@@ -217,8 +217,12 @@ func runOperator(args []string) error {
 			return err
 		}
 		fmt.Fprintf(os.Stdout, "Private invitation for %s: %s\n", invitation.Contributor, file.path)
-		fmt.Fprintln(os.Stdout, "Send that file privately with this command:")
-		fmt.Fprintln(os.Stdout, "./spr-ceremony contribute --invitation "+shellArgument(filepath.Base(file.path)))
+		fmt.Fprintln(os.Stdout, "On this computer:")
+		fmt.Fprintln(os.Stdout, "./spr-ceremony contribute --invitation "+shellArgument(file.path))
+		if filepath.Base(file.path) != file.path {
+			fmt.Fprintln(os.Stdout, "For another contributor, send the file privately. Save it beside the binary and run:")
+			fmt.Fprintln(os.Stdout, "./spr-ceremony contribute --invitation "+shellArgument(filepath.Base(file.path)))
+		}
 		return nil
 	case "revoke":
 		id, err := operatorIdentity(ctx, operator, target)

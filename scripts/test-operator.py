@@ -4,6 +4,7 @@ import json
 import os
 from pathlib import Path
 import shlex
+import shutil
 import socket
 import subprocess
 import sys
@@ -50,17 +51,20 @@ def main():
                 old_config = config.read_bytes()
                 cli('operator', 'connect', '--url', public, '--control-url', control, success=False)
                 assert config.read_bytes() == old_config
-                invitation_file = root / "bob's invitation.json"
-                output = cli('operator', 'invite', 'bob', '--out', invitation_file.name)
+                invitation_file = root / 'private invitations' / "bob's invitation.json"
+                output = cli('operator', 'invite', 'bob', '--out', invitation_file.relative_to(root))
                 invitation = json.loads(invitation_file.read_text())
                 assert invitation_file.stat().st_mode & 0o077 == 0
                 assert invitation['token'] not in output
                 handoff = [line for line in output.splitlines() if line.startswith('./spr-ceremony contribute ')]
-                assert len(handoff) == 1
+                assert len(handoff) == 2
                 arguments = shlex.split(handoff[0])
-                assert arguments[1:] == ['contribute', '--invitation', invitation_file.name]
+                assert arguments[1:] == ['contribute', '--invitation', str(invitation_file.relative_to(root))]
                 output += cli(*arguments[1:])
-                output += cli(*arguments[1:])
+                recipient = shlex.split(handoff[1])
+                assert recipient[1:] == ['contribute', '--invitation', invitation_file.name]
+                shutil.copyfile(invitation_file, root / invitation_file.name)
+                output += cli(*recipient[1:])
                 status = json.loads(cli('operator', 'status', '--json'))
                 assert len(status['invitations']) == 1 and status['invitations'][0]['accepted'] == 2
                 output += cli('operator', 'audit')
