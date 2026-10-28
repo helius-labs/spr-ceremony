@@ -1,0 +1,58 @@
+{
+  "checked_at": "2026-10-28T14:46:08.332123+00:00",
+  "release": "https://github.com/helius-labs/spr-ceremony/releases/tag/v0.1.0-rc.9",
+  "source_revision": "e626dd0a888d8bdb4d74ae4f20398afcacd1c8bb",
+  "release_workflow": "https://github.com/helius-labs/spr-ceremony/actions/runs/40707049815",
+  "native_platforms_passed": [
+    "linux-amd64",
+    "linux-arm64",
+    "darwin-amd64",
+    "darwin-arm64"
+  ],
+  "participant_origin": "https://d3gz3drevfa8mb.cloudfront.net",
+  "manifest": {
+    "sha256": "4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079",
+    "size": 31586
+  },
+  "checkpoint": {
+    "sha256": "1214e784afb0250bfc2b72ba3348a805cd1e4e74253d79177c9e80bb4a3f9f1d",
+    "size": 7064
+  },
+  "phase": "open",
+  "accepted_contributions": 41,
+  "circuits": 41,
+  "active_reservations": 0,
+  "phase1": {
+    "sha256": "f75bd40496b046942e62cdd2e0a2c3a580c68f789e705e97fa8e3a9db7c36780",
+    "size": 402653128
+  },
+  "uses_test_parameters": false,
+  "preserved": [
+    "manifest",
+    "checkpoint",
+    "invitations",
+    "reservations",
+    "beacon",
+    "phase"
+  ],
+  "verified": [
+    "release checksums and GitHub provenance before deployment",
+    "live browser build equals release",
+    "hosted installer equals release",
+    "authenticated operator status",
+    "unauthenticated operator and participant admin access rejected",
+    "Chromium and WebKit live labels match public parameters"
+  ],
+  "contribution_audit": {
+    "checkpoint": "1214e784afb0250bfc2b72ba3348a805cd1e4e74253d79177c9e80bb4a3f9f1d",
+    "unit": "spr-contribution-audit-1214e784afb0250b.service",
+    "state": "queued after initial audit",
+    "workers": 24
+  },
+  "limits": [
+    "Full transcript audit not complete at this recording",
+    "Final keys not yet produced",
+    "Earlier operator clients must be updated to rc.9 for new status fields",
+    "Independent security review remains separate"
+  ]
+}

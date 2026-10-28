@@ -29,26 +29,15 @@ The hosted code is part of your trust boundary. For independent verification,
 check the release's signed provenance and reviewed source commit before running
 it. [Verification instructions](docs/releases.md).
 
-## Run a rehearsal
+## Build from source
 
-Source builds need Go 1.27.3. The browser build needs Go and a shell.
+Requires Go 1.27.3. Prebuilt releases need no Go installation.
 
 ```sh
 go build -o spr-ceremony ./cmd/spr-ceremony
-bash scripts/build-browser.sh
-./spr-ceremony demo --out rehearsal
-./spr-ceremony serve --dir rehearsal --web-dir dist/browser --public-url http://127.0.0.1:8080
 ```
 
-In another terminal, start the private control panel:
-
-```sh
-./spr-ceremony admin --dir rehearsal --public-url http://127.0.0.1:8080
-```
-
-Open **http://127.0.0.1:8081**, enter a pseudonym, and create an invitation.
-Use **Reissue link** to renew access and preserve progress.
-Rehearsal proving keys are explicitly insecure. [Testing guide](docs/hosted-ui.md).
+For a local browser demo, see the [testing guide](docs/hosted-ui.md).
 
 ## Operate
 
@@ -82,6 +71,5 @@ Releases include four native binaries, the browser bundle, a pinned installer,
 checksums and signed provenance. The repository is internal; the deployed site
 mirrors the verified participant downloads without requiring GitHub access.
 
-**Launch gates:** complete the full core AWS/browser drill and independent security
-review before opening a production campaign. Engineering tests do not replace
-an external audit. [Evidence and remaining gates](docs/readiness.md).
+[Validation status and remaining checks](docs/readiness.md), including independent
+review and final-key verification.

@@ -65,12 +65,12 @@ presigned downloads, publication outages, lost PUT responses, stale ETags,
 competing coordinators, corruption, and restore against Moto 5.1.14 pinned by
 container digest. Moto is an emulator, not proof of AWS policy behavior.
 
-Terraform formatting and configuration validation pass. An internal SSM-only
-rehearsal is deployed in eu-north-1 without inbound ports or a public hostname.
+Terraform formatting and configuration validation pass. The earlier internal SSM-only
+demo ran in eu-north-1 without inbound ports or a public hostname.
 Real AWS checks verified S3 encryption, versioning, CORS and conditional-write
 policy; accepted contributions survived a stopped-coordinator S3 restore and
-cryptographic audit. This is a two-circuit test campaign, not the 41-circuit public
-campaign or a full failure/recovery certification. Rust verifier code is pinned to Zolana's actual
+cryptographic audit. That two-circuit fixture was separate from the current 41-circuit public
+campaign and was not a full failure/recovery certification. Rust verifier code is pinned to Zolana's actual
 `groth16-solana` revision `70a93803e5f55b8425301d506c625169ef557c9d`.
 
 The actual 41 core circuits compiled from Zolana
@@ -162,7 +162,7 @@ also runs offline in CI. It was not used to finalize any campaign.
 
 The signed core controls are released in
 [v0.1.0-rc.5](https://github.com/helius-labs/spr-ceremony/releases/tag/v0.1.0-rc.5)
-and deployed on the internal AWS instance. Chromium, WebKit and the native client
+and were deployed on the internal AWS instance. Chromium, WebKit and the native client
 completed the two-circuit campaign through SSM and real S3 downloads. The AWS
 restore drill preserved accepted work, restored the signing key from Secrets
 Manager after its local copy was removed, and verified explicit ID reissue.
@@ -232,3 +232,16 @@ The initialization audit runs independently on the original prepared snapshot.
 Its completion, final-key verification and the independent review gates above
 remain separately verifiable requirements. The current display identifies the
 actual public parameters instead of claiming that they were generated locally.
+
+The current AWS deployment runs
+[v0.1.0-rc.9](https://github.com/helius-labs/spr-ceremony/releases/tag/v0.1.0-rc.9),
+source `e626dd0a888d8bdb4d74ae4f20398afcacd1c8bb`. Native release checks passed
+on Linux and macOS, ARM64 and x86-64. The first contributor has 41/41 accepted
+receipts at checkpoint
+`1214e784afb0250bfc2b72ba3348a805cd1e4e74253d79177c9e80bb4a3f9f1d`.
+Deployment preserved the manifest, checkpoint, invitations and planned beacon.
+Chromium and WebKit checks against the live HTTPS site confirm that public
+parameters display without local-demo warnings. The CLI reports `[n/41]`
+progress. Update operator binaries to rc.9: earlier clients reject the added
+status fields. Acceptance is separate from completion of the independent full
+transcript audit. [Deployment evidence](evidence/release-v0.1.0-rc.9.json).
