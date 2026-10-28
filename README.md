@@ -3,7 +3,7 @@
 A trusted setup for **41 core circuits**. Browser or terminal. Private invitations.
 Verified contributions. Signed invitations and receipts. Public final keys.
 
-Release candidate: [v0.1.0-rc.2](https://github.com/helius-labs/spr-ceremony/releases/tag/v0.1.0-rc.2).
+Release candidate: [v0.1.0-rc.5](https://github.com/helius-labs/spr-ceremony/releases/tag/v0.1.0-rc.5).
 The public campaign is not open; launch gates are below.
 
 Custom rings, batch 10 and batch 4999 are excluded. The cryptographic engine is

@@ -160,6 +160,16 @@ including an exact-round fetch from a second endpoint and rejection of altered
 signatures, rounds, and randomness. The saved [public beacon fixture](evidence/live-beacon.json)
 also runs offline in CI. It was not used to finalize any campaign.
 
+The signed core controls are released in
+[v0.1.0-rc.5](https://github.com/helius-labs/spr-ceremony/releases/tag/v0.1.0-rc.5)
+and deployed on the internal AWS instance. Chromium, WebKit and the native client
+completed the two-circuit campaign through SSM and real S3 downloads. The AWS
+restore drill preserved accepted work, restored the signing key from Secrets
+Manager after its local copy was removed, and verified explicit ID reissue.
+GnuPG independently verified an actual hosted invitation and acceptance receipt,
+and rejected altered payloads. [Deployment evidence](evidence/aws-internal.json)
+records the release, checks, public identity and remaining limits.
+
 ## Release gates
 
 Items 1–4 apply before opening the public campaign. Item 5 applies before using

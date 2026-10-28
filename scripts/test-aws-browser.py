@@ -75,7 +75,7 @@ async def main():
             print(engine + ': checking control panel progress', flush=True)
             await page.locator('#refresh').click()
             row = page.locator('.invitation-row').filter(has_text=name)
-            await page.wait_for_function('() => document.querySelector("#invitations").textContent.includes("2/2 accepted")')
+            await page.wait_for_function('(name) => [...document.querySelectorAll(".invitation-row")].some(row => row.textContent.includes(name) && row.textContent.includes("2/2 accepted"))', arg=name)
             await page.screenshot(path=out / (engine + '-control.png'), full_page=True)
             assert await page.evaluate('() => document.documentElement.scrollWidth <= innerWidth')
             assert (await context.request.get(public + '/admin/status')).status == 404

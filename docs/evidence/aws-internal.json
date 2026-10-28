@@ -1,0 +1,233 @@
+{
+  "date": "2026-10-28",
+  "scope": "Internal two-circuit marked rehearsal; no public hostname or production campaign",
+  "release": "https://github.com/helius-labs/spr-ceremony/releases/tag/v0.1.0-rc.5",
+  "source_revision": "577da6ab410a581dc0ce9f6a2bd7a5d004a2e9c6",
+  "check_workflow": "https://github.com/helius-labs/spr-ceremony/actions/runs/40666792503",
+  "release_workflow": "https://github.com/helius-labs/spr-ceremony/actions/runs/40667531979",
+  "workflow_conclusion": "success",
+  "native_platform_checks": [
+    {
+      "name": "native / native (ubuntu-24.04-arm, linux-arm64)",
+      "conclusion": "success",
+      "url": "https://github.com/helius-labs/spr-ceremony/actions/runs/40667531979/job/122748698487"
+    },
+    {
+      "name": "native / native (macos-14, darwin-arm64)",
+      "conclusion": "success",
+      "url": "https://github.com/helius-labs/spr-ceremony/actions/runs/40667531979/job/122748698498"
+    },
+    {
+      "name": "native / native (macos-15-intel, darwin-amd64)",
+      "conclusion": "success",
+      "url": "https://github.com/helius-labs/spr-ceremony/actions/runs/40667531979/job/122748698578"
+    },
+    {
+      "name": "native / native (ubuntu-24.04, linux-amd64)",
+      "conclusion": "success",
+      "url": "https://github.com/helius-labs/spr-ceremony/actions/runs/40667531979/job/122748698600"
+    }
+  ],
+  "release_attestation": "gh release verify passed; deployment independently verified all eight build subjects and all asset checksums",
+  "asset_sha256": {
+    "SHA256SUMS": "8362f0df99edaed389a33b562bf8bc450f98b8cbad214502d5d87ead07399a65",
+    "browser-577da6ab410a581dc0ce9f6a2bd7a5d004a2e9c6.tar.gz": "790a7e3137161f318c0d18eab9767fc7eed933e37fdb4564a03f60db2af8bcf5",
+    "build.json": "d8175eb3bcd1d3a6bd10d1227c70d6895f71964f57201250face7ebf5c4488fe",
+    "join.sh": "a066ad09c3da1e0bc267396063c78faf5cb0a642603581913e3b03e0d038c0de",
+    "provenance.json": "7833b3bde5dfea2be1b049bcd261109bcec1b789115360cc15457e9737d885b7",
+    "spr-ceremony-darwin-amd64": "5dac8b19c43bd5a9d1e9475fb193a7d4f297d50628490f52bc42cf85ee0844ea",
+    "spr-ceremony-darwin-arm64": "b41dbcc0236e28c95a6ab75ac1b14f781b708d1827f8fc670a008a8404e0c9b0",
+    "spr-ceremony-linux-amd64": "8e4b879f789dc8ab38bb57d5b178fa3850cbc3d612137f1c69a226045627b852",
+    "spr-ceremony-linux-arm64": "a8c7dd7108476debb610b683b14b9db10589a68997855c8f8281dc53dbd39d80"
+  },
+  "deployment": {
+    "region": "eu-north-1",
+    "instance_id": "i-0f370030582283529",
+    "access": "SSM only; no inbound security-group rules",
+    "participant_origin": "http://127.0.0.1:8080",
+    "control_origin": "http://127.0.0.1:8081",
+    "ssm_deployment_command": "d1f88e6d-a66c-484b-98b2-87a8b1e47761",
+    "manifest": {
+      "sha256": "1628d0771c6cd477cbe98a9de794cccedf3256d39b1447699e49565326fa38e9",
+      "size": 1920
+    },
+    "checkpoint_after_checks": {
+      "sha256": "7d2594fd5e941f6d207ec3609af095204282d6dc1ac50e03382b67d80cbe3989",
+      "size": 616
+    },
+    "accepted_per_circuit": {
+      "demo_plain": 6,
+      "demo_commitment": 6
+    },
+    "test_invitation_links_revoked": true,
+    "old_unsigned_rehearsal_preserved": true,
+    "infrastructure_drift": "none after Secrets Manager/IAM apply"
+  },
+  "browser_and_native": {
+    "browser": [
+      {
+        "engine": "chromium",
+        "accepted": 2,
+        "real_s3_downloads": 2,
+        "revocation": "passed"
+      },
+      {
+        "engine": "webkit",
+        "accepted": 2,
+        "real_s3_downloads": 2,
+        "revocation": "passed"
+      }
+    ],
+    "native_join_and_retry": "passed",
+    "private_api_isolation": "passed",
+    "checkpoint": {
+      "sha256": "7d2594fd5e941f6d207ec3609af095204282d6dc1ac50e03382b67d80cbe3989",
+      "size": 616
+    },
+    "manifest": {
+      "sha256": "1628d0771c6cd477cbe98a9de794cccedf3256d39b1447699e49565326fa38e9",
+      "size": 1920
+    },
+    "rehearsal_only": true
+  },
+  "control_panel": "Both Chromium and WebKit rendered each invitation ID with the matching accepted count; mobile viewport did not overflow",
+  "s3_and_key_recovery": {
+    "date": "2026-10-28",
+    "marked_rehearsal": true,
+    "circuits": 2,
+    "manifest": {
+      "sha256": "1628d0771c6cd477cbe98a9de794cccedf3256d39b1447699e49565326fa38e9",
+      "size": 1920
+    },
+    "checkpoint": {
+      "sha256": "8c71591ee3b57127a0a8bad19f1eb2157f22d50b98d16b36cd8a89901c120ac8",
+      "size": 615
+    },
+    "restored_and_audited_from_real_s3": true,
+    "local_signing_key_removed_and_recovered_from_secrets_manager": true,
+    "key_permissions": "0600, owner spr",
+    "private_invitation_omitted_from_restore": true,
+    "reissued_original_id_preserves_completion": true,
+    "duplicate_active_pseudonym_rejected": true,
+    "new_id_reusing_pseudonym_has_no_completion": true,
+    "accepted_counts_preserved": true,
+    "release_during_drill": "v0.1.0-rc.4"
+  },
+  "independent_gnupg": {
+    "manifest_sha256": "1628d0771c6cd477cbe98a9de794cccedf3256d39b1447699e49565326fa38e9",
+    "coordinator_public_key": {
+      "sha256": "47ce4dde16112b79b3b8c027a58e1e88e474a56abbbb8681109f7a8acf0b6160",
+      "size": 477
+    },
+    "openpgp_fingerprint": "D8BE5424AFDC8166FA6AA1B89E641391A227DAEB",
+    "invitation_verified_with_gnupg": true,
+    "acceptance_receipt_verified_with_gnupg": true,
+    "canonical_payload_implementation": "independent Python JSON serialization of ASCII protocol fields",
+    "altered_messages_rejected": true,
+    "private_key_downloaded": false
+  },
+  "aws_policies": {
+    "inbound_security_group_rules": 0,
+    "imds_v2_required": true,
+    "all_ebs_encrypted": true,
+    "s3_public_access_block": {
+      "BlockPublicAcls": true,
+      "IgnorePublicAcls": true,
+      "BlockPublicPolicy": true,
+      "RestrictPublicBuckets": true
+    },
+    "s3_versioning": "Enabled",
+    "s3_encryption": "AES256",
+    "cors_origin": "http://127.0.0.1:8080",
+    "unconditional_immutable_put": "AccessDenied",
+    "duplicate_immutable_put": "PreconditionFailed",
+    "unconditional_pointer_put": "AccessDenied",
+    "stale_conditional_pointer_put": "PreconditionFailed",
+    "test_probe_objects_retained": 2,
+    "scope": "Dedicated unreferenced policy probes; no live transcript object was overwritten"
+  },
+  "health_metrics": {
+    "Healthy": {
+      "Label": "Healthy",
+      "Datapoints": [
+        {
+          "Timestamp": "2026-10-28T09:28:00+00:00",
+          "Minimum": 1.0,
+          "Maximum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-28T09:33:00+00:00",
+          "Minimum": 1.0,
+          "Maximum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-28T09:38:00+00:00",
+          "Minimum": 1.0,
+          "Maximum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-10-28T09:43:00+00:00",
+          "Minimum": 1.0,
+          "Maximum": 1.0,
+          "Unit": "Count"
+        }
+      ]
+    },
+    "DiskUsedPercent": {
+      "Label": "DiskUsedPercent",
+      "Datapoints": [
+        {
+          "Timestamp": "2026-10-28T09:38:00+00:00",
+          "Minimum": 1.0,
+          "Maximum": 1.0,
+          "Unit": "Percent"
+        },
+        {
+          "Timestamp": "2026-10-28T09:43:00+00:00",
+          "Minimum": 1.0,
+          "Maximum": 1.0,
+          "Unit": "Percent"
+        },
+        {
+          "Timestamp": "2026-10-28T09:33:00+00:00",
+          "Minimum": 1.0,
+          "Maximum": 1.0,
+          "Unit": "Percent"
+        },
+        {
+          "Timestamp": "2026-10-28T09:28:00+00:00",
+          "Minimum": 1.0,
+          "Maximum": 1.0,
+          "Unit": "Percent"
+        }
+      ]
+    }
+  },
+  "security_controls": {
+    "phase1": "Shared production check pins SRS SHA256 f75bd40496b046942e62cdd2e0a2c3a580c68f789e705e97fa8e3a9db7c36780 and size 402653128 in Prepare, OpenCeremony, audit and verify-export",
+    "beacon": "Production quicknet chain hash 52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971",
+    "beacon_recovery": "Checkpoint-pinned transition after a missed deadline to a later round over one hour ahead; circuit states unchanged; old/new plans and reason recorded",
+    "signatures": "Coordinator OpenPGP signatures on invitations and acceptance receipts; manifest-bound public key; native/browser/audit verification",
+    "invitations": "Unique invitation IDs, duplicate active pseudonym rejection, explicit ID reissue and token rotation",
+    "private_key": "Secrets Manager version pinned by manifest digest; key value absent from Terraform, S3 bundles and SSM commands"
+  },
+  "automated_checks": [
+    "Go race suite with S3 emulator",
+    "GnuPG interoperability in both directions",
+    "16 hosted browser cases including forged signatures, lost responses, resumable downloads and native handoff",
+    "native CLI and terminal cancellation checks",
+    "Terraform formatting/validation",
+    "govulncheck: zero called or imported-package vulnerabilities; three module-only advisories"
+  ],
+  "limits": [
+    "This is not an independent security audit.",
+    "AWS browser and recovery drills use two tiny marked test circuits, not the full 41-circuit campaign.",
+    "Playwright WebKit on Linux is not macOS Safari.",
+    "Full core AWS failure/final-key recovery and alert delivery remain release gates.",
+    "The actual multi-party campaign has not opened or produced final production keys.",
+    "Batch 4999 is deferred; custom rings and batch 10 remain excluded."
+  ]
+}
