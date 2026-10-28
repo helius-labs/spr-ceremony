@@ -1,0 +1,118 @@
+{
+  "release": "https://github.com/helius-labs/spr-ceremony/releases/tag/v0.1.0-rc.11",
+  "source_revision": "29249c8f989091163d7dbdeeef02d921945891e1",
+  "check_workflow": 40733890314,
+  "release_workflow": 40734752290,
+  "release_result": "success on all four native platforms",
+  "go": "1.27.3",
+  "gnark": "0.16.4",
+  "gnark_crypto": "0.22.0",
+  "asset_sha256": {
+    "build.json": "0ae9edd16f4767a1aabde2579e2cf87b5c032cd810f3db7f9fdf2e34c4e6e3dd",
+    "join.sh": "8ed7407748a2c52eabab8f3de1962320193cdf36879f5543d9656d90c14a95fd",
+    "spr-ceremony-darwin-amd64": "a44a9e68621cf882771c5c95713b9adffa02d9a70d4cd5cfb712b8c2e031f43f",
+    "spr-ceremony-darwin-arm64": "f18f8023c96058ec9ba5ff4b55cf0e7f32ccd27c9a71e5d85d8e0380333ee80e",
+    "spr-ceremony-linux-amd64": "451ab7627ec0e9b28e11d7a241dd9760649a18fdc1f26b54c00d428553d5563f",
+    "spr-ceremony-linux-arm64": "03fe7863b4bb1bb8e0991579512c13e851bf4da1ccfc9a054577929e1f23ae65",
+    "browser-29249c8f989091163d7dbdeeef02d921945891e1.tar.gz": "96bd7ddd04a4a39413cecc8da9268eee3718e7f06559861a4d2be34f5720d8d6"
+  },
+  "local_release_checks": {
+    "checked_at": "2026-10-28T17:32:25.492498+00:00",
+    "all_asset_checksums_verified": true,
+    "linux_amd64_provenance_verified": true,
+    "binary_revision": "29249c8f989091163d7dbdeeef02d921945891e1",
+    "go": "go1.27.3",
+    "gnark_crypto": "v0.22.0"
+  },
+  "checked_at": "2026-10-28T17:37:35.471077+00:00",
+  "deployment_ssm_command": "afbb93f8-74cd-4aff-90a7-f21a97775854",
+  "runtime_check_ssm_command": "89fbb006-09d9-4e8d-a9bf-a518db30c629",
+  "participant_origin": "https://d3gz3drevfa8mb.cloudfront.net",
+  "manifest": {
+    "sha256": "4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079",
+    "size": 31586
+  },
+  "checkpoint": {
+    "sha256": "e4f2c3a01a28f149c40680bc50b42b6eff5d57acca3486aa82c69993183497ea",
+    "size": 7065
+  },
+  "accepted": {
+    "alexatamanov": 41,
+    "sergeytimoshin": 41,
+    "tilo": 41
+  },
+  "deployment_preserved": [
+    "uses_test_parameters",
+    "phase1",
+    "operator_protocol",
+    "phase",
+    "beacon",
+    "manifest",
+    "checkpoint",
+    "invitations",
+    "reservations",
+    "insecure_test_setup",
+    "s3",
+    "coordinator_key",
+    "beacon_recoveries"
+  ],
+  "full_operator_status_unchanged": true,
+  "runtime": {
+    "revision": "29249c8f989091163d7dbdeeef02d921945891e1",
+    "go": "go1.27.3",
+    "gnark_crypto": "v0.22.0",
+    "finalize_workers": 24,
+    "gomaxprocs": 96,
+    "memory_max_bytes": 103079215104,
+    "services_active": true
+  },
+  "browsers_passed": [
+    "Chromium",
+    "WebKit"
+  ],
+  "completed_records_visible": 3,
+  "public_assets": [
+    {
+      "name": "join.sh",
+      "sha256": "8ed7407748a2c52eabab8f3de1962320193cdf36879f5543d9656d90c14a95fd",
+      "size": 2476
+    },
+    {
+      "name": "spr-ceremony-darwin-amd64",
+      "sha256": "a44a9e68621cf882771c5c95713b9adffa02d9a70d4cd5cfb712b8c2e031f43f",
+      "size": 45729168
+    },
+    {
+      "name": "spr-ceremony-darwin-arm64",
+      "sha256": "f18f8023c96058ec9ba5ff4b55cf0e7f32ccd27c9a71e5d85d8e0380333ee80e",
+      "size": 41939650
+    },
+    {
+      "name": "spr-ceremony-linux-amd64",
+      "sha256": "451ab7627ec0e9b28e11d7a241dd9760649a18fdc1f26b54c00d428553d5563f",
+      "size": 44323923
+    },
+    {
+      "name": "spr-ceremony-linux-arm64",
+      "sha256": "03fe7863b4bb1bb8e0991579512c13e851bf4da1ccfc9a054577929e1f23ae65",
+      "size": 40269765
+    }
+  ],
+  "running_audit": {
+    "unit": "spr-contribution-audit-03f11b8310922a9e.service",
+    "start_preserved": "2026-10-28T16:53:32Z",
+    "checkpoint_sha256": "03f11b8310922a9e66d62462287bbc363dfeec4bcb70399d385079d8061a15d1",
+    "complete": false
+  },
+  "limits": [
+    "Browser checks used Linux Chromium and WebKit, not native macOS Safari.",
+    "The running full transcript audit covers the first two contributors; it excludes Tilo.",
+    "Receipt verification is separate from the full cryptographic audit.",
+    "Live core finalization has not run; the ceremony remains open with the same future beacon."
+  ],
+  "mirror_workflow": 40737106873,
+  "mirror_attempt": 2,
+  "mirror_result": "success; archived third completed contributor",
+  "mirror_commit": "99b6470",
+  "mirror_retry_reason": "First attempt overlapped coordinator restart and received public ceremony unavailable; retry passed after deployment."
+}

@@ -273,13 +273,13 @@ directory and preserved the live campaign. No invitation tokens, private key,
 leases or S3 configuration were restored. This verifies archive recovery, not
 live failover or finalized-key recovery.
 
-[GnuPG independently verified all 82 acceptance receipts](evidence/core-receipt-signatures.json)
-for the first two contributors against the manifest-bound public key and rejected
-all 82 altered payloads.
+[GnuPG independently verified all 123 acceptance receipts](evidence/core-receipt-signatures.json)
+for the first three contributors against the manifest-bound public key and rejected
+all 123 altered payloads.
 This validates coordinator receipt authentication, separately from the completed
 cryptographic transcript audit.
 
-[v0.1.0-rc.10](evidence/release-v0.1.0-rc.10.json) is deployed with automatic
+[v0.1.0-rc.10](evidence/release-v0.1.0-rc.10.json) introduced automatic
 completed-contributor records. The public endpoint and GitHub mirror derive
 records from pinned checkpoint states and verify coordinator signatures. The
 first Actions run archived all 41 receipts; a second run produced no duplicate
@@ -296,3 +296,22 @@ verified and archived that completed record in commit `77fed95`, preserving the
 first contributor's existing record. Both completed records are visible through
 the public endpoint. The full audit above remains scoped to the earlier first
 contributor checkpoint.
+
+[v0.1.0-rc.11](evidence/release-v0.1.0-rc.11.json) is deployed from
+`29249c8f989091163d7dbdeeef02d921945891e1`, with Go 1.27.3 and gnark-crypto
+v0.22.0. All four native release checks passed. The public installer and all
+four hosted binaries match the attested release; live Chromium and WebKit checks
+show all three completed contributors. Deployment waited for Tilo to finish and
+preserved the full operator status at checkpoint
+`e4f2c3a01a28f149c40680bc50b42b6eff5d57acca3486aa82c69993183497ea`,
+including all 123 accepted contributions and the original beacon plan.
+Publication run `40737106873` archived Tilo's record in commit `99b6470`,
+preserving the earlier records. Its first attempt overlapped the coordinator
+restart; the retry passed after deployment.
+
+Hosted finalization is configured for 24 circuit workers, 96 Go CPU slots and a
+96 GiB memory limit. Finalization and independent export verification can rebuild
+circuits in parallel while preserving deterministic output order. The live core
+campaign has not been finalized; no full-core finalization runtime is claimed.
+The first-two-contributor audit continued across deployment on its original
+snapshot and binary. It does not cover Tilo's later contributions.

@@ -111,6 +111,11 @@ If an open ceremony misses its deadline:
 ```
 
 Recovery preserves verified contributions and records the old/new beacon rounds.
+The new deadline is measured from the recovery command. Contributions pause at
+the original deadline until recovery succeeds. Recovery requires the ceremony to
+remain open: it cannot extend an unexpired deadline or change a closed or
+finalized ceremony. Invitation expiry is separate; reissue expired invitations
+to restore access without losing accepted work.
 All commands accept `--config FILE`; audit/export accept `--work DIRECTORY`.
 
 For a local demo or existing SSM deployment, `operator connect` uses loopback

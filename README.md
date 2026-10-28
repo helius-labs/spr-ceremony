@@ -103,4 +103,4 @@ go build -o spr-ceremony ./cmd/spr-ceremony
 
 [Local browser demo](docs/hosted-ui.md). Custom rings, batch 10 and batch 4999 are
 excluded. The engine is pinned to gnark `v0.16.4` and gnark-crypto
-`v0.21.1-0.20260913224755-1409fe592052`.
+`v0.22.0`.
