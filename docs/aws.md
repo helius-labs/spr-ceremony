@@ -8,6 +8,75 @@ invitation tokens or GitHub tokens go into Terraform or user data.
 Operator tools: Terraform, AWS CLI with SSM plugin, GitHub CLI, Python 3.11+.
 Participants need only a browser or the release binary.
 
+## Internal test deployment
+
+No hostname is needed. Set `access_mode = "ssm"` in a separate Terraform
+workspace. This creates no inbound security-group rules or Elastic IP; the
+instance's outbound public IP is used for AWS APIs and updates. Both services
+listen only on loopback. Internal testers need AWS access and the
+[Session Manager plugin](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html).
+
+```sh
+export AWS_PROFILE=dev
+export AWS_REGION=eu-north-1
+cd infra/aws
+terraform init
+terraform workspace new internal-test  # use workspace select on later visits
+```
+
+Create ignored `internal.tfvars`:
+
+```hcl
+region      = "eu-north-1"
+name        = "spr-ceremony-test"
+access_mode = "ssm"
+data_gib    = 100
+```
+
+```sh
+terraform plan -var-file=internal.tfvars -out=internal.tfplan
+terraform apply internal.tfplan
+```
+
+From the repository root, use a release binary to prepare a marked rehearsal,
+then deploy it. `--rehearsal` refuses public deployments and unmarked campaigns.
+
+```sh
+./spr-ceremony demo --out rehearsal/aws
+TF_WORKSPACE=internal-test python3 scripts/deploy-aws.py \
+  --release RELEASE_VERSION --source-sha REVIEWED_SOURCE_COMMIT \
+  --ceremony rehearsal/aws --rehearsal
+```
+
+Use `terraform output instance_id` in the selected workspace. Keep these two
+commands running in separate terminals:
+
+```sh
+aws ssm start-session --target INSTANCE_ID --document-name spr-ceremony-test-participant
+aws ssm start-session --target INSTANCE_ID --document-name spr-ceremony-test-control-panel
+```
+
+Open **http://127.0.0.1:8081** to create an invitation; its link opens the
+participant site on **http://127.0.0.1:8080**. Use these exact ports. The HTTP
+connections are local to each end of the authenticated SSM tunnel. The site
+labels the campaign as a test. Browser contributions and release binaries work;
+the HTTPS terminal installer remains available only on a public HTTPS deployment.
+Do not expose the forwarded ports to your LAN.
+
+This is a separate campaign, bucket and volume. Do not promote rehearsal keys
+or switch this live workspace to public mode. Provision production separately.
+Stop the instance when the test is idle to stop compute charges; EBS, S3 and
+snapshots remain billable and retain state. Starting it again keeps both tunnel
+commands unchanged. Terraform deliberately protects the volume and bucket from
+accidental deletion.
+
+With both tunnels open, the optional `scripts/test-aws-browser.py --binary
+/path/to/verified/spr-ceremony --out /tmp/spr-aws-checks` check exercises Chromium,
+WebKit, real S3 downloads, native participation, retry and invitation revocation.
+It requires the browser tools from `scripts/browser-requirements.txt` and refuses
+anything except an open two-circuit marked demo. It adds three test contributors;
+its output contains public receipts and screenshots, never private invitations.
+
 ## Provision
 
 Choose a public hostname you control, region and operating budget. Default

@@ -12,6 +12,26 @@ spec.loader.exec_module(deploy)
 
 
 class DeploymentTests(unittest.TestCase):
+    def test_rehearsal_cannot_be_published_or_treated_as_production(self):
+        def manifest(test, count):
+            return {'phase1': {'insecure_test_setup': test}, 'circuits': [{'spec': {'track': 'core'}} for _ in range(count)]}
+        prepared, opened = {'lifecycle': {'phase': 'prepared'}}, {'lifecycle': {'phase': 'open'}}
+        deploy.check_initial_campaign(manifest(True, 2), opened, True, 'ssm')
+        deploy.check_initial_campaign(manifest(False, 41), prepared, False, 'public')
+        deploy.check_initial_campaign(manifest(False, 41), prepared, False, 'ssm')
+        for m, cp, rehearsal, mode in [
+            (manifest(True, 2), opened, True, 'public'),
+            (manifest(True, 41), prepared, False, 'public'),
+            (manifest(True, 41), prepared, False, 'ssm'),
+            (manifest(False, 41), prepared, True, 'ssm'),
+            (manifest(False, 41), opened, False, 'public'),
+            (manifest(False, 2), prepared, False, 'public'),
+            (manifest(None, 41), prepared, False, 'public'),
+            ({'phase1': {'insecure_test_setup': True}, 'circuits': [{'spec': {'track': 'large'}}]}, opened, True, 'ssm'),
+        ]:
+            with self.subTest(rehearsal=rehearsal, mode=mode), self.assertRaises(ValueError):
+                deploy.check_initial_campaign(m, cp, rehearsal, mode)
+
     def test_rejects_archive_traversal_links_and_duplicates(self):
         for name, kind in [('../escape', 'file'), ('hosted.html', 'link'), ('hosted.html', 'duplicate')]:
             with self.subTest(name=name, kind=kind), tempfile.TemporaryDirectory() as tmp:

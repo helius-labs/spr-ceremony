@@ -4,12 +4,14 @@ umask 077
 export DEBIAN_FRONTEND=noninteractive
 apt-get update
 apt-get install -y ca-certificates curl gnupg debian-keyring debian-archive-keyring apt-transport-https awscli unattended-upgrades
+%{ if public_https ~}
 curl --proto '=https' --tlsv1.2 -fsS https://dl.cloudsmith.io/public/caddy/stable/gpg.key | gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
 curl --proto '=https' --tlsv1.2 -fsS https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt -o /etc/apt/sources.list.d/caddy-stable.list
 chmod 644 /usr/share/keyrings/caddy-stable-archive-keyring.gpg /etc/apt/sources.list.d/caddy-stable.list
 apt-get update
 apt-get install -y caddy
 systemctl stop caddy
+%{ endif ~}
 id spr >/dev/null 2>&1 || useradd --system --home /var/lib/spr --shell /usr/sbin/nologin spr
 device=/dev/disk/by-id/nvme-Amazon_Elastic_Block_Store_${volume_id}
 for attempt in $(seq 1 120); do [ -b "$device" ] && break; sleep 5; done
@@ -33,6 +35,7 @@ ${s3_config}
 CONFIG
 chown root:spr /etc/spr/s3.json
 chmod 640 /etc/spr/s3.json
+%{ if public_https ~}
 cat > /etc/caddy/Caddyfile <<'CADDY'
 {
   admin off
@@ -53,6 +56,7 @@ ${domain} {
 }
 CADDY
 chmod 644 /etc/caddy/Caddyfile
+%{ endif ~}
 cat > /etc/systemd/system/spr-ceremony.service <<'SERVICE'
 [Unit]
 Description=Solana Privacy Rings coordinator
@@ -66,7 +70,7 @@ Group=spr
 WorkingDirectory=/var/lib/spr
 Environment=AWS_REGION=${region}
 Environment=GOMAXPROCS=4
-ExecStart=/opt/spr/current/native/spr-ceremony-linux-amd64 serve --dir /var/lib/spr/core --s3-config /etc/spr/s3.json --listen 127.0.0.1:8080 --public-url https://${domain} --web-dir /opt/spr/current/browser --native-dir /opt/spr/current/native --browser-download-origin https://${jsondecode(s3_config).bucket}.s3.${region}.amazonaws.com --trust-loopback-proxy
+ExecStart=/opt/spr/current/native/spr-ceremony-linux-amd64 serve --dir /var/lib/spr/core --s3-config /etc/spr/s3.json --listen 127.0.0.1:8080 --public-url ${origin} --web-dir /opt/spr/current/browser --native-dir /opt/spr/current/native --browser-download-origin https://${jsondecode(s3_config).bucket}.s3.${region}.amazonaws.com${public_https ? " --trust-loopback-proxy" : ""}
 Restart=on-failure
 RestartSec=10
 TimeoutStopSec=75
@@ -97,7 +101,7 @@ ConditionPathExists=/var/lib/spr/core/manifest.json
 User=spr
 Group=spr
 Environment=AWS_REGION=${region}
-ExecStart=/opt/spr/current/native/spr-ceremony-linux-amd64 admin --dir /var/lib/spr/core --s3-config /etc/spr/s3.json --listen 127.0.0.1:8081 --public-url https://${domain}
+ExecStart=/opt/spr/current/native/spr-ceremony-linux-amd64 admin --dir /var/lib/spr/core --s3-config /etc/spr/s3.json --listen 127.0.0.1:8081 --public-url ${origin}
 Restart=on-failure
 RestartSec=10
 UMask=0077
@@ -121,7 +125,7 @@ cat > /usr/local/bin/spr-health <<'HEALTH'
 set -euo pipefail
 disk=$(df -P /var/lib/spr | awk 'NR==2 {gsub(/%/, "", $5); print $5}')
 healthy=0
-if systemctl is-active --quiet spr-ceremony && curl -fsS --max-time 20 -H 'Host: ${domain}' http://127.0.0.1:8080/healthz >/dev/null && aws s3api head-bucket --bucket '${jsondecode(s3_config).bucket}' --region '${region}' --cli-connect-timeout 5 --cli-read-timeout 10 >/dev/null 2>&1; then healthy=1; fi
+if systemctl is-active --quiet spr-ceremony && curl -fsS --max-time 20 -H 'Host: ${origin_host}' http://127.0.0.1:8080/healthz >/dev/null && aws s3api head-bucket --bucket '${jsondecode(s3_config).bucket}' --region '${region}' --cli-connect-timeout 5 --cli-read-timeout 10 >/dev/null 2>&1; then healthy=1; fi
 aws cloudwatch put-metric-data --region '${region}' --namespace SPR/Ceremony --metric-data \
   "MetricName=DiskUsedPercent,Dimensions=[{Name=Deployment,Value=${name}}],Value=$disk,Unit=Percent" \
   "MetricName=Healthy,Dimensions=[{Name=Deployment,Value=${name}}],Value=$healthy,Unit=Count"
@@ -145,4 +149,7 @@ WantedBy=timers.target
 TIMER
 systemctl daemon-reload
 systemctl enable spr-ceremony spr-admin
-systemctl enable --now caddy spr-health.timer
+systemctl enable --now spr-health.timer
+%{ if public_https ~}
+systemctl enable --now caddy
+%{ endif ~}

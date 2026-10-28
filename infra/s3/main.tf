@@ -15,8 +15,8 @@ variable "browser_origins" {
   type        = list(string)
   default     = []
   validation {
-    condition     = alltrue([for origin in var.browser_origins : can(regex("^https://[a-zA-Z0-9.-]+(:[0-9]+)?$", origin))])
-    error_message = "Use exact HTTPS origins without paths, wildcards, query strings, or trailing slashes."
+    condition     = alltrue([for origin in var.browser_origins : can(regex("^https://[a-zA-Z0-9.-]+(:[0-9]+)?$", origin)) || can(regex("^http://127\\.0\\.0\\.1:[0-9]+$", origin))])
+    error_message = "Use exact HTTPS origins, or numeric loopback HTTP with a port for an SSM tunnel."
   }
 }
 variable "prefix" {
@@ -33,7 +33,7 @@ provider "aws" { region = var.region }
 resource "aws_s3_bucket" "ceremony" {
   bucket        = var.bucket_name
   force_destroy = false
-  tags          = { Purpose = "Zolana core trusted setup" }
+  tags          = { Purpose = "Solana Privacy Rings trusted setup" }
   lifecycle { prevent_destroy = true }
 }
 

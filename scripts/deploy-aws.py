@@ -12,6 +12,7 @@ import subprocess
 import tarfile
 import tempfile
 import time
+import urllib.parse
 import urllib.request
 
 REPO = 'helius-labs/spr-ceremony'
@@ -62,6 +63,19 @@ def checked_release(directory, revision):
         raise ValueError('Incomplete checksum manifest')
 
 
+def check_initial_campaign(manifest, checkpoint, rehearsal, access_mode):
+    circuits = manifest.get('circuits', [])
+    marked_test = manifest.get('phase1', {}).get('insecure_test_setup')
+    phase = checkpoint.get('lifecycle', {}).get('phase')
+    if not circuits or any(c.get('spec', {}).get('track') != 'core' for c in circuits):
+        raise ValueError('Initial deployment requires core circuits only')
+    if rehearsal:
+        if access_mode != 'ssm' or marked_test is not True or phase not in ['prepared', 'open']:
+            raise ValueError('Rehearsals require SSM access and an explicitly marked test campaign')
+    elif marked_test is not False or len(circuits) != 41 or phase != 'prepared':
+        raise ValueError('Initial deployment requires 41 production core circuits in prepared phase')
+
+
 def ssm(aws, instance, commands, tmp):
     request = tmp / 'ssm-request.json'
     request.write_text(json.dumps({'DocumentName': 'AWS-RunShellScript', 'InstanceIds': [instance], 'Parameters': {'commands': [commands], 'executionTimeout': ['7200']}, 'TimeoutSeconds': 600}))
@@ -90,11 +104,15 @@ def main():
     parser.add_argument('--release', required=True)
     parser.add_argument('--source-sha', required=True, help='independently reviewed source commit')
     parser.add_argument('--ceremony', type=Path, help='first deployment only: prepared production core store')
+    parser.add_argument('--rehearsal', action='store_true', help='allow a marked test campaign, only on an internal SSM deployment')
     args = parser.parse_args()
     if not re.fullmatch(r'[a-f0-9]{40}', args.source_sha) or not re.fullmatch(r'v[0-9]+\.[0-9]+\.[0-9]+(?:-rc\.[0-9]+)?', args.release):
         parser.error('Invalid version or source revision')
     outputs = json.loads(run('terraform', '-chdir=' + args.terraform_dir, 'output', '-json'))
     get = lambda key: outputs[key]['value']
+    access_mode = outputs.get('access_mode', {}).get('value', 'public')
+    if args.rehearsal and (access_mode != 'ssm' or not args.ceremony):
+        parser.error('--rehearsal requires --ceremony and access_mode = ssm')
     config = json.loads(get('s3_config'))
     aws = ['aws', '--region', config['region'], '--output', 'json']
     if json.loads(run(*aws, 'sts', 'get-caller-identity'))['Account'] not in get('bucket'):
@@ -118,8 +136,7 @@ def main():
             manifest = json.loads((args.ceremony / 'manifest.json').read_text())
             cp_ref = json.loads((args.ceremony / 'checkpoint.json').read_text())
             checkpoint = json.loads((args.ceremony / 'objects' / cp_ref['sha256']).read_text())
-            if manifest['phase1']['insecure_test_setup'] or len(manifest['circuits']) != 41 or any(c['spec']['track'] != 'core' for c in manifest['circuits']) or checkpoint['lifecycle']['phase'] != 'prepared':
-                raise RuntimeError('Initial deployment requires 41 production core circuits in prepared phase')
+            check_initial_campaign(manifest, checkpoint, args.rehearsal, access_mode)
             config_path = tmp / 's3.json'; config_path.write_text(json.dumps(config))
             platform = 'darwin' if os.uname().sysname == 'Darwin' else 'linux'
             arch = 'arm64' if os.uname().machine in ['arm64', 'aarch64'] else 'amd64'
@@ -161,20 +178,28 @@ systemctl stop spr-admin spr-ceremony
 ln -s {q(release_dir)} "$stage/current"
 mv -Tf "$stage/current" /opt/spr/current
 systemctl start spr-ceremony spr-admin
+ready=0
 for attempt in $(seq 1 180); do
-  if curl -fsS --max-time 10 -H {q('Host: ' + get('url').removeprefix('https://'))} http://127.0.0.1:8080/healthz >/dev/null; then exit 0; fi
+  if curl -fsS --max-time 10 -H {q('Host: ' + urllib.parse.urlsplit(get('url')).netloc)} http://127.0.0.1:8080/healthz >/dev/null; then ready=1; break; fi
   sleep 5
 done
-exit 1
+test "$ready" = 1
+curl -fsS --max-time 30 -H {q('Host: ' + urllib.parse.urlsplit(get('url')).netloc)} http://127.0.0.1:8080/build.json > "$stage/hosted-build.json"
+curl -fsS --max-time 30 -H {q('Host: ' + urllib.parse.urlsplit(get('url')).netloc)} http://127.0.0.1:8080/join.sh > "$stage/hosted-join.sh"
+printf '%s  %s\\n' {q(digest(bundle / 'browser' / 'build.json'))} "$stage/hosted-build.json" {q(digest(assets / 'join.sh'))} "$stage/hosted-join.sh" | sha256sum --check
 '''
         ssm(aws, get('instance_id'), commands, tmp)
-        with urllib.request.urlopen(get('url') + '/build.json', timeout=30) as response: hosted = json.load(response)
-        if hosted['source_revision'] != args.source_sha or hosted['source_modified']:
-            raise RuntimeError('Hosted build differs from reviewed release')
-        with urllib.request.urlopen(get('url') + '/join.sh', timeout=30) as response:
-            if hashlib.sha256(response.read(64 << 10)).hexdigest() != digest(assets / 'join.sh'):
-                raise RuntimeError('Hosted installer differs from release')
-        print('Verified HTTPS deployment:', get('url'))
+        if access_mode == 'public':
+            with urllib.request.urlopen(get('url') + '/build.json', timeout=30) as response: hosted = json.load(response)
+            if hosted['source_revision'] != args.source_sha or hosted['source_modified']:
+                raise RuntimeError('Hosted build differs from reviewed release')
+            with urllib.request.urlopen(get('url') + '/join.sh', timeout=30) as response:
+                if hashlib.sha256(response.read(64 << 10)).hexdigest() != digest(assets / 'join.sh'):
+                    raise RuntimeError('Hosted installer differs from release')
+            print('Verified HTTPS deployment:', get('url'))
+        else:
+            print('Verified internal deployment:', get('url'))
+            print('Participant tunnel: aws ssm start-session --target', get('instance_id'), '--document-name', get('participant_document'))
         print('Control panel: aws ssm start-session --target', get('instance_id'), '--document-name', get('panel_document'))
 
 

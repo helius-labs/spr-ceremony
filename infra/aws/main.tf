@@ -10,11 +10,20 @@ variable "region" {
 }
 variable "domain" {
   type        = string
+  default     = ""
   description = "Public hostname whose A record will point to the coordinator's Elastic IP."
   validation {
-    condition     = can(regex("^[a-z0-9][a-z0-9.-]+[a-z0-9]$", var.domain)) && strcontains(var.domain, ".") && !strcontains(var.domain, "..")
-    error_message = "Use a lowercase DNS hostname without a scheme, port, path or wildcard."
-
+    condition     = var.domain == "" || (can(regex("^[a-z0-9][a-z0-9.-]+[a-z0-9]$", var.domain)) && strcontains(var.domain, ".") && !strcontains(var.domain, ".."))
+    error_message = "Use a lowercase DNS hostname, or leave empty for SSM access."
+  }
+}
+variable "access_mode" {
+  type        = string
+  default     = "public"
+  description = "public enables HTTPS ingress; ssm exposes both interfaces only through authenticated port forwarding."
+  validation {
+    condition     = contains(["public", "ssm"], var.access_mode)
+    error_message = "Use public or ssm."
   }
 }
 variable "name" {
@@ -90,18 +99,15 @@ resource "aws_route_table_association" "ceremony" {
 resource "aws_security_group" "ceremony" {
   name_prefix = "${var.name}-"
   vpc_id      = aws_vpc.ceremony.id
-  description = "HTTPS participants and ACME only. Administration uses outbound SSM."
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+  description = "Ceremony access. Internal mode has no ingress; administration uses outbound SSM."
+  dynamic "ingress" {
+    for_each = var.access_mode == "public" ? [80, 443] : []
+    content {
+      from_port   = ingress.value
+      to_port     = ingress.value
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
   }
   egress {
     from_port   = 0
@@ -116,10 +122,12 @@ module "archive" {
   region          = var.region
   bucket_name     = "${var.name}-${data.aws_caller_identity.current.account_id}-artifacts"
   prefix          = "core/v1"
-  browser_origins = ["https://${var.domain}"]
+  browser_origins = [local.origin]
 }
 locals {
-  bucket = "${var.name}-${data.aws_caller_identity.current.account_id}-artifacts"
+  bucket      = "${var.name}-${data.aws_caller_identity.current.account_id}-artifacts"
+  origin      = var.access_mode == "ssm" ? "http://127.0.0.1:8080" : "https://${var.domain}"
+  origin_host = var.access_mode == "ssm" ? "127.0.0.1:8080" : var.domain
 }
 resource "aws_iam_role" "coordinator" {
   name_prefix        = "${var.name}-"
@@ -168,13 +176,20 @@ resource "aws_instance" "coordinator" {
     encrypted   = true
   }
   user_data = templatefile("${path.module}/bootstrap.sh.tftpl", {
-    domain    = var.domain, region = var.region, name = var.name,
-    volume_id = replace(aws_ebs_volume.data.id, "-", ""),
-    s3_config = module.archive.s3_config
+    domain       = var.domain, region = var.region, name = var.name,
+    public_https = var.access_mode == "public", origin = local.origin, origin_host = local.origin_host,
+    volume_id    = replace(aws_ebs_volume.data.id, "-", ""),
+    s3_config    = module.archive.s3_config
   })
   user_data_replace_on_change = false
   tags                        = { Name = var.name }
-  lifecycle { ignore_changes = [ami, user_data] }
+  lifecycle {
+    ignore_changes = [ami, user_data]
+    precondition {
+      condition     = var.access_mode == "ssm" || var.domain != ""
+      error_message = "Public access requires a hostname. Use access_mode = ssm for an internal deployment."
+    }
+  }
   depends_on = [aws_route_table_association.ceremony, aws_iam_role_policy_attachment.ssm, aws_iam_role_policy_attachment.archive]
 }
 resource "aws_volume_attachment" "data" {
@@ -183,10 +198,22 @@ resource "aws_volume_attachment" "data" {
   instance_id                    = aws_instance.coordinator.id
   stop_instance_before_detaching = true
 }
-resource "aws_eip" "ceremony" { domain = "vpc" }
+resource "aws_eip" "ceremony" {
+  count  = var.access_mode == "public" ? 1 : 0
+  domain = "vpc"
+}
 resource "aws_eip_association" "ceremony" {
-  allocation_id = aws_eip.ceremony.id
+  count         = var.access_mode == "public" ? 1 : 0
+  allocation_id = aws_eip.ceremony[0].id
   instance_id   = aws_instance.coordinator.id
+}
+moved {
+  from = aws_eip.ceremony
+  to   = aws_eip.ceremony[0]
+}
+moved {
+  from = aws_eip_association.ceremony
+  to   = aws_eip_association.ceremony[0]
 }
 
 resource "aws_iam_role" "backup" {
@@ -255,12 +282,20 @@ resource "aws_ssm_document" "panel" {
   document_type = "Session"
   content       = jsonencode({ schemaVersion = "1.0", description = "Private ceremony control panel", sessionType = "Port", properties = { portNumber = "8081", localPortNumber = "8081" } })
 }
+resource "aws_ssm_document" "participant" {
+  count         = var.access_mode == "ssm" ? 1 : 0
+  name          = "${var.name}-participant"
+  document_type = "Session"
+  content       = jsonencode({ schemaVersion = "1.0", description = "Internal ceremony participant site", sessionType = "Port", properties = { portNumber = "8080", localPortNumber = "8080" } })
+}
 
 output "instance_id" { value = aws_instance.coordinator.id }
-output "public_ip" { value = aws_eip.ceremony.public_ip }
-output "url" { value = "https://${var.domain}" }
+output "public_ip" { value = var.access_mode == "public" ? aws_eip.ceremony[0].public_ip : null }
+output "url" { value = local.origin }
+output "access_mode" { value = var.access_mode }
 output "bucket" { value = local.bucket }
 output "s3_config" { value = module.archive.s3_config }
 output "panel_document" { value = aws_ssm_document.panel.name }
+output "participant_document" { value = var.access_mode == "ssm" ? aws_ssm_document.participant[0].name : null }
 output "alarm_topic" { value = aws_sns_topic.alarms.arn }
 output "data_volume" { value = aws_ebs_volume.data.id }

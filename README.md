@@ -54,6 +54,8 @@ Rehearsal keys are explicitly insecure. [Testing guide](docs/hosted-ui.md).
 [Deploy to AWS and invite contributors](docs/aws.md). Terraform provisions HTTPS,
 private versioned S3, encrypted storage, backups and alarms. The control panel is
 reachable through AWS SSM; the public site has no administration API.
+[Internal testing](docs/aws.md#internal-test-deployment) uses SSM for both interfaces
+and needs no public hostname.
 
 Every acceptance and phase transition publishes its S3 checkpoint before success.
 Final keys appear only after closure and signed-beacon finalization.

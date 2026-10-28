@@ -77,7 +77,8 @@ function commands() {
   $("native-command").textContent = `chmod +x ${name}\n./${name} contribute --invitation invitation.json`;
   const hash = config.native.find(x => x.name === name)?.sha256;
   const bundle = config.provenance === "/native/provenance.json";
-  $("verify-command").textContent = `${$("platform").value.startsWith("darwin") ? "shasum -a 256" : "sha256sum"} ${name}${hash ? `\n# Expected SHA256: ${hash}` : ""}${bundle ? `\ncurl --proto '=https' --tlsv1.2 -fsS ${shellQuote(location.origin + config.provenance)} -o provenance.json` : ""}\ngh attestation verify ${name} --repo helius-labs/spr-ceremony ${bundle ? "--bundle provenance.json " : ""}--signer-workflow helius-labs/spr-ceremony/.github/workflows/binaries.yml --source-digest ${build.source_revision} --deny-self-hosted-runners`;
+  const transport = location.protocol === "https:" ? "--proto '=https' --tlsv1.2" : "--proto '=http'";
+  $("verify-command").textContent = `${$("platform").value.startsWith("darwin") ? "shasum -a 256" : "sha256sum"} ${name}${hash ? `\n# Expected SHA256: ${hash}` : ""}${bundle ? `\ncurl ${transport} -fsS ${shellQuote(location.origin + config.provenance)} -o provenance.json` : ""}\ngh attestation verify ${name} --repo helius-labs/spr-ceremony ${bundle ? "--bundle provenance.json " : ""}--signer-workflow helius-labs/spr-ceremony/.github/workflows/binaries.yml --source-digest ${build.source_revision} --deny-self-hosted-runners`;
 }
 function shellQuote(value) { return "'" + value.replaceAll("'", "'\\''") + "'"; }
 async function publicView() {
