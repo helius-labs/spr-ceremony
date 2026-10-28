@@ -1,0 +1,31 @@
+{
+  "checked_at": "2026-10-28T15:28:58.087359+00:00",
+  "manifest_sha256": "4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079",
+  "checkpoint_sha256": "6fb3f13d94de184f8633da342e1fbabfa39c79d1a4b7c312e025a0518402da49",
+  "source_revision": "565afc67ca8422c78804e0d1c030238c1770d25c",
+  "binary_sha256": "7dccef392514488c095ff3b8f03cb543a561c4722753bf1e26eacf6c13f773c7",
+  "binary_provenance": "Clean source build; dedicated audit executable, separate from serving release",
+  "instance_type": "c7i.48xlarge",
+  "workers": 24,
+  "gomaxprocs": 192,
+  "circuits_verified": 41,
+  "exit_status": 0,
+  "unit": "spr-initial-audit-parallel-4b2b4465b79b5670.service",
+  "systemd_completion": [
+    "Result=success",
+    "ExecMainStartTimestamp=Wed 2026-10-28 14:09:18 UTC",
+    "ExecMainExitTimestamp=Wed 2026-10-28 15:23:34 UTC",
+    "ExecMainStatus=0",
+    "MemoryPeak=26693443584",
+    "CPUUsageNSec=114750334660000",
+    "ActiveState=active",
+    "SubState=exited"
+  ],
+  "log": "core-initial-audit.log",
+  "scope": "Original prepared snapshot; initial circuit setup and Phase 1 derivations",
+  "limits": [
+    "Does not cover subsequently accepted contributions",
+    "Source predates rc.9 policy changes; current-release full contributed-transcript audit runs separately",
+    "Does not replace independent security review"
+  ]
+}

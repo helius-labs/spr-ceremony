@@ -228,8 +228,8 @@ scope and planned-beacon finalization even when this marker is present. Signed
 manifests, invitations and receipts retain their original bytes. New final exports
 classify parameter provenance consistently with independent export verification.
 
-The initialization audit runs independently on the original prepared snapshot.
-Its completion, final-key verification and the independent review gates above
+The initialization audit passed all 41 circuits on the original prepared snapshot.
+The contributed-transcript audit, final-key verification and independent review
 remain separately verifiable requirements. The current display identifies the
 actual public parameters instead of claiming that they were generated locally.
 
@@ -245,3 +245,22 @@ parameters display without local-demo warnings. The CLI reports `[n/41]`
 progress. Update operator binaries to rc.9: earlier clients reject the added
 status fields. Acceptance is separate from completion of the independent full
 transcript audit. [Deployment evidence](evidence/release-v0.1.0-rc.9.json).
+
+The [initial audit](evidence/core-initial-audit.json) passed on the enlarged AWS
+instance with 24 circuit workers; its largest job took about 72 minutes. The
+[full log](evidence/core-initial-audit.log) covers every initial circuit. The
+current rc.9 audit separately checks the checkpoint containing the first
+contributor's 41 accepted transitions; it was running when this evidence was
+recorded.
+
+A [full-core S3 restore](evidence/core-s3-restore.json) recovered 257 objects
+(4,125,901,577 bytes), the checkpoint history and all 41 receipts in 171 seconds,
+including a second hash pass over every restored object. It used an isolated
+directory and preserved the live campaign. No invitation tokens, private key,
+leases or S3 configuration were restored. This verifies archive recovery, not
+live failover or finalized-key recovery.
+
+[GnuPG independently verified all 41 acceptance receipts](evidence/core-receipt-signatures.json)
+against the manifest-bound public key and rejected all 41 altered payloads.
+This validates coordinator receipt authentication, separately from the running
+cryptographic transcript audit.

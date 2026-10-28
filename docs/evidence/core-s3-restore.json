@@ -1,0 +1,31 @@
+{
+  "manifest": {
+    "sha256": "4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079",
+    "size": 31586
+  },
+  "checkpoint": {
+    "sha256": "1214e784afb0250bfc2b72ba3348a805cd1e4e74253d79177c9e80bb4a3f9f1d",
+    "size": 7064
+  },
+  "circuits": 41,
+  "receipts": 41,
+  "objects": 257,
+  "bytes": 4125901577,
+  "elapsed_seconds": 171,
+  "restore": "passed",
+  "all_object_hashes": "passed",
+  "checkpoint_history_and_signatures": "verified by Restore/AuditCheckpoints",
+  "private_files_restored": false,
+  "live_coordinator_changed": false,
+  "checked_at": "2026-10-28T15:28:58.087448+00:00",
+  "release": "v0.1.0-rc.9",
+  "source_revision": "e626dd0a888d8bdb4d74ae4f20398afcacd1c8bb",
+  "region": "eu-north-1",
+  "bucket": "spr-ceremony-test-558215002830-artifacts",
+  "prefix": "core/v1",
+  "scope": "Restore from real S3 into a separate directory with pinned recovery references; no live service changes",
+  "limits": [
+    "Hash and checkpoint/signature verification; full MPC replay is a separate running audit",
+    "Not a coordinator failover or final-key recovery drill"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "checked_at": "2026-10-28T15:23:04.724549+00:00",
+  "manifest": {
+    "sha256": "4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079",
+    "size": 31586
+  },
+  "checkpoint": {
+    "sha256": "1214e784afb0250bfc2b72ba3348a805cd1e4e74253d79177c9e80bb4a3f9f1d",
+    "size": 7064
+  },
+  "public_key": {
+    "sha256": "85a9444e4673ecee6d2fb7c549058caec4941767389549ff122b05d83334db0e",
+    "size": 477
+  },
+  "openpgp_fingerprint": "96D93089E98D75696DC01BCC7542F7801944C2FA",
+  "receipts_verified_with_gnupg": 41,
+  "altered_payloads_rejected": 41,
+  "payload_implementation": "Independent Python canonical JSON; asserted ASCII protocol fields",
+  "private_keys_or_invitations_accessed": false,
+  "ceremony_modified": false,
+  "limits": "Receipt authentication only; full MPC transcript verification is a separate audit"
+}
