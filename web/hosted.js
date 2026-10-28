@@ -5,7 +5,7 @@ import { Session } from "./session.js";
 
 const $ = id => document.getElementById(id);
 let invitation, manifestRef, build, config, cache, session, active = false, refreshing = false, wakeLock;
-let ready;
+let ready, usesLocalParameters = false;
 const browserCapable = typeof Worker === "function" && typeof WebAssembly === "object" && !!navigator.locks;
 const fragment = new URLSearchParams(location.hash.slice(1));
 history.replaceState(null, "", location.pathname);
@@ -57,11 +57,12 @@ function save(name, data, type = "application/json") {
   document.body.append(link); link.click(); link.remove();
   setTimeout(() => URL.revokeObjectURL(url), 60000);
 }
-function newSession() { return new Session(invitation, manifestRef, build, { ...config, rehearsal: invitation.insecure_test_setup }, cache, update); }
+function newSession() { return new Session(invitation, manifestRef, build, { ...config, rehearsal: usesLocalParameters }, cache, update); }
 async function connect(value, pin) {
   require(!invitation, "Reload this page to switch invitations");
   checkingInvitation();
   const authenticated = await authenticate(value, pin);
+  usesLocalParameters = value.insecure_test_setup && !usesPublicPhase1(authenticated.manifest.phase1.artifact);
   const opened = await PublicCache.open(`${value.manifest_sha256}:${value.id}`);
   invitation = value; manifestRef = authenticated.ref; cache = opened;
   session = newSession();
