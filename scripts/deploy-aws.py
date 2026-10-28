@@ -95,7 +95,7 @@ def initial_audit_command(binary, incoming, recovery, background):
     # CAS objects and metadata use atomic replacement, so hard links stay fixed.
     return f'''test ! -e {q(snapshot)}
 cp -al {q(incoming)} {q(snapshot)}
-systemd-run --unit={q(unit)} --property=Type=oneshot --property=RemainAfterExit=yes --property=User=spr --property=Group=spr --property=MemoryMax=8G --property=NoNewPrivileges=yes --setenv=GOMAXPROCS=2 {q(binary)} audit --dir {q(snapshot)} {arguments}
+systemd-run --no-block --unit={q(unit)} --property=Type=oneshot --property=RemainAfterExit=yes --property=User=spr --property=Group=spr --property=MemoryMax=8G --property=NoNewPrivileges=yes --setenv=GOMAXPROCS=2 {q(binary)} audit --dir {q(snapshot)} {arguments}
 printf '%s\\n' {q('REHEARSAL: initial audit continues separately in ' + unit + '. Contributions are provisional until it passes.')}
 '''
 
