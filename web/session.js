@@ -24,12 +24,12 @@ export class Session {
       const accepted = view.receipts.find(r => r.circuit === pending.job.circuit.spec.id);
       if (accepted) {
         if (sameArtifact(accepted.parent, pending.job.input) && sameArtifact(accepted.output, pending.report.output)) {
-          checkReceipt(accepted, pending.job, this.invitation, pending.report.output);
+          await checkReceipt(accepted, pending.job, this.invitation, pending.report.output);
         } else {
           // Switching to native may accept a different output for the same
-          // pseudonym. Count its public receipt without claiming this browser
+          // invitation. Count its public receipt without claiming this browser
           // computed that output; the unaccepted browser result is obsolete.
-          this.event("elsewhere", { message: "A different output was accepted for this pseudonym. Discarding the unaccepted saved browser output." });
+          this.event("elsewhere", { message: "A different output was accepted for this invitation. Discarding the unaccepted saved browser output." });
         }
         await this.cache.delete("pending");
         await this.cache.clearParts();
@@ -42,7 +42,7 @@ export class Session {
   async run() {
     const signal = this.controller.signal;
     require(navigator.locks, "This browser lacks cross-tab locking; use the native client");
-    return navigator.locks.request(`spr:${this.invitation.manifest_sha256}:${this.invitation.contributor}`, { mode: "exclusive", ifAvailable: true }, async lock => {
+    return navigator.locks.request(`spr:${this.invitation.manifest_sha256}:${this.invitation.id}`, { mode: "exclusive", ifAvailable: true }, async lock => {
       require(lock, "This invitation is already running in another tab. Pause that tab first.");
       let recoveries = 0;
       while (!signal.aborted) {
@@ -51,7 +51,7 @@ export class Session {
           this.event("complete", { receipts: view.receipts });
           return;
         }
-        require(Date.parse(this.invitation.expires) > Date.now(), "Invitation expired; request renewal with the same pseudonym");
+        require(Date.parse(this.invitation.expires) > Date.now(), "Invitation expired; request a reissued link for this invitation");
         this.event("queue");
         const claim = await this.api("/v1/claim");
         if (claim.done) {
@@ -151,7 +151,7 @@ export class Session {
       await renew();
       this.event("upload");
       const receipt = await this.api(`/v1/contributions/${job.circuit.spec.id}`, { body: new Blob([pending.output], { type: "application/octet-stream" }), signal, timeout: 30 * 60 * 1000 });
-      checkReceipt(receipt, job, this.invitation, pending.report.output);
+      await checkReceipt(receipt, job, this.invitation, pending.report.output);
       this.event("receipt");
       const view = await this.inspect(signal);
       require(view.receipts.some(r => equal(r, receipt)), "Acceptance receipt is absent from the published checkpoint");
@@ -182,6 +182,6 @@ export class Session {
   }
   pause() { this.controller.abort(new DOMException("Paused", "AbortError")); }
   attestation() {
-    return { format: FORMAT, engine: ENGINE, manifest_sha256: this.invitation.manifest_sha256, contributor: this.invitation.contributor, track: "core", insecure_test_setup: this.invitation.insecure_test_setup, receipts: this.view?.receipts || [] };
+    return { format: FORMAT, engine: ENGINE, manifest_sha256: this.invitation.manifest_sha256, invitation_id: this.invitation.id, contributor: this.invitation.contributor, track: "core", insecure_test_setup: this.invitation.insecure_test_setup, receipts: this.view?.receipts || [] };
   }
 }

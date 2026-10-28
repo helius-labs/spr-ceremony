@@ -31,7 +31,7 @@ class DeploymentTests(unittest.TestCase):
 
     def test_rehearsal_cannot_be_published_or_treated_as_production(self):
         def manifest(test, count):
-            return {'phase1': {'insecure_test_setup': test}, 'circuits': [{'spec': {'track': 'core'}} for _ in range(count)]}
+            return {'coordinator_key': {'sha256': 'd' * 64, 'size': 1024}, 'phase1': {'insecure_test_setup': test}, 'circuits': [{'spec': {'track': 'core'}} for _ in range(count)]}
         prepared, opened = {'lifecycle': {'phase': 'prepared'}}, {'lifecycle': {'phase': 'open'}}
         deploy.check_initial_campaign(manifest(True, 2), opened, True, 'ssm')
         deploy.check_initial_campaign(manifest(False, 41), prepared, False, 'public')

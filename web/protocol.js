@@ -1,3 +1,4 @@
+import { setSigningKey, verifyMessage } from "./signatures.js";
 // Public metadata checks shared by queue, recovery, and transfer paths.
 export const FORMAT = "spr-ceremony-v1";
 export const ENGINE = "gnark-v0.16.4-bn254-mpcsetup";
@@ -91,8 +92,8 @@ export async function publicJSON(ref, signal) {
 }
 export async function authenticate(invitation, pin, signal) {
   require(invitation?.format === FORMAT && invitation.mode === "queue" && invitation.track === "core", "A queued core invitation is required");
-  require(hex(invitation.token) && hex(pin) && invitation.manifest_sha256 === pin && id(invitation.contributor), "Invitation identity or manifest pin is invalid");
-  require(typeof invitation.insecure_test_setup === "boolean" && Date.parse(invitation.expires) > Date.now(), "Invitation expired; request renewal with the same pseudonym");
+  require(hex(invitation.id) && hex(invitation.token) && hex(pin) && invitation.manifest_sha256 === pin && id(invitation.contributor), "Invitation identity or manifest pin is invalid");
+  require(typeof invitation.insecure_test_setup === "boolean" && Date.parse(invitation.expires) > Date.now(), "Invitation expired; request a reissued link for this invitation");
   const origin = new URL(invitation.url);
   require(origin.origin === location.origin && ["", "/"].includes(origin.pathname) && !origin.search && !origin.hash && !origin.username && !origin.password, "Invitation belongs to a different coordinator origin");
   require(Array.isArray(invitation.jobs) && invitation.jobs.length > 0 && invitation.jobs.length <= 41, "Invalid core circuit count");
@@ -100,6 +101,11 @@ export async function authenticate(invitation, pin, signal) {
   require(await sprSHA256(bytes) === pin, "Coordinator manifest does not match the private invitation");
   const manifest = JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(bytes));
   require(manifest.format === FORMAT && manifest.engine === ENGINE && manifest.phase1?.insecure_test_setup === invitation.insecure_test_setup, "Manifest engine or rehearsal marker mismatch");
+  artifact(manifest.coordinator_key, 16384);
+  const keyBytes = await sprFetch(`/v1/objects/${manifest.coordinator_key.sha256}`, 16384, manifest.coordinator_key.size, undefined, deadline(signal));
+  require(await sprSHA256(keyBytes) === manifest.coordinator_key.sha256, "Coordinator signing key checksum mismatch");
+  setSigningKey(pin, new TextDecoder("utf-8", { fatal: true }).decode(keyBytes));
+  await verifyMessage("invitation", pin, invitation);
   const seen = new Set();
   for (const job of invitation.jobs) {
     const c = job.circuit;
@@ -126,12 +132,15 @@ export async function snapshot(invitation, manifestRef, signal) {
     const state = await publicJSON(cp.states[name], signal);
     require(state.circuit === name && Array.isArray(state.history), "Checkpoint circuit mismatch");
     let parent = scope.circuit.initial;
+    const identities = new Set();
     for (let n = 0; n < state.history.length; n++) {
       const r = state.history[n];
-      require(r.circuit === name && r.sequence === n + 1 && sameArtifact(r.parent, parent) && id(r.contributor) && Number.isFinite(Date.parse(r.accepted_at)), "Broken receipt history");
+      require(r.circuit === name && r.sequence === n + 1 && sameArtifact(r.parent, parent) && hex(r.invitation_id) && !identities.has(r.invitation_id) && id(r.contributor) && Number.isFinite(Date.parse(r.accepted_at)), "Broken receipt history");
       artifact(r.output);
       require(r.output.size === shapeSize(scope.circuit.shape) + 32, "Receipt output size mismatch");
-      if (r.contributor === invitation.contributor) receipts.push(r);
+      await verifyMessage("receipt", invitation.manifest_sha256, r);
+      identities.add(r.invitation_id);
+      if (r.invitation_id === invitation.id) { require(r.contributor === invitation.contributor, "Invitation identity changed"); receipts.push(r); }
       parent = r.output;
     }
     require(sameArtifact(parent, state.head), "Checkpoint head differs from receipt history");
@@ -139,8 +148,9 @@ export async function snapshot(invitation, manifestRef, signal) {
   }
   return { ref: head.ref, checkpoint: cp, states, receipts };
 }
-export function checkReceipt(r, job, invitation, output) {
-  require(r && r.circuit === job.circuit.spec.id && r.sequence === job.sequence && r.contributor === invitation.contributor && sameArtifact(r.parent, job.input) && sameArtifact(r.output, output) && Number.isFinite(Date.parse(r.accepted_at)), "Acceptance receipt does not match the local contribution");
+export async function checkReceipt(r, job, invitation, output) {
+  require(r && r.invitation_id === invitation.id && r.circuit === job.circuit.spec.id && r.sequence === job.sequence && r.contributor === invitation.contributor && sameArtifact(r.parent, job.input) && sameArtifact(r.output, output) && Number.isFinite(Date.parse(r.accepted_at)), "Acceptance receipt does not match the local contribution");
+  await verifyMessage("receipt", invitation.manifest_sha256, r);
 }
 export function sleep(ms, signal) {
   return new Promise((resolve, reject) => {

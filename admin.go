@@ -11,7 +11,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
-	"path/filepath"
+	"sort"
 	"strings"
 	"time"
 )
@@ -25,6 +25,7 @@ type AdminInvitation struct {
 	Expires     time.Time `json:"expires"`
 	Accepted    int       `json:"accepted"`
 	Total       int       `json:"total"`
+	HasLink     bool      `json:"has_link"`
 }
 
 // RevokeInvitation removes private authorization and its reservations. Accepted
@@ -39,30 +40,20 @@ func (s *Store) RevokeInvitation(id string) error {
 		return err
 	}
 	defer unlock()
-	path := filepath.Join(s.Dir, "invitations", id+".json")
-	var invitation Invitation
-	if err = ReadJSON(path, &invitation); err != nil {
-		return fmt.Errorf("invitation unavailable")
-	}
-	if err = os.Remove(path); err != nil {
+	stored, err := s.storedInvitations()
+	if err != nil {
 		return err
 	}
-	for _, c := range s.Manifest.Circuits {
-		var lease Lease
-		if err = ReadJSON(s.leasePath(c.Spec.ID), &lease); os.IsNotExist(err) {
-			continue
-		}
-		if err != nil {
-			return err
-		}
-		if lease.Owner == id {
-			if err = os.Remove(s.leasePath(c.Spec.ID)); err != nil {
+	for _, i := range stored {
+		if i.ID == id {
+			if err = s.revokeToken(i); err != nil {
 				return err
 			}
+			log.Printf("admin action=revoke contributor=%s invitation=%s", i.Contributor, i.ID)
+			return nil
 		}
 	}
-	log.Printf("admin action=revoke contributor=%s invitation=%s", invitation.Contributor, id)
-	return nil
+	return fmt.Errorf("invitation unavailable")
 }
 
 func (s *Store) adminStatus() (any, error) {
@@ -75,35 +66,50 @@ func (s *Store) adminStatus() (any, error) {
 	if err != nil {
 		return nil, err
 	}
-	accepted := map[string]int{}
+	byID := map[string]AdminInvitation{}
+	total := 0
 	for _, c := range s.Manifest.Circuits {
+		if c.Spec.Track != Core {
+			continue
+		}
+		total++
 		st, e := s.State(c.Spec.ID)
 		if e != nil {
 			return nil, e
 		}
-		seen := map[string]bool{}
 		for _, receipt := range st.History {
-			seen[receipt.Contributor] = true
-		}
-		for name := range seen {
-			accepted[name]++
+			i := byID[receipt.InvitationID]
+			i.ID = receipt.InvitationID
+			i.Contributor = receipt.Contributor
+			i.Accepted++
+			byID[i.ID] = i
 		}
 	}
-	entries, err := os.ReadDir(filepath.Join(s.Dir, "invitations"))
-	if err != nil && !os.IsNotExist(err) {
+	stored, err := s.storedInvitations()
+	if err != nil {
 		return nil, err
 	}
-	invitations := []AdminInvitation{}
-	for _, entry := range entries {
-		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".json") {
-			continue
+	for _, grant := range stored {
+		if grant.Track == Core {
+			i := byID[grant.ID]
+			i.ID = grant.ID
+			i.Contributor = grant.Contributor
+			i.Expires = grant.Expires
+			i.HasLink = true
+			byID[i.ID] = i
 		}
-		var i Invitation
-		if err = ReadJSON(filepath.Join(s.Dir, "invitations", entry.Name()), &i); err != nil {
-			return nil, err
-		}
-		invitations = append(invitations, AdminInvitation{strings.TrimSuffix(entry.Name(), ".json"), i.Contributor, i.Expires, accepted[i.Contributor], len(i.Jobs)})
 	}
+	invitations := []AdminInvitation{}
+	for _, i := range byID {
+		i.Total = total
+		invitations = append(invitations, i)
+	}
+	sort.Slice(invitations, func(i, j int) bool {
+		if invitations[i].Contributor == invitations[j].Contributor {
+			return invitations[i].ID < invitations[j].ID
+		}
+		return invitations[i].Contributor < invitations[j].Contributor
+	})
 	reservations := []map[string]any{}
 	for _, c := range s.Manifest.Circuits {
 		var lease Lease
@@ -117,7 +123,7 @@ func (s *Store) adminStatus() (any, error) {
 			reservations = append(reservations, map[string]any{"circuit": c.Spec.ID, "expires": lease.Expires})
 		}
 	}
-	return map[string]any{"phase": cp.Lifecycle.Phase, "beacon": cp.Lifecycle.Beacon, "manifest": s.ManifestArtifact, "checkpoint": ref, "invitations": invitations, "reservations": reservations, "insecure_test_setup": s.Manifest.Phase1.InsecureTestSetup, "s3": s.Remote != nil}, nil
+	return map[string]any{"phase": cp.Lifecycle.Phase, "beacon": cp.Lifecycle.Beacon, "manifest": s.ManifestArtifact, "checkpoint": ref, "invitations": invitations, "reservations": reservations, "insecure_test_setup": s.Manifest.Phase1.InsecureTestSetup, "s3": s.Remote != nil, "coordinator_key": s.Manifest.CoordinatorKey, "beacon_recoveries": cp.Lifecycle.Recoveries}, nil
 }
 
 // AdminHandler is only for a separate loopback listener reached through SSM.
@@ -168,7 +174,7 @@ func (s *Store) AdminHandler(origin, publicURL string) (http.Handler, error) {
 		}
 		i, e := s.InviteQueued(publicURL, input.Name, Core, time.Duration(input.Hours)*time.Hour)
 		if e != nil {
-			http.Error(w, "Cannot invite. The ceremony must be open and before its beacon deadline.", 409)
+			http.Error(w, "Cannot invite. Use a unique active pseudonym and check the ceremony deadline.", 409)
 			return
 		}
 		link, e := InvitationLink(i)
@@ -176,7 +182,32 @@ func (s *Store) AdminHandler(origin, publicURL string) (http.Handler, error) {
 			http.Error(w, "Cannot create invitation link.", 500)
 			return
 		}
-		log.Printf("admin action=invite contributor=%s invitation=%s", i.Contributor, hashBytes([]byte(i.Token)))
+		log.Printf("admin action=invite contributor=%s invitation=%s", i.Contributor, i.ID)
+		respond(w, map[string]any{"link": link, "invitation": i})
+	})
+	mux.HandleFunc("POST /admin/reissue", func(w http.ResponseWriter, r *http.Request) {
+		var input struct {
+			ID    string `json:"id"`
+			Hours int    `json:"hours"`
+		}
+		if !adminJSON(w, r, &input) {
+			return
+		}
+		if !validInvitationID(input.ID) || input.Hours < 1 || input.Hours > 168 {
+			http.Error(w, "Invalid invitation ID or lifetime.", 400)
+			return
+		}
+		i, e := s.ReissueInvitation(publicURL, input.ID, time.Duration(input.Hours)*time.Hour)
+		if e != nil {
+			http.Error(w, "Cannot reissue. Check the ceremony deadline and active pseudonyms.", 409)
+			return
+		}
+		link, e := InvitationLink(i)
+		if e != nil {
+			http.Error(w, "Cannot create invitation link.", 500)
+			return
+		}
+		log.Printf("admin action=reissue contributor=%s invitation=%s", i.Contributor, i.ID)
 		respond(w, map[string]any{"link": link, "invitation": i})
 	})
 	mux.HandleFunc("POST /admin/revoke", func(w http.ResponseWriter, r *http.Request) {

@@ -43,6 +43,15 @@ ${s3_config}
 CONFIG
 chown root:spr /etc/spr/s3.json
 chmod 640 /etc/spr/s3.json
+cat > /etc/spr/signing-secret <<'SECRET'
+${signing_secret}
+SECRET
+chown root:spr /etc/spr/signing-secret
+chmod 640 /etc/spr/signing-secret
+cat > /usr/local/bin/spr-load-signing-key <<'LOADER'
+${key_loader}
+LOADER
+chmod 755 /usr/local/bin/spr-load-signing-key
 %{ if public_https ~}
 cat > /etc/caddy/Caddyfile <<'CADDY'
 {
@@ -78,7 +87,8 @@ Group=spr
 WorkingDirectory=/var/lib/spr
 Environment=AWS_REGION=${region}
 Environment=GOMAXPROCS=4
-ExecStart=/opt/spr/current/native/spr-ceremony-linux-amd64 serve --dir /var/lib/spr/core --s3-config /etc/spr/s3.json --listen 127.0.0.1:8080 --public-url ${origin} --web-dir /opt/spr/current/browser --native-dir /opt/spr/current/native --browser-download-origin https://${jsondecode(s3_config).bucket}.s3.${region}.amazonaws.com${public_https ? " --trust-loopback-proxy" : ""}
+ExecStartPre=/usr/local/bin/spr-load-signing-key
+ExecStart=/opt/spr/current/native/spr-ceremony-linux-amd64 serve --signing-key /var/lib/spr/signing/coordinator.private.asc --dir /var/lib/spr/core --s3-config /etc/spr/s3.json --listen 127.0.0.1:8080 --public-url ${origin} --web-dir /opt/spr/current/browser --native-dir /opt/spr/current/native --browser-download-origin https://${jsondecode(s3_config).bucket}.s3.${region}.amazonaws.com${public_https ? " --trust-loopback-proxy" : ""}
 Restart=on-failure
 RestartSec=10
 TimeoutStopSec=75
@@ -109,7 +119,8 @@ ConditionPathExists=/var/lib/spr/core/manifest.json
 User=spr
 Group=spr
 Environment=AWS_REGION=${region}
-ExecStart=/opt/spr/current/native/spr-ceremony-linux-amd64 admin --dir /var/lib/spr/core --s3-config /etc/spr/s3.json --listen 127.0.0.1:8081 --public-url ${origin}
+ExecStartPre=/usr/local/bin/spr-load-signing-key
+ExecStart=/opt/spr/current/native/spr-ceremony-linux-amd64 admin --signing-key /var/lib/spr/signing/coordinator.private.asc --dir /var/lib/spr/core --s3-config /etc/spr/s3.json --listen 127.0.0.1:8081 --public-url ${origin}
 Restart=on-failure
 RestartSec=10
 UMask=0077

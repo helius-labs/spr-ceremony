@@ -17,7 +17,7 @@ import urllib.request
 
 REPO = 'helius-labs/spr-ceremony'
 NATIVE = [f'spr-ceremony-{system}-{arch}' for system in ['darwin', 'linux'] for arch in ['amd64', 'arm64']]
-BROWSER = {'index.html', 'style.css', 'app.js', 'worker.js', 'network.js', 'wasm_exec.js', 'contributor.wasm', 'hosted.html', 'hosted.js', 'protocol.js', 'cache.js', 'transfer.js', 'session.js', 'build.json', 'admin.html', 'admin.js'}
+BROWSER = {'index.html', 'style.css', 'app.js', 'worker.js', 'network.js', 'wasm_exec.js', 'contributor.wasm', 'hosted.html', 'hosted.js', 'protocol.js', 'cache.js', 'transfer.js', 'session.js', 'signatures.js', 'signature-worker.js', 'signatures.wasm', 'build.json', 'admin.html', 'admin.js'}
 CHECK_HOSTED_BUILD = 'import json,sys; actual=json.load(open(sys.argv[1])); expected=json.load(open(sys.argv[2])); assert actual == expected and actual["source_modified"] is False, "Hosted build differs from release"'
 
 
@@ -68,6 +68,9 @@ def check_initial_campaign(manifest, checkpoint, rehearsal, access_mode):
     circuits = manifest.get('circuits', [])
     marked_test = manifest.get('phase1', {}).get('insecure_test_setup')
     phase = checkpoint.get('lifecycle', {}).get('phase')
+    key = manifest.get('coordinator_key', {})
+    if not re.fullmatch('[a-f0-9]{64}', key.get('sha256', '')) or not 0 < key.get('size', 0) <= 16384:
+        raise ValueError('Initial deployment requires a manifest-bound signing key')
     if not circuits or any(c.get('spec', {}).get('track') != 'core' for c in circuits):
         raise ValueError('Initial deployment requires core circuits only')
     if rehearsal:
@@ -106,6 +109,8 @@ def main():
     parser.add_argument('--source-sha', required=True, help='independently reviewed source commit')
     parser.add_argument('--ceremony', type=Path, help='first deployment only: prepared production core store')
     parser.add_argument('--rehearsal', action='store_true', help='allow a marked test campaign, only on an internal SSM deployment')
+    parser.add_argument('--signing-key', type=Path, help='initial deployment: private key file; defaults to ceremony/private/coordinator.private.asc')
+    parser.add_argument('--replace-test-manifest', help='internal rehearsal only: archive and replace this exact existing test manifest')
     args = parser.parse_args()
     if not re.fullmatch(r'[a-f0-9]{40}', args.source_sha) or not re.fullmatch(r'v[0-9]+\.[0-9]+\.[0-9]+(?:-rc\.[0-9]+)?', args.release):
         parser.error('Invalid version or source revision')
@@ -114,6 +119,10 @@ def main():
     access_mode = outputs.get('access_mode', {}).get('value', 'public')
     if args.rehearsal and (access_mode != 'ssm' or not args.ceremony):
         parser.error('--rehearsal requires --ceremony and access_mode = ssm')
+    if args.replace_test_manifest and (not args.rehearsal or not re.fullmatch('[a-f0-9]{64}', args.replace_test_manifest)):
+        parser.error('--replace-test-manifest requires --rehearsal and a current manifest digest')
+    if args.signing_key and not args.ceremony:
+        parser.error('--signing-key is only used with --ceremony')
     config = json.loads(get('s3_config'))
     aws = ['aws', '--region', config['region'], '--output', 'json']
     if json.loads(run(*aws, 'sts', 'get-caller-identity'))['Account'] not in get('bucket'):
@@ -132,6 +141,9 @@ def main():
         for name in NATIVE + ['join.sh', 'build.json', 'SHA256SUMS', 'provenance.json']:
             shutil.copyfile(assets / name, native / name)
         extract_browser(assets / f'browser-{args.source_sha}.tar.gz', bundle / 'browser')
+        # Runtime key-loading code must match the attested release's source.
+        loader = subprocess.check_output(['git', 'show', args.source_sha + ':infra/aws/load-signing-key.py'])
+        (bundle / 'load-signing-key.py').write_bytes(loader)
         recovery = None
         if args.ceremony:
             manifest = json.loads((args.ceremony / 'manifest.json').read_text())
@@ -142,8 +154,16 @@ def main():
             platform = 'darwin' if os.uname().sysname == 'Darwin' else 'linux'
             arch = 'arm64' if os.uname().machine in ['arm64', 'aarch64'] else 'amd64'
             binary = assets / f'spr-ceremony-{platform}-{arch}'; binary.chmod(0o700)
+            private_key = args.signing_key or args.ceremony / 'private/coordinator.private.asc'
+            run(binary, 'check-signing-key', '--dir', args.ceremony, '--signing-key', private_key)
             subprocess.run([str(binary), 'sync', '--dir', str(args.ceremony), '--s3-config', str(config_path), '--out', str(bundle / 'recovery.json')], check=True)
             recovery = json.loads((bundle / 'recovery.json').read_text())
+            # AWS redacts SecretString in CloudTrail. The command contains only a
+            # protected filename; no key bytes enter argv, SSM, S3, or Terraform.
+            run(*aws, 'secretsmanager', 'put-secret-value', '--secret-id', get('signing_key_secret_arn'),
+                '--client-request-token', recovery['manifest']['sha256'],
+                '--version-stages', 'campaign-' + recovery['manifest']['sha256'],
+                '--secret-string', 'file://' + str(private_key.resolve()))
         archive = tmp / 'deployment.tar.gz'
         with tarfile.open(archive, 'w:gz') as tar:
             for path in sorted(bundle.rglob('*')): tar.add(path, arcname=str(path.relative_to(bundle)), recursive=False)
@@ -168,14 +188,43 @@ chmod 755 "$stage/release/native/spr-ceremony-linux-amd64"
 if [ ! -d {q(release_dir)} ]; then mv "$stage/release" {q(release_dir)}; fi
 '''
         if recovery:
+            incoming = '/var/lib/spr/incoming-' + recovery['manifest']['sha256']
+            commands += f'''
+test ! -e {q(incoming)}
+runuser -u spr -- env GOMAXPROCS=4 {q(release_dir + '/native/spr-ceremony-linux-amd64')} restore --out {q(incoming)} --s3-config /etc/spr/s3.json --recovery-file {q(release_dir + '/recovery.json')} --recovery-sha256 {q(digest(bundle / 'recovery.json'))}
+runuser -u spr -- env GOMAXPROCS=4 {q(release_dir + '/native/spr-ceremony-linux-amd64')} audit --dir {q(incoming)} --manifest-sha256 {q(recovery['manifest']['sha256'])} --checkpoint-sha256 {q(recovery['checkpoint']['sha256'])}
+'''
+            if args.replace_test_manifest:
+                guard = 'import hashlib,json,sys; b=open("/var/lib/spr/core/manifest.json","rb").read(); m=json.loads(b); assert hashlib.sha256(b).hexdigest()==sys.argv[1] and m["phase1"]["insecure_test_setup"] is True, "Existing test campaign mismatch"'
+                commands += f'''
+python3 -c {q(guard)} {q(args.replace_test_manifest)}
+test ! -e {q('/var/lib/spr/replaced-' + args.replace_test_manifest)}
+systemctl stop spr-admin spr-ceremony
+mv /var/lib/spr/core {q('/var/lib/spr/replaced-' + args.replace_test_manifest)}
+'''
             commands += f'''
 test ! -e /var/lib/spr/core
-runuser -u spr -- env GOMAXPROCS=4 {q(release_dir + '/native/spr-ceremony-linux-amd64')} restore --out /var/lib/spr/core --s3-config /etc/spr/s3.json --recovery-file {q(release_dir + '/recovery.json')} --recovery-sha256 {q(digest(bundle / 'recovery.json'))}
-runuser -u spr -- env GOMAXPROCS=4 {q(release_dir + '/native/spr-ceremony-linux-amd64')} audit --dir /var/lib/spr/core --manifest-sha256 {q(recovery['manifest']['sha256'])} --checkpoint-sha256 {q(recovery['checkpoint']['sha256'])}
+mv {q(incoming)} /var/lib/spr/core
 '''
         commands += f'''
 test -f /var/lib/spr/core/manifest.json
 systemctl stop spr-admin spr-ceremony
+install -o root -g root -m 0755 {q(release_dir + '/load-signing-key.py')} /usr/local/bin/spr-load-signing-key
+printf '%s\\n' {q(get('signing_key_secret_arn'))} > /etc/spr/signing-secret
+chown root:spr /etc/spr/signing-secret
+chmod 640 /etc/spr/signing-secret
+python3 - <<'UNITS'
+from pathlib import Path
+for name in ['spr-ceremony', 'spr-admin']:
+    path = Path('/etc/systemd/system/' + name + '.service')
+    text = path.read_text()
+    if 'ExecStartPre=/usr/local/bin/spr-load-signing-key' not in text:
+        text = text.replace('ExecStart=', 'ExecStartPre=/usr/local/bin/spr-load-signing-key\\nExecStart=', 1)
+    if '--signing-key ' not in text:
+        text = text.replace(' --dir /var/lib/spr/core', ' --signing-key /var/lib/spr/signing/coordinator.private.asc --dir /var/lib/spr/core', 1)
+    path.write_text(text)
+UNITS
+systemctl daemon-reload
 ln -s {q(release_dir)} "$stage/current"
 mv -Tf "$stage/current" /opt/spr/current
 systemctl start spr-ceremony spr-admin

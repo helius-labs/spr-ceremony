@@ -78,7 +78,7 @@ func TestCloseAndVerifiedFinalization(t *testing.T) {
 	server := httptest.NewServer(s.Handler())
 	defer server.Close()
 	for _, track := range []string{Core, Large} {
-		i, e := s.InviteQueued(server.URL, "alice", track, time.Hour)
+		i, e := s.InviteQueued(server.URL, "alice-"+track, track, time.Hour)
 		must(t, e)
 		c := NewClient(t.TempDir())
 		c.Progress = io.Discard

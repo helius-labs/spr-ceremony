@@ -1,8 +1,6 @@
 package ceremony
 
 import (
-	"crypto/rand"
-	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -11,6 +9,8 @@ import (
 	"path/filepath"
 	"reflect"
 	"time"
+
+	"github.com/helius-labs/spr-ceremony/internal/signing"
 
 	mpc "github.com/consensys/gnark/backend/groth16/bn254/mpcsetup"
 )
@@ -37,14 +37,17 @@ type Manifest struct {
 	SourceRevision string    `json:"source_revision"`
 	Phase1         SRSInfo   `json:"phase1"`
 	Circuits       []Circuit `json:"circuits"`
+	CoordinatorKey *Artifact `json:"coordinator_key,omitempty"`
 }
 type Receipt struct {
-	Circuit     string    `json:"circuit"`
-	Sequence    int       `json:"sequence"`
-	Contributor string    `json:"contributor"`
-	Parent      Artifact  `json:"parent"`
-	Output      Artifact  `json:"output"`
-	AcceptedAt  time.Time `json:"accepted_at"`
+	InvitationID string    `json:"invitation_id"`
+	Signature    string    `json:"signature,omitempty"`
+	Circuit      string    `json:"circuit"`
+	Sequence     int       `json:"sequence"`
+	Contributor  string    `json:"contributor"`
+	Parent       Artifact  `json:"parent"`
+	Output       Artifact  `json:"output"`
+	AcceptedAt   time.Time `json:"accepted_at"`
 }
 type State struct {
 	Circuit string    `json:"circuit"`
@@ -57,6 +60,9 @@ type Job struct {
 	Sequence int      `json:"sequence"`
 }
 type Invitation struct {
+	signingPublicKey  []byte
+	ID                string    `json:"id"`
+	Signature         string    `json:"signature,omitempty"`
 	Format            string    `json:"format"`
 	URL               string    `json:"url"`
 	Token             string    `json:"token"`
@@ -73,6 +79,7 @@ type Store struct {
 	Manifest         Manifest
 	ManifestArtifact Artifact
 	Remote           BlobStore
+	Signer           *signing.Signer `json:"-"`
 	now              func() time.Time
 	checkpointRef    *Artifact
 }
@@ -135,12 +142,12 @@ func (s *Store) putBinary(v io.WriterTo) (Artifact, error) {
 
 // Prepare builds in a sibling staging directory and publishes only a complete
 // manifest. It never replaces an existing ceremony directory.
-func Prepare(dir, source, srsPath string, info SRSInfo, inputs []Input, maxDomain uint64) error {
+func Prepare(dir, source, srsPath string, info SRSInfo, inputs []Input, maxDomain uint64, publicKey ...[]byte) error {
 	if len(inputs) == 0 || source == "" {
 		return fmt.Errorf("source revision and nonempty circuit set are required")
 	}
-	if info.Format != Format || info.Engine != Engine || info.Provenance == "" {
-		return fmt.Errorf("invalid SRS metadata")
+	if e := validatePhase1Policy(info); e != nil {
+		return e
 	}
 	if e := Check(srsPath, info.Artifact); e != nil {
 		return e
@@ -157,6 +164,26 @@ func Prepare(dir, source, srsPath string, info SRSInfo, inputs []Input, maxDomai
 	}
 	defer os.RemoveAll(tmp)
 	s := &Store{Dir: tmp, Manifest: Manifest{Format: Format, Engine: Engine, SourceRevision: source, Phase1: info}}
+	if len(publicKey) > 1 {
+		return fmt.Errorf("only one coordinator key is allowed")
+	}
+	if len(publicKey) == 1 {
+		if _, e = signing.PublicFingerprint(publicKey[0]); e != nil {
+			return e
+		}
+		path := filepath.Join(tmp, "coordinator.asc")
+		if e = os.WriteFile(path, publicKey[0], 0600); e != nil {
+			return e
+		}
+		key, err := s.put(path)
+		if err != nil {
+			return err
+		}
+		s.Manifest.CoordinatorKey = &key
+		if e = os.Remove(path); e != nil {
+			return e
+		}
+	}
 	srs, e := ReadSRS(srsPath, maxDomain)
 	if e != nil {
 		return e
@@ -263,6 +290,14 @@ func Open(dir string) (*Store, error) {
 	if _, _, e := s.checkpoint(); e != nil {
 		return nil, fmt.Errorf("checkpoint unavailable; restore or recreate a pre-checkpoint prototype directory: %w", e)
 	}
+	keyPath := filepath.Join(dir, "private", "coordinator.private.asc")
+	if _, err := os.Lstat(keyPath); err == nil {
+		if err = s.LoadSigningKey(keyPath); err != nil {
+			return nil, err
+		}
+	} else if !os.IsNotExist(err) {
+		return nil, err
+	}
 	return s, nil
 }
 func (s *Store) circuit(id string) (Circuit, error) {
@@ -272,66 +307,6 @@ func (s *Store) circuit(id string) (Circuit, error) {
 		}
 	}
 	return Circuit{}, fmt.Errorf("unknown circuit")
-}
-
-func (s *Store) Invite(url, name, track string, ttl time.Duration) (Invitation, error) {
-	return s.invite(url, name, track, ttl, "")
-}
-
-func (s *Store) InviteQueued(url, name, track string, ttl time.Duration) (Invitation, error) {
-	return s.invite(url, name, track, ttl, "queue")
-}
-
-func (s *Store) invite(url, name, track string, ttl time.Duration, mode string) (Invitation, error) {
-	if !safeID.MatchString(name) || (track != Core && track != Large) || ttl <= 0 {
-		return Invitation{}, fmt.Errorf("invalid contributor, track, or lifetime")
-	}
-	unlock, e := s.lock()
-	if e != nil {
-		return Invitation{}, e
-	}
-	defer unlock()
-	cp, _, e := s.checkpoint()
-	if e != nil {
-		return Invitation{}, e
-	}
-	if cp.Lifecycle.Phase != "open" {
-		return Invitation{}, fmt.Errorf("ceremony is not open")
-	}
-	if cp.Lifecycle.Beacon != nil && !s.nowUTC().Before(cp.Lifecycle.Beacon.RoundTime) {
-		return Invitation{}, fmt.Errorf("announced beacon deadline has passed")
-	}
-	b := make([]byte, 32)
-	if _, e := rand.Read(b); e != nil {
-		return Invitation{}, e
-	}
-	i := Invitation{Format: Format, URL: url, Token: hex.EncodeToString(b), ManifestSHA256: s.ManifestArtifact.SHA256, Contributor: name, Track: track, Expires: time.Now().UTC().Add(ttl), InsecureTestSetup: s.Manifest.Phase1.InsecureTestSetup}
-	i.Mode = mode
-	for _, c := range s.Manifest.Circuits {
-		if c.Spec.Track == track {
-			st, e := s.State(c.Spec.ID)
-			if e != nil {
-				return i, e
-			}
-			i.Jobs = append(i.Jobs, Job{Circuit: c, Input: st.Head, Sequence: len(st.History) + 1})
-		}
-	}
-	if len(i.Jobs) == 0 {
-		return i, fmt.Errorf("no circuits in requested track")
-	}
-	return i, WriteJSON(filepath.Join(s.Dir, "invitations", hashBytes([]byte(i.Token))+".json"), i)
-}
-
-func (s *Store) invitation(token string) (Invitation, error) {
-	var i Invitation
-	if len(token) != 64 {
-		return i, fmt.Errorf("invalid invitation")
-	}
-	e := ReadJSON(filepath.Join(s.Dir, "invitations", hashBytes([]byte(token))+".json"), &i)
-	if e != nil || time.Now().After(i.Expires) {
-		return i, fmt.Errorf("invalid or expired invitation")
-	}
-	return i, nil
 }
 
 // Accept serializes the commit under a coordinator lock, including across
@@ -373,8 +348,13 @@ func (s *Store) Accept(token, id, path string) (Receipt, error) {
 		return Receipt{}, e
 	}
 	for _, r := range st.History {
-		if r.Output == a && (r.Parent == job.Input || i.Mode == "queue") && r.Contributor == i.Contributor {
+		if r.Output == a && (r.Parent == job.Input || i.Mode == "queue") && r.InvitationID == i.ID {
 			return r, nil
+		}
+	}
+	for _, r := range st.History {
+		if r.InvitationID == i.ID {
+			return Receipt{}, fmt.Errorf("invitation already contributed to this circuit")
 		}
 	}
 	if cp.Lifecycle.Phase != "open" {
@@ -406,7 +386,10 @@ func (s *Store) Accept(token, id, path string) (Receipt, error) {
 	if cp.Lifecycle.Beacon != nil && !s.nowUTC().Before(cp.Lifecycle.Beacon.RoundTime) {
 		return Receipt{}, fmt.Errorf("announced beacon deadline passed during verification")
 	}
-	r := Receipt{Circuit: id, Sequence: job.Sequence, Contributor: i.Contributor, Parent: st.Head, Output: a, AcceptedAt: time.Now().UTC()}
+	r := Receipt{InvitationID: i.ID, Circuit: id, Sequence: job.Sequence, Contributor: i.Contributor, Parent: st.Head, Output: a, AcceptedAt: s.nowUTC()}
+	if e = s.signReceipt(&r); e != nil {
+		return Receipt{}, e
+	}
 	st.Head = a
 	st.History = append(st.History, r)
 	ref, e := s.putJSON(st)
@@ -440,8 +423,8 @@ func (s *Store) audit(track string, maxDomain uint64, consume func(Circuit, *mpc
 		return err
 	}
 	phase1 := s.Manifest.Phase1
-	if phase1.Format != Format || phase1.Engine != Engine || phase1.Provenance == "" {
-		return fmt.Errorf("invalid Phase 1 metadata")
+	if err := validatePhase1Policy(phase1); err != nil {
+		return err
 	}
 	if err := Check(s.Object(phase1.Artifact), phase1.Artifact); err != nil {
 		return err

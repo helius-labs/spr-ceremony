@@ -160,6 +160,9 @@ func objectKey(a Artifact) string { return "objects/" + a.SHA256 }
 // checkpoint. Arbitrary files from the working directory are never uploaded.
 func (s *Store) references(cp Checkpoint, ref Artifact) ([]Artifact, error) {
 	refs := []Artifact{ref, cp.Manifest, s.Manifest.Phase1.Artifact}
+	if s.Manifest.CoordinatorKey != nil {
+		refs = append(refs, *s.Manifest.CoordinatorKey)
+	}
 	if cp.Previous != nil {
 		refs = append(refs, *cp.Previous)
 	}

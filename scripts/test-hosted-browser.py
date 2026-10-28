@@ -73,6 +73,9 @@ async def main():
                 async def connected(browser, name, context=None):
                     invitation, link, path = invite(name)
                     context = context or await browser.new_context(accept_downloads=True)
+                    # A browser may never settle the optional wake-lock release.
+                    # Completion must still restore controls and native handoff.
+                    await context.add_init_script("Object.defineProperty(navigator, 'wakeLock', {value: {request: async () => ({release: () => new Promise(() => {})})}})")
                     page = await context.new_page()
                     await page.goto(link)
                     await page.wait_for_function('() => !document.querySelector("#start").disabled', timeout=20000)
@@ -86,7 +89,7 @@ async def main():
                         await page.screenshot(path=out / 'error.png', full_page=True)
                     assert stage == ('complete' if success else 'error'), (stage, message)
                     if success: assert '2 / 2 accepted' in await page.locator('#count').inner_text()
-                    await page.wait_for_function('() => document.querySelector("#pause").disabled')
+                    await page.wait_for_function('() => document.querySelector("#pause").disabled && !document.querySelector("#native").disabled')
                 for engine in ['chromium', 'webkit']:
                     browser = await getattr(pw, engine).launch()
                     context, page, invitation, path = await connected(browser, engine)
@@ -221,6 +224,33 @@ async def main():
                 checks.append('altered acceptance receipt rejected; authentic checkpoint recovers response')
                 await context.close()
 
+                # Valid receipt fields do not compensate for a forged GPG signature.
+                context, page, invitation, path = await connected(browser, 'receipt_signature')
+                async def alter_signature(route):
+                    response = await route.fetch()
+                    body = await response.json(); body['signature'] = 'invalid signature'
+                    await route.fulfill(response=response, json=body)
+                await context.route('**/v1/contributions/**', alter_signature)
+                await page.locator('#start').click(); await terminal(page, False)
+                assert 'Invalid coordinator signature' in await page.locator('#status').inner_text()
+                await context.unroute('**/v1/contributions/**', alter_signature)
+                await page.locator('#start').click(); await terminal(page)
+                checks.append('forged GPG acceptance signature rejected; authentic signed checkpoint recovers')
+                await context.close()
+
+                invitation, link, path = invite('invitation_signature')
+                context = await browser.new_context()
+                async def alter_invitation(route):
+                    response = await route.fetch()
+                    body = await response.json(); body['signature'] = 'invalid signature'
+                    await route.fulfill(response=response, json=body)
+                await context.route('**/v1/invitation', alter_invitation)
+                page = await context.new_page(); await page.goto(link)
+                await page.wait_for_function('() => document.querySelector("#status").textContent.includes("Invalid coordinator signature")')
+                assert await page.locator('#start').is_disabled()
+                checks.append('forged GPG invitation signature rejected before contribution')
+                await context.close()
+
                 # Abort while downloading releases the lease immediately.
                 context, page, invitation, path = await connected(browser, 'pause_resume')
                 started_download = asyncio.Event()
@@ -332,7 +362,7 @@ async def main():
             # All browser updates receive independent native cryptographic replay.
             cli('audit', '--dir', 'ceremony', '--manifest-sha256', manifest_hash)
             states = json.loads(cli('status', '--dir', 'ceremony'))['circuits']
-            expected = {'chromium', 'webkit', 'lost_response', 'reload', 'parallel_a', 'parallel_b', 'native_handoff', 'stale_recovery', 'intervening_native', 'receipt_mismatch', 'pause_resume'}
+            expected = {'chromium', 'webkit', 'lost_response', 'reload', 'parallel_a', 'parallel_b', 'native_handoff', 'stale_recovery', 'intervening_native', 'receipt_mismatch', 'receipt_signature', 'pause_resume'}
             assert all({r['contributor'] for r in s['history']} == expected and len(s['history']) == len(expected) for s in states)
             checks.append('native audit replays every browser transition; no duplicate accepted entries')
             if endpoint:

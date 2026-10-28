@@ -130,6 +130,12 @@ func FetchBeacon(ctx context.Context, raw string, plan BeaconPlan) (BeaconProof,
 }
 
 func (s *Store) OpenCeremony(plan BeaconPlan) (Artifact, error) {
+	if err := validatePhase1Policy(s.Manifest.Phase1); err != nil {
+		return Artifact{}, err
+	}
+	if err := validateBeaconPolicy(s.Manifest.Phase1.InsecureTestSetup, &plan); err != nil {
+		return Artifact{}, err
+	}
 	unlock, err := s.lock()
 	if err != nil {
 		return Artifact{}, err
@@ -150,6 +156,12 @@ func (s *Store) OpenCeremony(plan BeaconPlan) (Artifact, error) {
 		return ref, fmt.Errorf("beacon must be scheduled at least one hour in the future")
 	}
 	if !s.Manifest.Phase1.InsecureTestSetup {
+		if err = Check(s.Object(s.Manifest.Phase1.Artifact), s.Manifest.Phase1.Artifact); err != nil {
+			return ref, err
+		}
+		if err = s.RequireSigningKey(); err != nil {
+			return ref, err
+		}
 		core, _ := Select(Core, "")
 		if len(s.Manifest.Circuits) != len(core) {
 			return ref, fmt.Errorf("production core ceremony requires all 41 circuits")
@@ -161,6 +173,9 @@ func (s *Store) OpenCeremony(plan BeaconPlan) (Artifact, error) {
 		}
 	}
 	now := s.nowUTC()
+	if !now.Add(time.Hour).Before(plan.RoundTime) {
+		return ref, fmt.Errorf("beacon must be scheduled at least one hour in the future")
+	}
 	cp.Lifecycle = Lifecycle{Phase: "open", Beacon: &checked, OpenedAt: &now}
 	if err = s.commitCheckpoint(cp, ref); err != nil {
 		return Artifact{}, err
@@ -188,6 +203,9 @@ func (s *Store) Finalize(out string, proof BeaconProof, maxDomain uint64) (Artif
 		return ref, fmt.Errorf("announced beacon and closure are required")
 	}
 	plan := *cp.Lifecycle.Beacon
+	if err = validateBeaconPolicy(s.Manifest.Phase1.InsecureTestSetup, &plan); err != nil {
+		return ref, err
+	}
 	if !cp.Lifecycle.ClosedAt.Before(plan.RoundTime) || s.nowUTC().Before(plan.RoundTime) {
 		return ref, fmt.Errorf("invalid closure or beacon timing")
 	}

@@ -6,6 +6,8 @@ Batch 4999 is deferred. Custom rings and batch 10 remain excluded.
 
 ## Implemented controls
 
+- A shared production check pins the exact public Phase 1 SRS hash and size in
+  preparation, opening, audit and export verification.
 - Frozen compilation metadata and Phase 1 provenance, per-circuit transcripts,
   bounded contribution decoding, and cryptographic verification before acceptance.
   Independent audits reproduce each reduced SRS from the manifest's full Phase 1
@@ -17,6 +19,12 @@ Batch 4999 is deferred. Custom rings and batch 10 remain excluded.
   bounded uploads, and disk preflight.
 - An immutable checkpoint chain binding circuit heads and lifecycle. S3
   publication precedes acceptance; conditional writes reject stale coordinators.
+- Production beacons pin quicknet’s chain hash. Explicit missed-deadline recovery
+  preserves circuit states and records old/new rounds, reason and prior checkpoint.
+- Manifest-bound coordinator OpenPGP signatures authenticate invitations and
+  acceptance receipts in native clients, browsers and audits. Progress is keyed by
+  unique invitation ID; duplicate active pseudonyms are rejected. Link reissue
+  preserves ID and progress while revoking the previous token.
 - Announced future drand beacon, close-before-beacon checks, frozen heads,
   signature verification, one final export, and independent key reproduction.
 - Hash-verified S3 recovery including finalized keys; private tokens and leases
@@ -57,10 +65,12 @@ presigned downloads, publication outages, lost PUT responses, stale ETags,
 competing coordinators, corruption, and restore against Moto 5.1.14 pinned by
 container digest. Moto is an emulator, not proof of AWS policy behavior.
 
-Terraform formatting and configuration validation pass; no production account
-resources have been applied. A read-only plan in eu-north-1 creates 31 isolated
-resources and modifies none; hostname, budget and live recovery validation remain
-outstanding. Rust verifier code is pinned to Zolana's actual
+Terraform formatting and configuration validation pass. An internal SSM-only
+rehearsal is deployed in eu-north-1 without inbound ports or a public hostname.
+Real AWS checks verified S3 encryption, versioning, CORS and conditional-write
+policy; accepted contributions survived a stopped-coordinator S3 restore and
+cryptographic audit. This is a two-circuit test campaign, not the 41-circuit public
+campaign or a full failure/recovery certification. Rust verifier code is pinned to Zolana's actual
 `groth16-solana` revision `70a93803e5f55b8425301d506c625169ef557c9d`.
 
 The actual 41 core circuits compiled from Zolana
@@ -166,9 +176,8 @@ its keys in Zolana.
 3. A real AWS staging drill with the deployed IAM/bucket policy: presigned access,
    interrupted transfer, response loss/retry, coordinator crash, restore/audit,
    competing coordinator rejection, and final-key recovery. Confirm encryption,
-   version retention, alarm routing, fencing, and backup ownership. No actual
-   production resources have been deployed yet; eu-north-1 access and the
-   proposed Terraform plan have been checked.
+   version retention, alarm routing, fencing, and backup ownership. The internal two-circuit deployment has passed initial policy and restore
+   checks; full-core failure, final-key recovery and alert delivery checks remain.
 4. Freeze and independently reproduce the chosen public Phase 1 transcript and
    circuit compilation. Announce and externally witness the manifest, beacon
    network/round, and closure checkpoint before the beacon is revealed.

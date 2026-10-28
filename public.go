@@ -18,6 +18,7 @@ type PublicCeremony struct {
 	Phase             string          `json:"phase"`
 	InsecureTestSetup bool            `json:"insecure_test_setup"`
 	Phase1            Artifact        `json:"phase1"`
+	CoordinatorKey    *Artifact       `json:"coordinator_key,omitempty"`
 	Participants      int             `json:"participants"`
 	Circuits          []PublicCircuit `json:"circuits"`
 	FinalExport       *Artifact       `json:"final_export,omitempty"`
@@ -31,7 +32,7 @@ func (s *Store) PublicView() (PublicCeremony, error) {
 	if err != nil {
 		return view, err
 	}
-	view = PublicCeremony{Format: "spr-public-ceremony-v1", Manifest: cp.Manifest, Checkpoint: ref, Phase: cp.Lifecycle.Phase, InsecureTestSetup: s.Manifest.Phase1.InsecureTestSetup, Phase1: s.Manifest.Phase1.Artifact, Circuits: []PublicCircuit{}}
+	view = PublicCeremony{Format: "spr-public-ceremony-v1", Manifest: cp.Manifest, Checkpoint: ref, Phase: cp.Lifecycle.Phase, InsecureTestSetup: s.Manifest.Phase1.InsecureTestSetup, Phase1: s.Manifest.Phase1.Artifact, CoordinatorKey: s.Manifest.CoordinatorKey, Circuits: []PublicCircuit{}}
 	keys := map[string]ExportedCircuit{}
 	if cp.Lifecycle.Phase == "finalized" {
 		if cp.Lifecycle.FinalExport == nil {
@@ -67,7 +68,7 @@ func (s *Store) PublicView() (PublicCeremony, error) {
 		}
 		item := PublicCircuit{ID: c.Spec.ID, R1CS: c.R1CS, Head: state.Head, Contributions: len(state.History)}
 		for _, receipt := range state.History {
-			names[receipt.Contributor] = true
+			names[receipt.InvitationID] = true
 		}
 		if view.FinalExport != nil {
 			key, ok := keys[c.Spec.ID]

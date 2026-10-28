@@ -21,6 +21,9 @@ func (s *Store) VerifyExport(dir string, maxDomain uint64) error {
 }
 
 func (s *Store) verifyExport(dir string, maxDomain uint64) error {
+	if err := validatePhase1Policy(s.Manifest.Phase1); err != nil {
+		return err
+	}
 	var m ExportManifest
 	if e := ReadJSON(filepath.Join(dir, "export.json"), &m); e != nil {
 		return e
@@ -31,6 +34,9 @@ func (s *Store) verifyExport(dir string, maxDomain uint64) error {
 	if !m.InsecureTestSetup || m.BeaconProof != nil {
 		if m.BeaconPlan == nil || m.BeaconProof == nil || m.Closure == nil {
 			return fmt.Errorf("final export requires a verified beacon and closure")
+		}
+		if err := validateBeaconPolicy(s.Manifest.Phase1.InsecureTestSetup, m.BeaconPlan); err != nil {
+			return err
 		}
 		current, _, e := s.checkpoint()
 		if e != nil {

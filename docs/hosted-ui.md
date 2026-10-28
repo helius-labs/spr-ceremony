@@ -79,7 +79,7 @@ run shows **2 / 2 accepted** and enables **Save receipts**.
    The local rehearsal has no binary downloads unless `--native-dir` is set;
    the already built `spr-ceremony` is sufficient for testing the handoff.
 4. Repeat with a fresh pseudonym in another browser. Accepted contributors are
-   identified by pseudonym, so reusing Alice's invitation will correctly show
+   identified by unique invitation ID, so reusing Alice's invitation will correctly show
    completed work instead of creating a new participant.
 5. For a manual pause or reload during work, use browser network throttling or a
    real core rehearsal: the toy circuits finish too quickly for reliable manual
@@ -170,7 +170,7 @@ chmod +x spr-ceremony-darwin-arm64
 
 The website polls the published checkpoint and shows accepted progress. It does
 not launch local programs or require a localhost bridge. Pause the browser before
-switching clients. Native work uses the same pseudonym and skips already accepted
+switching clients. Native work uses the same invitation ID and skips already accepted
 circuits; an unaccepted browser output is not imported into the native workspace.
 
 Serve the four platform binaries by passing `--native-dir` pointing at a verified
@@ -275,3 +275,9 @@ and recovery drill, and intended-device tests including macOS Safari, sleeping
 and reopening a laptop, storage pressure, and the full 41-circuit session are
 still required. This implementation and passing CI do not replace those checks
 or the [core ceremony launch gates](readiness.md#release-gates).
+
+Invitations and acceptance receipts carry coordinator OpenPGP signatures, checked
+inside a dedicated Go WebAssembly verifier. The manifest pins its public key.
+The control panel's **Reissue link** rotates access while preserving the public
+invitation ID. A fresh invitation with a reused name starts new participation.
+No personal GPG key or browser extension is required.

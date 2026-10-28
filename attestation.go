@@ -10,6 +10,7 @@ import (
 // signature or proof that the coordinator included these receipts in its final
 // checkpoint; auditors compare them with the independently published transcript.
 type Attestation struct {
+	InvitationID      string    `json:"invitation_id"`
 	Format            string    `json:"format"`
 	Engine            string    `json:"engine"`
 	ManifestSHA256    string    `json:"manifest_sha256"`
@@ -24,10 +25,14 @@ type Attestation struct {
 // Every invited circuit must have a locally verified acceptance receipt.
 func VerifyLocalContributions(work string, i Invitation) (Attestation, error) {
 	a := Attestation{Format: Format, Engine: Engine, ManifestSHA256: i.ManifestSHA256,
-		Contributor: i.Contributor, Track: i.Track, InsecureTestSetup: i.InsecureTestSetup}
-	if i.Format != Format || !safeID.MatchString(i.Contributor) || len(i.Jobs) == 0 ||
+		InvitationID: i.ID, Contributor: i.Contributor, Track: i.Track, InsecureTestSetup: i.InsecureTestSetup}
+	if i.Format != Format || !safeID.MatchString(i.Contributor) || !validInvitationID(i.ID) || len(i.Jobs) == 0 ||
 		(Artifact{SHA256: i.ManifestSHA256, Size: 1}).Validate() != nil || (i.Track != Core && i.Track != Large) {
 		return a, fmt.Errorf("invalid invitation for offline verification")
+	}
+	verify, err := offlineReceiptVerifier(work, i)
+	if err != nil {
+		return a, err
 	}
 	seen := map[string]bool{}
 	for _, scope := range i.Jobs {
@@ -36,7 +41,7 @@ func VerifyLocalContributions(work string, i Invitation) (Attestation, error) {
 			return a, fmt.Errorf("invalid or duplicate circuit")
 		}
 		seen[id] = true
-		dir := filepath.Join(work, i.ManifestSHA256, i.Contributor, id)
+		dir := filepath.Join(work, i.ManifestSHA256, i.ID, id)
 		entries, err := os.ReadDir(dir)
 		if err != nil {
 			return a, err
@@ -54,8 +59,11 @@ func VerifyLocalContributions(work string, i Invitation) (Attestation, error) {
 			if err != nil {
 				return a, err
 			}
-			if r.Circuit != id || r.Contributor != i.Contributor || r.Sequence < 1 || r.Parent.SHA256 != entry.Name() {
+			if r.Circuit != id || r.Contributor != i.Contributor || r.InvitationID != i.ID || r.Sequence < 1 || r.Parent.SHA256 != entry.Name() {
 				return a, fmt.Errorf("local receipt mismatch: %s", id)
+			}
+			if err = verify(r); err != nil {
+				return a, err
 			}
 			input, output := filepath.Join(parentDir, "input.ph2"), filepath.Join(parentDir, "output.ph2")
 			if err = Check(input, r.Parent); err != nil {
@@ -85,7 +93,7 @@ func (s *Store) VerifyAttestation(a Attestation) error {
 		return err
 	}
 	if a.Format != Format || a.Engine != Engine || a.ManifestSHA256 != view.ManifestArtifact.SHA256 ||
-		a.InsecureTestSetup != view.Manifest.Phase1.InsecureTestSetup || !safeID.MatchString(a.Contributor) ||
+		a.InsecureTestSetup != view.Manifest.Phase1.InsecureTestSetup || !safeID.MatchString(a.Contributor) || !validInvitationID(a.InvitationID) ||
 		(a.Track != Core && a.Track != Large) || len(a.Receipts) == 0 {
 		return fmt.Errorf("attestation provenance mismatch")
 	}
@@ -97,7 +105,7 @@ func (s *Store) VerifyAttestation(a Attestation) error {
 			return err
 		}
 		key := fmt.Sprintf("%s/%d", r.Circuit, r.Sequence)
-		if c.Spec.Track != a.Track || r.Contributor != a.Contributor || r.Sequence < 1 || seen[key] ||
+		if c.Spec.Track != a.Track || r.Contributor != a.Contributor || r.InvitationID != a.InvitationID || r.Sequence < 1 || seen[key] ||
 			r.Parent.Validate() != nil || r.Output.Validate() != nil {
 			return fmt.Errorf("invalid attested receipt")
 		}
@@ -107,6 +115,9 @@ func (s *Store) VerifyAttestation(a Attestation) error {
 		}
 		if r.Sequence > len(st.History) {
 			return fmt.Errorf("attested contribution is absent: %s #%d", r.Circuit, r.Sequence)
+		}
+		if err = view.verifyMessage("receipt", r); err != nil {
+			return err
 		}
 		expected := st.History[r.Sequence-1]
 		if !sameReceipt(r, expected) {

@@ -15,6 +15,17 @@ type Lifecycle struct {
 	ClosedAt    *time.Time          `json:"closed_at,omitempty"`
 	ClosedHeads map[string]Artifact `json:"closed_heads,omitempty"`
 	FinalExport *Artifact           `json:"final_export,omitempty"`
+	Recoveries  []BeaconRecovery    `json:"beacon_recoveries,omitempty"`
+}
+
+// BeaconRecovery preserves the superseded plan and its exact checkpoint.
+// Recovery only resumes an open campaign after its closure deadline was missed.
+type BeaconRecovery struct {
+	PreviousCheckpoint Artifact   `json:"previous_checkpoint"`
+	Previous           BeaconPlan `json:"previous"`
+	Next               BeaconPlan `json:"next"`
+	RecoveredAt        time.Time  `json:"recovered_at"`
+	Reason             string     `json:"reason"`
 }
 
 type BeaconPlan struct {

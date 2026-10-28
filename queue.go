@@ -70,7 +70,7 @@ func (s *Store) Claim(token string, ttl time.Duration) (Claim, error) {
 		}
 		found := false
 		for _, r := range st.History {
-			if r.Contributor == i.Contributor {
+			if r.InvitationID == i.ID {
 				receipts = append(receipts, r)
 				found = true
 			}
@@ -97,7 +97,7 @@ func (s *Store) Claim(token string, ttl time.Duration) (Claim, error) {
 		}
 		complete := false
 		for _, r := range st.History {
-			if r.Contributor == i.Contributor {
+			if r.InvitationID == i.ID {
 				complete = true
 				break
 			}
@@ -172,7 +172,7 @@ func (s *Store) Renew(token, id string, ttl time.Duration) (Claim, error) {
 	}
 	// Acceptance may race the last heartbeat, including after closure.
 	for _, receipt := range st.History {
-		if receipt.Contributor == i.Contributor {
+		if receipt.InvitationID == i.ID {
 			return Claim{Done: true}, nil
 		}
 	}

@@ -30,19 +30,25 @@ func main() {
 }
 func run(args []string) error {
 	if len(args) == 0 {
-		return fmt.Errorf("usage: spr-ceremony <version|catalog|demo|test-srs|phase1|import-ph1|prepare|open|close|finalize|serve|admin|invite|join|contribute|verify-contribution|verify-attestation|status|checkpoint|sync|restore|fetch-export|audit|export|verify-export> [flags]")
+		return fmt.Errorf("usage: spr-ceremony <version|catalog|keygen|bind-key|check-signing-key|demo|test-srs|phase1|import-ph1|prepare|open|recover-beacon|close|finalize|serve|admin|invite|join|contribute|verify-contribution|verify-attestation|status|checkpoint|sync|restore|fetch-export|audit|export|verify-export> [flags]")
 	}
 	f := flag.NewFlagSet(args[0], flag.ContinueOnError)
 	dir := f.String("dir", "ceremony-data", "coordinator ceremony directory")
 	track := f.String("track", ceremony.Core, "core or batch-4999; large track is always opt-in")
 	out := f.String("out", "", "output path (must be new for prepare/demo/export)")
 	maxDomain := f.Uint64("max-domain", 1<<22, "maximum in-memory SRS domain; does not establish hardware suitability")
+	signingKey := f.String("signing-key", "", "private coordinator OpenPGP key file (0600)")
 	remoteConfig := f.String("s3-config", "", "S3 configuration JSON (credentials use the AWS default chain)")
 	var action func() error
 	open := func() (*ceremony.Store, error) {
 		s, e := ceremony.Open(*dir)
 		if e != nil {
 			return nil, e
+		}
+		if *signingKey != "" {
+			if e = s.LoadSigningKey(*signingKey); e != nil {
+				return nil, e
+			}
 		}
 		path := *remoteConfig
 		if path == "" {
@@ -80,9 +86,36 @@ func run(args []string) error {
 				Build  *debug.BuildInfo `json:"build"`
 			}{ceremony.Engine, info})
 		}
+	case "keygen":
+		public := f.String("public-out", "", "public coordinator key output")
+		action = func() error { return ceremony.GenerateSigningKey(*out, *public) }
+	case "bind-key":
+		public := f.String("public-key", "", "coordinator public key")
+		action = func() error {
+			if err := requireOut(); err != nil {
+				return err
+			}
+			s, err := open()
+			if err != nil {
+				return err
+			}
+			b, err := os.ReadFile(*public)
+			if err != nil {
+				return err
+			}
+			return s.BindSigningKey(*out, b)
+		}
+	case "check-signing-key":
+		action = func() error {
+			s, err := open()
+			if err != nil {
+				return err
+			}
+			return s.RequireSigningKey()
+		}
 	case "open":
 		info := f.String("chain-info", "", "authenticated drand chain-info JSON")
-		hash := f.String("chain-hash", "", "independently authenticated drand chain hash")
+		hash := f.String("chain-hash", ceremony.QuicknetChainHash, "drand chain hash; production requires quicknet")
 		round := f.Uint64("round", 0, "future drand round announced before opening")
 		action = func() error {
 			b, e := os.ReadFile(*info)
@@ -100,6 +133,21 @@ func run(args []string) error {
 			ref, e := s.OpenCeremony(plan)
 			if e != nil {
 				return e
+			}
+			return print(ref)
+		}
+	case "recover-beacon":
+		round := f.Uint64("round", 0, "later round on the same beacon network, more than one hour in the future")
+		checkpoint := f.String("checkpoint-sha256", "", "checkpoint reviewed before recovery")
+		reason := f.String("reason", "", "public recovery reason; never include credentials")
+		action = func() error {
+			s, err := open()
+			if err != nil {
+				return err
+			}
+			ref, err := s.RecoverBeacon(*round, *checkpoint, *reason)
+			if err != nil {
+				return err
 			}
 			return print(ref)
 		}
@@ -243,11 +291,7 @@ func run(args []string) error {
 			if e := requireOut(); e != nil {
 				return e
 			}
-			create := ceremony.DemoCore
-			if *largeFixture {
-				create = ceremony.Demo
-			}
-			if e := create(*out); e != nil {
+			if e := ceremony.DemoSigned(*out, *largeFixture); e != nil {
 				return e
 			}
 			s, e := ceremony.Open(*out)
@@ -360,6 +404,9 @@ func run(args []string) error {
 					}
 				}
 			}
+			if e = s.RequireSigningKey(); e != nil {
+				return e
+			}
 			fmt.Fprintln(os.Stderr, "Serving", *listen, "manifest", s.ManifestArtifact.SHA256)
 			handler := s.HandlerWithOptions(ceremony.ServerOptions{MaxUploads: *maxUploads, LeaseTTL: *leaseTTL, UploadTimeout: 30 * time.Minute, MinFreeBytes: *reserve})
 			if *webDir != "" {
@@ -392,6 +439,9 @@ func run(args []string) error {
 			if err != nil {
 				return err
 			}
+			if err = s.RequireSigningKey(); err != nil {
+				return err
+			}
 			handler, err := s.AdminHandler("http://"+*listen, *publicURL)
 			if err != nil {
 				return err
@@ -412,6 +462,7 @@ func run(args []string) error {
 			}
 		}
 	case "invite":
+		resumeID := f.String("reissue-id", "", "retain this invitation ID and replace its private link")
 		base := f.String("url", "http://127.0.0.1:8080", "coordinator HTTPS origin")
 		name := f.String("name", "", "contributor pseudonym (letters, digits, underscore, hyphen)")
 		ttl := f.Duration("ttl", 24*time.Hour, "invitation lifetime")
@@ -430,7 +481,12 @@ func run(args []string) error {
 			if e != nil {
 				return e
 			}
-			i, e := s.InviteQueued(*base, *name, *track, *ttl)
+			var i ceremony.Invitation
+			if *resumeID != "" {
+				i, e = s.ReissueInvitation(*base, *resumeID, *ttl)
+			} else {
+				i, e = s.InviteQueued(*base, *name, *track, *ttl)
+			}
 			if e != nil {
 				return e
 			}

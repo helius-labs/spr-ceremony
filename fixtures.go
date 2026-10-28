@@ -2,6 +2,7 @@ package ceremony
 
 import (
 	"fmt"
+	"github.com/helius-labs/spr-ceremony/internal/signing"
 	"os"
 	"path/filepath"
 
@@ -57,7 +58,15 @@ func Demo(dir string) error {
 // DemoCore keeps the participant rehearsal within the same core-only scope.
 func DemoCore(dir string) error { return demo(dir, false) }
 
-func demo(dir string, withLarge bool) error {
+// DemoSigned exercises the same identity signatures used by hosted ceremonies.
+func DemoSigned(dir string, withLarge bool) error {
+	key, err := signing.New()
+	if err != nil {
+		return err
+	}
+	return demo(dir, withLarge, key)
+}
+func demo(dir string, withLarge bool, keys ...*signing.Signer) error {
 	tmp, e := os.MkdirTemp("", "spr-demo-*")
 	if e != nil {
 		return e
@@ -89,5 +98,19 @@ func demo(dir string, withLarge bool) error {
 	if e = ReadJSON(srs+".json", &info); e != nil {
 		return e
 	}
-	return Prepare(dir, "rehearsal-only", srs, info, inputs, 64)
+	var public [][]byte
+	if len(keys) > 0 {
+		public = append(public, keys[0].Public())
+	}
+	if e = Prepare(dir, "rehearsal-only", srs, info, inputs, 64, public...); e != nil {
+		return e
+	}
+	if len(keys) > 0 {
+		private, err := keys[0].Private()
+		if err != nil {
+			return err
+		}
+		return writePublicFile(filepath.Join(dir, "private", "coordinator.private.asc"), private)
+	}
+	return nil
 }

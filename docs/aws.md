@@ -115,19 +115,27 @@ state, plans or variable files. Data volumes have destruction protection.
 
 Prepare the production core directory following the [operator runbook](operations.md).
 Use the pinned public Phase 1 SRS and the reviewed 41-circuit compilation.
-The initial campaign must be `prepared`, without contributions or test markers.
+The initial campaign must be `prepared`, with a manifest-bound coordinator public
+key and without contributions or test markers.
 
 From the repository root:
 
 ```sh
 python3 scripts/deploy-aws.py --release RELEASE_VERSION \
-  --source-sha REVIEWED_SOURCE_COMMIT --ceremony ceremony-data/core
+  --source-sha REVIEWED_SOURCE_COMMIT --ceremony ceremony-data/core \
+  --signing-key ceremony-data/core.private.asc
 ```
 
 The helper verifies the immutable GitHub release, provenance and hashes. It
 syncs only public ceremony objects to S3, restores them on the host, runs a full
 transcript audit, installs the exact release, and checks the HTTPS build and
-installer. Initial preparation and audit can take substantial time. Monitor the
+installer. The matching private signing key is stored in Secrets Manager with
+its version ID equal to the manifest SHA256. Only secret metadata enters
+Terraform state. Key bytes never enter S3 bundles, SSM commands or logs. Services
+retrieve that exact version into a 0600 file on encrypted EBS before starting;
+the binary checks it against the manifest. Retain an independent private-key
+backup and restrict Secrets Manager/SSM administration.
+Initial preparation and audit can take substantial time. Monitor the
 reported SSM command; do not start another deployment while it is running.
 
 For software updates, omit `--ceremony`. Existing invitations and accepted work
@@ -156,7 +164,7 @@ reject alternate hosts. The AWS CLI needs the
 
 1. Enter a stable, public pseudonym and expiration.
 2. Click **Create invitation**. Copy the link and send it privately yourself.
-3. Watch accepted counts. Reissue with the same pseudonym to resume expired access.
+3. **Reissue link** preserves the invitation ID and progress, and invalidates the old link.
 4. **Revoke** removes that invitation and its reservation. Accepted contributions remain.
 
 Private links are shown once, cleared after five minutes, and never included in
@@ -176,9 +184,11 @@ proving/verifying keys with hashes. It never treats a temporary export as final.
 
 S3 commits every accepted contribution and lifecycle transition. Immutable
 objects precede a conditional checkpoint update; a stale coordinator is fenced
-out. Daily encrypted EBS snapshots retain seven days of private invitations and
-local reservations. Restoring from public S3 omits invitations by design: reissue
-them with the same pseudonyms. Stop/fence the previous coordinator before recovery.
+out. Daily encrypted EBS snapshots retain seven days of private invitations,
+reservations and the local signing-key copy; restrict snapshot access accordingly.
+Restoring from public S3 omits invitations by design: reissue the original IDs
+from the control panel. The same signing-key version is restored independently
+from Secrets Manager. Stop/fence the previous coordinator before recovery.
 
 Before launch, perform and record the [recovery drill](operations.md#recovery)
 in the actual AWS account, verify private bucket/CORS policies, exercise an
@@ -186,3 +196,21 @@ interrupted participant upload, and confirm alert delivery. Disk alarms trigger
 above 80%; health/metric gaps alarm after two five-minute periods. Preserve
 independently witnessed manifest/checkpoint hashes outside the coordinator.
 Engineering readiness and a deployed HTTPS site do not replace independent review.
+
+## Upgrade the internal unsigned prototype
+
+Old prototype invitations and receipts predate signatures and unique IDs. They
+cannot be retroactively authenticated. Preserve the old test campaign and start
+a fresh marked rehearsal:
+
+```sh
+./spr-ceremony demo --out ceremony-data/signed-rehearsal
+python3 scripts/deploy-aws.py --release RELEASE_VERSION --source-sha REVIEWED_SOURCE_COMMIT \
+  --ceremony ceremony-data/signed-rehearsal --rehearsal \
+  --replace-test-manifest EXACT_OLD_TEST_MANIFEST_SHA256
+```
+
+This option is restricted to SSM deployments and explicitly marked test data.
+The host archives the old store at `replaced-<manifest>`; its S3 history remains.
+It refuses a production campaign or a mismatched old digest. New invitation
+links are required. Normal upgrades omit the replacement and ceremony flags.

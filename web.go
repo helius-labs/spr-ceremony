@@ -15,7 +15,7 @@ import (
 	"time"
 )
 
-var BrowserAssets = []string{"index.html", "style.css", "app.js", "worker.js", "network.js", "wasm_exec.js", "contributor.wasm", "hosted.html", "hosted.js", "protocol.js", "cache.js", "transfer.js", "session.js"}
+var BrowserAssets = []string{"index.html", "style.css", "app.js", "worker.js", "network.js", "wasm_exec.js", "contributor.wasm", "hosted.html", "hosted.js", "protocol.js", "cache.js", "transfer.js", "session.js", "signatures.js", "signature-worker.js", "signatures.wasm"}
 
 type BrowserBuild struct {
 	Format         string              `json:"format"`
@@ -92,7 +92,7 @@ func WebHandler(api http.Handler, options WebOptions) (http.Handler, error) {
 			path = "/{$}"
 		}
 		mux.HandleFunc("GET "+path, func(w http.ResponseWriter, r *http.Request) {
-			if name == "worker.js" {
+			if name == "worker.js" || name == "signature-worker.js" {
 				// The computation worker has no access to S3 or any off-origin endpoint.
 				w.Header().Set("Content-Security-Policy", browserCSP(""))
 			}

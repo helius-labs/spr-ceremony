@@ -15,24 +15,33 @@ async function refresh() {
   $("storage").textContent = view.s3 ? "S3 archive connected." : "Local storage. Connect S3 before launch.";
   $("beacon").textContent = view.beacon ? `Close before ${new Date(view.beacon.round_time).toLocaleString()} · beacon round ${view.beacon.round}` : "No beacon planned.";
   $("leases").textContent = `${view.reservations.length} active reservations`;
-  $("pins").textContent = `Manifest: ${view.manifest.sha256}\nCheckpoint: ${view.checkpoint.sha256}`;
+  $("pins").textContent = `Manifest: ${view.manifest.sha256}\nCheckpoint: ${view.checkpoint.sha256}${view.coordinator_key ? `\nSigning key: ${view.coordinator_key.sha256}` : ""}`;
   $("invite").disabled = view.phase !== "open" || (view.beacon && Date.now() >= Date.parse(view.beacon.round_time));
   $("invitations").replaceChildren();
   for (const invitation of view.invitations) {
     const row = document.createElement("div"); row.className = "invitation-row";
     const text = document.createElement("p"); text.textContent = `${invitation.contributor} · ${invitation.accepted}/${invitation.total} accepted`;
-    const expiry = document.createElement("p"); expiry.className = "detail"; expiry.textContent = `${Date.parse(invitation.expires) < Date.now() ? "Expired" : "Expires"} ${new Date(invitation.expires).toLocaleString()}`;
+    const expiry = document.createElement("p"); expiry.className = "detail"; expiry.textContent = !invitation.has_link ? "Link revoked or unavailable. Reissue to resume." : `${Date.parse(invitation.expires) < Date.now() ? "Expired" : "Expires"} ${new Date(invitation.expires).toLocaleString()}`;
     const revoke = document.createElement("button"); revoke.className = "secondary"; revoke.textContent = "Revoke";
     revoke.addEventListener("click", () => action(async () => { if (!confirm(`Revoke access for ${invitation.contributor}? Accepted contributions remain.`)) return; await api("revoke", { id: invitation.id }); clearSecret(); await refresh(); say("Access revoked."); }));
-    row.append(text, expiry, revoke); $("invitations").append(row);
+    const reissue = document.createElement("button"); reissue.className = "secondary"; reissue.textContent = "Reissue link";
+    reissue.disabled = $("invite").disabled;
+    reissue.addEventListener("click", () => action(async () => {
+      clearSecret(); showSecret(await api("reissue", { id: invitation.id, hours: Number($("hours").value) }));
+      await refresh(); say("Previous link replaced. Progress preserved.");
+    }));
+    revoke.disabled = !invitation.has_link;
+    const identity = document.createElement("p"); identity.className = "detail"; identity.textContent = `ID ${invitation.id.slice(0, 12)}`; identity.title = invitation.id;
+    row.append(text, expiry, identity, reissue, revoke); $("invitations").append(row);
   }
   if (!view.invitations.length) $("invitations").textContent = "No invitations yet.";
 }
+function showSecret(value) { secret = value; $("link").value = secret.link; $("secret").hidden = false; clearTimer = setTimeout(clearSecret, 300000); }
 async function action(fn) { try { await fn(); } catch { say("Request failed. Refresh and check the ceremony state.", true); } }
 $("invite").addEventListener("click", () => action(async () => {
   const name = $("name").value.trim(); if (!/^[a-z0-9][a-z0-9_-]{0,99}$/.test(name)) { say("Use lowercase letters, numbers, underscores or hyphens.", true); return; }
   $("invite").disabled = true; clearSecret();
-  try { secret = await api("invite", { name, hours: Number($("hours").value) }); $("link").value = secret.link; $("secret").hidden = false; clearTimer = setTimeout(clearSecret, 300000); say("Share the private link."); }
+  try { showSecret(await api("invite", { name, hours: Number($("hours").value) })); say("Share the private link."); }
   finally { await refresh(); }
 }));
 $("copy").addEventListener("click", () => action(async () => { if (secret) { await navigator.clipboard.writeText(secret.link); say("Copied. Share privately."); } }));

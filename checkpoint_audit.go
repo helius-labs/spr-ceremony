@@ -4,14 +4,28 @@ import (
 	"fmt"
 	"reflect"
 	"slices"
+	"time"
 )
 
 // AuditCheckpoints validates the append-only publication history independently
 // of MPC verification. It detects rolled-back heads and rewritten beacon plans.
 func (s *Store) AuditCheckpoints() error {
+	if err := validatePhase1Policy(s.Manifest.Phase1); err != nil {
+		return err
+	}
 	current, _, err := s.checkpoint()
 	if err != nil {
 		return err
+	}
+	if current.Lifecycle.Phase != "prepared" {
+		if err = validateBeaconPolicy(s.Manifest.Phase1.InsecureTestSetup, current.Lifecycle.Beacon); err != nil {
+			return err
+		}
+	}
+	if s.Manifest.CoordinatorKey != nil || current.Lifecycle.Phase != "prepared" {
+		if _, err = s.PublicSigningKey(); err != nil {
+			return err
+		}
 	}
 	for current.Previous != nil {
 		if err = Check(s.Object(*current.Previous), *current.Previous); err != nil {
@@ -51,26 +65,41 @@ func (s *Store) AuditCheckpoints() error {
 				return fmt.Errorf("checkpoint rewrote circuit history: %s", id)
 			}
 			last := newState.History[len(oldState.History)]
-			if last.Circuit != id || last.Sequence != len(newState.History) || last.Parent != oldState.Head || last.Output != newState.Head {
+			if !validInvitationID(last.InvitationID) || !safeID.MatchString(last.Contributor) || last.AcceptedAt.IsZero() || last.Circuit != id || last.Sequence != len(newState.History) || last.Parent != oldState.Head || last.Output != newState.Head {
 				return fmt.Errorf("invalid checkpoint receipt")
+			}
+			for _, receipt := range oldState.History {
+				if receipt.InvitationID == last.InvitationID {
+					return fmt.Errorf("duplicate invitation contribution")
+				}
+			}
+			if err = s.verifyMessage("receipt", last); err != nil {
+				return err
 			}
 		}
 		switch previous.Lifecycle.Phase + "->" + current.Lifecycle.Phase {
 		case "open->open":
-			if changes != 1 || !reflect.DeepEqual(previous.Lifecycle, current.Lifecycle) || !reflect.DeepEqual(previous.Exports, current.Exports) {
+			if len(current.Lifecycle.Recoveries) != len(previous.Lifecycle.Recoveries) {
+				if err = s.auditBeaconRecovery(previous, current); err != nil {
+					return err
+				}
+			} else if changes != 1 || !reflect.DeepEqual(previous.Lifecycle, current.Lifecycle) || !reflect.DeepEqual(previous.Exports, current.Exports) {
 				return fmt.Errorf("invalid contribution checkpoint")
 			}
 		case "prepared->open":
-			if changes != 0 || current.Lifecycle.ClosedAt != nil || len(current.Lifecycle.ClosedHeads) != 0 || current.Lifecycle.FinalExport != nil || current.Lifecycle.Beacon == nil || current.Lifecycle.OpenedAt == nil || !current.Lifecycle.OpenedAt.Before(current.Lifecycle.Beacon.RoundTime) || !reflect.DeepEqual(previous.Exports, current.Exports) {
+			if changes != 0 || current.Lifecycle.ClosedAt != nil || len(current.Lifecycle.ClosedHeads) != 0 || current.Lifecycle.FinalExport != nil || current.Lifecycle.Beacon == nil || len(current.Lifecycle.Recoveries) != 0 || current.Lifecycle.OpenedAt == nil || !current.Lifecycle.OpenedAt.Add(time.Hour).Before(current.Lifecycle.Beacon.RoundTime) || !reflect.DeepEqual(previous.Exports, current.Exports) {
 				return fmt.Errorf("invalid opening checkpoint")
 			}
 			p := current.Lifecycle.Beacon
+			if err := validateBeaconPolicy(s.Manifest.Phase1.InsecureTestSetup, p); err != nil {
+				return err
+			}
 			checked, e := NewBeaconPlan(p.ChainInfo, p.ChainHash, p.Round)
 			if e != nil || !checked.RoundTime.Equal(p.RoundTime) {
 				return fmt.Errorf("invalid announced beacon plan")
 			}
 		case "open->closed":
-			if changes != 0 || !reflect.DeepEqual(previous.Lifecycle.OpenedAt, current.Lifecycle.OpenedAt) || current.Lifecycle.FinalExport != nil || !samePlan(previous.Lifecycle.Beacon, current.Lifecycle.Beacon) || current.Lifecycle.ClosedAt == nil || !reflect.DeepEqual(previous.Exports, current.Exports) {
+			if changes != 0 || !reflect.DeepEqual(previous.Lifecycle.OpenedAt, current.Lifecycle.OpenedAt) || current.Lifecycle.FinalExport != nil || !samePlan(previous.Lifecycle.Beacon, current.Lifecycle.Beacon) || !reflect.DeepEqual(previous.Lifecycle.Recoveries, current.Lifecycle.Recoveries) || current.Lifecycle.ClosedAt == nil || !reflect.DeepEqual(previous.Exports, current.Exports) {
 				return fmt.Errorf("invalid closure checkpoint")
 			}
 			if current.Lifecycle.Beacon != nil && !current.Lifecycle.ClosedAt.Before(current.Lifecycle.Beacon.RoundTime) {
@@ -103,7 +132,7 @@ func (s *Store) AuditCheckpoints() error {
 		}
 		current = previous
 	}
-	if current.Lifecycle.OpenedAt != nil || current.Lifecycle.ClosedAt != nil || len(current.Lifecycle.ClosedHeads) != 0 || current.Sequence != 0 || len(current.Exports) != 0 || current.Lifecycle.Beacon != nil || current.Lifecycle.FinalExport != nil {
+	if current.Lifecycle.OpenedAt != nil || current.Lifecycle.ClosedAt != nil || len(current.Lifecycle.ClosedHeads) != 0 || current.Sequence != 0 || len(current.Exports) != 0 || current.Lifecycle.Beacon != nil || current.Lifecycle.FinalExport != nil || len(current.Lifecycle.Recoveries) != 0 {
 		return fmt.Errorf("invalid initial checkpoint")
 	}
 	if current.Lifecycle.Phase != "prepared" && !(s.Manifest.Phase1.InsecureTestSetup && current.Lifecycle.Phase == "open") {

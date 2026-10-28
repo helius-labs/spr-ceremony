@@ -44,12 +44,31 @@ Independent transcript review remains a launch requirement.
 ```sh
 ./spr-ceremony prepare --track core --r1cs-dir core-r1cs \
   --source-revision FROZEN_ZOLANA_COMMIT \
-  --srs ceremony-data/phase1/public-21.srs --out ceremony-data/core
+  --srs ceremony-data/phase1/public-21.srs --out ceremony-data/prepared-core
 ```
 
-Preparation is local and produces a `prepared` checkpoint. It cannot accept
-contributions yet. Publish the manifest digest and source/Phase 1 provenance for
-independent reviewers before opening.
+Preparation, opening, audit and export verification all enforce the same pinned
+public SRS hash and size. Bind a dedicated coordinator signing key before
+publishing the campaign identity:
+
+```sh
+./spr-ceremony keygen --out ceremony-data/core.private.asc --public-out ceremony-data/coordinator.asc
+./spr-ceremony bind-key --dir ceremony-data/prepared-core \
+  --public-key ceremony-data/coordinator.asc --out ceremony-data/core
+```
+
+This creates a new manifest without recalculating the 41 circuits. The original
+prepared directory remains intact. Back up the private key separately; keep it
+0600. Pass `--signing-key ceremony-data/core.private.asc` to `open`, `invite`,
+`serve` and `admin`. On AWS the services load it from Secrets Manager automatically.
+The public key is included in the manifest and S3 archive. The private key is not.
+Publish the final manifest digest and public key fingerprint independently.
+
+Coordinator OpenPGP signatures bind invitations and acceptance receipts to this
+manifest and a unique invitation ID. Native clients, browsers and transcript
+audits verify them. Contributors do not need GPG or personal keys. A coordinator
+signature authenticates acceptance, not the contributor's real-world identity or
+secret erasure. Signed source commits do not authenticate these protocol messages.
 
 ### Independent historical transcript replay
 
@@ -131,7 +150,9 @@ than the announced beacon deadline by a generous closure margin.
 
 ## Open and participate
 
-Use an independently authenticated drand chain-info JSON and chain hash for the
+Production pins quicknet chain hash
+`52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971`.
+Use its independently authenticated chain-info JSON for the
 unchained RFC9380 G1 scheme (`bls-unchained-g1-rfc9380`). Select a specific future
 round allowing time for contributions, closure, and independent witnesses. The
 round must be more than one hour away at opening; normal campaigns need longer.
@@ -142,18 +163,18 @@ not a future round to reuse for a campaign.
 
 ```sh
 ./spr-ceremony open --dir ceremony-data/core --chain-info drand-chain.json \
-  --chain-hash AUTHENTICATED_CHAIN_HASH --round FUTURE_ROUND
+  --signing-key ceremony-data/core.private.asc --round FUTURE_ROUND
 ./spr-ceremony checkpoint --dir ceremony-data/core --out opened-recovery.json
 ```
 
 Publish the opened checkpoint digest, exact beacon network/round, and planned
 closure schedule through an independently witnessed channel. A local timestamp
 or a mutable S3 pointer alone does not prove that announcement preceded the
-beacon. Do not modify an announced plan or restart with a different beacon.
+beacon. Any missed-deadline recovery must use the explicit transition below.
 
 ```sh
 ./spr-ceremony invite --dir ceremony-data/core --url https://CEREMONY_HOST \
-  --name alice --ttl 72h --out invitations/alice.json
+  --signing-key ceremony-data/core.private.asc --name alice --ttl 72h --out invitations/alice.json
 # Alice, on a separate machine:
 ./spr-ceremony contribute --invitation alice.json --work alice-work
 ```
@@ -166,7 +187,11 @@ secret; it cannot attest to host compromise, swap, crash dumps, or secret erasur
 Use independent participants and review per-circuit participation before closure.
 The software minimum of one accepted contribution is not a campaign policy.
 
-If an invitation expires, reissue it with the same contributor name. A queue
+If an invitation expires, select **Reissue link** in the control panel, or run
+`invite --reissue-id INVITATION_ID` with the same URL, signing key and output flags.
+Reissue rotates the bearer token and retains progress. New invitations always
+receive new IDs; reusing a pseudonym never inherits earlier completion. Duplicate
+active pseudonyms are rejected. A queue
 invitation covers all core circuits, with one reserved job at a time. Expired
 reservations are reclaimed. Re-running the client skips that person's accepted
 circuits. A lost coordinator is recovered as below; do not run another writer
@@ -196,8 +221,21 @@ all 41 contribution histories. Close **before** the chosen beacon round:
 Closure freezes the heads and refuses further contributions. It requires at least
 one contribution per circuit and no live reservations. Publish and independently
 witness the closure checkpoint before the beacon is revealed. If the deadline
-is missed, the tool refuses a retroactive close; abandon that campaign and plan
-a new one. There is no override to change the beacon after opening.
+is missed, retroactive closure is refused. Preserve contributions by recording an
+explicit recovery to a later quicknet round, more than one hour in the future:
+
+```sh
+./spr-ceremony recover-beacon --dir ceremony-data/core \
+  --checkpoint-sha256 CURRENT_CHECKPOINT_SHA256 --round NEW_FUTURE_ROUND \
+  --reason "Contribution window exceeded the announced deadline"
+./spr-ceremony checkpoint --dir ceremony-data/core --out recovered-beacon.json
+```
+
+Recovery requires the exact reviewed checkpoint, an open campaign and a missed
+deadline. It records the prior checkpoint, old/new plans, time and public reason.
+Circuit states and accepted contributions stay unchanged. Audits check this
+transition. Closed or finalized campaigns cannot switch beacons. Publish and
+independently witness the new plan before closing against its new deadline.
 
 After the exact round is available, obtain its signed JSON. The endpoint is not
 trusted for randomness: the signature, chain key, round, and optional randomness
@@ -242,8 +280,10 @@ S3 head. Restore into a new directory:
 
 Restore validates every artifact hash and checkpoint history. The separate audit
 replays the MPC transcript. It intentionally does not restore invitation tokens,
-leases, or S3 configuration; issue new invitations under the same contributor
-names. A success receipt guarantees remote publication when S3 was configured.
+leases, the private signing key, or S3 configuration. Restore the same signing
+key from its separate backup, then explicitly reissue each original invitation ID.
+The control panel reconstructs IDs and progress from public receipts.
+A success receipt guarantees remote publication when S3 was configured.
 If a crash occurred after the remote commit but before local acceptance, recover
 the remote head: do not overwrite it or force the old coordinator to continue.
 

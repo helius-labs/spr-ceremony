@@ -3,6 +3,7 @@ module github.com/helius-labs/spr-ceremony
 go 1.27.3
 
 require (
+	github.com/ProtonMail/go-crypto v1.5.2
 	github.com/aws/aws-sdk-go-v2 v1.47.4
 	github.com/aws/aws-sdk-go-v2/config v1.33.11
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.114.5
@@ -34,6 +35,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/sts v1.51.5 // indirect
 	github.com/bits-and-blooms/bitset v1.24.6 // indirect
 	github.com/blang/semver/v4 v4.0.0 // indirect
+	github.com/cloudflare/circl v1.6.3 // indirect
 	github.com/drand/kyber-bls12381 v0.3.3 // indirect
 	github.com/fxamacker/cbor/v2 v2.9.2 // indirect
 	github.com/google/pprof v0.0.0-20260802141513-ef3492d7dac3 // indirect

@@ -66,6 +66,18 @@ async def main():
                         assert token.encode() not in stdout + stderr
                         await page.locator('#refresh').click()
                         await page.wait_for_function('() => document.querySelector("#invitations").textContent.includes("2/2 accepted")')
+                        row = page.locator('.invitation-row').filter(has_text=engine)
+                        await row.locator('button', has_text='Reissue link').click()
+                        await page.wait_for_function('() => !document.querySelector("#secret").hidden')
+                        renewed = await page.locator('#link').input_value()
+                        assert renewed != invitation
+                        assert (await context.request.get(public + '/v1/invitation', headers={'Authorization': 'Bearer ' + token})).status == 401
+                        from urllib.parse import parse_qs, urlsplit
+                        token = parse_qs(urlsplit(renewed).fragment)['token'][0]
+                        await page.locator('#clear').click()
+                        visitor_check = await context.new_page(); await visitor_check.goto(renewed)
+                        await visitor_check.wait_for_function('() => document.querySelector("#count").textContent === "2 / 2 accepted"')
+                        await visitor_check.close()
                         await page.screenshot(path=out / f'{engine}-control.png', full_page=True)
                         assert await page.evaluate('() => document.documentElement.scrollWidth <= innerWidth')
                         visitor = await context.new_page(); await visitor.goto(public)
@@ -87,7 +99,7 @@ async def main():
             finally:
                 for process in processes: process.terminate()
                 for process in processes: process.wait(timeout=15)
-    (out / 'result.json').write_text(json.dumps({'passed': ['Chromium and WebKit: create invitation, hidden native join, resume progress, revoke, private API isolation, public parameters, mobile layout, no persisted tokens']}, indent=2) + '\n')
+    (out / 'result.json').write_text(json.dumps({'passed': ['Chromium and WebKit: create invitation, hidden native join, reissue signed link, preserve ID and progress, revoke, private API isolation, public parameters, mobile layout, no persisted tokens']}, indent=2) + '\n')
     print('Control panel integration passed in Chromium and WebKit.')
 
 

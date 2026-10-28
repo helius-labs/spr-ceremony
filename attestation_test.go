@@ -53,7 +53,7 @@ func TestOfflineAttestationRejectsMissingAndCorruptFiles(t *testing.T) {
 		t.Fatal("attestation leaked invitation data")
 	}
 	r := attestation.Receipts[0]
-	dir := filepath.Join(client.Work, i.ManifestSHA256, i.Contributor, r.Circuit, r.Parent.SHA256)
+	dir := filepath.Join(client.Work, i.ManifestSHA256, i.ID, r.Circuit, r.Parent.SHA256)
 	receipt := filepath.Join(dir, "receipt.json")
 	must(t, os.Rename(receipt, receipt+".saved"))
 	if _, err = VerifyLocalContributions(client.Work, i); err == nil {
@@ -82,7 +82,7 @@ func TestQueueRecoversLostReceiptAfterClosure(t *testing.T) {
 	a, err := VerifyLocalContributions(client.Work, i)
 	must(t, err)
 	r := a.Receipts[0]
-	dir := filepath.Join(client.Work, i.ManifestSHA256, i.Contributor, r.Circuit, r.Parent.SHA256)
+	dir := filepath.Join(client.Work, i.ManifestSHA256, i.ID, r.Circuit, r.Parent.SHA256)
 	receipt := filepath.Join(dir, "receipt.json")
 	// Equivalent on-disk state to a process dying after the server accepted it.
 	must(t, os.Remove(receipt))

@@ -39,7 +39,7 @@ func ValidateURL(raw string) error {
 }
 
 func (c *Client) Run(ctx context.Context, i Invitation, track string) error {
-	if i.Format != Format || i.Track != track || len(i.Jobs) == 0 || len(i.Token) != 64 || !safeID.MatchString(i.Contributor) {
+	if i.Format != Format || i.Track != track || len(i.Jobs) == 0 || len(i.Token) != 64 || !safeID.MatchString(i.Contributor) || !validInvitationID(i.ID) {
 		return fmt.Errorf("invalid invitation or track; batch-4999 requires explicit --track batch-4999")
 	}
 	if track != Core && track != Large {
@@ -76,6 +76,9 @@ func (c *Client) Run(ctx context.Context, i Invitation, track string) error {
 	if m.Engine != Engine || m.Format != Format || m.Phase1.InsecureTestSetup != i.InsecureTestSetup {
 		return fmt.Errorf("manifest engine or test-setup marker mismatch")
 	}
+	if e = c.authenticateSigningKey(ctx, &i, m, b); e != nil {
+		return e
+	}
 	seen := map[string]bool{}
 	for _, job := range i.Jobs {
 		id := job.Circuit.Spec.ID
@@ -104,7 +107,7 @@ func (c *Client) Run(ctx context.Context, i Invitation, track string) error {
 		fmt.Fprintln(c.Progress, "REHEARSAL: coordinator-generated test SRS; outputs are not production keys")
 	}
 	// Reusing one public workspace is safe across reruns, not concurrent writers.
-	workspace := filepath.Join(c.Work, i.ManifestSHA256, i.Contributor)
+	workspace := filepath.Join(c.Work, i.ManifestSHA256, i.ID)
 	if e = os.MkdirAll(workspace, 0700); e != nil {
 		return e
 	}
@@ -136,7 +139,7 @@ func (c *Client) runJob(ctx context.Context, i Invitation, job Job, track string
 	base := strings.TrimRight(i.URL, "/")
 	id := job.Circuit.Spec.ID
 	fmt.Fprintf(c.Progress, "[%s] %s: downloading parent %s\n", track, id, job.Input.SHA256[:12])
-	dir := filepath.Join(c.Work, i.ManifestSHA256, i.Contributor, id, job.Input.SHA256)
+	dir := filepath.Join(c.Work, i.ManifestSHA256, i.ID, id, job.Input.SHA256)
 	if e = os.MkdirAll(dir, 0700); e != nil {
 		return e
 	}
@@ -198,8 +201,11 @@ func (c *Client) runJob(ctx context.Context, i Invitation, job Job, track string
 	}); e != nil {
 		return e
 	}
-	if receipt.Circuit != id || receipt.Sequence != job.Sequence || receipt.Parent != job.Input || receipt.Output != cached.Output || receipt.Contributor != i.Contributor {
+	if receipt.Circuit != id || receipt.Sequence != job.Sequence || receipt.Parent != job.Input || receipt.Output != cached.Output || receipt.Contributor != i.Contributor || receipt.InvitationID != i.ID {
 		return fmt.Errorf("acceptance receipt mismatch")
+	}
+	if e = c.verifyReceipt(i, receipt); e != nil {
+		return e
 	}
 	if e = WriteJSON(filepath.Join(dir, "receipt.json"), receipt); e != nil {
 		return e

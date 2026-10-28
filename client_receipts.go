@@ -7,7 +7,7 @@ import (
 )
 
 func sameReceipt(a, b Receipt) bool {
-	return a.Circuit == b.Circuit && a.Sequence == b.Sequence && a.Contributor == b.Contributor &&
+	return a.InvitationID == b.InvitationID && a.Signature == b.Signature && a.Circuit == b.Circuit && a.Sequence == b.Sequence && a.Contributor == b.Contributor &&
 		a.Parent == b.Parent && a.Output == b.Output && a.AcceptedAt.Equal(b.AcceptedAt)
 }
 
@@ -22,13 +22,16 @@ func (c *Client) recoverReceipts(i Invitation, receipts []Receipt) error {
 	for _, r := range receipts {
 		job, ok := jobs[r.Circuit]
 		key := fmt.Sprintf("%s/%d", r.Circuit, r.Sequence)
-		if !ok || r.Contributor != i.Contributor || r.Sequence < 1 || seen[key] ||
+		if !ok || r.Contributor != i.Contributor || r.InvitationID != i.ID || r.Sequence < 1 || seen[key] ||
 			r.Parent.Validate() != nil || r.Output.Validate() != nil ||
 			r.Parent.Size > c.MaxFileBytes || r.Output.Size > c.MaxFileBytes+1024 {
 			return fmt.Errorf("invalid completion receipt")
 		}
+		if err := c.verifyReceipt(i, r); err != nil {
+			return err
+		}
 		covered[r.Circuit], seen[key] = true, true
-		dir := filepath.Join(c.Work, i.ManifestSHA256, i.Contributor, r.Circuit, r.Parent.SHA256)
+		dir := filepath.Join(c.Work, i.ManifestSHA256, i.ID, r.Circuit, r.Parent.SHA256)
 		path := filepath.Join(dir, "receipt.json")
 		var saved Receipt
 		if err := ReadJSON(path, &saved); err == nil {

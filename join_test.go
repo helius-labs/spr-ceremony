@@ -36,7 +36,7 @@ func TestPrivateLinkJoinAndResume(t *testing.T) {
 	client := testClient(t)
 	var progress bytes.Buffer
 	client.Progress = &progress
-	workspace := filepath.Join(client.Work, invitation.ManifestSHA256, invitation.Contributor)
+	workspace := filepath.Join(client.Work, invitation.ManifestSHA256, invitation.ID)
 	must(t, os.MkdirAll(workspace, 0700))
 	lock, err := os.OpenFile(filepath.Join(workspace, ".participant.lock"), os.O_CREATE|os.O_RDWR, 0600)
 	must(t, err)

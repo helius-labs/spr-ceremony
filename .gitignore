@@ -19,4 +19,5 @@
 .env
 .env.*
 *.pem
+*.private.asc
 __pycache__/

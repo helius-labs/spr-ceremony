@@ -64,7 +64,7 @@ func TestPrivateAdminBoundaryAndRevocation(t *testing.T) {
 	if w.Code != 200 || strings.Contains(w.Body.String(), created.Invitation.Token) || strings.Contains(w.Body.String(), created.Link) {
 		t.Fatal("status leaked private invitation")
 	}
-	w = request("POST", "/admin/revoke", `{"id":"`+hashBytes([]byte(created.Invitation.Token))+`"}`)
+	w = request("POST", "/admin/revoke", `{"id":"`+created.Invitation.ID+`"}`)
 	if w.Code != 200 {
 		t.Fatalf("revoke: %d", w.Code)
 	}

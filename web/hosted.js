@@ -1,3 +1,4 @@
+import { configureSignatures } from "./signatures.js";
 import { ENGINE, hex, require, authenticate, request, deadline, MAX_JSON } from "./protocol.js";
 import { PublicCache } from "./cache.js";
 import { Session } from "./session.js";
@@ -46,7 +47,7 @@ async function connect(value, pin) {
   require(!invitation, "Reload this page to switch invitations");
   status("Checking your invitation…");
   const authenticated = await authenticate(value, pin);
-  const opened = await PublicCache.open(`${value.manifest_sha256}:${value.contributor}`);
+  const opened = await PublicCache.open(`${value.manifest_sha256}:${value.id}`);
   invitation = value; manifestRef = authenticated.ref; cache = opened;
   session = newSession();
   $("join").hidden = true; $("participant").hidden = false;
@@ -93,6 +94,7 @@ async function publicView() {
   }
   const parameters = $("parameter-links"); parameters.replaceChildren(); parameters.className = "key-row";
   link(parameters, "Phase 1", view.phase1); link(parameters, "Manifest", view.manifest); link(parameters, "Checkpoint", view.checkpoint);
+  if (view.coordinator_key) link(parameters, "Signing key", view.coordinator_key);
   if (view.final_export) link(parameters, "Export manifest", view.final_export);
   $("public-pins").textContent = `Manifest: ${view.manifest.sha256}\nCheckpoint: ${view.checkpoint.sha256}`;
   $("keys").replaceChildren();
@@ -107,6 +109,7 @@ async function publicView() {
 async function initialize() {
   require(isSecureContext && crypto.subtle && typeof AbortSignal.any === "function" && typeof indexedDB === "object", "Use a current desktop browser over HTTPS, or use the native client");
   build = JSON.parse(new TextDecoder().decode(await sprFetch("/build.json", 64 << 10, undefined, undefined, deadline())));
+  configureSignatures(build);
   config = JSON.parse(new TextDecoder().decode(await sprFetch("/ui-config.json", 64 << 10, undefined, undefined, deadline())));
   require(build.format === "spr-browser-build-v1" && build.engine === ENGINE && /^[a-f0-9]{40}$/.test(build.source_revision) && config.format === "spr-hosted-ui-v1" && config.origin === location.origin, "Hosted configuration or engine mismatch");
   $("build").textContent = `Engine ${build.engine} · ${build.go_version} · source ${build.source_revision}${build.source_modified ? " (modified rehearsal build)" : ""}`;
@@ -152,7 +155,10 @@ $("start").addEventListener("click", async () => {
     document.documentElement.dataset.stage = e.name === "AbortError" ? "paused" : "error";
     status(e.name === "AbortError" ? "Paused. Resume when ready." : `${e.message.replace(/[. ]+$/, "")}. Retry or use terminal.`, e.name !== "AbortError");
   } finally {
-    active = false; clearInterval(timer); await wakeLock?.release().catch(() => {}); wakeLock = null;
+    active = false; clearInterval(timer);
+    const heldWakeLock = wakeLock; wakeLock = null;
+    // Releasing an optional wake lock must not hold the participant controls.
+    heldWakeLock?.release().catch(() => {});
     const complete = new Set(session.view?.receipts.map(r => r.circuit)).size === invitation.jobs.length;
     $("start").disabled = complete || !browserCapable; $("start").textContent = complete ? "Completed" : "Resume"; $("pause").disabled = true; $("refresh").disabled = false; $("native").disabled = false;
   }

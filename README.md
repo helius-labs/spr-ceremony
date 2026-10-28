@@ -1,7 +1,7 @@
 # Solana Privacy Rings
 
 A trusted setup for **41 core circuits**. Browser or terminal. Private invitations.
-Verified contributions. Public receipts and final keys.
+Verified contributions. Signed invitations and receipts. Public final keys.
 
 Release candidate: [v0.1.0-rc.2](https://github.com/helius-labs/spr-ceremony/releases/tag/v0.1.0-rc.2).
 The public campaign is not open; launch gates are below.
@@ -47,7 +47,8 @@ In another terminal, start the private control panel:
 ```
 
 Open **http://127.0.0.1:8081**, enter a pseudonym, and create an invitation.
-Rehearsal keys are explicitly insecure. [Testing guide](docs/hosted-ui.md).
+Use **Reissue link** to renew access and preserve progress.
+Rehearsal proving keys are explicitly insecure. [Testing guide](docs/hosted-ui.md).
 
 ## Operate
 
@@ -65,6 +66,6 @@ Releases include four native binaries, the browser bundle, a pinned installer,
 checksums and signed provenance. The repository is internal; the deployed site
 mirrors the verified participant downloads without requiring GitHub access.
 
-**Launch gates:** complete the actual AWS restore drill and independent security
+**Launch gates:** complete the full core AWS/browser drill and independent security
 review before opening a production campaign. Engineering tests do not replace
 an external audit. [Evidence and remaining gates](docs/readiness.md).

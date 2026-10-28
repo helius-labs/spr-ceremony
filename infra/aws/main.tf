@@ -141,10 +141,18 @@ resource "aws_iam_role_policy_attachment" "ssm" {
   role       = aws_iam_role.coordinator.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
+# Only metadata enters Terraform state. Key versions are installed separately.
+resource "aws_secretsmanager_secret" "coordinator_key" {
+  name                    = "${var.name}/coordinator-signing-key"
+  description             = "Private OpenPGP coordinator keys, versioned by ceremony manifest digest"
+  recovery_window_in_days = 30
+  lifecycle { prevent_destroy = true }
+}
 resource "aws_iam_role_policy" "runtime" {
   role = aws_iam_role.coordinator.id
   policy = jsonencode({ Version = "2012-10-17", Statement = [
     { Effect = "Allow", Action = "s3:GetObject", Resource = "arn:aws:s3:::${local.bucket}/deployment/*" },
+    { Effect = "Allow", Action = "secretsmanager:GetSecretValue", Resource = aws_secretsmanager_secret.coordinator_key.arn },
     { Effect = "Allow", Action = "cloudwatch:PutMetricData", Resource = "*", Condition = { StringEquals = { "cloudwatch:namespace" = "SPR/Ceremony" } } }
   ] })
 }
@@ -176,10 +184,12 @@ resource "aws_instance" "coordinator" {
     encrypted   = true
   }
   user_data = templatefile("${path.module}/bootstrap.sh.tftpl", {
-    domain       = var.domain, region = var.region, name = var.name,
-    public_https = var.access_mode == "public", origin = local.origin, origin_host = local.origin_host,
-    volume_id    = replace(aws_ebs_volume.data.id, "-", ""),
-    s3_config    = module.archive.s3_config
+    domain         = var.domain, region = var.region, name = var.name,
+    public_https   = var.access_mode == "public", origin = local.origin, origin_host = local.origin_host,
+    volume_id      = replace(aws_ebs_volume.data.id, "-", ""),
+    s3_config      = module.archive.s3_config,
+    signing_secret = aws_secretsmanager_secret.coordinator_key.arn,
+    key_loader     = file("${path.module}/load-signing-key.py")
   })
   user_data_replace_on_change = false
   tags                        = { Name = var.name }
@@ -299,3 +309,5 @@ output "panel_document" { value = aws_ssm_document.panel.name }
 output "participant_document" { value = var.access_mode == "ssm" ? aws_ssm_document.participant[0].name : null }
 output "alarm_topic" { value = aws_sns_topic.alarms.arn }
 output "data_volume" { value = aws_ebs_volume.data.id }
+
+output "signing_key_secret_arn" { value = aws_secretsmanager_secret.coordinator_key.arn }

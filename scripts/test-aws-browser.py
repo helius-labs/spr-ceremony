@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 import sys
 import time
+import traceback
 import urllib.parse
 import urllib.request
 
@@ -59,6 +60,8 @@ async def main():
             assert 'Test ceremony' in await visitor.locator('#notice').inner_text()
             await visitor.locator('#start').click()
             await visitor.wait_for_function('() => document.querySelector("#count").textContent === "2 / 2 accepted"', timeout=300000)
+            print(engine + ': contributions accepted; checking terminal handoff', flush=True)
+            print('Public UI state:', await visitor.evaluate('() => ({stage: document.documentElement.dataset.stage, nativeDisabled: document.querySelector("#native").disabled})'), flush=True)
             assert s3_downloads, 'Browser did not exercise real S3 downloads'
             assert await visitor.evaluate('() => localStorage.length + sessionStorage.length') == 0
             assert not await context.cookies()
@@ -68,6 +71,7 @@ async def main():
             command = await visitor.locator('#verify-command').text_content()
             assert "--proto '=http'" in command and '--bundle provenance.json' in command
             await visitor.screenshot(path=out / (engine + '-participant.png'), full_page=True)
+            print(engine + ': checking control panel progress', flush=True)
             await page.locator('#refresh').click()
             row = page.locator('.invitation-row').filter(has_text=name)
             await page.wait_for_function('() => document.querySelector("#invitations").textContent.includes("2/2 accepted")')
@@ -119,4 +123,7 @@ if __name__ == '__main__':
     except Exception as error:
         # Browser exceptions can include private URLs. Keep those out of test logs.
         print('Internal rehearsal check failed (' + type(error).__name__ + '). No private browser diagnostics were logged.', file=sys.stderr)
+        for frame in traceback.extract_tb(error.__traceback__):
+            if Path(frame.filename).name == Path(__file__).name:
+                print('Test location: ' + frame.name + ':' + str(frame.lineno), file=sys.stderr)
         raise SystemExit(1)
