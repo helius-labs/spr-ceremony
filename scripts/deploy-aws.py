@@ -18,6 +18,7 @@ import urllib.request
 REPO = 'helius-labs/spr-ceremony'
 NATIVE = [f'spr-ceremony-{system}-{arch}' for system in ['darwin', 'linux'] for arch in ['amd64', 'arm64']]
 BROWSER = {'index.html', 'style.css', 'app.js', 'worker.js', 'network.js', 'wasm_exec.js', 'contributor.wasm', 'hosted.html', 'hosted.js', 'protocol.js', 'cache.js', 'transfer.js', 'session.js', 'build.json', 'admin.html', 'admin.js'}
+CHECK_HOSTED_BUILD = 'import json,sys; actual=json.load(open(sys.argv[1])); expected=json.load(open(sys.argv[2])); assert actual == expected and actual["source_modified"] is False, "Hosted build differs from release"'
 
 
 def run(*args):
@@ -186,7 +187,8 @@ done
 test "$ready" = 1
 curl -fsS --max-time 30 -H {q('Host: ' + urllib.parse.urlsplit(get('url')).netloc)} http://127.0.0.1:8080/build.json > "$stage/hosted-build.json"
 curl -fsS --max-time 30 -H {q('Host: ' + urllib.parse.urlsplit(get('url')).netloc)} http://127.0.0.1:8080/join.sh > "$stage/hosted-join.sh"
-printf '%s  %s\\n' {q(digest(bundle / 'browser' / 'build.json'))} "$stage/hosted-build.json" {q(digest(assets / 'join.sh'))} "$stage/hosted-join.sh" | sha256sum --check
+python3 -c {q(CHECK_HOSTED_BUILD)} "$stage/hosted-build.json" {q(release_dir + '/browser/build.json')}
+printf '%s  %s\\n' {q(digest(assets / 'join.sh'))} "$stage/hosted-join.sh" | sha256sum --check
 '''
         ssm(aws, get('instance_id'), commands, tmp)
         if access_mode == 'public':

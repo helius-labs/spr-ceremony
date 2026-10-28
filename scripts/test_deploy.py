@@ -2,6 +2,8 @@ import importlib.util
 import io
 import json
 from pathlib import Path
+import subprocess
+import sys
 import tarfile
 import tempfile
 import unittest
@@ -12,6 +14,21 @@ spec.loader.exec_module(deploy)
 
 
 class DeploymentTests(unittest.TestCase):
+    def test_hosted_build_comparison_accepts_serialization_and_rejects_changes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            actual, expected = Path(tmp) / 'actual.json', Path(tmp) / 'expected.json'
+            value = {'source_revision': 'a' * 40, 'source_modified': False, 'assets': {'worker.js': {'sha256': 'b' * 64, 'size': 5}}}
+            expected.write_text(json.dumps(value, indent=2) + '\n')
+            actual.write_text(json.dumps(value, separators=(',', ':')))
+            command = [sys.executable, '-c', deploy.CHECK_HOSTED_BUILD, str(actual), str(expected)]
+            self.assertEqual(subprocess.run(command, capture_output=True).returncode, 0)
+            value['assets']['worker.js']['sha256'] = 'c' * 64
+            actual.write_text(json.dumps(value))
+            self.assertNotEqual(subprocess.run(command, capture_output=True).returncode, 0)
+            value['source_modified'] = True
+            actual.write_text(json.dumps(value)); expected.write_text(json.dumps(value))
+            self.assertNotEqual(subprocess.run(command, capture_output=True).returncode, 0)
+
     def test_rehearsal_cannot_be_published_or_treated_as_production(self):
         def manifest(test, count):
             return {'phase1': {'insecure_test_setup': test}, 'circuits': [{'spec': {'track': 'core'}} for _ in range(count)]}

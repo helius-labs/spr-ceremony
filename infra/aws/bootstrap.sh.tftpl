@@ -3,7 +3,15 @@ set -euo pipefail
 umask 077
 export DEBIAN_FRONTEND=noninteractive
 apt-get update
-apt-get install -y ca-certificates curl gnupg debian-keyring debian-archive-keyring apt-transport-https awscli unattended-upgrades
+apt-get install -y ca-certificates curl gnupg debian-keyring debian-archive-keyring apt-transport-https unzip unattended-upgrades
+# AWS CLI 2.36.41: archive signature verified against AWS's published signer
+# FB5DB77FD5C118B80511ADA8A6310ACC4672475C before pinning this digest.
+cli_tmp=$(mktemp -d)
+curl --proto '=https' --tlsv1.2 -fsS https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.36.41.zip -o "$cli_tmp/aws.zip"
+printf '%s  %s\n' 659c1fe734a9534736fa452bb1b557dd4cccadea5823f45a74c0f09408a93d22 "$cli_tmp/aws.zip" | sha256sum --check
+unzip -q "$cli_tmp/aws.zip" -d "$cli_tmp"
+(umask 022; "$cli_tmp/aws/install" --update)
+rm -rf -- "$cli_tmp"
 %{ if public_https ~}
 curl --proto '=https' --tlsv1.2 -fsS https://dl.cloudsmith.io/public/caddy/stable/gpg.key | gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
 curl --proto '=https' --tlsv1.2 -fsS https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt -o /etc/apt/sources.list.d/caddy-stable.list

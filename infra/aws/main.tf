@@ -280,13 +280,13 @@ resource "aws_cloudwatch_metric_alarm" "health" {
 resource "aws_ssm_document" "panel" {
   name          = "${var.name}-control-panel"
   document_type = "Session"
-  content       = jsonencode({ schemaVersion = "1.0", description = "Private ceremony control panel", sessionType = "Port", properties = { portNumber = "8081", localPortNumber = "8081" } })
+  content       = jsonencode({ schemaVersion = "1.0", description = "Private ceremony control panel", sessionType = "Port", properties = { type = "LocalPortForwarding", portNumber = "8081", localPortNumber = "8081" } })
 }
 resource "aws_ssm_document" "participant" {
   count         = var.access_mode == "ssm" ? 1 : 0
   name          = "${var.name}-participant"
   document_type = "Session"
-  content       = jsonencode({ schemaVersion = "1.0", description = "Internal ceremony participant site", sessionType = "Port", properties = { portNumber = "8080", localPortNumber = "8080" } })
+  content       = jsonencode({ schemaVersion = "1.0", description = "Internal ceremony participant site", sessionType = "Port", properties = { type = "LocalPortForwarding", portNumber = "8080", localPortNumber = "8080" } })
 }
 
 output "instance_id" { value = aws_instance.coordinator.id }
