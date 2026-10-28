@@ -1,0 +1,83 @@
+{
+  "checked_at": "2026-10-28T19:35:13.822125+00:00",
+  "release": "https://github.com/helius-labs/spr-ceremony/releases/tag/v0.1.0-rc.14",
+  "source_revision": "28ec63125ac318a1390eddedd632469dead3281e",
+  "check_workflow": 40753259584,
+  "release_workflow": 40753701181,
+  "release_result": "success on all four native platforms",
+  "deployment_ssm_command": "c4428725-66d9-4b7c-8546-b160c89fa2c2",
+  "runtime_check_ssm_command": "d40ab1bd-c946-42af-9b08-031e5ff33505",
+  "participant_origin": "https://d3gz3drevfa8mb.cloudfront.net",
+  "manifest": {
+    "sha256": "4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079",
+    "size": 31586
+  },
+  "checkpoint": {
+    "sha256": "8ce40de71626f9754b8019f1980be5afe9c416b00aa5d887ed7ecebe79fefe23",
+    "size": 7065
+  },
+  "accepted": {
+    "alexatamanov": 41,
+    "jorrit": 17,
+    "sergeytimoshin": 41,
+    "tilo": 41
+  },
+  "full_operator_status_unchanged": true,
+  "runtime": {
+    "revision": "28ec63125ac318a1390eddedd632469dead3281e",
+    "go": "go1.27.3",
+    "gnark_crypto": "v0.22.0",
+    "finalize_workers": 24,
+    "gomaxprocs": 96,
+    "memory_max_bytes": 103079215104,
+    "services_active": true
+  },
+  "browser_checks": {
+    "revision": "28ec63125ac318a1390eddedd632469dead3281e",
+    "passed": [
+      "chromium",
+      "webkit"
+    ]
+  },
+  "public_assets": [
+    {
+      "name": "join.sh",
+      "sha256": "3695a7ed7de231ccfa3662e4d1250430b57a08f17df6ccb8fdf09e4bd836fcf2",
+      "size": 2476
+    },
+    {
+      "name": "spr-ceremony-darwin-amd64",
+      "sha256": "0c89ff721618c9860eddb90c7c83e9a851c78b871f57b2a74fa9e8019325e6ab",
+      "size": 45750144
+    },
+    {
+      "name": "spr-ceremony-darwin-arm64",
+      "sha256": "780d44991d426ab398779c8e35c73bb6a0079ed87788882a02dd61e4f2e3fec3",
+      "size": 41956658
+    },
+    {
+      "name": "spr-ceremony-linux-amd64",
+      "sha256": "4dc9411c23208215d0d78e3ebccfc4957ab603d2a5c0a7bdc4bd841bbfe81d6d",
+      "size": 44340100
+    },
+    {
+      "name": "spr-ceremony-linux-arm64",
+      "sha256": "4b702c350b197012f952c3a1b6b1863a061df35488a6130eec210a04abf98b3d",
+      "size": 40276214
+    }
+  ],
+  "restore_performance_evidence": "restore-performance.json",
+  "ongoing_audit": {
+    "unit": "spr-public-audit-8ce40de71626f975.service",
+    "source_revision": "de4291f9451f99c0ab90522ed004209b2938f213",
+    "pid_unchanged": true,
+    "circuits_verified_at_check": 21,
+    "transcript_verified": false
+  },
+  "limits": [
+    "The 140-contribution audit remains in progress on its immutable rc.13 executable; deployment did not restart it.",
+    "Restore timings use warm cached files and local hard links; they do not measure the cryptographic audit or download throughput.",
+    "Live UI checks used Chromium and WebKit on Linux, not native macOS Safari.",
+    "No contribution or lifecycle transition was made for deployment verification."
+  ]
+}

@@ -77,10 +77,12 @@ additional RAM. Reissue preserves accepted work and invalidates previous access.
 Revoke also preserves accepted work. The current ceremony is already open.
 
 **Finish:** close before the announced beacon time, finalize after it, then
-independently reproduce the published keys:
+independently reproduce the published keys. Publish and independently witness
+the closure checkpoint hash before the beacon is revealed:
 
 ```sh
 ./spr-ceremony operator close
+# Publish the checkpoint hash printed when closure completes.
 # After the beacon time shown by operator status:
 ./spr-ceremony operator finalize
 ./spr-ceremony operator export --out final-keys

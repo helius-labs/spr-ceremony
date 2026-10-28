@@ -382,3 +382,11 @@ directories were removed. This used warm cached files and local hard links,
 excludes download time, and does not measure cryptographic audit performance.
 Tests reject corrupt downloads, objects altered after their first check,
 conflicting size metadata and cancellation without publishing a failed restore.
+
+[v0.1.0-rc.14](evidence/release-v0.1.0-rc.14.json) deploys that restore improvement
+from `28ec63125ac318a1390eddedd632469dead3281e`. CI, S3 integration and all four
+native platform checks passed. The public installer and binaries match the
+attested release, and live Chromium/WebKit checks passed. Deployment preserved
+the complete operator status, all 140 accepted contributions and the beacon plan.
+The separate full-core audit continued on its immutable rc.13 executable without
+restarting; its result is still pending.

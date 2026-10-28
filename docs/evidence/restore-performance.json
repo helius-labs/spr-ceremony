@@ -62,6 +62,7 @@
     "One comparison with warm cached files and local hard links; excludes network download time.",
     "Both jobs used low CPU priority while the separate full-core cryptographic audit was running.",
     "This measures object integrity and checkpoint restore, not the full cryptographic audit or final-key reproduction.",
-    "Every unique object is hashed on arrival and again before publishing the restored directory."
+    "Every unique object is hashed on arrival and again before publishing the restored directory.",
+    "Read byte counts are /proc/self/io rchar, including cached file reads; they are not EBS I/O or network traffic."
   ]
 }

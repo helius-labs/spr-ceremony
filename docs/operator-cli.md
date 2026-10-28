@@ -111,8 +111,14 @@ and updated explicitly for a new ceremony.
 
 ## Finish
 
+Close before the announced beacon time. Publish the checkpoint hash printed when
+closure completes through an independently witnessed channel before the beacon
+is revealed. Keep that record for final-key verification; local timestamps alone
+do not prove when closure occurred. [Closure procedure](operations.md#close-finalize-and-independently-verify).
+
 ```sh
 ./spr-ceremony operator close
+# Publish and independently witness the returned checkpoint hash.
 # After the announced beacon time:
 ./spr-ceremony operator finalize
 ./spr-ceremony operator export --out final-keys
