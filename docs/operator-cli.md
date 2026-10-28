@@ -60,6 +60,31 @@ For parallel verification, use `operator audit --workers 4`. Each worker needs
 additional RAM. Audit prints circuit starts, completed counts and elapsed times;
 it checks every circuit with the same pinned engine and initialization rules.
 
+## Contribution records
+
+Completed core contributions appear automatically in the participant site's
+**Contributions** section. Records contain the checkpoint, public artifact hashes
+and coordinator-signed receipts. They are labeled **accepted**; full transcript
+audit remains separate. Partial participation and invitation tokens are excluded.
+
+The **Contribution records** GitHub workflow independently checks the pinned
+manifest, checkpoint state hashes and receipt signatures before archiving new
+records under `contributions/records/<manifest>/<invitation-id>.json`. Existing
+records are preserved. It runs about every 15 minutes when the repository
+variable `SPR_RECORD_PUBLICATION_ENABLED` is `true`, or on manual dispatch.
+The coordinator has no GitHub credential; a failed mirror never blocks acceptance.
+
+To perform the same public-data export locally, without AWS credentials:
+
+```sh
+./spr-ceremony records --url https://CEREMONY_HOST \
+  --manifest-sha256 AUTHENTICATED_MANIFEST --out contribution-records
+```
+
+This checks receipt authentication and inclusion at the downloaded checkpoint;
+it does not replace `operator audit`. The workflow's source pins must be reviewed
+and updated explicitly for a new ceremony.
+
 ## Finish
 
 ```sh

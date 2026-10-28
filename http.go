@@ -41,6 +41,9 @@ func (s *Store) HandlerWithOptions(options ServerOptions) http.Handler {
 	uploads := make(chan struct{}, options.MaxUploads)
 	var active sync.Map
 	mux := http.NewServeMux()
+	records := s.contributionRecordHandler()
+	mux.HandleFunc("GET /v1/records", records)
+	mux.HandleFunc("GET /v1/records/{id}", records)
 	mux.HandleFunc("GET /v1/ceremony", func(w http.ResponseWriter, r *http.Request) {
 		view, err := s.PublicView()
 		if err != nil {

@@ -44,7 +44,7 @@ function update(event) {
     $("circuit").textContent = `${event.circuit} · #${event.sequence} · ${formatBytes(event.bytes)}`;
   }
   if (event.stage === "download" && event.total) $("progress").value = 100 * event.done / event.total;
-  else if (event.stage === "complete") $("progress").value = 100;
+  else if (event.stage === "complete") { $("progress").value = 100; void publicRecords(); }
   else $("progress").removeAttribute("value");
   if (event.message || labels[event.stage]) status(event.message || labels[event.stage]);
   // Public diagnostics for support/automation, never invitations or signed URLs.
@@ -121,6 +121,21 @@ async function publicView() {
     if (view.phase === "finalized") { link(row, "Proving key", circuit.pk); link(row, "Verifying key", circuit.vk); }
     $("keys").append(row);
   }
+}
+async function publicRecords() {
+  try {
+    const view = await request("/v1/records");
+    require(hex(view.manifest?.sha256) && hex(view.checkpoint?.sha256) && Array.isArray(view.records), "Invalid contribution records");
+    $("records").replaceChildren();
+    for (const record of view.records) {
+      require(hex(record.invitation_id) && typeof record.contributor === "string" && record.status === "accepted" && Number.isInteger(record.total) && record.total > 0 && record.total <= 41, "Invalid contribution record");
+      const row = document.createElement("div"); row.className = "key-row";
+      const link = document.createElement("a"); link.href = `/v1/records/${record.invitation_id}`;
+      link.textContent = `${record.contributor} · ${record.total}/${record.total} accepted`;
+      row.append(link); $("records").append(row);
+    }
+    $("records-status").textContent = view.records.length ? "Download signed receipts:" : "Completed contributions appear here automatically.";
+  } catch { $("records-status").textContent = "Contribution records are temporarily unavailable."; }
 }
 async function initialize() {
   require(isSecureContext && crypto.subtle && typeof AbortSignal.any === "function" && typeof indexedDB === "object", "Use a current desktop browser over HTTPS, or use the native client");
@@ -199,3 +214,5 @@ ready.then(async () => {
   await connect(value, pin);
 }).catch(connectionError);
 setInterval(() => { if (invitation && !active && !document.hidden && document.documentElement.dataset.stage !== "error") refresh(); }, 15000);
+
+void publicRecords();

@@ -98,6 +98,14 @@ async def main():
                     page.on('pageerror', lambda e: errors.append(str(e)))
                     await page.locator('#start').click()
                     await terminal(page)
+                    record_link = page.locator(f'#records a[href="/v1/records/{invitation["id"]}"]')
+                    await record_link.wait_for(state='attached')
+                    assert '2/2 accepted' in await record_link.text_content()
+                    record_response = await context.request.get(origin + '/v1/records/' + invitation['id'])
+                    assert record_response.status == 200
+                    record = await record_response.json()
+                    assert record['status'] == 'accepted' and len(record['receipts']) == 2
+                    assert invitation['token'] not in json.dumps(record)
                     await page.locator('#native').click()
                     assert await page.locator('#native-panel').is_visible()
                     await page.locator('#native').click()

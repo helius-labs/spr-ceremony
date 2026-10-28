@@ -89,6 +89,10 @@ independently reproduce the published keys:
 [Operator guide](docs/operator-cli.md) · [Preparation and recovery](docs/operations.md) ·
 [AWS deployment](docs/aws.md) · [Validation status](docs/readiness.md)
 
+Completed contributions appear automatically on the participant site. A separate
+GitHub workflow mirrors verified receipt records; acceptance never waits for
+GitHub. [Publication details](docs/operator-cli.md#contribution-records).
+
 ## Build from source
 
 Optional; requires Go 1.27.3:

@@ -1,0 +1,94 @@
+name: Contribution records
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '7,22,37,52 * * * *'
+permissions:
+  contents: read
+concurrency:
+  group: contribution-records
+  cancel-in-progress: false
+jobs:
+  verify:
+    if: github.event_name == 'workflow_dispatch' || vars.SPR_RECORD_PUBLICATION_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      has-records: ${{ steps.records.outputs.has-records }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5
+        with:
+          go-version-file: go.mod
+          cache: true
+      - name: Verify completed records from pinned public transcript
+        id: records
+        run: |
+          go build -o "$RUNNER_TEMP/spr-ceremony" ./cmd/spr-ceremony
+          "$RUNNER_TEMP/spr-ceremony" records \
+            --url https://d3gz3drevfa8mb.cloudfront.net \
+            --manifest-sha256 4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079 \
+            --out contributions/records
+          python3 - <<'PYCODE'
+          import os
+          from pathlib import Path
+          found = any(Path('contributions/records').glob('*/*.json'))
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              output.write('has-records=' + str(found).lower() + '\n')
+          PYCODE
+      - if: steps.records.outputs.has-records == 'true'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: verified-contribution-records
+          path: contributions/records/
+          if-no-files-found: error
+          retention-days: 7
+  publish:
+    if: needs.verify.outputs.has-records == 'true'
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: main
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: verified-contribution-records
+          path: ${{ runner.temp }}/verified-records
+      - name: Preserve existing records and add new records
+        env:
+          RECORD_INPUT: ${{ runner.temp }}/verified-records
+        run: |
+          python3 - <<'PY'
+          import json, os, re
+          from pathlib import Path
+          source = Path(os.environ['RECORD_INPUT'])
+          for path in source.rglob('*'):
+              if path.is_dir():
+                  continue
+              relative = path.relative_to(source)
+              assert not path.is_symlink() and re.fullmatch(r'[a-f0-9]{64}/[a-f0-9]{64}\.json', relative.as_posix())
+              data = path.read_bytes()
+              assert len(data) <= 4 << 20
+              record = json.loads(data)
+              assert record['format'] == 'spr-contribution-record-v1' and record['status'] == 'accepted'
+              assert record['manifest']['sha256'] == relative.parts[0]
+              assert record['invitation_id'] + '.json' == relative.name
+              assert record['total'] == len(record['receipts']) == 41
+              target = Path('contributions/records') / relative
+              if target.exists():
+                  assert target.read_bytes() == data, 'Existing record differs; do not overwrite'
+              else:
+                  target.parent.mkdir(parents=True, exist_ok=True)
+                  with target.open('xb') as output:
+                      output.write(data)
+          PY
+          git add -- contributions/records
+          if git diff --cached --quiet; then exit 0; fi
+          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'Archive completed contribution records'
+          git push origin HEAD:main

@@ -30,7 +30,7 @@ func main() {
 }
 func run(args []string) error {
 	if len(args) == 0 {
-		return fmt.Errorf("usage: spr-ceremony <version|operator|catalog|keygen|bind-key|check-signing-key|demo|test-srs|phase1|import-ph1|prepare|open|recover-beacon|close|finalize|serve|admin|invite|join|contribute|verify-contribution|verify-attestation|status|checkpoint|sync|restore|fetch-export|audit|export|verify-export> [flags]")
+		return fmt.Errorf("usage: spr-ceremony <version|operator|catalog|keygen|bind-key|check-signing-key|demo|test-srs|phase1|import-ph1|prepare|open|recover-beacon|close|finalize|serve|admin|invite|join|contribute|verify-contribution|verify-attestation|status|records|checkpoint|sync|restore|fetch-export|audit|export|verify-export> [flags]")
 	}
 	if args[0] == "operator" {
 		return runOperator(args[1:])
@@ -201,6 +201,23 @@ func run(args []string) error {
 				return e
 			}
 			return print(ref)
+		}
+	case "records":
+		origin := f.String("url", "", "public ceremony HTTPS origin; no operator credentials needed")
+		pin := f.String("manifest-sha256", "", "independently authenticated manifest SHA256")
+		action = func() error {
+			if err := requireOut(); err != nil {
+				return err
+			}
+			records, err := ceremony.FetchContributionRecords(context.Background(), *origin, *pin)
+			if err != nil {
+				return err
+			}
+			if err = ceremony.SaveContributionRecords(*out, records); err != nil {
+				return err
+			}
+			fmt.Fprintf(os.Stdout, "%d complete contribution records verified and archived. Full transcript audit is separate.\n", len(records))
+			return nil
 		}
 	case "checkpoint", "sync":
 		action = func() error {
