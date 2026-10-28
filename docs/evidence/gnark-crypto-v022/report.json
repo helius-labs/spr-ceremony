@@ -1,0 +1,62 @@
+{
+  "checked_at": "2026-10-28T17:13:30.142388+00:00",
+  "go": "go1.27.3",
+  "gnark": "v0.16.4",
+  "previous_crypto": "v0.21.1-0.20260913224755-1409fe592052",
+  "candidate_crypto": "v0.22.0",
+  "candidate_source_base": "c1634d523ac9221057748201e1eaba66461fae78",
+  "circuit_source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6",
+  "core_compilation_hashes_unchanged": 41,
+  "saved_core_proofs_verified": 41,
+  "altered_public_inputs_rejected": 41,
+  "old_contributions_verified_by_candidate": 82,
+  "old_proving_keys_decoded_by_candidate": 41,
+  "candidate_contributions_created_and_verified": 41,
+  "candidate_contributions_verified_by_previous_crypto": 41,
+  "hosted_browser_checks_passed": 15,
+  "control_panel_browsers": [
+    "Chromium",
+    "WebKit"
+  ],
+  "go_race_tests_passed": true,
+  "go_vet_passed": true,
+  "fresh_witness_round_trip": {
+    "passed": true,
+    "circuits": [
+      "transfer_confidential_1_2",
+      "merge_8_1"
+    ],
+    "steps": [
+      "compile",
+      "initialize",
+      "two contributions",
+      "audit and export",
+      "Zolana key packaging and loading",
+      "prove and verify in Go",
+      "Solana host verifier accepts proof and rejects changed public input"
+    ]
+  },
+  "live_ceremony_modified": false,
+  "checker_source": "checker.go.txt",
+  "checker_commands": [
+    "Build checker.go.txt as a .go file from each module checkout with GOTOOLCHAIN=go1.27.3; confirm dependency versions with go version -m.",
+    "GOMAXPROCS=4 candidate-checker write REHEARSAL_ROOT NEW_OUTPUT_DIR",
+    "GOMAXPROCS=4 previous-checker verify REHEARSAL_ROOT NEW_OUTPUT_DIR"
+  ],
+  "logs": [
+    "new-engine.log",
+    "old-engine.log",
+    "go-tests.log",
+    "fresh-witness.log",
+    "fresh-solana.log"
+  ],
+  "limits": [
+    "Compatibility tests use previously validated rehearsal artifacts, not live contributions.",
+    "Old-engine elapsed time includes waiting for new-engine output; these logs are not a speed comparison.",
+    "This is not an independent cryptographic security review."
+  ],
+  "live_manifest_sha256": "4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079",
+  "live_manifest_r1cs_hashes_matched": 41,
+  "combined_parallel_finalization_go_race_tests_passed": true,
+  "combined_source_base": "f6ccd2e65df216740b20f8b34b22df9de3b1aa8d"
+}

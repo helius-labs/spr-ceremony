@@ -1,0 +1,4 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.03s
+     Running `adapters/solana/target/debug/spr-solana-rehearsal /tmp/spr-crypto-v022-fresh-vectors /tmp/spr-crypto-v022-fresh-catalog.json`
+verified transfer_confidential_1_2: ceremony proof accepted; tampered public input rejected
+verified merge_8_1: ceremony proof accepted; tampered public input rejected

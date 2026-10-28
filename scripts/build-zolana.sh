@@ -20,7 +20,7 @@ go mod edit -modfile "$tmp_dir/go.mod" \
 go mod tidy -modfile "$tmp_dir/go.mod"
 gnark_version="$(go list -modfile "$tmp_dir/go.mod" -m -f '{{.Version}}' github.com/consensys/gnark)"
 crypto_version="$(go list -modfile "$tmp_dir/go.mod" -m -f '{{.Version}}' github.com/consensys/gnark-crypto)"
-if [[ "$gnark_version" != v0.16.4 ]] || [[ "$crypto_version" != v0.21.1-0.20260913224755-1409fe592052 ]]; then
+if [[ "$gnark_version" != v0.16.4 ]] || [[ "$crypto_version" != v0.22.0 ]]; then
     echo 'Zolana dependencies differ from the ceremony engine; align and validate them before building.' >&2
     exit 1
 fi

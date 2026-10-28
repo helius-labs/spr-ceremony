@@ -55,16 +55,20 @@ The automated Go suite covers plain and commitment-bearing fixtures, malformed
 contributions, replay/stale submissions, export tampering, lifecycle/beacon
 checks, reservation conflicts, checkpoint rewrites, and finalized-key recovery.
 Tests run with the race detector. The toolchain is updated to Go 1.27.3 and
-network dependencies to the patched versions; gnark and gnark-crypto pins remain
-unchanged. Govulncheck 1.9.0 is required in CI; the current scan finds zero
+network dependencies to the patched versions. Gnark remains at v0.16.4;
+gnark-crypto is pinned to v0.22.0 after compatibility validation.
+Govulncheck 1.9.0 is required in CI; the current scan finds zero
 called or imported-package vulnerabilities. Module-level advisories are reported
 separately for code outside the imported package set; this is not a claim that
 every package in every dependency module is free of advisories.
 [The October 28 dependency check](evidence/security-check-2026-10-28.json) confirms
-the deployed Go toolchain includes the eMudhra-related certificate fix. Gnark is
-current; gnark-crypto remains at gnark's pinned revision. The newer v0.22.0
-release requires compatibility assessment before an engine upgrade. The fresh
-scan reports three advisories in packages outside the application's imports.
+the deployed Go toolchain includes the eMudhra-related certificate fix. It records
+the earlier gnark-crypto pin and three advisories outside the application's imports.
+[The v0.22.0 compatibility report](evidence/gnark-crypto-v022/report.json) covers
+all 41 live-manifest R1CS hashes, old key decoding, historical contributions,
+and new contributions verified by the previous library. Fresh transfer and merge
+proofs pass the Go and Solana verifiers. These checks do not alter the active
+ceremony; release deployment is recorded separately below.
 [Security update evidence](evidence/security-updates.json) records versions and
 advisories. Recompiling all 41 circuits after these updates reproduced every
 original R1CS hash. The S3 integration suite additionally exercises

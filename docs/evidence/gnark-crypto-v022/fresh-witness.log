@@ -1,0 +1,22 @@
+ok  	github.com/helius-labs/zolana/prover/server/circuits/spp_transaction/shared	0.084s
+ok  	github.com/helius-labs/zolana/prover/server/circuits/spp_merge	0.305s
+=== RUN   TestZolanaRoundTrip
+=== RUN   TestZolanaRoundTrip/transfer_confidential_1_2
+    integration_test.go:70: compiling pinned Zolana circuit
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+    integration_test.go:110: contributing: bob
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+    integration_test.go:154: proving and verifying valid Zolana witness
+=== RUN   TestZolanaRoundTrip/merge_8_1
+    integration_test.go:70: compiling pinned Zolana circuit
+    integration_test.go:98: initializing Phase 2 (may take several minutes)
+    integration_test.go:110: contributing: alice
+    integration_test.go:110: contributing: bob
+    integration_test.go:118: auditing transcript and exporting keys (replays initialization)
+    integration_test.go:154: proving and verifying valid Zolana witness
+--- PASS: TestZolanaRoundTrip (1428.14s)
+    --- PASS: TestZolanaRoundTrip/transfer_confidential_1_2 (176.55s)
+    --- PASS: TestZolanaRoundTrip/merge_8_1 (1251.59s)
+PASS
+ok  	github.com/helius-labs/spr-ceremony/adapters/zolana	1428.174s

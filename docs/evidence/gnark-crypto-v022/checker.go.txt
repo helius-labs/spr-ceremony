@@ -1,0 +1,110 @@
+package main
+
+import (
+	"fmt"
+	"github.com/consensys/gnark-crypto/ecc"
+	"github.com/consensys/gnark/backend/groth16"
+	ceremony "github.com/helius-labs/spr-ceremony"
+	"os"
+	"path/filepath"
+	"time"
+)
+
+func main() {
+	if err := run(); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+}
+func run() error {
+	if len(os.Args) != 4 {
+		return fmt.Errorf("usage: compat <write|verify> rehearsal-root output-dir")
+	}
+	mode, root, out := os.Args[1], os.Args[2], os.Args[3]
+	if mode != "write" && mode != "verify" {
+		return fmt.Errorf("invalid mode")
+	}
+	if err := os.MkdirAll(out, 0700); err != nil {
+		return err
+	}
+	specs, err := ceremony.Select(ceremony.Core, "")
+	if err != nil {
+		return err
+	}
+	started := time.Now()
+	for index, spec := range specs {
+		dir := filepath.Join(root, spec.ID)
+		store, err := ceremony.Open(filepath.Join(dir, "ceremony"))
+		if err != nil {
+			return err
+		}
+		if !store.Manifest.Phase1.InsecureTestSetup || len(store.Manifest.Circuits) != 1 {
+			return fmt.Errorf("requires isolated single-circuit rehearsal")
+		}
+		circuit := store.Manifest.Circuits[0]
+		if circuit.Spec != spec {
+			return fmt.Errorf("circuit mismatch")
+		}
+		state, err := store.State(spec.ID)
+		if err != nil {
+			return err
+		}
+		if len(state.History) != 2 {
+			return fmt.Errorf("expected two historical contributions for %s", spec.ID)
+		}
+		if err = ceremony.Check(store.Object(state.Head), state.Head); err != nil {
+			return err
+		}
+		target := filepath.Join(out, spec.ID+".ph2")
+		if mode == "verify" {
+			deadline := time.Now().Add(20 * time.Minute)
+			for {
+				_, err := os.Stat(target)
+				if err == nil {
+					break
+				}
+				if !os.IsNotExist(err) || time.Now().After(deadline) {
+					return fmt.Errorf("waiting for candidate output %s: %w", spec.ID, err)
+				}
+				time.Sleep(time.Second)
+			}
+		}
+		if mode == "write" {
+			parent := circuit.Initial
+			for _, receipt := range state.History {
+				if receipt.Parent != parent {
+					return fmt.Errorf("parent mismatch")
+				}
+				if err = ceremony.Check(store.Object(receipt.Output), receipt.Output); err != nil {
+					return err
+				}
+				if err = ceremony.Verify(store.Object(parent), store.Object(receipt.Output), circuit.Shape); err != nil {
+					return fmt.Errorf("%s historical contribution: %w", spec.ID, err)
+				}
+				parent = receipt.Output
+			}
+			var exported ceremony.ExportManifest
+			if err = ceremony.ReadJSON(filepath.Join(dir, "export", "export.json"), &exported); err != nil {
+				return err
+			}
+			if len(exported.Circuits) != 1 {
+				return fmt.Errorf("invalid export")
+			}
+			pkPath := filepath.Join(dir, "export", spec.ID+".pk")
+			if err = ceremony.Check(pkPath, exported.Circuits[0].PK); err != nil {
+				return err
+			}
+			if err = ceremony.ReadBinary(pkPath, groth16.NewProvingKey(ecc.BN254)); err != nil {
+				return fmt.Errorf("%s old key decoding: %w", spec.ID, err)
+			}
+			if err = ceremony.Contribute(store.Object(state.Head), target, circuit.Shape); err != nil {
+				return fmt.Errorf("%s candidate contribution: %w", spec.ID, err)
+			}
+		}
+		if err = ceremony.Verify(store.Object(state.Head), target, circuit.Shape); err != nil {
+			return fmt.Errorf("%s cross-version verification: %w", spec.ID, err)
+		}
+		fmt.Printf("[%d/%d] %s %s passed; elapsed %s\n", index+1, len(specs), spec.ID, mode, time.Since(started).Round(time.Second))
+	}
+	return nil
+}

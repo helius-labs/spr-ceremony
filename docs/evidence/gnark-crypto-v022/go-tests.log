@@ -1,0 +1,7 @@
+ok  	github.com/helius-labs/spr-ceremony	7.459s
+?   	github.com/helius-labs/spr-ceremony/cmd/spr-browser-rehearsal	[no test files]
+?   	github.com/helius-labs/spr-ceremony/cmd/spr-ceremony	[no test files]
+ok  	github.com/helius-labs/spr-ceremony/internal/browserproto	1.011s
+?   	github.com/helius-labs/spr-ceremony/internal/contribution	[no test files]
+ok  	github.com/helius-labs/spr-ceremony/internal/signing	1.018s
+ok  	github.com/helius-labs/spr-ceremony/storage	1.012s
