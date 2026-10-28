@@ -424,3 +424,11 @@ Deployed on October 28 with GitHub OAuth enabled. Runtime and hosted release
 hashes, service health and private configuration permissions passed checks. All
 181 accepted circuit contributions and the checkpoint remained unchanged. A real
 GitHub consent/callback/publication check remains pending. See [GitHub setup](github.md).
+
+On October 28, Zolana `main` at
+`1ca1163a6aab4929eb5b2edea98d9fa3bac771c6` was recompiled with Go 1.27.3,
+gnark v0.16.4 and gnark-crypto v0.22.0. All 41 core R1CS hashes and sizes,
+circuit specs, constraint counts and domains matched the live manifest pinned
+to `ff04c625ceb43c688cd048549e00a5dabc0c6ee6`. The six intervening commits
+therefore do not require replacing these circuit parameters. The live ceremony
+was unchanged. [Comparison evidence](evidence/core-main-circuit-match.json).

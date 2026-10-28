@@ -1,0 +1,317 @@
+{
+  "checked_at": "2026-10-28T22:09:50.283481+00:00",
+  "repository": "helius-labs/zolana",
+  "branch": "main",
+  "checked_revision": "1ca1163a6aab4929eb5b2edea98d9fa3bac771c6",
+  "ceremony_source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6",
+  "commits_ahead": 6,
+  "manifest_sha256": "4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079",
+  "adapter_revision": "4b67c727756bc6f418e977003df36ff6f70668ac",
+  "go": "go1.27.3",
+  "gnark": "v0.16.4",
+  "gnark_crypto": "v0.22.0",
+  "matched_circuits": 41,
+  "r1cs_bytes_identical": true,
+  "compilation_sha256": "5dc26de4d519996a31487c86ad08fde5df02ee83a81fd24073e7665fb5debd90",
+  "source_review": "Only a comment changed under prover/server/circuits; prover/server/prover is unchanged. Go and gnark-crypto dependencies were updated.",
+  "live_ceremony_modified": false,
+  "checks": [
+    {
+      "circuit": "transfer_confidential_1_2",
+      "sha256": "aca3fea69fe143e6235bfe73a48de65d1f666a074a1f5b66c7022e78173d449a",
+      "size": 3620361,
+      "constraints": 30924,
+      "domain": 32768
+    },
+    {
+      "circuit": "transfer_confidential_1_4",
+      "sha256": "38fc44f826077ee162e5a246e3c6c359d42ddf188b4d08b68fbc05900a28cf43",
+      "size": 4080092,
+      "constraints": 34590,
+      "domain": 65536
+    },
+    {
+      "circuit": "transfer_confidential_1_8",
+      "sha256": "d1cb0709da5f859652b9eaede111a0df17e61ddbfd649f9ec0bba03355072cdb",
+      "size": 5179735,
+      "constraints": 43170,
+      "domain": 65536
+    },
+    {
+      "circuit": "transfer_confidential_2_2",
+      "sha256": "12270333ac9f8733d36bb6c08f05441c015bc0808fbaaa5ee035d1b793c3ce92",
+      "size": 6314652,
+      "constraints": 53876,
+      "domain": 65536
+    },
+    {
+      "circuit": "transfer_confidential_2_4",
+      "sha256": "cfd5512a669ea60f2b4f825dfa04e93c9dbd5ec9d8ee467fecaf6c091a14a855",
+      "size": 6777825,
+      "constraints": 57558,
+      "domain": 65536
+    },
+    {
+      "circuit": "transfer_confidential_1_16",
+      "sha256": "f52b643b55c488cbf125a34bc942bc908a8e2e8a7e13d0705f56345e95e1bdc1",
+      "size": 7186128,
+      "constraints": 59562,
+      "domain": 65536
+    },
+    {
+      "circuit": "transfer_confidential_2_8",
+      "sha256": "28b6b4f3f0d0a455e94a1672abf4eb5d0905b77b7a7f9bab5ff8e0fece9599a5",
+      "size": 7872687,
+      "constraints": 66170,
+      "domain": 131072
+    },
+    {
+      "circuit": "transfer_confidential_3_2",
+      "sha256": "8c48e58a5572b6dcd0ce54a22a10427b14d285e628c2a926183b4d85f0b65420",
+      "size": 8923099,
+      "constraints": 76268,
+      "domain": 131072
+    },
+    {
+      "circuit": "transfer_confidential_3_4",
+      "sha256": "d45c38dc079b9c617cc72bf7a826ca4e8ef302aa5131e5d81f2a0fd8d613517d",
+      "size": 9383986,
+      "constraints": 79966,
+      "domain": 131072
+    },
+    {
+      "circuit": "transfer_confidential_2_16",
+      "sha256": "8bd854bace7d6a71c99789f00d7986d60950c81b0377c3e20db76229907ef45e",
+      "size": 9886740,
+      "constraints": 82626,
+      "domain": 131072
+    },
+    {
+      "circuit": "transfer_confidential_3_8",
+      "sha256": "457845019c218547f04858834668015046e58fe49c5234cc7af0a049a10cf4e5",
+      "size": 10472366,
+      "constraints": 88610,
+      "domain": 131072
+    },
+    {
+      "circuit": "transfer_confidential_4_2",
+      "sha256": "28d5f4e7935fc9d524f5e6bf4bb5451488dc80b81ce3334ca6c33d2a11a05881",
+      "size": 11531376,
+      "constraints": 98676,
+      "domain": 131072
+    },
+    {
+      "circuit": "transfer_confidential_4_4",
+      "sha256": "2b8238cc7bce71e374970cb7580895b19b5f235a2b53023f17037ff67ed50b78",
+      "size": 11996238,
+      "constraints": 102390,
+      "domain": 131072
+    },
+    {
+      "circuit": "transfer_confidential_4_8",
+      "sha256": "c61ab2f21430957048bc344b8262f13d570998e5a1d69422c0f986f945cbd69b",
+      "size": 13076738,
+      "constraints": 111066,
+      "domain": 131072
+    },
+    {
+      "circuit": "transfer_confidential_5_2",
+      "sha256": "a1906b058a4c4a926dfbef50be91b3df6dfc091fe7b911073884a6c8dccd9f5d",
+      "size": 14232253,
+      "constraints": 121676,
+      "domain": 131072
+    },
+    {
+      "circuit": "transfer_confidential_5_4",
+      "sha256": "aae5767ccd9c89e2af6608d22af13cbeeaf22c57672f393815459473413e19f5",
+      "size": 14694743,
+      "constraints": 125406,
+      "domain": 131072
+    },
+    {
+      "circuit": "transfer_confidential_4_16",
+      "sha256": "46dc0c05c51b3f2ecd57d495a350154f9ce9118c3204db94ef4dfc40360012d6",
+      "size": 15111512,
+      "constraints": 127650,
+      "domain": 131072
+    },
+    {
+      "circuit": "transfer_confidential_5_8",
+      "sha256": "a2c6e55e55b6a4c19871fc0c4386586bc118ca39f985b655a8978a24e44dc2e6",
+      "size": 15772061,
+      "constraints": 134114,
+      "domain": 262144
+    },
+    {
+      "circuit": "transfer_confidential_6_2",
+      "sha256": "54f07ea0b60cacd94edf19b5b6930d69ddab275851bda2d6a7cc5fa50229da36",
+      "size": 16842230,
+      "constraints": 144116,
+      "domain": 262144
+    },
+    {
+      "circuit": "transfer_confidential_6_4",
+      "sha256": "0ef36ea5c9fd791100ae1307452c1b5992a1609b55a4908a680c0dbb2d9a2003",
+      "size": 17308366,
+      "constraints": 147862,
+      "domain": 262144
+    },
+    {
+      "circuit": "transfer_confidential_5_16",
+      "sha256": "8535595c1604db42942a3f468bedcea07fb2d96637c0acb7d83f88af7db5e658",
+      "size": 17817668,
+      "constraints": 150762,
+      "domain": 262144
+    },
+    {
+      "circuit": "transfer_confidential_6_8",
+      "sha256": "d268fe27ab271af7b41966c578dee6d2cc9db2a61f80139eb30c8f63474cd72c",
+      "size": 18380940,
+      "constraints": 156602,
+      "domain": 262144
+    },
+    {
+      "circuit": "transfer_confidential_8_2",
+      "sha256": "ecb9b082517807f4aa19a92e3712a063af4f54ef3214f15c556c4f3c944bed40",
+      "size": 22147508,
+      "constraints": 189620,
+      "domain": 262144
+    },
+    {
+      "circuit": "transfer_confidential_8_4",
+      "sha256": "0601376b82bdcf9809c7ee2d8318b8920d1e457929267de9f45b9f96ad9a3ac4",
+      "size": 22602907,
+      "constraints": 193398,
+      "domain": 262144
+    },
+    {
+      "circuit": "transfer_confidential_8_8",
+      "sha256": "41ca1cc0f3074b40a1164e80c79720937fd6ef5e607be5f6cd4990b5964b1dc2",
+      "size": 23691485,
+      "constraints": 202202,
+      "domain": 262144
+    },
+    {
+      "circuit": "transfer_confidential_8_16",
+      "sha256": "77dd68856371da67dda039fcef52b2d846bed5a003ea1a20a2975dac4f2fcc11",
+      "size": 25749644,
+      "constraints": 219042,
+      "domain": 262144
+    },
+    {
+      "circuit": "transfer_confidential_12_2",
+      "sha256": "c93586f5212fc83c4f9522bdd2cc1fa8b986803ab3b2d18bbfb5f1bd74da0244",
+      "size": 32658821,
+      "constraints": 280244,
+      "domain": 524288
+    },
+    {
+      "circuit": "transfer_confidential_12_4",
+      "sha256": "9308ba53795909672cca236803ff54ae734cc3512f33f7ee269856bf18b93222",
+      "size": 33131532,
+      "constraints": 284086,
+      "domain": 524288
+    },
+    {
+      "circuit": "transfer_confidential_12_8",
+      "sha256": "bf859551cb8b1f2393a90f84656de21b9abb06eb67c5e62df76d7a6cf57e357f",
+      "size": 34237992,
+      "constraints": 293018,
+      "domain": 524288
+    },
+    {
+      "circuit": "transfer_confidential_16_2",
+      "sha256": "9d479d6ffdf1580b354d455a5c6c71b2f701815803ab84cfa850f8dbc7994e80",
+      "size": 43214491,
+      "constraints": 371124,
+      "domain": 524288
+    },
+    {
+      "circuit": "transfer_confidential_16_4",
+      "sha256": "c73fe486950214b7816772b9844067f796f5db236da31a87702abe791bad46f1",
+      "size": 43684328,
+      "constraints": 375030,
+      "domain": 524288
+    },
+    {
+      "circuit": "transfer_confidential_16_8",
+      "sha256": "7bb995f1e00263f691306bac50f392bdb4a268f0b6cc37fb2b0e803917aa46b3",
+      "size": 44801100,
+      "constraints": 384090,
+      "domain": 524288
+    },
+    {
+      "circuit": "transfer_confidential_24_2",
+      "sha256": "bbfd1ce1a123d9f5c31f73f3c82087758c3fb55f8a41d387fb6d85649d396de2",
+      "size": 64440006,
+      "constraints": 554228,
+      "domain": 1048576
+    },
+    {
+      "circuit": "transfer_confidential_24_4",
+      "sha256": "110c6a4d6112222b438f9b152e8a914cf88b7a2091bba2ea81438387aa8370c5",
+      "size": 64915461,
+      "constraints": 558262,
+      "domain": 1048576
+    },
+    {
+      "circuit": "transfer_confidential_32_2",
+      "sha256": "1e2090e6103ba77f9593e4400dc5342dc1b46dc2e4b45d3eb349417270307dbe",
+      "size": 85596385,
+      "constraints": 737252,
+      "domain": 1048576
+    },
+    {
+      "circuit": "transfer_confidential_40_2",
+      "sha256": "594cf584aedd5db382c99706447e1904fdccfdb14cfb54ab869167c399489962",
+      "size": 106272195,
+      "constraints": 917252,
+      "domain": 1048576
+    },
+    {
+      "circuit": "transfer_confidential_48_2",
+      "sha256": "d6ee3c9fcc86bffea56cbb3c22a3ce06f749c664d7b4d7dd5cb0b3b89cb08f24",
+      "size": 127092685,
+      "constraints": 1098596,
+      "domain": 2097152
+    },
+    {
+      "circuit": "transfer_confidential_49_2",
+      "sha256": "9d5c39be3c12771be7e3864db882ce63cea1177f09892ac757b378ee8341141e",
+      "size": 129661970,
+      "constraints": 1121102,
+      "domain": 2097152
+    },
+    {
+      "circuit": "merge_8_1",
+      "sha256": "acfff1a46f1978aad4817d3782b36cb25891f4abcc5e70b3996843115d2d96d9",
+      "size": 21166992,
+      "constraints": 180294,
+      "domain": 262144
+    },
+    {
+      "circuit": "merge_24_1",
+      "sha256": "3f0bf6b412669390857e73c16de0f07e9d8ef320706c7ad80028895d50e333f0",
+      "size": 61936587,
+      "constraints": 527430,
+      "domain": 1048576
+    },
+    {
+      "circuit": "merge_52_1",
+      "sha256": "b32b08f35d866208989755e08fd64b0aed661a653f507e72f0c269a5e20544b2",
+      "size": 133412211,
+      "constraints": 1136222,
+      "domain": 2097152
+    }
+  ],
+  "reproduction": [
+    "Check out Zolana at checked_revision in a clean worktree.",
+    "At adapter_revision: GOTOOLCHAIN=go1.27.3 bash scripts/build-zolana.sh /path/to/zolana",
+    "GOMAXPROCS=8 ./spr-zolana compile --track core --out /new/r1cs/directory",
+    "Download /v1/manifest from the coordinator, authenticate its SHA256 against manifest_sha256, then compare the 41 circuit specs, R1CS SHA256/size, constraint counts and domains to compilation.json and hash the generated R1CS files."
+  ],
+  "limits": [
+    "Applies to the exact checked main revision; subsequent changes require another comparison.",
+    "This checks circuit identity, not final ceremony keys or the entire application."
+  ]
+}
