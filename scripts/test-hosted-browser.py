@@ -98,6 +98,9 @@ async def main():
                     page.on('pageerror', lambda e: errors.append(str(e)))
                     await page.locator('#start').click()
                     await terminal(page)
+                    await page.locator('#native').click()
+                    assert await page.locator('#native-panel').is_visible()
+                    await page.locator('#native').click()
                     assert not errors, errors
                     allowed = {urlparse(origin).netloc, urlparse(endpoint).netloc if endpoint else ''}
                     assert requests and all(urlparse(u).netloc in allowed for _, u, _ in requests)

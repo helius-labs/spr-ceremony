@@ -32,7 +32,7 @@ progress::-webkit-progress-value { background: var(--orange); border-radius: 4px
 progress::-moz-progress-bar { background: var(--orange); border-radius: 4px; }
 progress:not([value])::-webkit-progress-bar { background: linear-gradient(90deg, #292929, var(--orange), #292929); }
 #pause:disabled { display: none; }
-html[data-stage="complete"] #contribute-actions, html[data-stage="complete"] #keep-open { display: none; }
+html[data-stage="complete"] #start, html[data-stage="complete"] #pause, html[data-stage="complete"] #keep-open { display: none; }
 html[data-stage="complete"] #receipts { background: var(--orange); color: #080808; padding: 10px 18px; font-weight: 650; }
 #status { overflow-wrap: anywhere; color: var(--muted); font-size: 14px; line-height: 1.6; margin: 22px 0; }
 #status.error, .error { color: #ffb09c; }
