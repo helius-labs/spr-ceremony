@@ -71,8 +71,8 @@ variable "instance_type" {
   type    = string
   default = "m7i.xlarge"
   validation {
-    condition     = contains(["m7i.xlarge", "m7i.2xlarge"], var.instance_type)
-    error_message = "Use a supported x86 coordinator with at least 16 GiB RAM."
+    condition     = contains(["m7i.xlarge", "m7i.2xlarge", "c7i.24xlarge", "c7i.48xlarge"], var.instance_type)
+    error_message = "Use a supported x86 coordinator or temporary c7i audit host."
   }
 }
 variable "data_gib" {

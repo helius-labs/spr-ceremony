@@ -597,6 +597,7 @@ func run(args []string) error {
 			}{life, ref, states})
 		}
 	case "audit", "verify-attestation":
+		workers := f.Int("workers", 1, "parallel circuit audits, 1–41; requires RAM for each worker")
 		attestation := f.String("attestation", "", "participant attestation JSON for inclusion verification")
 		digest := f.String("manifest-sha256", "", "out-of-band authenticated manifest digest")
 		checkpoint := f.String("checkpoint-sha256", "", "authenticated checkpoint digest (required for production)")
@@ -639,7 +640,7 @@ func run(args []string) error {
 				fmt.Fprintln(os.Stdout, "All attested receipts are included in checkpoint:", pinnedRef.SHA256)
 				return nil
 			}
-			if e = s.Audit(*track, *maxDomain); e != nil {
+			if e = s.AuditWithOptions(*track, *maxDomain, ceremony.AuditOptions{Workers: *workers, Progress: os.Stderr}); e != nil {
 				return e
 			}
 			fmt.Fprintln(os.Stdout, "Transcript verified:", *track)

@@ -1,9 +1,14 @@
 package ceremony
 
 import (
+	"context"
 	"encoding/json"
+	"sort"
+	"sync"
+
 	"errors"
 	"fmt"
+	"golang.org/x/sync/errgroup"
 	"io"
 	"os"
 	"path/filepath"
@@ -418,7 +423,29 @@ func (s *Store) Audit(track string, maxDomain uint64) error {
 
 // audit can consume the reconstructed evaluations after each circuit's full
 // transcript has verified. Export uses this to avoid repeating initialization.
+// AuditOptions controls resource use and progress reporting. Parallel workers
+// share only immutable Phase 1 points; each circuit gets independent evaluations.
+type AuditOptions struct {
+	Workers  int
+	Progress io.Writer
+}
+
+func (s *Store) AuditWithOptions(track string, maxDomain uint64, options AuditOptions) error {
+	if options.Workers < 1 || options.Workers > 41 {
+		return fmt.Errorf("audit workers must be 1–41")
+	}
+	view, err := s.snapshot()
+	if err != nil {
+		return err
+	}
+	return view.auditWithOptions(track, maxDomain, nil, options)
+}
+
 func (s *Store) audit(track string, maxDomain uint64, consume func(Circuit, *mpc.SrsCommons, *mpc.Phase2Evaluations, State) error) error {
+	return s.auditWithOptions(track, maxDomain, consume, AuditOptions{Workers: 1})
+}
+
+func (s *Store) auditWithOptions(track string, maxDomain uint64, consume func(Circuit, *mpc.SrsCommons, *mpc.Phase2Evaluations, State) error, options AuditOptions) error {
 	if err := s.AuditCheckpoints(); err != nil {
 		return err
 	}
@@ -433,12 +460,20 @@ func (s *Store) audit(track string, maxDomain uint64, consume func(Circuit, *mpc
 	if err != nil {
 		return err
 	}
-	count := 0
+	var circuits []Circuit
 	for _, c := range s.Manifest.Circuits {
-		if c.Spec.Track != track {
-			continue
+		if c.Spec.Track == track {
+			circuits = append(circuits, c)
 		}
-		count++
+	}
+	if len(circuits) == 0 {
+		return fmt.Errorf("no circuits in requested track")
+	}
+	// Start the largest jobs first so they do not form a long tail at completion.
+	if options.Workers > 1 {
+		sort.SliceStable(circuits, func(i, j int) bool { return circuits[i].Domain > circuits[j].Domain })
+	}
+	auditCircuit := func(c Circuit) error {
 		for _, a := range []Artifact{c.R1CS, c.SRS, c.Initial} {
 			if e := Check(s.Object(a), a); e != nil {
 				return e
@@ -492,11 +527,37 @@ func (s *Store) audit(track string, maxDomain uint64, consume func(Circuit, *mpc
 				return e
 			}
 		}
+		return nil
 	}
-	if count == 0 {
-		return fmt.Errorf("no circuits in requested track")
+	var progress sync.Mutex
+	completed := 0
+	group, ctx := errgroup.WithContext(context.Background())
+	group.SetLimit(options.Workers)
+	for _, circuit := range circuits {
+		c := circuit
+		group.Go(func() error {
+			if err := ctx.Err(); err != nil {
+				return err
+			}
+			started := time.Now()
+			progress.Lock()
+			if options.Progress != nil {
+				fmt.Fprintf(options.Progress, "Audit started: %s · domain %d\n", c.Spec.ID, c.Domain)
+			}
+			progress.Unlock()
+			if err := auditCircuit(c); err != nil {
+				return fmt.Errorf("%s: %w", c.Spec.ID, err)
+			}
+			progress.Lock()
+			completed++
+			if options.Progress != nil {
+				fmt.Fprintf(options.Progress, "Audit verified: %d/%d · %s · %s\n", completed, len(circuits), c.Spec.ID, time.Since(started).Round(time.Second))
+			}
+			progress.Unlock()
+			return nil
+		})
 	}
-	return nil
+	return group.Wait()
 }
 
 // sameCircuit compares invitation contents with the pinned
