@@ -6,8 +6,10 @@ import json
 from pathlib import Path
 import socket
 import subprocess
+import sys
 import tempfile
 import time
+import traceback
 import urllib.request
 from playwright.async_api import async_playwright
 
@@ -48,6 +50,10 @@ async def main():
                         await page.locator('#name').fill(engine)
                         await page.locator('#invite').click()
                         await page.wait_for_function('() => !document.querySelector("#secret").hidden')
+                        assert await page.locator('#secret-name').inner_text() == engine
+                        assert await page.locator('#name').input_value() == ''
+                        assert await page.locator('#secret').evaluate('(element) => element.open')
+                        await page.screenshot(path=out / f'{engine}-invitation.png', mask=[page.locator('#link')])
                         invitation = await page.locator('#link').input_value()
                         assert '#manifest=' in invitation and '&token=' in invitation
                         assert await page.evaluate('() => localStorage.length + sessionStorage.length') == 0
@@ -55,24 +61,72 @@ async def main():
                         async with page.expect_download() as downloaded: await page.locator('#download').click()
                         download = await downloaded.value
                         private_file = await download.path()
-                        token = json.loads(Path(private_file).read_text())['token']
+                        saved = json.loads(Path(private_file).read_text())
+                        token, identity = saved['token'], saved['id']
                         response = await page.evaluate('''async () => JSON.stringify(await (await fetch('/admin/status', {headers: {'X-SPR-Admin': '1'}})).json())''')
                         assert token not in response
                         await page.locator('#clear').click()
                         assert await page.locator('#link').input_value() == ''
+                        # Keep the first invitation partially complete while the
+                        # operator creates another contributor and reissues it.
+                        participant = await context.new_page()
+                        claims = 0
+                        async def stop_after_one(route):
+                            nonlocal claims
+                            claims += 1
+                            if claims > 1:
+                                await route.fulfill(status=503, body='Rehearsal interruption')
+                            else:
+                                await route.continue_()
+                        await participant.route('**/v1/claim', stop_after_one)
+                        await participant.goto(invitation)
+                        await participant.wait_for_function('() => !document.querySelector("#start").disabled')
+                        await participant.locator('#start').click()
+                        await participant.wait_for_function('() => document.querySelector("#count").textContent === "1 / 2 accepted"')
+                        await participant.locator('#pause').click()
+                        await participant.wait_for_function('() => document.documentElement.dataset.stage === "paused"')
+                        await participant.close()
+                        await page.locator('#refresh').click()
+                        row = page.locator(f'.invitation-row[data-id="{identity}"]')
+                        await row.get_by_text(f'{engine} · 1/2 accepted', exact=True).wait_for()
+                        await page.locator('#name').fill(engine)
+                        assert await page.locator('#existing').is_visible()
+                        assert '1/2 accepted' in await page.locator('#existing-name').inner_text()
+                        assert await page.locator('#invite').is_disabled()
+                        await page.locator('#resume-existing').click()
+                        await page.wait_for_function('() => document.querySelector("#secret").open')
+                        assert await page.locator('#secret-name').inner_text() == engine
+                        invitation = await page.locator('#link').input_value()
+                        assert (await context.request.get(public + '/v1/invitation', headers={'Authorization': 'Bearer ' + token})).status == 401
+                        from urllib.parse import parse_qs, urlsplit
+                        token = parse_qs(urlsplit(invitation).fragment)['token'][0]
+                        await page.locator('#clear').click()
+                        await page.locator('#name').fill(engine + '-next')
+                        assert await page.locator('#existing').is_hidden()
+                        assert await page.locator('#invite').is_enabled()
+                        await page.locator('#invite').click()
+                        await page.wait_for_function('() => document.querySelector("#secret").open')
+                        assert await page.locator('#secret-name').inner_text() == engine + '-next'
+                        await page.keyboard.press('Escape')
+                        await page.wait_for_function('() => document.querySelector("#secret").hidden')
+                        assert await page.locator('#link').input_value() == ''
+                        assert '1/2 accepted' in await row.inner_text()
                         process = await asyncio.create_subprocess_exec(binary, 'join', '--work', str(root / 'work'), stdin=asyncio.subprocess.PIPE, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
                         stdout, stderr = await asyncio.wait_for(process.communicate(invitation.encode() + b'\n'), timeout=60)
                         assert process.returncode == 0, 'Native join failed'
                         assert token.encode() not in stdout + stderr
                         await page.locator('#refresh').click()
-                        await page.wait_for_function('() => document.querySelector("#invitations").textContent.includes("2/2 accepted")')
-                        row = page.locator('.invitation-row').filter(has_text=engine)
+                        await row.get_by_text(f'{engine} · 2/2 accepted', exact=True).wait_for()
+                        # A row action must identify its contributor independently
+                        # of the name currently entered in the new-invitation form.
+                        await page.locator('#name').fill('someone-else')
                         await row.locator('button', has_text='Reissue link').click()
                         await page.wait_for_function('() => !document.querySelector("#secret").hidden')
+                        assert await page.locator('#secret-name').inner_text() == engine
+                        assert await page.locator('#name').input_value() == 'someone-else'
                         renewed = await page.locator('#link').input_value()
                         assert renewed != invitation
                         assert (await context.request.get(public + '/v1/invitation', headers={'Authorization': 'Bearer ' + token})).status == 401
-                        from urllib.parse import parse_qs, urlsplit
                         token = parse_qs(urlsplit(renewed).fragment)['token'][0]
                         await page.locator('#clear').click()
                         visitor_check = await context.new_page(); await visitor_check.goto(renewed)
@@ -88,10 +142,16 @@ async def main():
                         await visitor.screenshot(path=out / f'{engine}-parameters.png', full_page=True)
                         public_admin = await context.request.get(public + '/admin/status')
                         assert public_admin.status == 404
-                        row = page.locator('.invitation-row').filter(has_text=engine)
-                        page.once('dialog', lambda dialog: dialog.accept())
-                        await row.locator('button', has_text='Revoke').click()
+                        await row.get_by_role('button', name='Revoke', exact=True).click()
+                        await row.get_by_role('button', name='Cancel', exact=True).click()
+                        assert await row.locator('.revoke-confirmation').count() == 0
+                        await row.get_by_role('button', name='Revoke', exact=True).click()
+                        await row.get_by_role('button', name='Revoke access', exact=True).click()
                         await page.wait_for_function('() => document.querySelector("#status").textContent === "Access revoked."')
+                        assert await row.locator('.invitation-state').inner_text() == 'Revoked'
+                        assert '2/2 accepted' in await row.inner_text()
+                        assert await row.get_by_role('button', name='Revoke', exact=True).count() == 0
+                        await page.screenshot(path=out / f'{engine}-revoked.png', full_page=True)
                         rejected = await context.request.get(public + '/v1/invitation', headers={'Authorization': 'Bearer ' + token})
                         assert rejected.status == 401
                         assert token not in (out / 'server.log').read_text()
@@ -99,8 +159,16 @@ async def main():
             finally:
                 for process in processes: process.terminate()
                 for process in processes: process.wait(timeout=15)
-    (out / 'result.json').write_text(json.dumps({'passed': ['Chromium and WebKit: create invitation, hidden native join, reissue signed link, preserve ID and progress, revoke, private API isolation, public parameters, mobile layout, no persisted tokens']}, indent=2) + '\n')
+    (out / 'result.json').write_text(json.dumps({'passed': ['Chromium and WebKit: partial contribution, new invitation while another is incomplete, duplicate-name guidance, named private-link dialog, Escape clears link, hidden native resume, reissue with unrelated form input, revoke/cancel, visible revoked state, preserved accepted work, private API isolation, public parameters, mobile layout, no persisted tokens']}, indent=2) + '\n')
     print('Control panel integration passed in Chromium and WebKit.')
 
 
-asyncio.run(main())
+if __name__ == '__main__':
+    try:
+        asyncio.run(main())
+    except Exception as error:
+        print('Control panel check failed (' + type(error).__name__ + '). Private diagnostics omitted.', file=sys.stderr)
+        for frame in traceback.extract_tb(error.__traceback__):
+            if Path(frame.filename).name == Path(__file__).name:
+                print('Test location: ' + frame.name + ':' + str(frame.lineno), file=sys.stderr)
+        raise SystemExit(1)

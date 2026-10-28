@@ -53,7 +53,9 @@ func (s *Store) RevokeInvitation(id string) error {
 			return nil
 		}
 	}
-	return fmt.Errorf("invitation unavailable")
+	// Repeating a completed revocation is successful, including after a lost
+	// HTTP response. Absence of a grant already means access is disabled.
+	return nil
 }
 
 func (s *Store) adminStatus() (any, error) {

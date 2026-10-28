@@ -6,12 +6,13 @@
 <p id="status" role="status" aria-live="polite">Loading…</p>
 <p id="test" class="notice" hidden>Test ceremony. These keys are not for production.</p>
 <section><div class="heading"><h2 id="phase">Ceremony</h2><button id="refresh" class="secondary">Refresh</button></div><p id="storage" class="detail"></p><p id="beacon" class="detail"></p><p id="leases" class="detail"></p></section>
-<section><h2>Invite someone.</h2><p class="detail">Use a unique pseudonym. Share the link privately. Reissue its link to resume.</p>
+<section><h2>New invitation</h2>
 <label for="name">Pseudonym</label><input id="name" autocomplete="off" maxlength="100" pattern="[a-z0-9][a-z0-9_-]{0,99}" placeholder="alice">
+<div id="existing" hidden><p id="existing-name" class="detail"></p><button id="resume-existing" class="secondary">Reissue link</button></div>
 <label for="hours">Expires in</label><select id="hours"><option value="24">24 hours</option><option value="72">3 days</option><option value="168">7 days</option></select>
 <div class="buttons"><button id="invite" disabled>Create invitation</button></div>
-<div id="secret" hidden><label for="link">Private link · shown once</label><textarea id="link" rows="4" readonly spellcheck="false" autocomplete="off"></textarea><div class="buttons"><button id="copy">Copy link</button><button id="download" class="secondary">Save invitation</button><button id="clear" class="secondary">Clear</button></div><p class="detail">Clears in five minutes. Never post this link publicly.</p></div>
 </section>
+<dialog id="secret" aria-labelledby="secret-name" hidden><p class="eyebrow">PRIVATE INVITATION</p><h2 id="secret-name"></h2><p id="secret-context" class="detail"></p><label for="link">Private link · shown once</label><textarea id="link" rows="4" readonly spellcheck="false" autocomplete="off"></textarea><p id="secret-expiry" class="detail"></p><div class="buttons"><button id="copy">Copy link</button><button id="download" class="secondary">Save invitation</button><button id="clear" class="secondary">Done</button></div><p class="detail">Clears in five minutes.</p></dialog>
 <section><h2>Invitations</h2><div id="invitations"></div></section>
 <details><summary>Finish the ceremony</summary><p>Wait for participants and active reservations to finish. Close before the announced beacon, publish the closure hash, then finalize with the signed beacon. Audit the transcript and verify the exported keys before integrating them.</p><p>Use the operator CLI for phase transitions. The public site lists final keys only after finalization.</p><pre>spr-ceremony close --dir /var/lib/spr/core
 spr-ceremony finalize --dir /var/lib/spr/core --beacon-file beacon.json --out final-keys

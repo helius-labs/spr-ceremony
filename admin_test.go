@@ -74,6 +74,9 @@ func TestPrivateAdminBoundaryAndRevocation(t *testing.T) {
 	if _, err = s.Renew(created.Invitation.Token, claim.Job.Circuit.Spec.ID, time.Minute); err == nil {
 		t.Fatal("revoked invitation renewed work")
 	}
+	if w = request("POST", "/admin/revoke", `{"id":"`+created.Invitation.ID+`"}`); w.Code != 200 {
+		t.Fatal("repeated revocation should succeed after a lost response")
+	}
 	next, err := s.InviteQueued("https://ceremony.example", "bob", Core, time.Hour)
 	must(t, err)
 	available, err := s.Claim(next.Token, time.Minute)

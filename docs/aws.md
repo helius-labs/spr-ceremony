@@ -171,10 +171,13 @@ Use the actual `instance_id` and `panel_document` Terraform outputs. Open
 reject alternate hosts. The AWS CLI needs the
 [Session Manager plugin](https://docs.aws.amazon.com/en_en/systems-manager/latest/userguide/session-manager-working-with-sessions-start.html).
 
-1. Enter a stable, public pseudonym and expiration.
-2. Click **Create invitation**. Copy the link and send it privately yourself.
-3. **Reissue link** preserves the invitation ID and progress, and invalidates the old link.
-4. **Revoke** removes that invitation and its reservation. Accepted contributions remain.
+1. Enter a stable, public pseudonym and expiration. Other contributors can still be working.
+2. Click **Create invitation**. The dialog names the contributor. Copy the link,
+   send it privately yourself, then click **Done**.
+3. For an existing pseudonym, use **Reissue link**. It creates a new 24-hour link,
+   preserves the invitation ID and progress, and invalidates the old link.
+4. **Revoke**, then **Revoke access**, disables the link and releases its reservation.
+   Accepted contributions remain visible with **Revoked** status.
 
 Private links are shown once, cleared after five minutes, and never included in
 status listings or logs. Save them privately if needed. Clipboard history and a

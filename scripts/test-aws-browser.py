@@ -79,8 +79,8 @@ async def main():
             await page.screenshot(path=out / (engine + '-control.png'), full_page=True)
             assert await page.evaluate('() => document.documentElement.scrollWidth <= innerWidth')
             assert (await context.request.get(public + '/admin/status')).status == 404
-            page.once('dialog', lambda dialog: dialog.accept())
-            await row.locator('button', has_text='Revoke').click()
+            await row.get_by_role('button', name='Revoke', exact=True).click()
+            await row.get_by_role('button', name='Revoke access', exact=True).click()
             await page.wait_for_function('() => document.querySelector("#status").textContent === "Access revoked."')
             assert (await context.request.get(public + '/v1/invitation', headers={'Authorization': 'Bearer ' + token})).status == 401
             results.append({'engine': engine, 'accepted': 2, 'real_s3_downloads': len(s3_downloads), 'revocation': 'passed'})
@@ -104,8 +104,8 @@ async def main():
             assert token.encode() not in stdout + stderr, 'Native output exposed an invitation'
         await page.locator('#refresh').click()
         row = page.locator('.invitation-row').filter(has_text=name)
-        page.once('dialog', lambda dialog: dialog.accept())
-        await row.locator('button', has_text='Revoke').click()
+        await row.get_by_role('button', name='Revoke', exact=True).click()
+        await row.get_by_role('button', name='Revoke access', exact=True).click()
         await page.wait_for_function('() => document.querySelector("#status").textContent === "Access revoked."')
         await context.close(); await browser.close()
 
