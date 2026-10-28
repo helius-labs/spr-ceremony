@@ -1,0 +1,52 @@
+{
+  "checked_at": "2026-10-28T16:29:27.188041+00:00",
+  "source_revision": "e3d185487039381748633b5350146f4fb14826db",
+  "deployed_release": "v0.1.0-rc.10",
+  "deployed_source_revision": "23bee5ff6dd09fa77372112f55907b438e61c7af",
+  "go": "go1.27.3",
+  "gnark": "v0.16.4",
+  "gnark_crypto": "v0.21.1-0.20260913224755-1409fe592052",
+  "gnark_crypto_matches_gnark_go_mod": true,
+  "latest_checked": {
+    "go": "go1.27.3",
+    "gnark": "v0.16.4",
+    "gnark_crypto": "v0.22.0"
+  },
+  "command": "GOTOOLCHAIN=go1.27.3 GOMAXPROCS=4 go run golang.org/x/vuln/cmd/govulncheck@v1.9.0 -show verbose ./...",
+  "called_vulnerabilities": 0,
+  "imported_package_vulnerabilities": 0,
+  "unused_package_advisories": [
+    {
+      "id": "GO-2026-6866",
+      "module": "golang.org/x/net",
+      "found": "v0.60.0",
+      "fixed": "v0.62.0",
+      "package": "golang.org/x/net/html"
+    },
+    {
+      "id": "GO-2026-6860",
+      "module": "golang.org/x/net",
+      "found": "v0.60.0",
+      "fixed": "v0.62.0",
+      "package": "golang.org/x/net/html"
+    },
+    {
+      "id": "GO-2026-5932",
+      "module": "golang.org/x/crypto",
+      "found": "v0.57.0",
+      "package": "golang.org/x/crypto/openpgp",
+      "fixed": null
+    }
+  ],
+  "references": [
+    "https://pkg.go.dev/vuln/GO-2026-6809",
+    "https://go.dev/doc/devel/release",
+    "https://github.com/Consensys-Incorporated/gnark/releases/tag/v0.16.4",
+    "https://github.com/Consensys-Incorporated/gnark-crypto/releases/tag/v0.22.0"
+  ],
+  "limits": [
+    "Source scan using the pinned toolchain; not an independent security audit.",
+    "gnark-crypto v0.22.0 is newer and includes security fixes and breaking changes. Compatibility with existing ceremony artifacts has not been established.",
+    "No dependency versions or live ceremony artifacts were changed by this check."
+  ]
+}

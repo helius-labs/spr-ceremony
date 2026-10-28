@@ -1,7 +1,8 @@
 # Core launch gates and validation
 
-This repository implements the core ceremony workflow. It is not an independent
-security audit or evidence that a public ceremony has already taken place.
+This repository implements the core ceremony workflow. The public-parameter
+campaign is open; accepted contributions are recorded below. These implementation
+checks do not replace independent security review or final-key verification.
 Batch 4999 is deferred. Custom rings and batch 10 remain excluded.
 
 ## Implemented controls
@@ -37,8 +38,9 @@ Batch 4999 is deferred. Custom rings and batch 10 remain excluded.
   public download/output recovery, checked receipts, and native-client handoff.
   Fixed checked assets, same-origin APIs, bounded downloads, and optional S3 CORS
   support dedicated HTTPS hosting. [Hosting and browser checks](hosted-ui.md).
-- Separate SSM control panel for invitation creation, revocation and progress;
-  peer/Host/Origin checks and strict JSON requests protect its loopback boundary.
+- Separate operator control panel for invitation creation, revocation and progress;
+  public access uses AWS IAM authentication and browser pairing. Peer/Host/Origin
+  checks and strict JSON requests protect its local service boundary.
   Invitation tokens are absent from status, logs and participant workspaces.
 - Native hidden-input `join`, pinned one-line installer, immutable GitHub releases
   and signed provenance bundles usable without repository access. Public artifact
@@ -58,6 +60,11 @@ unchanged. Govulncheck 1.9.0 is required in CI; the current scan finds zero
 called or imported-package vulnerabilities. Module-level advisories are reported
 separately for code outside the imported package set; this is not a claim that
 every package in every dependency module is free of advisories.
+[The October 28 dependency check](evidence/security-check-2026-10-28.json) confirms
+the deployed Go toolchain includes the eMudhra-related certificate fix. Gnark is
+current; gnark-crypto remains at gnark's pinned revision. The newer v0.22.0
+release requires compatibility assessment before an engine upgrade. The fresh
+scan reports three advisories in packages outside the application's imports.
 [Security update evidence](evidence/security-updates.json) records versions and
 advisories. Recompiling all 41 circuits after these updates reproduced every
 original R1CS hash. The S3 integration suite additionally exercises
@@ -233,7 +240,7 @@ The contributed-transcript audit, final-key verification and independent review
 remain separately verifiable requirements. The current display identifies the
 actual public parameters instead of claiming that they were generated locally.
 
-The current AWS deployment runs
+The previous AWS deployment ran
 [v0.1.0-rc.9](https://github.com/helius-labs/spr-ceremony/releases/tag/v0.1.0-rc.9),
 source `e626dd0a888d8bdb4d74ae4f20398afcacd1c8bb`. Native release checks passed
 on Linux and macOS, ARM64 and x86-64. The first contributor has 41/41 accepted
@@ -242,7 +249,7 @@ receipts at checkpoint
 Deployment preserved the manifest, checkpoint, invitations and planned beacon.
 Chromium and WebKit checks against the live HTTPS site confirm that public
 parameters display without local-demo warnings. The CLI reports `[n/41]`
-progress. Update operator binaries to rc.9: earlier clients reject the added
+progress. Operator binaries must be rc.9 or newer: earlier clients reject the added
 status fields. Acceptance is separate from completion of the independent full
 transcript audit. [Deployment evidence](evidence/release-v0.1.0-rc.9.json).
 
