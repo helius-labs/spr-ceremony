@@ -1,0 +1,36 @@
+{
+  "release": "v0.1.0-rc.8",
+  "phase": "prepared",
+  "circuits": 41,
+  "invitations": 0,
+  "manifest": {
+    "sha256": "4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079",
+    "size": 31586
+  },
+  "checkpoint": {
+    "sha256": "6fb3f13d94de184f8633da342e1fbabfa39c79d1a4b7c312e025a0518402da49",
+    "size": 6111
+  },
+  "s3": true,
+  "aws_authenticated_connect": true,
+  "unsigned_operator_rejected": true,
+  "public_admin_absent": true,
+  "checked_at": "2026-10-28T14:10:53.321423+00:00",
+  "participant_url": "https://d3gz3drevfa8mb.cloudfront.net",
+  "operator_url": "https://1q82ow4q4c.execute-api.eu-north-1.amazonaws.com",
+  "instance_type": "c7i.48xlarge",
+  "vcpus": 192,
+  "memory_gib": 384,
+  "initialization_audit": {
+    "status": "running",
+    "workers": 24,
+    "source_revision": "565afc67ca8422c78804e0d1c030238c1770d25c",
+    "binary_sha256": "7dccef392514488c095ff3b8f03cb543a561c4722753bf1e26eacf6c13f773c7",
+    "completed": false
+  },
+  "limits": [
+    "Marked rehearsal only; contributions remain provisional until the initialization audit passes.",
+    "Campaign left prepared with zero invitations for the operator to open and contribute first.",
+    "Hosted browser login and full-core recovery were not verified in this rollout."
+  ]
+}
