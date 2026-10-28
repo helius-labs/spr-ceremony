@@ -25,7 +25,7 @@ class DeploymentTests(unittest.TestCase):
         code = compile(blocks[0], 'generated-runtime-configuration', 'exec')
         gateway = 'https://example.execute-api.eu-north-1.amazonaws.com'
         role = 'arn:aws:iam::123456789012:role/Operator'
-        for mode, origin, operator in [('ssm', 'http://127.0.0.1:8080', ''), ('cloudfront', 'https://example.cloudfront.net', ''), ('cloudfront', 'https://example.cloudfront.net', gateway), ('public', 'https://ceremony.example.com', '')]:
+        for mode, origin, operator, workers in [('ssm', 'http://127.0.0.1:8080', '', 1), ('cloudfront', 'https://example.cloudfront.net', '', 1), ('cloudfront', 'https://example.cloudfront.net', gateway, 1), ('cloudfront', 'https://example.cloudfront.net', gateway, 24), ('public', 'https://ceremony.example.com', '', 1)]:
             with self.subTest(mode=mode, operator=operator), tempfile.TemporaryDirectory() as temporary:
                 root = Path(temporary)
                 for directory in ['etc/systemd/system', 'etc/caddy', 'usr/local/bin']:
@@ -34,7 +34,8 @@ class DeploymentTests(unittest.TestCase):
                     (root / f'etc/systemd/system/{service}.service').write_text(
                         f'[Service]\nMemoryMax=1G\nExecStart=/opt/spr/current/native/spr-ceremony-linux-amd64 {command} --dir /var/lib/spr/core --listen 127.0.0.1:{port} --public-url http://127.0.0.1:8080\n')
                 (root / 'usr/local/bin/spr-health').write_text("curl -H 'Host: 127.0.0.1:8080' http://127.0.0.1:8080/healthz\n")
-                with patch('pathlib.Path', side_effect=lambda path: root / path.lstrip('/')), patch.object(sys, 'argv', ['configure', origin, mode, operator, role if operator else '']):
+                with patch('pathlib.Path', side_effect=lambda path: root / path.lstrip('/')), patch.object(sys, 'argv', ['configure', origin, mode, operator, role if operator else '', str(workers)]):
+                    exec(code, {})
                     exec(code, {})
                 admin = (root / 'etc/systemd/system/spr-admin.service').read_text()
                 participant = (root / 'etc/systemd/system/spr-ceremony.service').read_text()
@@ -53,8 +54,11 @@ class DeploymentTests(unittest.TestCase):
                         self.assertIn('Host ' + gateway.split('://')[1], proxy)
                         self.assertIn('--operator-origin ' + gateway, admin)
                         self.assertIn('--operator-role ' + role, admin)
-                        self.assertIn('Environment=GOMAXPROCS=4', admin)
-                        self.assertIn('MemoryMax=12G', admin)
+                        self.assertIn('Environment=GOMAXPROCS=' + str(max(4, workers * 4)) + '\n', admin)
+                        self.assertIn('Environment=SPR_FINALIZE_WORKERS=' + str(workers) + '\n', admin)
+                        self.assertEqual(admin.count('Environment=GOMAXPROCS='), 1)
+                        self.assertEqual(admin.count('Environment=SPR_FINALIZE_WORKERS='), 1)
+                        self.assertIn('MemoryMax=' + str(max(12, workers * 4)) + 'G', admin)
                     else:
                         self.assertNotIn('8081', proxy)
                         self.assertNotIn('--operator-origin', admin)

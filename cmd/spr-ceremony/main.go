@@ -13,6 +13,7 @@ import (
 	"os/signal"
 	"path/filepath"
 	"runtime/debug"
+	"strconv"
 	"strings"
 	"syscall"
 	"time"
@@ -167,6 +168,7 @@ func run(args []string) error {
 			return print(ref)
 		}
 	case "finalize":
+		workers := f.Int("workers", 1, "parallel circuit rebuilds, 1–41; allow RAM for each worker")
 		proofFile := f.String("beacon-file", "", "JSON containing the planned signed beacon")
 		proofURL := f.String("beacon-url", "", "HTTPS endpoint for the exact planned round")
 		action = func() error {
@@ -196,7 +198,7 @@ func run(args []string) error {
 			if e != nil {
 				return e
 			}
-			ref, e := s.Finalize(*out, proof, *maxDomain)
+			ref, e := s.FinalizeWithOptions(*out, proof, *maxDomain, ceremony.AuditOptions{Workers: *workers, Progress: os.Stderr})
 			if e != nil {
 				return e
 			}
@@ -464,7 +466,14 @@ func run(args []string) error {
 			if err = s.RequireSigningKey(); err != nil {
 				return err
 			}
-			handler, err := s.AdminHandlerWithGateway("http://"+*listen, *publicURL, *operatorURL, *operatorRole)
+			workers := 1
+			if value, present := os.LookupEnv("SPR_FINALIZE_WORKERS"); present {
+				workers, err = strconv.Atoi(value)
+				if err != nil {
+					return fmt.Errorf("SPR_FINALIZE_WORKERS must be an integer from 1 to 41")
+				}
+			}
+			handler, err := s.AdminHandlerWithGatewayOptions("http://"+*listen, *publicURL, *operatorURL, *operatorRole, ceremony.AuditOptions{Workers: workers, Progress: os.Stderr})
 			if err != nil {
 				return err
 			}
@@ -664,6 +673,7 @@ func run(args []string) error {
 			return nil
 		}
 	case "export":
+		workers := f.Int("workers", 1, "parallel circuit rebuilds, 1–41; allow RAM for each worker")
 		beacon := f.String("beacon", "", "at least 32 bytes of hex public beacon material")
 		action = func() error {
 			if e := requireOut(); e != nil {
@@ -677,9 +687,10 @@ func run(args []string) error {
 			if e != nil {
 				return e
 			}
-			return s.Export(*track, *out, b, *maxDomain)
+			return s.ExportWithOptions(*track, *out, b, *maxDomain, ceremony.AuditOptions{Workers: *workers, Progress: os.Stderr})
 		}
 	case "verify-export":
+		workers := f.Int("workers", 1, "parallel circuit rebuilds, 1–41; allow RAM for each worker")
 		keys := f.String("export", "", "export directory")
 		digest := f.String("manifest-sha256", "", "out-of-band authenticated manifest digest")
 		checkpoint := f.String("checkpoint-sha256", "", "authenticated checkpoint digest (required for production)")
@@ -715,7 +726,7 @@ func run(args []string) error {
 			if metadata.Track != *track {
 				return fmt.Errorf("export track does not match --track; batch-4999 requires explicit selection")
 			}
-			if e = s.VerifyExport(*keys, *maxDomain); e != nil {
+			if e = s.VerifyExportWithOptions(*keys, *maxDomain, ceremony.AuditOptions{Workers: *workers, Progress: os.Stderr}); e != nil {
 				return e
 			}
 			fmt.Fprintln(os.Stdout, "Export verified against ceremony transcript")

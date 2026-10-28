@@ -43,6 +43,15 @@ variable "operator_origin" {
     error_message = "Use the exact HTTPS operator API Gateway origin."
   }
 }
+variable "finalize_workers" {
+  description = "Parallel core finalization circuits; reserve four vCPUs and four GiB RAM per worker, with a 12 GiB minimum memory budget."
+  type        = number
+  default     = 1
+  validation {
+    condition     = var.finalize_workers >= 1 && var.finalize_workers <= 41 && floor(var.finalize_workers) == var.finalize_workers
+    error_message = "Choose an integer from 1 to 41 and size the instance for its CPU and memory budget."
+  }
+}
 variable "operator_role_arn" {
   type    = string
   default = ""
@@ -82,6 +91,9 @@ variable "data_gib" {
     condition     = var.data_gib >= 100 && var.data_gib <= 2048
     error_message = "Use 100–2048 GiB for retained ceremony transcripts."
   }
+}
+data "aws_ec2_instance_type" "coordinator" {
+  instance_type = var.instance_type
 }
 variable "alarm_email" {
   type    = string
@@ -243,12 +255,19 @@ resource "aws_instance" "coordinator" {
     s3_config       = module.archive.s3_config,
     signing_secret  = aws_secretsmanager_secret.coordinator_key.arn,
     key_loader      = file("${path.module}/load-signing-key.py")
-    operator_origin = var.operator_origin, operator_role = var.operator_role_arn
+    operator_origin = var.operator_origin, operator_role = var.operator_role_arn, finalize_workers = var.finalize_workers
   })
   user_data_replace_on_change = false
   tags                        = { Name = var.name }
   lifecycle {
     ignore_changes = [ami, user_data]
+    precondition {
+      condition = var.operator_origin == "" ? true : (
+        data.aws_ec2_instance_type.coordinator.default_vcpus >= max(4, var.finalize_workers * 4) &&
+        data.aws_ec2_instance_type.coordinator.memory_size >= (max(12, var.finalize_workers * 4) + 4) * 1024
+      )
+      error_message = "Instance is too small for finalize_workers: reserve four vCPUs and four GiB per worker, at least 12 GiB for finalization, plus four GiB for services."
+    }
     precondition {
       condition     = var.access_mode == "ssm" || var.domain != ""
       error_message = "Public access requires a hostname. Use access_mode = ssm for an internal deployment."
@@ -375,3 +394,5 @@ output "data_volume" { value = aws_ebs_volume.data.id }
 output "signing_key_secret_arn" { value = aws_secretsmanager_secret.coordinator_key.arn }
 output "operator_origin" { value = var.operator_origin }
 output "operator_role_arn" { value = var.operator_role_arn }
+
+output "finalize_workers" { value = var.finalize_workers }

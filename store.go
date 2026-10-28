@@ -430,9 +430,16 @@ type AuditOptions struct {
 	Progress io.Writer
 }
 
-func (s *Store) AuditWithOptions(track string, maxDomain uint64, options AuditOptions) error {
+func (options AuditOptions) validate() error {
 	if options.Workers < 1 || options.Workers > 41 {
-		return fmt.Errorf("audit workers must be 1–41")
+		return fmt.Errorf("circuit workers must be 1–41")
+	}
+	return nil
+}
+
+func (s *Store) AuditWithOptions(track string, maxDomain uint64, options AuditOptions) error {
+	if err := options.validate(); err != nil {
+		return err
 	}
 	view, err := s.snapshot()
 	if err != nil {
@@ -446,6 +453,9 @@ func (s *Store) audit(track string, maxDomain uint64, consume func(Circuit, *mpc
 }
 
 func (s *Store) auditWithOptions(track string, maxDomain uint64, consume func(Circuit, *mpc.SrsCommons, *mpc.Phase2Evaluations, State) error, options AuditOptions) error {
+	if err := options.validate(); err != nil {
+		return err
+	}
 	if err := s.AuditCheckpoints(); err != nil {
 		return err
 	}

@@ -9,7 +9,23 @@ invitation tokens or GitHub tokens go into Terraform or user data.
 Operator tools: Terraform, AWS CLI with SSM plugin, GitHub CLI, Python 3.11+.
 Participants need only a browser or the release binary.
 
-For the public rehearsal with CLI operation and no tunnels, follow the
+## Finalization resources
+
+Set Terraform `finalize_workers` to the number of core circuits the operator
+service should rebuild concurrently (1–41, default 1). Deployment configures
+`SPR_FINALIZE_WORKERS`, four Go execution slots per worker, and four GiB per
+worker with a 12 GiB minimum memory limit. Terraform checks the instance has
+that CPU budget and memory plus four GiB for other services. For example,
+24 workers reserve 96 vCPUs and a 96 GiB service memory limit.
+
+Apply the reviewed Terraform plan, then deploy the release to update existing
+services. A worker-count change alone does not restart the live coordinator.
+Keep contributors paused during deployment. Finalization still verifies the
+announced beacon and all contributions; parallel scheduling does not change key
+bytes or skip initialization. Each circuit has sequential work, so adding workers
+does not guarantee proportional speedups. This option does not resize the VM.
+
+For the public ceremony with CLI operation and no tunnels, follow the
 [Mac walkthrough](rehearsal.md). Infrastructure setup is documented in
 [public-test](../infra/public-test/README.md).
 

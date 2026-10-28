@@ -13,14 +13,22 @@ import (
 // VerifyExport independently reproduces keys for the recorded transcript prefix,
 // including snapshots taken before additional contributions were accepted.
 func (s *Store) VerifyExport(dir string, maxDomain uint64) error {
+	return s.VerifyExportWithOptions(dir, maxDomain, AuditOptions{Workers: 1})
+}
+
+// VerifyExportWithOptions reproduces final keys with bounded circuit parallelism.
+func (s *Store) VerifyExportWithOptions(dir string, maxDomain uint64, options AuditOptions) error {
+	if err := options.validate(); err != nil {
+		return err
+	}
 	view, err := s.snapshot()
 	if err != nil {
 		return err
 	}
-	return view.verifyExport(dir, maxDomain)
+	return view.verifyExport(dir, maxDomain, options)
 }
 
-func (s *Store) verifyExport(dir string, maxDomain uint64) error {
+func (s *Store) verifyExport(dir string, maxDomain uint64, options AuditOptions) error {
 	if err := validatePhase1Policy(s.Manifest.Phase1); err != nil {
 		return err
 	}
@@ -99,7 +107,7 @@ func (s *Store) verifyExport(dir string, maxDomain uint64) error {
 		}
 		entries[c.Spec.ID] = entry
 	}
-	return s.audit(m.Track, maxDomain, func(c Circuit, srs *mpc.SrsCommons, evals *mpc.Phase2Evaluations, st State) error {
+	return s.auditWithOptions(m.Track, maxDomain, func(c Circuit, srs *mpc.SrsCommons, evals *mpc.Phase2Evaluations, st State) error {
 		entry, ok := entries[c.Spec.ID]
 		if !ok {
 			return fmt.Errorf("export omitted circuit")
@@ -130,7 +138,7 @@ func (s *Store) verifyExport(dir string, maxDomain uint64) error {
 			}
 		}
 		return nil
-	})
+	}, options)
 }
 
 type ExportedCircuit struct {
@@ -156,6 +164,14 @@ type ExportManifest struct {
 // Export creates a reproducible key snapshot. It does not deploy keys or rotate
 // any Zolana lockfile. Further contributions need a new snapshot and beacon.
 func (s *Store) Export(track, out string, beacon []byte, maxDomain uint64) error {
+	return s.ExportWithOptions(track, out, beacon, maxDomain, AuditOptions{Workers: 1})
+}
+
+// ExportWithOptions builds a key snapshot with bounded circuit parallelism.
+func (s *Store) ExportWithOptions(track, out string, beacon []byte, maxDomain uint64, options AuditOptions) error {
+	if err := options.validate(); err != nil {
+		return err
+	}
 	if !s.Manifest.Phase1.UsesTestParameters() {
 		return fmt.Errorf("production keys require close and finalize with the announced beacon")
 	}
@@ -163,10 +179,10 @@ func (s *Store) Export(track, out string, beacon []byte, maxDomain uint64) error
 	if err != nil {
 		return err
 	}
-	return view.export(track, out, beacon, maxDomain, nil)
+	return view.export(track, out, beacon, maxDomain, nil, options)
 }
 
-func (s *Store) export(track, out string, beacon []byte, maxDomain uint64, proof *BeaconProof) error {
+func (s *Store) export(track, out string, beacon []byte, maxDomain uint64, proof *BeaconProof, options AuditOptions) error {
 	if len(beacon) < 32 {
 		return fmt.Errorf("beacon must contain at least 32 bytes")
 	}
@@ -191,7 +207,16 @@ func (s *Store) export(track, out string, beacon []byte, maxDomain uint64, proof
 		m.BeaconProof = proof
 		m.Closure = &ref
 	}
-	e = s.audit(track, maxDomain, func(c Circuit, srs *mpc.SrsCommons, evals *mpc.Phase2Evaluations, st State) error {
+	// Reserve one result slot per circuit in manifest order. Each worker writes
+	// only its own slot; scheduling cannot change the export manifest or its hash.
+	indexes := make(map[string]int)
+	for _, c := range s.Manifest.Circuits {
+		if c.Spec.Track == track {
+			indexes[c.Spec.ID] = len(m.Circuits)
+			m.Circuits = append(m.Circuits, ExportedCircuit{})
+		}
+	}
+	e = s.auditWithOptions(track, maxDomain, func(c Circuit, srs *mpc.SrsCommons, evals *mpc.Phase2Evaluations, st State) error {
 		if len(st.History) == 0 {
 			return fmt.Errorf("%s has no accepted contributions", c.Spec.ID)
 		}
@@ -216,9 +241,9 @@ func (s *Store) export(track, out string, beacon []byte, maxDomain uint64, proof
 		if e != nil {
 			return e
 		}
-		m.Circuits = append(m.Circuits, ExportedCircuit{Circuit: c, Head: st.Head, Contributions: len(st.History), PK: pa, VK: va})
+		m.Circuits[indexes[c.Spec.ID]] = ExportedCircuit{Circuit: c, Head: st.Head, Contributions: len(st.History), PK: pa, VK: va}
 		return nil
-	})
+	}, options)
 	if e != nil {
 		return e
 	}

@@ -30,13 +30,14 @@ type OperatorJob struct {
 }
 
 type operatorJobs struct {
-	store     *Store
-	chainInfo func(context.Context) ([]byte, error)
-	beacon    func(context.Context, BeaconPlan) (BeaconProof, error)
+	auditOptions AuditOptions
+	store        *Store
+	chainInfo    func(context.Context) ([]byte, error)
+	beacon       func(context.Context, BeaconPlan) (BeaconProof, error)
 }
 
 func newOperatorJobs(store *Store) *operatorJobs {
-	return &operatorJobs{store: store, chainInfo: func(ctx context.Context) ([]byte, error) {
+	return &operatorJobs{store: store, auditOptions: AuditOptions{Workers: 1}, chainInfo: func(ctx context.Context) ([]byte, error) {
 		ctx, cancel := context.WithTimeout(ctx, 30*time.Second)
 		defer cancel()
 		r, err := http.NewRequestWithContext(ctx, "GET", "https://api2.drand.sh/"+QuicknetChainHash+"/info", nil)
@@ -252,7 +253,7 @@ func (j *operatorJobs) execute(input OperatorJobRequest) (Artifact, error) {
 		if err != nil {
 			return Artifact{}, err
 		}
-		return s.Finalize(filepath.Join(s.Dir, "export", "core"), proof, 1<<22)
+		return s.FinalizeWithOptions(filepath.Join(s.Dir, "export", "core"), proof, 1<<22, j.auditOptions)
 	}
 	return Artifact{}, fmt.Errorf("unsupported coordinator operation")
 }

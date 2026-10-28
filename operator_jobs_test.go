@@ -104,6 +104,7 @@ func TestOperatorJobsCloseAndFinalizeWithoutASession(t *testing.T) {
 	client.Progress = io.Discard
 	must(t, client.Run(context.Background(), invitation, Core))
 	jobs := newOperatorJobs(s)
+	jobs.auditOptions = AuditOptions{Workers: 2}
 	jobs.beacon = func(context.Context, BeaconPlan) (BeaconProof, error) { return proof, nil }
 	_, ref, err = s.Lifecycle()
 	must(t, err)

@@ -187,6 +187,15 @@ func (s *Store) OpenCeremony(plan BeaconPlan) (Artifact, error) {
 // Finalize binds the exported keys to the closed heads and a verified, planned
 // beacon. Repeating it is idempotent; a different beacon/export cannot replace it.
 func (s *Store) Finalize(out string, proof BeaconProof, maxDomain uint64) (Artifact, error) {
+	return s.FinalizeWithOptions(out, proof, maxDomain, AuditOptions{Workers: 1})
+}
+
+// FinalizeWithOptions preserves the beacon and closure checks while rebuilding
+// independent circuits concurrently. Retrying uses the same verification budget.
+func (s *Store) FinalizeWithOptions(out string, proof BeaconProof, maxDomain uint64, options AuditOptions) (Artifact, error) {
+	if err := options.validate(); err != nil {
+		return Artifact{}, err
+	}
 	unlock, err := s.lock()
 	if err != nil {
 		return Artifact{}, err
@@ -230,7 +239,7 @@ func (s *Store) Finalize(out string, proof BeaconProof, maxDomain uint64) (Artif
 			if err = s.MaterializeExport(out); err != nil {
 				return ref, err
 			}
-		} else if err = s.VerifyExport(out, maxDomain); err != nil {
+		} else if err = s.VerifyExportWithOptions(out, maxDomain, options); err != nil {
 			return ref, err
 		}
 		return *cp.Lifecycle.FinalExport, nil
@@ -238,7 +247,7 @@ func (s *Store) Finalize(out string, proof BeaconProof, maxDomain uint64) (Artif
 	// Reuse an export left by a crash before checkpoint publication, but verify
 	// its complete contents and beacon before marking it final.
 	if _, e := os.Stat(out); os.IsNotExist(e) {
-		if err = s.export(Core, out, beacon, maxDomain, &proof); err != nil {
+		if err = s.export(Core, out, beacon, maxDomain, &proof, options); err != nil {
 			return ref, err
 		}
 	} else {
@@ -249,7 +258,7 @@ func (s *Store) Finalize(out string, proof BeaconProof, maxDomain uint64) (Artif
 		if exported.Beacon != hex.EncodeToString(beacon) || exported.BeaconProof == nil {
 			return ref, fmt.Errorf("existing export has a different beacon")
 		}
-		if err = s.VerifyExport(out, maxDomain); err != nil {
+		if err = s.VerifyExportWithOptions(out, maxDomain, options); err != nil {
 			return ref, err
 		}
 	}

@@ -253,6 +253,9 @@ Finalization replays contributions, seals all keys with the planned beacon, and
 archives keys and export metadata before publishing the finalized checkpoint.
 Repeating finalization is idempotent. Reviewers should restore into a separate
 machine and run `audit` and `verify-export` with independently obtained digests.
+Local `finalize`, `export`, and `verify-export` accept `--workers 1–41`, defaulting
+to one. Parallel workers retain manifest order and produce the same key and
+export bytes as sequential execution; allocate RAM for each concurrent circuit.
 Those checks cannot establish the real-world time of an announcement; retain the
 external witness records for opening and closure.
 

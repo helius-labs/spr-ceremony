@@ -65,8 +65,8 @@ with tempfile.TemporaryDirectory(prefix='spr-cli-') as temporary:
             status = json.loads(run('status', '--dir', 'ceremony'))
             assert status['lifecycle']['phase'] == 'open'
             assert len(status['circuits']) == 2 and all(len(c['history']) == 1 for c in status['circuits'])
-            run('export', '--dir', 'ceremony', '--out', 'keys', '--beacon', '42' * 32)
-            run('verify-export', '--dir', 'ceremony', '--export', 'keys', '--manifest-sha256', manifest)
+            run('export', '--dir', 'ceremony', '--out', 'keys', '--beacon', '42' * 32, '--workers', '2')
+            run('verify-export', '--dir', 'ceremony', '--export', 'keys', '--manifest-sha256', manifest, '--workers', '2')
             if endpoint:
                 run('sync', '--dir', 'ceremony', '--out', 'recovery.json')
                 digest = hashlib.sha256((root / 'recovery.json').read_bytes()).hexdigest()

@@ -140,6 +140,9 @@ def main():
     access_mode = outputs.get('access_mode', {}).get('value', 'public')
     operator_origin = outputs.get('operator_origin', {}).get('value', '')
     operator_role = outputs.get('operator_role_arn', {}).get('value', '')
+    finalize_workers = outputs.get('finalize_workers', {}).get('value', 1)
+    if type(finalize_workers) is not int or not 1 <= finalize_workers <= 41:
+        parser.error('finalize_workers must be an integer from 1 to 41')
     if operator_origin:
         # Refuse to configure gateway flags on a release predating IAM support.
         run('git', 'cat-file', '-e', args.source_sha + ':operator_gateway.go')
@@ -248,11 +251,13 @@ install -o root -g root -m 0755 {q(release_dir + '/load-signing-key.py')} /usr/l
 printf '%s\\n' {q(get('signing_key_secret_arn'))} > /etc/spr/signing-secret
 chown root:spr /etc/spr/signing-secret
 chmod 640 /etc/spr/signing-secret
-python3 - {q(get('url'))} {q(access_mode)} {q(operator_origin)} {q(operator_role)} <<'UNITS'
+python3 - {q(get('url'))} {q(access_mode)} {q(operator_origin)} {q(operator_role)} {q(str(finalize_workers))} <<'UNITS'
 from pathlib import Path
 import re, shlex, sys, urllib.parse
 origin, access_mode = sys.argv[1:3]
 operator_origin, operator_role = sys.argv[3:5] if len(sys.argv) >= 5 else ('', '')
+finalize_workers = int(sys.argv[5]) if len(sys.argv) >= 6 else 1
+assert 1 <= finalize_workers <= 41
 hostname = urllib.parse.urlsplit(origin).netloc
 for name in ['spr-ceremony', 'spr-admin']:
     path = Path('/etc/systemd/system/' + name + '.service')
@@ -277,8 +282,11 @@ for name in ['spr-ceremony', 'spr-admin']:
         lines[n] = 'ExecStart=' + shlex.join(arguments)
     text = '\\n'.join(lines) + '\\n'
     if name == 'spr-admin' and operator_origin:
-        text = re.sub(r'^MemoryMax=.*$', 'MemoryMax=12G', text, flags=re.MULTILINE)
-        if 'Environment=GOMAXPROCS=4' not in text: text = text.replace('[Service]', '[Service]\\nEnvironment=GOMAXPROCS=4')
+        text = re.sub(r'^MemoryMax=.*$', 'MemoryMax=' + str(max(12, finalize_workers * 4)) + 'G', text, flags=re.MULTILINE)
+        for key, value in [('GOMAXPROCS', max(4, finalize_workers * 4)), ('SPR_FINALIZE_WORKERS', finalize_workers)]:
+            line = 'Environment=' + key + '=' + str(value)
+            text = re.sub(r'^Environment=' + key + r'=.*\\n?', '', text, flags=re.MULTILINE)
+            text = text.replace('[Service]', '[Service]\\n' + line)
     path.write_text(text)
 health = Path('/usr/local/bin/spr-health')
 health.write_text(re.sub(r"(-H 'Host: )[^']*(')", lambda match: match[1] + hostname + match[2], health.read_text()))

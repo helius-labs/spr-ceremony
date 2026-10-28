@@ -91,6 +91,14 @@ func pairingCode() (string, error) {
 // listener; it strips caller identity headers and supplies API Gateway's verified
 // IAM principal. Public browser requests must also present an approved cookie.
 func (s *Store) AdminHandlerWithGateway(controlOrigin, publicURL, gatewayOrigin, roleARN string) (http.Handler, error) {
+	return s.AdminHandlerWithGatewayOptions(controlOrigin, publicURL, gatewayOrigin, roleARN, AuditOptions{Workers: 1})
+}
+
+// AdminHandlerWithGatewayOptions applies the server's resource budget to finalization.
+func (s *Store) AdminHandlerWithGatewayOptions(controlOrigin, publicURL, gatewayOrigin, roleARN string, options AuditOptions) (http.Handler, error) {
+	if err := options.validate(); err != nil {
+		return nil, err
+	}
 	private, err := s.AdminHandler(controlOrigin, publicURL)
 	if err != nil {
 		return nil, err
@@ -113,6 +121,7 @@ func (s *Store) AdminHandlerWithGateway(controlOrigin, publicURL, gatewayOrigin,
 	control, _ := url.Parse(controlOrigin)
 	sessions := newOperatorSessions()
 	jobs := newOperatorJobs(s)
+	jobs.auditOptions = options
 	delegate := func(w http.ResponseWriter, r *http.Request, path string) {
 		copy := r.Clone(r.Context())
 		u := *r.URL

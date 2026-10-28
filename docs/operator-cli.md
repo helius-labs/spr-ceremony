@@ -99,6 +99,11 @@ Phase changes run on AWS and continue if the terminal disconnects. Use
 export downloads and independently reproduces them locally. Existing export
 files are checked, never replaced. This verification also takes substantial time.
 
+Use `operator export --out final-keys --workers 4` to rebuild circuits in parallel
+on your computer, allowing RAM for each worker. Hosted finalization uses the
+server's configured worker count; the operator command stays the same. See
+[AWS resource sizing](aws.md#finalization-resources).
+
 If an open ceremony misses its deadline:
 
 ```sh

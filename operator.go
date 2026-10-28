@@ -475,6 +475,14 @@ func (o *Operator) AuditWithOptions(ctx context.Context, work string, maxDomain 
 // Export downloads the finalized public keys and independently reproduces them
 // from the pinned transcript. Existing output is verified, never overwritten.
 func (o *Operator) Export(ctx context.Context, work, out string, maxDomain uint64, progress io.Writer) (RecoveryPoint, string, error) {
+	return o.ExportWithOptions(ctx, work, out, maxDomain, AuditOptions{Workers: 1, Progress: progress})
+}
+
+func (o *Operator) ExportWithOptions(ctx context.Context, work, out string, maxDomain uint64, options AuditOptions) (RecoveryPoint, string, error) {
+	if err := options.validate(); err != nil {
+		return RecoveryPoint{}, "", err
+	}
+	progress := options.Progress
 	if progress == nil {
 		progress = io.Discard
 	}
@@ -500,7 +508,8 @@ func (o *Operator) Export(ctx context.Context, work, out string, maxDomain uint6
 			return fmt.Errorf("export differs from the finalized checkpoint")
 		}
 		fmt.Fprintf(progress, "Verifying final keys for %d circuits against the transcript and beacon…\n", len(s.Manifest.Circuits))
-		return s.VerifyExport(out, maxDomain)
+		options.Progress = progress
+		return s.VerifyExportWithOptions(out, maxDomain, options)
 	})
 }
 

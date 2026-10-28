@@ -152,7 +152,8 @@ ConditionPathExists=/var/lib/spr/core/manifest.json
 User=spr
 Group=spr
 Environment=AWS_REGION=${region}
-Environment=GOMAXPROCS=4
+Environment=GOMAXPROCS=${max(4, finalize_workers * 4)}
+Environment=SPR_FINALIZE_WORKERS=${finalize_workers}
 ExecStartPre=/usr/local/bin/spr-load-signing-key
 ExecStart=/opt/spr/current/native/spr-ceremony-linux-amd64 admin --signing-key /var/lib/spr/signing/coordinator.private.asc --dir /var/lib/spr/core --s3-config /etc/spr/s3.json --listen 127.0.0.1:8081 --public-url ${origin}${operator_origin != "" ? " --operator-origin ${operator_origin} --operator-role ${operator_role}" : ""}
 Restart=on-failure
@@ -169,7 +170,7 @@ RestrictSUIDSGID=true
 LockPersonality=true
 ReadWritePaths=/var/lib/spr
 LimitCORE=0
-MemoryMax=${operator_origin != "" ? "12G" : "1G"}
+MemoryMax=${operator_origin != "" ? max(12, finalize_workers * 4) : 1}G
 [Install]
 WantedBy=multi-user.target
 SERVICE
