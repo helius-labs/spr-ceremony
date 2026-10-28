@@ -364,3 +364,11 @@ The hosted installer and binaries match the attested release; live Chromium and
 WebKit checks passed. The full operator status, including all 140 accepted
 contributions, remained unchanged. The new command was exercised against small
 signed fixtures; no additional full-core audit or finalization was performed.
+
+A subsequent [public audit recovery check](evidence/public-audit-recovery.json)
+interrupted an isolated AWS audit during snapshot download, then resumed the same
+pinned checkpoint with rc.13. All 342 cached objects (6,186,217,858 bytes) retained
+their files and passed another SHA256 check. The full live operator status was
+unchanged. No partial object transfer was present at interruption, so this checks
+workspace recovery rather than a mid-object Range resume. The resumed full-core
+audit remains a separate, unfinished verification result.
