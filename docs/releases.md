@@ -43,6 +43,15 @@ runs native contribution/export/terminal checks on all four target platforms,
 uploads a draft, then publishes an immutable release. Existing versions are not
 overwritten. Keep release immutability enabled in repository settings.
 
+Automatic contribution-record commits do not trigger push checks. If the current
+main commit has no successful Check run, start one manually and wait for it to
+pass before releasing. Release accepts push or manual checks on that exact main
+commit; pull-request checks do not satisfy the gate.
+
+```sh
+gh workflow run check.yml --ref main
+```
+
 ```sh
 gh workflow run binaries.yml --ref main -f version=NEW_VERSION
 ```

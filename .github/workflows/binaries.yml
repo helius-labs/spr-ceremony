@@ -32,8 +32,8 @@ jobs:
         run: |
           test "$GITHUB_REF" = refs/heads/main
           python3 -c 'import os,re; assert re.fullmatch(r"v[0-9]+\.[0-9]+\.[0-9]+(?:-rc\.[0-9]+)?",os.environ["SPR_RELEASE_VERSION"])'
-          gh run list --workflow check.yml --commit "$GITHUB_SHA" --json conclusion,event \
-            --jq 'any(.[]; .event == "push" and .conclusion == "success")' | grep -qx true
+          gh run list --workflow check.yml --branch main --commit "$GITHUB_SHA" --json conclusion,event,status \
+            --jq 'any(.[]; (.event == "push" or .event == "workflow_dispatch") and .status == "completed" and .conclusion == "success")' | grep -qx true
           gh api "repos/$GITHUB_REPOSITORY/git/matching-refs/tags/$SPR_RELEASE_VERSION" \
             --jq "[.[] | select(.ref == \"refs/tags/$SPR_RELEASE_VERSION\")] | length" | grep -qx 0
       - run: bash scripts/build-release.sh
