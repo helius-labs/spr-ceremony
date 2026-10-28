@@ -526,7 +526,17 @@ func (o *Operator) withSnapshot(ctx context.Context, work string, progress io.Wr
 	if _, _, err = o.manifest(ctx); err != nil {
 		return point, "", err
 	}
-	if err = os.MkdirAll(work, 0700); err != nil {
+	return withPublicSnapshot(ctx, o.client, o.Config.URL, work, point, progress, verify)
+}
+
+func withPublicSnapshot(ctx context.Context, client *Client, origin, work string, point RecoveryPoint, progress io.Writer, verify func(*Store) error) (RecoveryPoint, string, error) {
+	if progress == nil {
+		progress = io.Discard
+	}
+	if strings.TrimSpace(work) == "" {
+		return point, "", fmt.Errorf("choose a public audit workspace")
+	}
+	if err := os.MkdirAll(work, 0700); err != nil {
 		return point, "", err
 	}
 	lock, err := os.OpenFile(filepath.Join(work, ".operator-audit.lock"), os.O_CREATE|os.O_RDWR, 0600)
@@ -543,7 +553,7 @@ func (o *Operator) withSnapshot(ctx context.Context, work string, progress io.Wr
 		return point, "", err
 	}
 	directory := filepath.Join(work, point.Manifest.SHA256, point.Checkpoint.SHA256)
-	remote := &operatorPublicStore{client: o.client, origin: strings.TrimRight(o.Config.URL, "/"), cache: cache}
+	remote := &operatorPublicStore{client: client, origin: strings.TrimRight(origin, "/"), cache: cache}
 	if _, err = os.Stat(directory); os.IsNotExist(err) {
 		fmt.Fprintln(progress, "Downloading the public transcript…")
 		if err = Restore(ctx, remote, directory, point.Manifest, point.Checkpoint); err != nil {

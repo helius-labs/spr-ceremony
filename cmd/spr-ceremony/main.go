@@ -627,7 +627,30 @@ func run(args []string) error {
 		attestation := f.String("attestation", "", "participant attestation JSON for inclusion verification")
 		digest := f.String("manifest-sha256", "", "out-of-band authenticated manifest digest")
 		checkpoint := f.String("checkpoint-sha256", "", "authenticated checkpoint digest (required for production)")
+		var publicURL, work string
+		if args[0] == "audit" {
+			f.StringVar(&publicURL, "url", "", "public coordinator origin; audit without AWS access or invitations")
+			f.StringVar(&work, "work", "audit", "reusable public download workspace with --url")
+		}
 		action = func() error {
+			if publicURL != "" {
+				if *track != ceremony.Core {
+					return fmt.Errorf("public audit supports core only")
+				}
+				privateOptions := *signingKey != "" || *remoteConfig != ""
+				f.Visit(func(flag *flag.Flag) { privateOptions = privateOptions || flag.Name == "dir" })
+				if privateOptions {
+					return fmt.Errorf("public audit uses --work, without --dir, --signing-key or --s3-config")
+				}
+				point, directory, err := ceremony.AuditPublic(context.Background(), publicURL, work, *digest, *checkpoint, *maxDomain, ceremony.AuditOptions{Workers: *workers, Progress: os.Stderr})
+				if err != nil {
+					return err
+				}
+				fmt.Fprintln(os.Stdout, "Transcript verified:", ceremony.Core)
+				fmt.Fprintln(os.Stdout, "Checkpoint:", point.Checkpoint.SHA256)
+				fmt.Fprintln(os.Stdout, "Public snapshot:", directory)
+				return nil
+			}
 			s, e := open()
 			if e != nil {
 				return e

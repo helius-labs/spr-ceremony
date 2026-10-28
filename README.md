@@ -93,6 +93,20 @@ Completed contributions appear automatically on the participant site. A separate
 GitHub workflow mirrors verified receipt records; acceptance never waits for
 GitHub. [Publication details](docs/operator-cli.md#contribution-records).
 
+## Verify independently
+
+With authenticated manifest and checkpoint hashes from the operator:
+
+```sh
+./spr-ceremony audit --url https://d3gz3drevfa8mb.cloudfront.net \
+  --manifest-sha256 MANIFEST_SHA256 --checkpoint-sha256 CHECKPOINT_SHA256 \
+  --work audit --workers 4
+```
+
+No AWS access or invitation needed. This downloads and verifies the pinned public
+transcript, including every contribution. Full-core verification can take hours;
+keep `audit/` to reuse downloads. [Audit details](docs/operator-cli.md#public-audit).
+
 ## Build from source
 
 Optional; requires Go 1.27.3:

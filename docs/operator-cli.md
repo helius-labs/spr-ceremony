@@ -60,6 +60,30 @@ For parallel verification, use `operator audit --workers 4`. Each worker needs
 additional RAM. Audit prints circuit starts, completed counts and elapsed times;
 it checks every circuit with the same pinned engine and initialization rules.
 
+## Public audit
+
+Anyone with the CLI can audit a chosen checkpoint without an invitation, AWS
+credentials or operator configuration:
+
+```sh
+./spr-ceremony audit --url https://d3gz3drevfa8mb.cloudfront.net \
+  --manifest-sha256 MANIFEST_SHA256 --checkpoint-sha256 CHECKPOINT_SHA256 \
+  --work audit --workers 4
+```
+
+Replace both hashes with values authenticated through the operator or an
+independently witnessed publication. Operators can obtain them with
+`operator status --json` (`manifest.sha256` and `checkpoint.sha256`). Downloading
+hashes from the same untrusted server alone does not authenticate the ceremony.
+
+The command verifies Phase 1 derivation, circuit initialization, every included
+contribution, receipt signatures and checkpoint history. It stays on the requested
+checkpoint even while new contributions arrive. The workspace contains public
+artifacts only; interrupted downloads resume and completed downloads are reused.
+Cryptographic verification runs again on each invocation and can take hours for
+the full core set. `--workers` defaults to 1; more workers require more RAM.
+An audit does not close the ceremony or verify final exported keys.
+
 ## Contribution records
 
 Completed core contributions appear automatically in the participant site's
