@@ -41,6 +41,15 @@ func TestPrivateAdminBoundaryAndRevocation(t *testing.T) {
 	request := func(method, path, body string) *httptest.ResponseRecorder {
 		return call(method, path, body, "127.0.0.1:8081", "127.0.0.1:1", origin, "1", "same-origin")
 	}
+	landing := call("GET", "/", "", "localhost:8081", "127.0.0.1:1", "", "", "none")
+	if landing.Code != http.StatusTemporaryRedirect || landing.Header().Get("Location") != origin+"/" {
+		t.Fatal("localhost landing page did not redirect to the numeric control origin")
+	}
+	for _, path := range []string{"/admin/status", "/admin/invite"} {
+		if w := call("GET", path, "", "localhost:8081", "127.0.0.1:1", "", "1", "none"); w.Code != 403 {
+			t.Fatal("localhost alias exposed an admin API")
+		}
+	}
 	for _, body := range []string{`{"name":"bad/name","hours":24}`, `{"name":"alice","hours":999}`, `{"name":"alice","hours":24,"extra":"secret"}`, `{"name":"alice","hours":24} {}`} {
 		if w := request("POST", "/admin/invite", body); w.Code != 400 {
 			t.Fatalf("bad input: %d", w.Code)

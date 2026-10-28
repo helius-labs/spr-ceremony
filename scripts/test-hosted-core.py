@@ -5,6 +5,7 @@ import asyncio
 import hashlib
 import json
 import os
+import re
 from pathlib import Path
 import socket
 import subprocess
@@ -65,7 +66,10 @@ async def main():
             browser = await getattr(pw, args.browser).launch()
             context = await browser.new_context(accept_downloads=True)
             reports = []
-            await context.expose_binding('recordSPRReport', lambda source, report: reports.append(report))
+            def record_report(source, report):
+                reports.append(report)
+                (out / 'worker-reports.json').write_text(json.dumps(reports, indent=2) + '\n')
+            await context.expose_binding('recordSPRReport', record_report)
             await context.add_init_script('''
                 const OriginalWorker = window.Worker;
                 window.Worker = class extends OriginalWorker {
@@ -114,7 +118,15 @@ async def main():
                     reopened = True
                 if stage in ['complete', 'error', 'paused']: break
                 await asyncio.sleep(1)
-            assert stage == 'complete', await page.locator('#status').inner_text()
+            if stage != 'complete':
+                message = await page.locator('#status').inner_text()
+                private_token = json.loads(invite.read_text())['token']
+                message = re.sub(r'https?://[^\s<>"\x27]+', '[URL]', message.replace(private_token, '[private invitation]'))
+                failure = {'stage': stage, 'accepted': count, 'seconds': time.monotonic() - start,
+                           'message': message, 'storage': await page.evaluate('async () => await navigator.storage.estimate()')}
+                (out / 'failure.json').write_text(json.dumps(failure, indent=2) + '\n')
+                print(json.dumps(failure), flush=True)
+            assert stage == 'complete', 'Browser session did not complete'
             browser_seconds = time.monotonic() - start
             assert not args.reopen or reopened, 'Reopen scenario did not run'
             assert await page.locator('#count').inner_text() == f'{len(manifest["circuits"])} / {len(manifest["circuits"])} accepted'

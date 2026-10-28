@@ -16,10 +16,14 @@
   <noscript><p class="notice">Enable JavaScript or use the terminal client.</p></noscript>
   <p id="public-summary" class="detail"></p>
   <p id="notice" class="notice" hidden></p>
-  <section id="join" aria-labelledby="join-title">
+  <section id="connecting" aria-labelledby="connecting-title" aria-busy="true" role="status">
+    <h2 id="connecting-title">Loading…</h2>
+    <progress max="100" aria-label="Checking invitation"></progress>
+  </section>
+  <section id="join" aria-labelledby="join-title" hidden>
     <h2 id="join-title">Your invitation</h2>
     <label class="file-label" for="invitation">Choose your invitation file</label>
-    <input id="invitation" type="file" accept=".json,application/json">
+    <input id="invitation" type="file" accept=".json,application/json" disabled>
     <p class="detail">Or open your private link.</p>
   </section>
   <section id="participant" aria-labelledby="participant-title" hidden>
@@ -36,7 +40,7 @@
     <p class="detail" id="keep-open">Keep this tab open. Terminal is faster.</p>
     <div class="buttons footer-actions"><button id="receipts" class="secondary" disabled>Save receipts</button><button id="refresh" class="secondary">Refresh</button></div>
   </section>
-  <p id="status" role="status" aria-live="polite">Loading…</p>
+  <p id="status" role="status" aria-live="polite" hidden></p>
   <section id="native-panel" aria-labelledby="native-title" hidden>
     <h2 id="native-title">Use your terminal.</h2>
     <div id="one-liner" hidden><p>One command. Paste your invitation when asked.</p><pre id="join-command"></pre><div class="buttons"><button id="copy-command">Copy command</button><button id="copy-invitation" class="secondary">Copy invitation</button></div><p class="detail">The command contains no invitation. Input is hidden in your terminal.</p></div>

@@ -29,6 +29,7 @@ def main():
     parser.add_argument('--binary', required=True)
     parser.add_argument('--from-prepared', required=True)
     parser.add_argument('--out', required=True)
+    parser.add_argument('--prepared', action='store_true', help='leave the rehearsal prepared so an operator can announce a beacon and open it')
     args = parser.parse_args()
     os.umask(0o077)
     binary = str(Path(args.binary).resolve())
@@ -84,7 +85,7 @@ def main():
         write_json(unsigned / 'manifest.json', manifest)
         checkpoint['manifest'] = reference(unsigned / 'manifest.json')
         shutil.copyfile(unsigned / 'manifest.json', objects / checkpoint['manifest']['sha256'])
-        checkpoint['lifecycle'] = {'phase': 'open'}
+        checkpoint['lifecycle'] = {'phase': 'prepared' if args.prepared else 'open'}
         write_json(root / 'checkpoint.json', checkpoint)
         ref = reference(root / 'checkpoint.json')
         shutil.copyfile(root / 'checkpoint.json', objects / ref['sha256'])

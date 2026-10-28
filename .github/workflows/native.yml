@@ -71,3 +71,4 @@ jobs:
           "$binary" version
           python3 scripts/smoke-cli.py "$binary"
           python3 scripts/test-terminal.py "$binary"
+          python3 scripts/test-operator.py "$binary"

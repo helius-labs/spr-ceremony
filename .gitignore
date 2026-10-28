@@ -3,6 +3,8 @@
 /ceremony-data/
 /rehearsal/
 /work/
+/audit/
+/ceremony-operator.json
 /invitations/
 /export/
 /go.work

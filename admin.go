@@ -125,7 +125,7 @@ func (s *Store) adminStatus() (any, error) {
 			reservations = append(reservations, map[string]any{"circuit": c.Spec.ID, "expires": lease.Expires})
 		}
 	}
-	return map[string]any{"phase": cp.Lifecycle.Phase, "beacon": cp.Lifecycle.Beacon, "manifest": s.ManifestArtifact, "checkpoint": ref, "invitations": invitations, "reservations": reservations, "insecure_test_setup": s.Manifest.Phase1.InsecureTestSetup, "s3": s.Remote != nil, "coordinator_key": s.Manifest.CoordinatorKey, "beacon_recoveries": cp.Lifecycle.Recoveries}, nil
+	return map[string]any{"operator_protocol": 1, "phase": cp.Lifecycle.Phase, "beacon": cp.Lifecycle.Beacon, "manifest": s.ManifestArtifact, "checkpoint": ref, "invitations": invitations, "reservations": reservations, "insecure_test_setup": s.Manifest.Phase1.InsecureTestSetup, "s3": s.Remote != nil, "coordinator_key": s.Manifest.CoordinatorKey, "beacon_recoveries": cp.Lifecycle.Recoveries}, nil
 }
 
 // AdminHandler is only for a separate loopback listener reached through SSM.
@@ -234,7 +234,17 @@ func (s *Store) AdminHandler(origin, publicURL string) (http.Handler, error) {
 		w.Header().Set("Cross-Origin-Opener-Policy", "same-origin")
 		host, _, e := net.SplitHostPort(r.RemoteAddr)
 		peer := net.ParseIP(host)
-		if e != nil || peer == nil || !peer.IsLoopback() || r.Host != u.Host || r.URL.RawQuery != "" {
+		if e != nil || peer == nil || !peer.IsLoopback() || r.URL.RawQuery != "" {
+			http.Error(w, "Forbidden", 403)
+			return
+		}
+		// A typed localhost URL is a common SSM entry point. Only the empty
+		// landing-page GET redirects; APIs retain the exact numeric origin.
+		if r.Method == "GET" && r.URL.Path == "/" && r.Host == "localhost:"+u.Port() && r.Header.Get("Origin") == "" {
+			http.Redirect(w, r, origin+"/", http.StatusTemporaryRedirect)
+			return
+		}
+		if r.Host != u.Host {
 			http.Error(w, "Forbidden", 403)
 			return
 		}
@@ -249,6 +259,10 @@ func (s *Store) AdminHandler(origin, publicURL string) (http.Handler, error) {
 		if strings.HasPrefix(r.URL.Path, "/admin/") {
 			if r.Header.Get("X-SPR-Admin") != "1" || (r.Method != "GET" && r.Header.Get("Origin") != origin) {
 				http.Error(w, "Forbidden", 403)
+				return
+			}
+			if pin := r.Header.Get("X-SPR-Manifest"); r.Method != "GET" && pin != "" && pin != s.ManifestArtifact.SHA256 {
+				http.Error(w, "Campaign changed. Refresh or reconnect before continuing.", 409)
 				return
 			}
 		}

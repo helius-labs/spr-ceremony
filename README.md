@@ -3,7 +3,7 @@
 A trusted setup for **41 core circuits**. Browser or terminal. Private invitations.
 Verified contributions. Signed invitations and receipts. Public final keys.
 
-Release candidate: [v0.1.0-rc.5](https://github.com/helius-labs/spr-ceremony/releases/tag/v0.1.0-rc.5).
+Download the latest [release candidate](https://github.com/helius-labs/spr-ceremony/releases).
 The public campaign is not open; launch gates are below.
 
 Custom rings, batch 10 and batch 4999 are excluded. The cryptographic engine is
@@ -51,6 +51,20 @@ Use **Reissue link** to renew access and preserve progress.
 Rehearsal proving keys are explicitly insecure. [Testing guide](docs/hosted-ui.md).
 
 ## Operate
+
+With the participant and control SSM tunnels open:
+
+```sh
+./spr-ceremony operator connect
+./spr-ceremony operator invite bob
+./spr-ceremony operator status
+./spr-ceremony operator audit
+```
+
+`invite` saves a private invitation file and prints the contributor's command.
+Send both privately. `audit` downloads and verifies the current public transcript.
+For a public participant site, add `--url https://CEREMONY_HOST` to `connect`.
+[CLI guide](docs/operator-cli.md).
 
 [Deploy to AWS and invite contributors](docs/aws.md). Terraform provisions HTTPS,
 private versioned S3, encrypted storage, backups and alarms. The control panel is

@@ -30,7 +30,10 @@ func main() {
 }
 func run(args []string) error {
 	if len(args) == 0 {
-		return fmt.Errorf("usage: spr-ceremony <version|catalog|keygen|bind-key|check-signing-key|demo|test-srs|phase1|import-ph1|prepare|open|recover-beacon|close|finalize|serve|admin|invite|join|contribute|verify-contribution|verify-attestation|status|checkpoint|sync|restore|fetch-export|audit|export|verify-export> [flags]")
+		return fmt.Errorf("usage: spr-ceremony <version|operator|catalog|keygen|bind-key|check-signing-key|demo|test-srs|phase1|import-ph1|prepare|open|recover-beacon|close|finalize|serve|admin|invite|join|contribute|verify-contribution|verify-attestation|status|checkpoint|sync|restore|fetch-export|audit|export|verify-export> [flags]")
+	}
+	if args[0] == "operator" {
+		return runOperator(args[1:])
 	}
 	f := flag.NewFlagSet(args[0], flag.ContinueOnError)
 	dir := f.String("dir", "ceremony-data", "coordinator ceremony directory")

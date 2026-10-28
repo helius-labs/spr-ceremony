@@ -19,6 +19,21 @@ const labels = {
 };
 function formatBytes(n) { return n >= 1e6 ? `${(n / 1e6).toFixed(n >= 100e6 ? 0 : 1)} MB` : `${(n / 1e3).toFixed(1)} KB`; }
 function status(text, error = false) { $("status").textContent = text; $("status").classList.toggle("error", error); }
+function checkingInvitation() {
+  $("join").hidden = true; $("invitation").disabled = true;
+  $("connecting-title").textContent = "Checking your invitation…";
+  $("connecting").hidden = false; $("status").hidden = true;
+}
+function joinView() {
+  $("connecting").hidden = true; $("join").hidden = false;
+  $("invitation").disabled = false; $("status").hidden = false;
+  status("Your invitation stays private.");
+}
+function connectionError(error) {
+  if (!invitation) joinView();
+  status(error.message, true);
+}
+if (fragment.size) checkingInvitation();
 function update(event) {
   if (event.stage === "progress") {
     $("count").textContent = `${event.completed} / ${event.total} accepted`;
@@ -45,12 +60,12 @@ function save(name, data, type = "application/json") {
 function newSession() { return new Session(invitation, manifestRef, build, { ...config, rehearsal: invitation.insecure_test_setup }, cache, update); }
 async function connect(value, pin) {
   require(!invitation, "Reload this page to switch invitations");
-  status("Checking your invitation…");
+  checkingInvitation();
   const authenticated = await authenticate(value, pin);
   const opened = await PublicCache.open(`${value.manifest_sha256}:${value.id}`);
   invitation = value; manifestRef = authenticated.ref; cache = opened;
   session = newSession();
-  $("join").hidden = true; $("participant").hidden = false;
+  $("connecting").hidden = true; $("status").hidden = false; $("participant").hidden = false;
   $("participant-title").textContent = invitation.contributor;
   const bytes = invitation.jobs.reduce((sum, j) => sum + j.input.size, 0);
   $("scope").textContent = `${invitation.jobs.length} circuit${invitation.jobs.length === 1 ? "" : "s"} · ${formatBytes(bytes)} each way`;
@@ -127,7 +142,6 @@ async function initialize() {
   }
   commands();
   await publicView();
-  status("Your invitation stays private.");
 }
 $("invitation").addEventListener("change", async () => {
   try {
@@ -137,7 +151,7 @@ $("invitation").addEventListener("change", async () => {
     let value;
     try { value = JSON.parse(await file.text()); } catch { throw new Error("Invalid invitation file"); }
     await connect(value, value.manifest_sha256);
-  } catch (e) { status(e.message, true); }
+  } catch (e) { connectionError(e); }
   finally { $("invitation").value = ""; }
 });
 $("start").addEventListener("click", async () => {
@@ -175,12 +189,12 @@ window.addEventListener("beforeunload", e => { if (active) { e.preventDefault();
 // No service worker, analytics, external scripts, cookies, or stored credentials.
 ready = initialize();
 ready.then(async () => {
-  if (!fragment.size) return;
+  if (!fragment.size) { joinView(); return; }
   const token = fragment.get("token"), pin = fragment.get("manifest");
   fragment.delete("token"); fragment.delete("manifest");
   require(hex(token) && hex(pin), "Invalid invitation link");
   const value = await request("/v1/invitation", { token });
   require(value.token === token, "Invitation token mismatch");
   await connect(value, pin);
-}).catch(e => status(e.message, true));
+}).catch(connectionError);
 setInterval(() => { if (invitation && !active && !document.hidden && document.documentElement.dataset.stage !== "error") refresh(); }, 15000);

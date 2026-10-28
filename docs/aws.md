@@ -167,8 +167,8 @@ aws ssm start-session --target INSTANCE_ID --document-name spr-ceremony-control-
 ```
 
 Use the actual `instance_id` and `panel_document` Terraform outputs. Open
-**http://127.0.0.1:8081**. Keep that exact host and port; origin checks deliberately
-reject alternate hosts. The AWS CLI needs the
+**http://127.0.0.1:8081**. The `localhost:8081` landing page redirects here;
+administration requests still require the exact numeric origin. The AWS CLI needs the
 [Session Manager plugin](https://docs.aws.amazon.com/en_en/systems-manager/latest/userguide/session-manager-working-with-sessions-start.html).
 
 1. Enter a stable, public pseudonym and expiration. Other contributors can still be working.
@@ -184,6 +184,10 @@ status listings or logs. Save them privately if needed. Clipboard history and a
 downloaded invitation file are under your control. Close the SSM tunnel when done.
 Restrict operator IAM access to this instance and the panel session document;
 SSM shell/RunCommand access is deployment-level privilege, separate from inviting.
+
+The [operator CLI](operator-cli.md) uses the same tunnel to create private
+invitation files, reissue, revoke, inspect progress and independently audit the
+public transcript. Internal testing requires both SSM tunnels for these commands.
 
 ## Finish and recover
 
