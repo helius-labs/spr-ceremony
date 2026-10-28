@@ -658,19 +658,27 @@ func run(args []string) error {
 func readPrivateInvitation(ctx context.Context) ([]byte, error) {
 	if term.IsTerminal(int(os.Stdin.Fd())) {
 		fd := int(os.Stdin.Fd())
-		state, err := term.GetState(fd)
+		// Change terminal mode before starting the reader. A cancelled reader
+		// must never disable echo after the outer cleanup has restored it.
+		state, err := term.MakeRaw(fd)
 		if err != nil {
 			return nil, fmt.Errorf("cannot read terminal state")
 		}
 		defer term.Restore(fd, state)
-		fmt.Fprint(os.Stderr, "Invitation link (hidden): ")
 		defer fmt.Fprintln(os.Stderr)
+		terminal := term.NewTerminal(struct {
+			io.Reader
+			io.Writer
+		}{io.LimitReader(os.Stdin, 8193), os.Stderr}, "")
 		type result struct {
 			data []byte
 			err  error
 		}
 		done := make(chan result, 1)
-		go func() { data, err := term.ReadPassword(fd); done <- result{data, err} }()
+		go func() {
+			data, err := terminal.ReadPassword("Invitation link (hidden): ")
+			done <- result{[]byte(data), err}
+		}()
 		select {
 		case <-ctx.Done():
 			return nil, ctx.Err()

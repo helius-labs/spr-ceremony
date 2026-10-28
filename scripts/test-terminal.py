@@ -9,7 +9,7 @@ import termios
 import time
 
 binary = os.path.abspath(sys.argv[1])
-for cancel in [False, True]:
+for cancel in ['none', 'ctrl-c', 'sigterm']:
     pid, master = pty.fork()
     if pid == 0:
         os.execv(binary, [binary, 'join'])
@@ -24,7 +24,8 @@ for cancel in [False, True]:
         while termios.tcgetattr(master)[3] & termios.ECHO:
             if time.monotonic() > deadline: raise RuntimeError('Echo was not disabled')
             time.sleep(.01)
-        os.write(master, b'\x03' if cancel else secret + b'\n')
+        if cancel == 'sigterm': os.kill(pid, signal.SIGTERM)
+        else: os.write(master, b'\x03' if cancel == 'ctrl-c' else secret + b'\n')
         while time.monotonic() < deadline:
             if select.select([master], [], [], .1)[0]:
                 try: chunk = os.read(master, 4096)
@@ -40,4 +41,4 @@ for cancel in [False, True]:
         os.close(master)
         try: os.kill(pid, signal.SIGKILL)
         except ProcessLookupError: pass
-print('Hidden invitation input and Ctrl-C recovery passed.')
+print('Hidden invitation input, Ctrl-C and SIGTERM recovery passed.')
