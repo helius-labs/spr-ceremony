@@ -31,7 +31,7 @@ func main() {
 }
 func run(args []string) error {
 	if len(args) == 0 {
-		return fmt.Errorf("usage: spr-ceremony <version|operator|catalog|keygen|bind-key|check-signing-key|demo|test-srs|phase1|import-ph1|prepare|open|recover-beacon|close|finalize|serve|admin|invite|join|contribute|verify-contribution|verify-attestation|status|records|checkpoint|sync|restore|fetch-export|audit|export|verify-export> [flags]")
+		return fmt.Errorf("usage: spr-ceremony <version|operator|catalog|keygen|bind-key|check-signing-key|demo|test-srs|phase1|import-ph1|prepare|open|recover-beacon|close|finalize|serve|admin|invite|join|contribute|link-github|verify-contribution|verify-attestation|status|records|checkpoint|sync|restore|fetch-export|audit|export|verify-export> [flags]")
 	}
 	if args[0] == "operator" {
 		return runOperator(args[1:])
@@ -205,6 +205,7 @@ func run(args []string) error {
 			return print(ref)
 		}
 	case "records":
+		githubOut := f.String("github-out", "", "also verify and archive optional GitHub account links in this separate directory")
 		origin := f.String("url", "", "public ceremony HTTPS origin; no operator credentials needed")
 		pin := f.String("manifest-sha256", "", "independently authenticated manifest SHA256")
 		action = func() error {
@@ -217,6 +218,16 @@ func run(args []string) error {
 			}
 			if err = ceremony.SaveContributionRecords(*out, records); err != nil {
 				return err
+			}
+			if *githubOut != "" {
+				identities, err := ceremony.FetchGitHubIdentities(context.Background(), *origin, records)
+				if err != nil {
+					return err
+				}
+				if err = ceremony.SaveGitHubIdentities(*githubOut, identities); err != nil {
+					return err
+				}
+				fmt.Fprintf(os.Stdout, "%d GitHub account links verified and archived.\n", len(identities))
 			}
 			fmt.Fprintf(os.Stdout, "%d complete contribution records verified and archived. Full transcript audit is separate.\n", len(records))
 			return nil
@@ -402,6 +413,7 @@ func run(args []string) error {
 			return ceremony.Prepare(*out, *source, *srs, info, inputs, *maxDomain)
 		}
 	case "serve":
+		githubConfig := f.String("github-oauth-config", "", "optional private 0600 GitHub OAuth config; enables post-contribution account linking")
 		listen := f.String("listen", "127.0.0.1:8080", "listen address; use a TLS reverse proxy outside localhost")
 		webDir := f.String("web-dir", "", "checked browser bundle from scripts/build-browser.sh; enables hosted UI")
 		publicURL := f.String("public-url", "", "exact HTTPS origin of the hosted UI")
@@ -431,6 +443,19 @@ func run(args []string) error {
 			}
 			fmt.Fprintln(os.Stderr, "Serving", *listen, "manifest", s.ManifestArtifact.SHA256)
 			handler := s.HandlerWithOptions(ceremony.ServerOptions{MaxUploads: *maxUploads, LeaseTTL: *leaseTTL, UploadTimeout: 30 * time.Minute, MinFreeBytes: *reserve})
+			if *githubConfig != "" {
+				if *webDir == "" {
+					return fmt.Errorf("GitHub linking requires --web-dir and --public-url")
+				}
+				config, err := ceremony.LoadGitHubOAuthConfig(*githubConfig)
+				if err != nil {
+					return err
+				}
+				handler, e = s.GitHubHandler(handler, *publicURL, config)
+				if e != nil {
+					return e
+				}
+			}
 			if *webDir != "" {
 				handler, e = ceremony.WebHandler(handler, ceremony.WebOptions{Directory: *webDir, Origin: *publicURL, DownloadOrigin: *downloadOrigin, NativeDirectory: *nativeDir, InsecureTestSetup: s.Manifest.Phase1.UsesTestParameters(), TrustLoopbackProxy: *trustProxy})
 				if e != nil {
@@ -534,6 +559,38 @@ func run(args []string) error {
 				}
 			}
 			fmt.Fprintf(os.Stdout, "Wrote invitation for %d %s circuits to %s\n", len(i.Jobs), i.Track, *out)
+			return nil
+		}
+	case "link-github":
+		invite := f.String("invitation", "", "optional private invitation JSON; otherwise paste invitation at the hidden prompt")
+		action = func() error {
+			ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+			defer stop()
+			client := ceremony.NewClient("")
+			var link string
+			var err error
+			if *invite != "" {
+				var i ceremony.Invitation
+				if err = ceremony.ReadJSON(*invite, &i); err != nil {
+					return err
+				}
+				link, err = client.LinkGitHub(ctx, i)
+			} else {
+				secret, e := readPrivateInvitation(ctx)
+				if e != nil {
+					return e
+				}
+				defer clear(secret)
+				link, err = client.GitHubLinkFromInvitation(ctx, strings.TrimSpace(string(secret)))
+			}
+			if err != nil {
+				return err
+			}
+			if link == "" {
+				return fmt.Errorf("GitHub linking is not enabled on this coordinator")
+			}
+			fmt.Fprintln(os.Stdout, "Open this private link within 10 minutes. Confirm your account before publication:")
+			fmt.Fprintln(os.Stdout, link)
 			return nil
 		}
 	case "join":

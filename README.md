@@ -35,6 +35,11 @@ invitation file instead:
 ./spr-ceremony contribute --invitation bob.json
 ```
 
+Optional: link your GitHub account using the URL printed after completion, or
+run `./spr-ceremony link-github`. Confirm the account before publication. Signed
+account links appear on the site and are archived automatically; no PR needed.
+Requires the operator to enable [GitHub linking](docs/github.md).
+
 The one-liner trusts the hosted installer. For independent release provenance
 verification, follow the [verification guide](docs/releases.md).
 

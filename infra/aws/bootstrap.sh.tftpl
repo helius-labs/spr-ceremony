@@ -52,6 +52,17 @@ cat > /usr/local/bin/spr-load-signing-key <<'LOADER'
 ${key_loader}
 LOADER
 chmod 755 /usr/local/bin/spr-load-signing-key
+%{ if github_secret != "" ~}
+cat > /etc/spr/github-oauth-secret <<'GITHUB_SECRET'
+${github_secret}
+GITHUB_SECRET
+chown root:spr /etc/spr/github-oauth-secret
+chmod 640 /etc/spr/github-oauth-secret
+cat > /usr/local/bin/spr-load-github-oauth <<'GITHUB_LOADER'
+${github_loader}
+GITHUB_LOADER
+chmod 755 /usr/local/bin/spr-load-github-oauth
+%{ endif ~}
 %{ if public_https ~}
 cat > /etc/caddy/Caddyfile <<'CADDY'
 {
@@ -121,7 +132,10 @@ WorkingDirectory=/var/lib/spr
 Environment=AWS_REGION=${region}
 Environment=GOMAXPROCS=4
 ExecStartPre=/usr/local/bin/spr-load-signing-key
-ExecStart=/opt/spr/current/native/spr-ceremony-linux-amd64 serve --signing-key /var/lib/spr/signing/coordinator.private.asc --dir /var/lib/spr/core --s3-config /etc/spr/s3.json --listen 127.0.0.1:8080 --public-url ${origin} --web-dir /opt/spr/current/browser --native-dir /opt/spr/current/native --browser-download-origin https://${jsondecode(s3_config).bucket}.s3.${region}.amazonaws.com${public_https || cloudfront ? " --trust-loopback-proxy" : ""}
+%{ if github_secret != "" ~}
+ExecStartPre=/usr/local/bin/spr-load-github-oauth
+%{ endif ~}
+ExecStart=/opt/spr/current/native/spr-ceremony-linux-amd64 serve --signing-key /var/lib/spr/signing/coordinator.private.asc --dir /var/lib/spr/core --s3-config /etc/spr/s3.json --listen 127.0.0.1:8080 --public-url ${origin} --web-dir /opt/spr/current/browser --native-dir /opt/spr/current/native --browser-download-origin https://${jsondecode(s3_config).bucket}.s3.${region}.amazonaws.com${public_https || cloudfront ? " --trust-loopback-proxy" : ""}${github_secret != "" ? " --github-oauth-config /var/lib/spr/github/oauth.json" : ""}
 Restart=on-failure
 RestartSec=10
 TimeoutStopSec=75

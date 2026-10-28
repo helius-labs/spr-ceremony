@@ -21,6 +21,7 @@
 *.tfvars.json
 .env
 .env.*
+github-oauth.json
 *.pem
 *.private.asc
 __pycache__/

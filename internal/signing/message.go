@@ -12,7 +12,7 @@ import (
 // The manifest digest supplies the ceremony context; signatures cannot be moved
 // between ceremonies or between invitation and receipt messages.
 func Payload(kind, manifest string, message []byte) ([]byte, error) {
-	if (kind != "invitation" && kind != "receipt") || len(manifest) != 64 || len(message) > MaxPayloadBytes {
+	if (kind != "invitation" && kind != "receipt" && kind != "github-identity") || len(manifest) != 64 || len(message) > MaxPayloadBytes {
 		return nil, fmt.Errorf("invalid signed message")
 	}
 	for _, c := range manifest {

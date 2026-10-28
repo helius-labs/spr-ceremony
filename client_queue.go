@@ -42,6 +42,7 @@ func (c *Client) runQueue(ctx context.Context, i Invitation, track string) error
 				return err
 			}
 			fmt.Fprintln(c.Progress, "All invited circuits have an accepted contribution.")
+			c.offerGitHubLink(ctx, i)
 			return nil
 		}
 		if claim.Job == nil {

@@ -43,6 +43,15 @@ variable "operator_origin" {
     error_message = "Use the exact HTTPS operator API Gateway origin."
   }
 }
+variable "github_oauth_secret_arn" {
+  type        = string
+  default     = ""
+  description = "Optional dedicated GitHub OAuth App credentials in Secrets Manager. Never pass secret values through Terraform."
+  validation {
+    condition     = var.github_oauth_secret_arn == "" || can(regex("^arn:aws:secretsmanager:[a-z0-9-]+:[0-9]{12}:secret:[A-Za-z0-9/_+=.@-]+$", var.github_oauth_secret_arn))
+    error_message = "Use an exact Secrets Manager ARN, or leave empty to disable GitHub linking."
+  }
+}
 variable "finalize_workers" {
   description = "Parallel core finalization circuits; reserve four vCPUs and four GiB RAM per worker, with a 12 GiB minimum memory budget."
   type        = number
@@ -215,11 +224,11 @@ resource "aws_secretsmanager_secret" "coordinator_key" {
 }
 resource "aws_iam_role_policy" "runtime" {
   role = aws_iam_role.coordinator.id
-  policy = jsonencode({ Version = "2012-10-17", Statement = [
+  policy = jsonencode({ Version = "2012-10-17", Statement = concat([
     { Effect = "Allow", Action = "s3:GetObject", Resource = "arn:aws:s3:::${local.bucket}/deployment/*" },
     { Effect = "Allow", Action = "secretsmanager:GetSecretValue", Resource = aws_secretsmanager_secret.coordinator_key.arn },
     { Effect = "Allow", Action = "cloudwatch:PutMetricData", Resource = "*", Condition = { StringEquals = { "cloudwatch:namespace" = "SPR/Ceremony" } } }
-  ] })
+  ], var.github_oauth_secret_arn == "" ? [] : [{ Effect = "Allow", Action = "secretsmanager:GetSecretValue", Resource = var.github_oauth_secret_arn }]) })
 }
 resource "aws_iam_instance_profile" "coordinator" { role = aws_iam_role.coordinator.name }
 resource "aws_ebs_volume" "data" {
@@ -255,6 +264,8 @@ resource "aws_instance" "coordinator" {
     s3_config       = module.archive.s3_config,
     signing_secret  = aws_secretsmanager_secret.coordinator_key.arn,
     key_loader      = file("${path.module}/load-signing-key.py")
+    github_secret   = var.github_oauth_secret_arn
+    github_loader   = file("${path.module}/load-github-oauth.py")
     operator_origin = var.operator_origin, operator_role = var.operator_role_arn, finalize_workers = var.finalize_workers
   })
   user_data_replace_on_change = false
@@ -392,6 +403,7 @@ output "alarm_topic" { value = aws_sns_topic.alarms.arn }
 output "data_volume" { value = aws_ebs_volume.data.id }
 
 output "signing_key_secret_arn" { value = aws_secretsmanager_secret.coordinator_key.arn }
+output "github_oauth_secret_arn" { value = var.github_oauth_secret_arn }
 output "operator_origin" { value = var.operator_origin }
 output "operator_role_arn" { value = var.operator_role_arn }
 

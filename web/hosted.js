@@ -1,7 +1,7 @@
 import { usesPublicPhase1, ENGINE, hex, require, request, deadline } from "./protocol.js";
 
 const $ = id => document.getElementById(id);
-let build, config, invitationLink;
+let build, config, invitationLink, githubTicket, githubConfirmation;
 function status(text, error = false) {
   $("status").hidden = false;
   $("status").textContent = text;
@@ -14,6 +14,15 @@ function readInvitationLink() {
   $("invitation-actions").hidden = true;
   $("invitation-help").textContent = "Get a private invitation from the operator. Paste it when the terminal asks.";
   if (!fragment.size) return;
+  if (fragment.size === 1 && fragment.has("github")) {
+    $("github-panel").hidden = false;
+    $("native-panel").hidden = true;
+    const value = fragment.get("github");
+    if (hex(value)) { githubTicket = value; $("github-begin").hidden = false; }
+    else if (value === "confirm") void showGitHubConfirmation();
+    else $("github-status").textContent = "GitHub linking did not finish. Run spr-ceremony link-github to try again.";
+    return;
+  }
   const token = fragment.get("token"), pin = fragment.get("manifest");
   if (fragment.size === 2 && hex(token) && hex(pin)) {
     invitationLink = `${location.origin}/#${new URLSearchParams({ token, manifest: pin })}`;
@@ -68,6 +77,7 @@ async function publicRecords() {
       const link = document.createElement("a"); link.href = `/v1/records/${record.invitation_id}`;
       link.textContent = `${record.contributor} · ${record.total}/${record.total} accepted`;
       row.append(link); $("records").append(row);
+      void showGitHubIdentity(row, record, view.manifest);
     }
     $("records-status").textContent = view.records.length ? "Download signed receipts:" : "Completed contributions appear here automatically.";
   } catch { $("records-status").textContent = "Contribution records are temporarily unavailable."; }
@@ -104,5 +114,60 @@ $("copy-invitation").addEventListener("click", async () => {
 $("platform").addEventListener("change", () => { if (config && build) commands(); });
 initialize().catch(() => status("Ceremony information is unavailable. Retry, or use your existing terminal client.", true));
 void publicRecords();
-// The page never submits contributions or sends the invitation to the server.
-// No workers, browser storage, cookies, analytics or service worker.
+// Invitation fragments never leave this page. Only the separate, short-lived
+// GitHub flow uses a cookie; contributions still run exclusively in the CLI.
+
+async function githubRequest(path, body) {
+  const response = await fetch(path, {method: body === undefined ? "GET" : "POST", credentials: "same-origin", redirect: "error", cache: "no-store", headers: body === undefined ? {} : {"Content-Type": "application/json"}, body: body === undefined ? undefined : JSON.stringify(body), signal: deadline()});
+  if (!response.ok) throw new Error("GitHub linking failed");
+  const reader = response.body.getReader();
+  const bytes = new Uint8Array(32 << 10); let length = 0;
+  try {
+    while (true) {
+      const {value, done} = await reader.read(); if (done) break;
+      require(length + value.length <= bytes.length, "Oversized GitHub response"); bytes.set(value, length); length += value.length;
+    }
+  } finally { await reader.cancel().catch(() => {}); }
+  return JSON.parse(new TextDecoder().decode(bytes.subarray(0, length)));
+}
+async function showGitHubConfirmation() {
+  try {
+    const session = await githubRequest("/v1/github/session");
+    require(Number.isSafeInteger(session.github_id) && session.github_id > 0 && typeof session.github_login === "string" && /^[a-zA-Z0-9-]{1,39}$/.test(session.github_login) && hex(session.confirm) && typeof session.contributor === "string", "Invalid GitHub session");
+    githubConfirmation = session.confirm;
+    $("github-status").textContent = `Link @${session.github_login} to ${session.contributor} · ${session.total}/${session.total} accepted? This will be public.`;
+    $("github-confirm").hidden = false;
+  } catch { $("github-status").textContent = "Link expired. Run spr-ceremony link-github to try again."; }
+}
+$("github-begin").addEventListener("click", async () => {
+  $("github-begin").disabled = true;
+  try {
+    const result = await githubRequest("/v1/github/begin", {ticket: githubTicket});
+    const target = new URL(result.url);
+    require(target.origin === "https://github.com" && target.pathname === "/login/oauth/authorize" && !target.username && !target.password && !target.hash, "Invalid GitHub authorization URL");
+    githubTicket = undefined;
+    location.assign(target.href);
+  } catch { $("github-status").textContent = "Link expired or unavailable. Run spr-ceremony link-github to try again."; }
+});
+$("github-confirm").addEventListener("click", async () => {
+  $("github-confirm").disabled = true;
+  try {
+    const identity = await githubRequest("/v1/github/confirm", {confirm: githubConfirmation});
+    require(identity.format === "spr-github-identity-v1" && hex(identity.invitation_id), "Invalid GitHub identity");
+    githubConfirmation = undefined;
+    $("github-confirm").parentElement.hidden = true;
+    $("github-title").textContent = "GitHub linked.";
+    $("github-status").textContent = `Linked @${identity.github_login}. Your public record is ready. GitHub publication follows automatically.`;
+    const link = document.createElement("a"); link.href = `/v1/github/identities/${identity.invitation_id}`; link.textContent = "Download signed account link"; $("github-panel").append(link);
+    await publicRecords();
+  } catch { $("github-status").textContent = "Could not publish the link. Retry with spr-ceremony link-github, using the original GitHub account if already linked."; }
+});
+async function showGitHubIdentity(row, record, manifest) {
+  try {
+    const identity = await request(`/v1/github/identities/${record.invitation_id}`);
+    require(identity.format === "spr-github-identity-v1" && identity.invitation_id === record.invitation_id && identity.manifest?.sha256 === manifest.sha256 && Number.isSafeInteger(identity.github_id) && identity.github_id > 0 && /^[a-zA-Z0-9-]{1,39}$/.test(identity.github_login), "Invalid GitHub identity");
+    const profile = document.createElement("a"); profile.href = `https://github.com/${identity.github_login}`; profile.rel = "noopener noreferrer"; profile.textContent = `@${identity.github_login} · GitHub verified`; profile.title = `Account ID ${identity.github_id}; linked ${identity.linked_at}`;
+    const proof = document.createElement("a"); proof.href = `/v1/github/identities/${record.invitation_id}`; proof.textContent = "Account proof";
+    row.append(profile, proof);
+  } catch { /* Account linking is optional; receipt visibility never depends on it. */ }
+}

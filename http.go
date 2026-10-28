@@ -44,6 +44,7 @@ func (s *Store) HandlerWithOptions(options ServerOptions) http.Handler {
 	records := s.contributionRecordHandler()
 	mux.HandleFunc("GET /v1/records", records)
 	mux.HandleFunc("GET /v1/records/{id}", records)
+	mux.HandleFunc("GET /v1/github/identities/{id}", s.githubIdentityHandler)
 	mux.HandleFunc("GET /v1/ceremony", func(w http.ResponseWriter, r *http.Request) {
 		view, err := s.PublicView()
 		if err != nil {

@@ -137,6 +137,46 @@ async def main():
                         assert not await context.cookies()
                         assert await page.evaluate('() => localStorage.length + sessionStorage.length') == 0
                         checks.append(engine + ': HTTPS CLI-only page, private clipboard handoff, no browser engine/storage/auth requests, native contribution and idempotent rerun, signed records, mobile layout')
+                        # UI-only provider simulation. The Go HTTP tests verify
+                        # cookies, PKCE/state, signatures, consent and S3 recovery.
+                        github_ticket, confirmation = 'a' * 64, 'b' * 64
+                        confirmed = []
+                        identity = {'format': 'spr-github-identity-v1', 'manifest': published['manifest'], 'invitation_id': invitation['id'], 'github_id': 12345, 'github_login': 'alice-github', 'linked_at': '2026-10-28T00:00:00Z'}
+                        async def github_begin(route):
+                            assert route.request.post_data_json == {'ticket': github_ticket}
+                            await route.fulfill(json={'url': 'https://github.com/login/oauth/authorize?client_id=fixture&state=test'})
+                        async def github_authorize(route):
+                            # WebKit's route mock cannot fulfill redirect statuses.
+                            await route.fulfill(content_type='text/html', body='<script>location.replace(' + json.dumps(origin + '/#github=confirm') + ')</script>')
+                        async def github_session(route):
+                            await route.fulfill(json={'github_id': 12345, 'github_login': 'alice-github', 'contributor': engine, 'total': 2, 'confirm': confirmation})
+                        async def github_confirm(route):
+                            assert route.request.post_data_json == {'confirm': confirmation}
+                            confirmed.append(True)
+                            await route.fulfill(json=identity)
+                        await page.route(origin + '/v1/github/begin', github_begin)
+                        await page.route('https://github.com/login/oauth/authorize?**', github_authorize)
+                        await page.route(origin + '/v1/github/session', github_session)
+                        await page.route(origin + '/v1/github/confirm', github_confirm)
+                        await page.goto(origin + '/#github=' + github_ticket)
+                        await page.locator('#github-begin').wait_for(state='visible')
+                        assert '#' not in page.url and github_ticket not in await page.locator('body').inner_text()
+                        assert await page.locator('#native-panel').is_hidden()
+                        await page.locator('#github-begin').click()
+                        await page.locator('#github-confirm').wait_for(state='visible')
+                        assert '@alice-github' in await page.locator('#github-status').inner_text()
+                        assert not confirmed
+                        async def github_identity(route):
+                            await route.fulfill(json=identity)
+                        await page.route(origin + '/v1/github/identities/' + invitation['id'], github_identity)
+                        await page.locator('#github-confirm').click()
+                        await page.locator('#github-panel a').wait_for(state='visible')
+                        assert len(confirmed) == 1
+                        assert 'Linked @alice-github' in await page.locator('#github-status').inner_text()
+                        await page.locator('#records a[href="https://github.com/alice-github"]').wait_for(state='attached')
+                        assert not errors, errors
+                        await page.screenshot(path=out / (engine + '-github.png'), full_page=True)
+                        checks.append(engine + ': optional GitHub link, fragment removal, account preview, explicit consent and public account proof (mock OAuth provider)')
                         await context.close(); await browser.close()
             finally:
                 server.terminate(); server.wait(timeout=15); proxy.close()

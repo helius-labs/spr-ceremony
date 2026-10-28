@@ -43,6 +43,16 @@ class DeploymentTests(unittest.TestCase):
                 self.assertIn('--public-url ' + origin, admin)
                 self.assertIn('--public-url ' + origin, participant)
                 self.assertEqual('--trust-loopback-proxy' in participant, mode != 'ssm')
+                with patch('pathlib.Path', side_effect=lambda path: root / path.lstrip('/')), patch.object(sys, 'argv', ['configure', origin, mode, operator, role if operator else '', str(workers), 'arn:aws:secretsmanager:eu-north-1:123456789012:secret:github-oauth']):
+                    exec(code, {})
+                    exec(code, {})
+                linked = (root / 'etc/systemd/system/spr-ceremony.service').read_text()
+                self.assertEqual(linked.count('--github-oauth-config /var/lib/spr/github/oauth.json'), 1)
+                self.assertEqual(linked.count('ExecStartPre=/usr/local/bin/spr-load-github-oauth'), 1)
+                self.assertNotIn('github-oauth', (root / 'etc/systemd/system/spr-admin.service').read_text())
+                with patch('pathlib.Path', side_effect=lambda path: root / path.lstrip('/')), patch.object(sys, 'argv', ['configure', origin, mode, operator, role if operator else '', str(workers)]):
+                    exec(code, {})
+                self.assertNotIn('github-oauth', (root / 'etc/systemd/system/spr-ceremony.service').read_text())
                 self.assertIn('Host: ' + origin.split('://')[1], (root / 'usr/local/bin/spr-health').read_text())
                 if mode == 'cloudfront':
                     proxy = (root / 'etc/caddy/Caddyfile').read_text()

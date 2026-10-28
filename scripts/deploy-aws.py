@@ -141,6 +141,11 @@ def main():
     operator_origin = outputs.get('operator_origin', {}).get('value', '')
     operator_role = outputs.get('operator_role_arn', {}).get('value', '')
     finalize_workers = outputs.get('finalize_workers', {}).get('value', 1)
+    github_secret = outputs.get('github_oauth_secret_arn', {}).get('value', '')
+    if github_secret:
+        if not re.fullmatch(r'arn:aws:secretsmanager:[a-z0-9-]+:[0-9]{12}:secret:[A-Za-z0-9/_+=.@-]+', github_secret):
+            parser.error('Invalid GitHub OAuth secret ARN')
+        run('git', 'cat-file', '-e', args.source_sha + ':github_oauth.go')
     if type(finalize_workers) is not int or not 1 <= finalize_workers <= 41:
         parser.error('finalize_workers must be an integer from 1 to 41')
     if operator_origin:
@@ -175,6 +180,9 @@ def main():
         # Runtime key-loading code must match the attested release's source.
         loader = subprocess.check_output(['git', 'show', args.source_sha + ':infra/aws/load-signing-key.py'])
         (bundle / 'load-signing-key.py').write_bytes(loader)
+        if github_secret:
+            loader = subprocess.check_output(['git', 'show', args.source_sha + ':infra/aws/load-github-oauth.py'])
+            (bundle / 'load-github-oauth.py').write_bytes(loader)
         recovery = None
         if args.ceremony:
             manifest = json.loads((args.ceremony / 'manifest.json').read_text())
@@ -244,6 +252,12 @@ mv /var/lib/spr/core {q('/var/lib/spr/replaced-' + args.replace_test_manifest)}
 test ! -e /var/lib/spr/core
 mv {q(incoming)} /var/lib/spr/core
 '''
+        github_setup = ''
+        if github_secret:
+            github_setup = f'''install -o root -g root -m 0755 {q(release_dir + '/load-github-oauth.py')} /usr/local/bin/spr-load-github-oauth
+printf '%s\\n' {q(github_secret)} > /etc/spr/github-oauth-secret
+chown root:spr /etc/spr/github-oauth-secret
+chmod 640 /etc/spr/github-oauth-secret'''
         commands += f'''
 test -f /var/lib/spr/core/manifest.json
 systemctl stop spr-admin spr-ceremony
@@ -251,17 +265,22 @@ install -o root -g root -m 0755 {q(release_dir + '/load-signing-key.py')} /usr/l
 printf '%s\\n' {q(get('signing_key_secret_arn'))} > /etc/spr/signing-secret
 chown root:spr /etc/spr/signing-secret
 chmod 640 /etc/spr/signing-secret
-python3 - {q(get('url'))} {q(access_mode)} {q(operator_origin)} {q(operator_role)} {q(str(finalize_workers))} <<'UNITS'
+{github_setup}
+python3 - {q(get('url'))} {q(access_mode)} {q(operator_origin)} {q(operator_role)} {q(str(finalize_workers))} {q(github_secret)} <<'UNITS'
 from pathlib import Path
 import re, shlex, sys, urllib.parse
 origin, access_mode = sys.argv[1:3]
 operator_origin, operator_role = sys.argv[3:5] if len(sys.argv) >= 5 else ('', '')
 finalize_workers = int(sys.argv[5]) if len(sys.argv) >= 6 else 1
+github_secret = sys.argv[6] if len(sys.argv) >= 7 else ''
 assert 1 <= finalize_workers <= 41
 hostname = urllib.parse.urlsplit(origin).netloc
 for name in ['spr-ceremony', 'spr-admin']:
     path = Path('/etc/systemd/system/' + name + '.service')
     text = path.read_text()
+    text = text.replace('ExecStartPre=/usr/local/bin/spr-load-github-oauth\\n', '')
+    if name == 'spr-ceremony' and github_secret:
+        text = text.replace('ExecStart=', 'ExecStartPre=/usr/local/bin/spr-load-github-oauth\\nExecStart=', 1)
     if 'ExecStartPre=/usr/local/bin/spr-load-signing-key' not in text:
         text = text.replace('ExecStart=', 'ExecStartPre=/usr/local/bin/spr-load-signing-key\\nExecStart=', 1)
     if '--signing-key ' not in text:
@@ -272,6 +291,9 @@ for name in ['spr-ceremony', 'spr-admin']:
         arguments = shlex.split(line[len('ExecStart='):])
         arguments[arguments.index('--public-url') + 1] = origin
         if name == 'spr-ceremony':
+            while '--github-oauth-config' in arguments:
+                index = arguments.index('--github-oauth-config'); del arguments[index:index + 2]
+            if github_secret: arguments.extend(['--github-oauth-config', '/var/lib/spr/github/oauth.json'])
             arguments = [arg for arg in arguments if arg != '--trust-loopback-proxy']
             if access_mode != 'ssm': arguments.append('--trust-loopback-proxy')
         if name == 'spr-admin':

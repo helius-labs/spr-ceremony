@@ -187,6 +187,7 @@ func WebHandler(api http.Handler, options WebOptions) (http.Handler, error) {
 		respond(w, map[string]any{"format": "spr-hosted-ui-v1", "origin": origin, "download_origin": downloadOrigin, "native": downloads, "version": version, "installer": installerURL, "provenance": provenanceURL})
 	})
 	mux.Handle("/v1/", api)
+	mux.Handle("/github/callback", api)
 	mux.Handle("/healthz", api)
 	parsed, _ := url.Parse(origin)
 	limited := limitWeb(mux, options.TrustLoopbackProxy)

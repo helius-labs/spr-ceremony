@@ -9,6 +9,7 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"syscall"
 	"time"
@@ -132,6 +133,7 @@ func (c *Client) Run(ctx context.Context, i Invitation, track string) error {
 			return e
 		}
 	}
+	c.offerGitHubLink(ctx, i)
 	return nil
 }
 
@@ -184,19 +186,28 @@ func (c *Client) runJob(ctx context.Context, i Invitation, job Job, track string
 	}
 	fmt.Fprintf(c.Progress, "[%s] %s: uploading and awaiting verification\n", progress, id)
 	var receipt Receipt
-	if e = retry(ctx, func() error {
+	uploadDeadline := time.Now().Add(30 * time.Minute)
+	if i.Expires.Before(uploadDeadline) {
+		uploadDeadline = i.Expires
+	}
+	uploadCtx, stopUpload := context.WithDeadline(ctx, uploadDeadline)
+	defer stopUpload()
+	waitingPrinted := false
+	if e = retryUpload(uploadCtx, func() error {
 		f, e := os.Open(output)
 		if e != nil {
 			return e
 		}
 		defer f.Close()
-		req, e := http.NewRequestWithContext(ctx, "POST", base+"/v1/contributions/"+id, f)
+		req, e := http.NewRequestWithContext(uploadCtx, "POST", base+"/v1/contributions/"+id, f)
 		if e != nil {
 			return e
 		}
 		req.ContentLength = cached.Output.Size
 		req.Header.Set("Authorization", "Bearer "+i.Token)
 		req.Header.Set("Content-Type", "application/octet-stream")
+		// Let a busy server reject the upload before transmitting its body.
+		req.Header.Set("Expect", "100-continue")
 		resp, e := c.HTTP.Do(req)
 		if e != nil {
 			return e
@@ -204,7 +215,18 @@ func (c *Client) runJob(ctx context.Context, i Invitation, job Job, track string
 		defer resp.Body.Close()
 		if resp.StatusCode != 200 {
 			err := fmt.Errorf("upload rejected (HTTP %d); rerun to recover or request invitation renewal", resp.StatusCode)
-			if resp.StatusCode >= 500 || resp.StatusCode == 429 {
+			if resp.StatusCode == 429 {
+				if !waitingPrinted {
+					fmt.Fprintf(c.Progress, "[%s] Coordinator busy; waiting for an upload slot…\n", progress)
+					waitingPrinted = true
+				}
+				seconds, parseErr := strconv.Atoi(resp.Header.Get("Retry-After"))
+				if parseErr != nil || seconds < 1 || seconds > 60 {
+					seconds = 5
+				}
+				return uploadBackpressure{wait: time.Duration(seconds) * time.Second}
+			}
+			if resp.StatusCode >= 500 {
 				return err
 			}
 			return permanentError{err}
@@ -314,6 +336,41 @@ func (c *Client) downloadWithURL(ctx context.Context, resolve func(context.Conte
 }
 
 type permanentError struct{ error }
+
+type uploadBackpressure struct{ wait time.Duration }
+
+func (uploadBackpressure) Error() string { return "coordinator upload capacity reached" }
+
+// Capacity is a queue condition, not one of the four transient network retry
+// attempts. The caller bounds the wait by cancellation and invitation expiry.
+func retryUpload(ctx context.Context, fn func() error) error {
+	for failures := 0; ; {
+		if err := ctx.Err(); err != nil {
+			return err
+		}
+		err := fn()
+		if err == nil {
+			return nil
+		}
+		var delay time.Duration
+		if busy, ok := err.(uploadBackpressure); ok {
+			delay = busy.wait
+		} else {
+			failures++
+			if _, permanent := err.(permanentError); permanent || failures >= 4 {
+				return err
+			}
+			delay = time.Duration(1<<(failures-1)) * time.Second
+		}
+		timer := time.NewTimer(delay)
+		select {
+		case <-ctx.Done():
+			timer.Stop()
+			return ctx.Err()
+		case <-timer.C:
+		}
+	}
+}
 
 func retry(ctx context.Context, fn func() error) error {
 	var e error
