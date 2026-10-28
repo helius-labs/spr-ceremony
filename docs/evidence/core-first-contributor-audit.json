@@ -1,0 +1,31 @@
+{
+  "checked_at": "2026-10-28T16:39:56.790504+00:00",
+  "unit": "spr-contribution-audit-1214e784afb0250b.service",
+  "binary_sha256": "20772a651cae6c0075ac5144492742eb0bb2c7fa8498f0503c7acaced00ef668",
+  "systemd_completion": [
+    "Result=success",
+    "ExecMainStartTimestamp=Wed 2026-10-28 15:23:34 UTC",
+    "ExecMainExitTimestamp=Wed 2026-10-28 16:37:57 UTC",
+    "ExecMainStatus=0",
+    "MemoryPeak=26110734336",
+    "CPUUsageNSec=116076665288000",
+    "ActiveState=active",
+    "SubState=exited"
+  ],
+  "manifest_sha256": "4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079",
+  "checkpoint_sha256": "1214e784afb0250bfc2b72ba3348a805cd1e4e74253d79177c9e80bb4a3f9f1d",
+  "source_revision": "e626dd0a888d8bdb4d74ae4f20398afcacd1c8bb",
+  "release": "v0.1.0-rc.9",
+  "instance_type": "c7i.48xlarge",
+  "workers": 24,
+  "gomaxprocs": 192,
+  "circuits_verified": 41,
+  "contributions_verified": 41,
+  "exit_status": 0,
+  "log": "core-first-contributor-audit.log",
+  "scope": "All core initializations and first contributor transitions at the pinned checkpoint",
+  "limits": [
+    "Does not cover contributions accepted after this checkpoint, including Alex's later contributions",
+    "Does not replace independent security review or final-key verification"
+  ]
+}
