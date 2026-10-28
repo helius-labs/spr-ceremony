@@ -350,3 +350,17 @@ CI and all four native release checks passed. Live Chromium/WebKit checks and
 public binary/installer hashes match the release. Deployment preserved the full
 operator status, including 140 accepted circuit contributions: 41 each from
 Sergei, Alex and Tilo, and 17 from Jorrit. The manifest and beacon plan are unchanged.
+
+[v0.1.0-rc.13](evidence/release-v0.1.0-rc.13.json) is deployed from
+`de4291f9451f99c0ab90522ed004209b2938f213`. Public `audit --url` accepts
+independently authenticated manifest and checkpoint hashes without AWS credentials
+or invitations. It shares the full transcript verifier and reusable download
+workspace with operator audits. Historical checkpoint pins remain fixed while
+the live campaign advances; altered metadata, mixed ceremony pins and corrupt
+cached objects are rejected.
+
+CI, including S3 integration, and native CLI checks on all four platforms passed.
+The hosted installer and binaries match the attested release; live Chromium and
+WebKit checks passed. The full operator status, including all 140 accepted
+contributions, remained unchanged. The new command was exercised against small
+signed fixtures; no additional full-core audit or finalization was performed.
