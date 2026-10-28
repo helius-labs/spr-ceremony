@@ -1,0 +1,40 @@
+{
+  "checked_at": "2026-10-28T21:33:56.777208+00:00",
+  "release": "https://github.com/helius-labs/spr-ceremony/releases/tag/v0.1.0-rc.15",
+  "source_revision": "5629f879c52f925cc2216cd82cc21a9f5e0ab306",
+  "check_workflow": 40771488279,
+  "release_workflow": 40771994146,
+  "publication_workflow": 40772100161,
+  "release_result": "success on all four native platforms",
+  "downloaded_linux_amd64_sha256": "f27882e0e99a8a9c733bc28ccda609cfe7d2255fc51bfa38cf666a23c8cdfc25",
+  "release_attestation_verified": true,
+  "downloaded_binary_provenance_verified": true,
+  "downloaded_binary_version_verified": true,
+  "native_sha256": {
+    "spr-ceremony-darwin-amd64": "a20ff9643c31d80940ab24754d1fb66f60175192718e2de97d894a48c47c673a",
+    "spr-ceremony-darwin-arm64": "234aab6afe3ae7b91d71bb54e2d0cf6aff697914c8f34f225fa62fc8b028ea09",
+    "spr-ceremony-linux-amd64": "f27882e0e99a8a9c733bc28ccda609cfe7d2255fc51bfa38cf666a23c8cdfc25",
+    "spr-ceremony-linux-arm64": "f923e739346a2665efd68010916e36d3ad9bfa88e22914e34caa5208f17404e1"
+  },
+  "browser_checks": {
+    "passed": [
+      "chromium: HTTPS CLI-only page, private clipboard handoff, no browser engine/storage/auth requests, native contribution and idempotent rerun, signed records, mobile layout",
+      "chromium: optional GitHub link, fragment removal, account preview, explicit consent and public account proof (mock OAuth provider)",
+      "webkit: HTTPS CLI-only page, private clipboard handoff, no browser engine/storage/auth requests, native contribution and idempotent rerun, signed records, mobile layout",
+      "webkit: optional GitHub link, fragment removal, account preview, explicit consent and public account proof (mock OAuth provider)"
+    ]
+  },
+  "verification": [
+    "Go race tests, vet and Python tests passed",
+    "Ten concurrent clients completed two fixture circuits each; the resulting transcript audited successfully",
+    "GitHub OAuth state/PKCE, explicit consent, replay, revocation, expiry, account replacement rejection and signed sidecar recovery tested with a simulated provider",
+    "Updated record-publication workflow passed against the live public records"
+  ],
+  "deployed": false,
+  "limits": [
+    "The live coordinator and hosted installer were not restarted or updated; deployment hold remains active.",
+    "Real GitHub OAuth registration, secret configuration and a live linking check are pending.",
+    "The ten-client test checks scheduling and integrity on small fixtures, not full-core throughput or failure certification.",
+    "OAuth linking is optional and remains disabled without configuration."
+  ]
+}

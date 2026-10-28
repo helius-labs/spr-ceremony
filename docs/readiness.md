@@ -410,3 +410,15 @@ of all 554 restored objects (6,187,060,783 bytes). The [complete log](evidence/c
 and [collector source](evidence/core-public-audit-collector.py.txt) are retained.
 This result covers the pinned snapshot only; subsequent contributions, final
 keys and independent security review remain separate. The ceremony stayed open.
+
+[v0.1.0-rc.15](evidence/release-v0.1.0-rc.15.json) adds optional post-contribution
+GitHub account links, separately signed and archived without changing MPC
+checkpoints or receipts. Native and hosted tests cover explicit consent,
+session/replay checks, immutable account binding and sidecar recovery; OAuth is
+simulated in these tests. The record-publication workflow passed against the
+live public records. Upload capacity responses now wait without consuming the
+four transient network retry attempts, bounded by cancellation, invitation expiry
+and a 30-minute upload deadline. Ten concurrent clients completed and audited
+two fixture circuits each. All four native release platform checks passed.
+This release has not been deployed; real OAuth app setup and live linking remain
+pending. See [GitHub setup](github.md).
