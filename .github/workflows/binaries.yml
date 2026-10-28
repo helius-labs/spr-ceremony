@@ -67,8 +67,18 @@ jobs:
           path: dist/
           if-no-files-found: error
           retention-days: 30
-  publish:
+  native:
     needs: build
+    uses: ./.github/workflows/native.yml
+    permissions:
+      contents: read
+      actions: read
+      attestations: read
+    with:
+      source_revision: ${{ github.sha }}
+      artifact: participant-binaries-${{ github.sha }}
+  publish:
+    needs: [build, native]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -100,4 +110,13 @@ jobs:
           else
             gh release edit "$SPR_RELEASE_VERSION" --repo "$GITHUB_REPOSITORY" --draft=false --latest
           fi
-          gh release verify "$SPR_RELEASE_VERSION" --repo "$GITHUB_REPOSITORY"
+          # GitHub creates the immutable release attestation asynchronously.
+          verified=0
+          for attempt in $(seq 1 12); do
+            if gh release verify "$SPR_RELEASE_VERSION" --repo "$GITHUB_REPOSITORY"; then
+              verified=1
+              break
+            fi
+            sleep 5
+          done
+          test "$verified" = 1

@@ -39,6 +39,7 @@ The expected repository ID is `1435851983`; this survives repository renames.
 The **Release** workflow accepts `vMAJOR.MINOR.PATCH` or `vMAJOR.MINOR.PATCH-rc.N`.
 It requires a successful Check run on the exact main commit, builds all four
 binaries and browser assets, signs their provenance, verifies every asset,
+runs native contribution/export/terminal checks on all four target platforms,
 uploads a draft, then publishes an immutable release. Existing versions are not
 overwritten. Keep release immutability enabled in repository settings.
 

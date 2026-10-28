@@ -1,0 +1,73 @@
+name: Verify native binaries
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Published release version
+        required: true
+        type: string
+      source_revision:
+        description: Reviewed 40-character source commit
+        required: true
+        type: string
+  workflow_call:
+    inputs:
+      source_revision:
+        required: true
+        type: string
+      artifact:
+        required: true
+        type: string
+permissions:
+  contents: read
+  actions: read
+  attestations: read
+jobs:
+  native:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-24.04
+            platform: linux-amd64
+          - runner: ubuntu-24.04-arm
+            platform: linux-arm64
+          - runner: macos-14
+            platform: darwin-arm64
+          - runner: macos-15-intel
+            platform: darwin-amd64
+    runs-on: ${{ matrix.runner }}
+    env:
+      GH_TOKEN: ${{ github.token }}
+      SPR_SOURCE: ${{ inputs.source_revision }}
+      SPR_VERSION: ${{ inputs.version }}
+      SPR_PLATFORM: ${{ matrix.platform }}
+    steps:
+      - name: Validate source
+        run: python3 -c 'import os,re; assert re.fullmatch(r"[a-f0-9]{40}",os.environ["SPR_SOURCE"])'
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ inputs.source_revision }}
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        if: inputs.artifact != ''
+        with:
+          name: ${{ inputs.artifact }}
+          path: dist
+      - name: Download published release
+        if: inputs.artifact == ''
+        run: |
+          python3 -c 'import os,re; assert re.fullmatch(r"v[0-9]+\.[0-9]+\.[0-9]+(?:-rc\.[0-9]+)?",os.environ["SPR_VERSION"])'
+          gh release verify "$SPR_VERSION" --repo "$GITHUB_REPOSITORY"
+          mkdir -p "dist/$SPR_SOURCE"
+          gh release download "$SPR_VERSION" --repo "$GITHUB_REPOSITORY" --dir "dist/$SPR_SOURCE" \
+            --pattern "spr-ceremony-$SPR_PLATFORM" --pattern provenance.json
+      - name: Verify and execute the native release
+        run: |
+          binary="$PWD/dist/$SPR_SOURCE/spr-ceremony-$SPR_PLATFORM"
+          gh attestation verify "$binary" --repo "$GITHUB_REPOSITORY" \
+            --bundle "dist/$SPR_SOURCE/provenance.json" --source-digest "$SPR_SOURCE" \
+            --signer-workflow "$GITHUB_REPOSITORY/.github/workflows/binaries.yml" --deny-self-hosted-runners
+          chmod +x "$binary"
+          "$binary" version
+          python3 scripts/smoke-cli.py "$binary"
+          python3 scripts/test-terminal.py "$binary"
