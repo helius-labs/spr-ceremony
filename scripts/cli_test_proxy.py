@@ -37,7 +37,7 @@ class Proxy:
                     for k, v in response.getheaders():
                         if k.lower() not in ['connection', 'transfer-encoding', 'content-length']:
                             self.send_header(k, v)
-                    self.send_header('Content-Length', str(len(payload)))
+                    self.send_header('Content-Length', response.getheader('Content-Length', '0') if self.command == 'HEAD' else str(len(payload)))
                     self.end_headers()
                     self.wfile.write(payload)
                 except OSError:
@@ -45,7 +45,7 @@ class Proxy:
                 finally:
                     connection.close()
 
-            do_GET = do_POST = do_DELETE = forward
+            do_GET = do_POST = do_DELETE = do_PUT = do_HEAD = forward
 
         self.server = http.server.ThreadingHTTPServer(('127.0.0.1', 0), Handler)
         self.server.daemon_threads = True

@@ -37,17 +37,20 @@ async def main():
             result = subprocess.run([binary, *map(str, arguments)], cwd=root, capture_output=True, text=True)
             if result.returncode: raise RuntimeError('Fixture command failed: ' + str(arguments[0]))
             return result.stdout
+        certificate, key = root / 'cert.pem', root / 'key.pem'
+        subprocess.run(['openssl', 'req', '-x509', '-newkey', 'rsa:2048', '-nodes', '-keyout', str(key), '-out', str(certificate), '-days', '1', '-subj', '/CN=localhost', '-addext', 'subjectAltName=IP:127.0.0.1', '-addext', 'basicConstraints=critical,CA:TRUE'], check=True, capture_output=True)
+        os.environ['SSL_CERT_FILE'] = str(certificate)
+        storage_proxy = None
         cli('demo', '--out', 'ceremony')
         endpoint = os.environ.get('SPR_S3_ENDPOINT')
         if endpoint:
             assert endpoint.startswith(('http://127.0.0.1:', 'http://localhost:'))
             os.environ.update(AWS_ACCESS_KEY_ID='testing', AWS_SECRET_ACCESS_KEY='testing', AWS_EC2_METADATA_DISABLED='true')
+            storage_proxy = Proxy(urlsplit(endpoint).port, certificate, key)
             bucket = 'spr-cli-web-' + uuid.uuid4().hex
             with urllib.request.urlopen(urllib.request.Request(endpoint + '/' + bucket, data=b'', method='PUT')): pass
-            (root / 's3.json').write_text(json.dumps({'bucket': bucket, 'region': 'us-east-1', 'prefix': 'hosted', 'endpoint': endpoint}))
+            (root / 's3.json').write_text(json.dumps({'bucket': bucket, 'region': 'us-east-1', 'prefix': 'hosted', 'endpoint': storage_proxy.origin}))
             cli('sync', '--dir', 'ceremony', '--s3-config', 's3.json')
-        certificate, key = root / 'cert.pem', root / 'key.pem'
-        subprocess.run(['openssl', 'req', '-x509', '-newkey', 'rsa:2048', '-nodes', '-keyout', str(key), '-out', str(certificate), '-days', '1', '-subj', '/CN=localhost', '-addext', 'subjectAltName=IP:127.0.0.1', '-addext', 'basicConstraints=critical,CA:TRUE'], check=True, capture_output=True)
         with socket.socket() as sock:
             sock.bind(('127.0.0.1', 0)); upstream = sock.getsockname()[1]
         proxy = Proxy(upstream, certificate, key); origin = proxy.origin
@@ -137,6 +140,7 @@ async def main():
                         await context.close(); await browser.close()
             finally:
                 server.terminate(); server.wait(timeout=15); proxy.close()
+                if storage_proxy: storage_proxy.close()
         if endpoint: checks.append('Native contributions published through S3')
     (out / 'result.json').write_text(json.dumps({'passed': checks}, indent=2) + '\n')
     print('CLI-only hosted checks passed in Chromium and WebKit.')
