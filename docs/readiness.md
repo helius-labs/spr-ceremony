@@ -264,3 +264,13 @@ live failover or finalized-key recovery.
 against the manifest-bound public key and rejected all 41 altered payloads.
 This validates coordinator receipt authentication, separately from the running
 cryptographic transcript audit.
+
+[v0.1.0-rc.10](evidence/release-v0.1.0-rc.10.json) is deployed with automatic
+completed-contributor records. The public endpoint and GitHub mirror derive
+records from pinned checkpoint states and verify coordinator signatures. The
+first Actions run archived all 41 receipts; a second run produced no duplicate
+commit. Scheduled publication is enabled. The live Chromium/WebKit checks show
+the completed first contributor and exclude the partial second contributor.
+Deployment followed the operator-confirmed pause and preserved both contributors'
+accepted work. GitHub publication is independent of S3 acceptance and labels
+records as accepted, without claiming completion of the full MPC audit.

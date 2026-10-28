@@ -1,0 +1,47 @@
+{
+  "checked_at": "2026-10-28T16:15:33.600469+00:00",
+  "release": "https://github.com/helius-labs/spr-ceremony/releases/tag/v0.1.0-rc.10",
+  "source_revision": "23bee5ff6dd09fa77372112f55907b438e61c7af",
+  "check_workflow": 40719715936,
+  "release_workflow": 40720417729,
+  "release_result": "success on all four native platforms",
+  "mirror_workflow": 40720489287,
+  "mirror_repeat_workflow": 40721036166,
+  "mirror_result": "published 41 checked receipts; repeated run preserved existing bytes and produced no new commit",
+  "mirror_commit": "0db3f1d20391b21c5569b8f94c605dd0741a1881",
+  "scheduled_mirror_enabled": true,
+  "deployment_ssm_command": "1f610aea-5515-49c9-8914-6c3c4ec1c35e",
+  "participant_origin": "https://d3gz3drevfa8mb.cloudfront.net",
+  "manifest": {
+    "sha256": "4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079",
+    "size": 31586
+  },
+  "checkpoint": {
+    "sha256": "4fcfff17f5d2c7c269ba581456e4e78e28f98e72debd381e2c52b42ce9dfd168",
+    "size": 7064
+  },
+  "accepted": {
+    "alexatamanov": 16,
+    "sergeytimoshin": 41
+  },
+  "deployment_preserved": [
+    "manifest",
+    "checkpoint",
+    "phase",
+    "beacon",
+    "invitations",
+    "reservations"
+  ],
+  "browsers_passed": [
+    "Chromium",
+    "WebKit"
+  ],
+  "completed_record_visible": true,
+  "partial_contributor_excluded": true,
+  "private_tokens_published": false,
+  "limits": [
+    "Accepted record status is distinct from independent full transcript verification",
+    "Operator confirmed contributor paused; old invitation revoked before restart; reissue is needed to resume",
+    "No cryptographic engine or ceremony parameters changed"
+  ]
+}
