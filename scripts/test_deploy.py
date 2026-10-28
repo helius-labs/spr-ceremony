@@ -1,3 +1,4 @@
+import ast
 import importlib.util
 import io
 import json
@@ -7,6 +8,7 @@ import sys
 import tarfile
 import tempfile
 import unittest
+from unittest.mock import patch
 
 spec = importlib.util.spec_from_file_location('deploy', Path(__file__).with_name('deploy-aws.py'))
 deploy = importlib.util.module_from_spec(spec)
@@ -14,6 +16,50 @@ spec.loader.exec_module(deploy)
 
 
 class DeploymentTests(unittest.TestCase):
+    def test_rendered_runtime_configuration_keeps_admin_private(self):
+        tree = ast.parse(Path(deploy.__file__).read_text())
+        blocks = [node.value.split("<<'UNITS'\n", 1)[1].split('\nUNITS', 1)[0]
+                  for node in ast.walk(tree) if isinstance(node, ast.Constant)
+                  and isinstance(node.value, str) and "<<'UNITS'\n" in node.value]
+        self.assertEqual(len(blocks), 1)
+        code = compile(blocks[0], 'generated-runtime-configuration', 'exec')
+        gateway = 'https://example.execute-api.eu-north-1.amazonaws.com'
+        role = 'arn:aws:iam::123456789012:role/Operator'
+        for mode, origin, operator in [('ssm', 'http://127.0.0.1:8080', ''), ('cloudfront', 'https://example.cloudfront.net', ''), ('cloudfront', 'https://example.cloudfront.net', gateway), ('public', 'https://ceremony.example.com', '')]:
+            with self.subTest(mode=mode, operator=operator), tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary)
+                for directory in ['etc/systemd/system', 'etc/caddy', 'usr/local/bin']:
+                    (root / directory).mkdir(parents=True)
+                for service, command, port in [('spr-ceremony', 'serve', 8080), ('spr-admin', 'admin', 8081)]:
+                    (root / f'etc/systemd/system/{service}.service').write_text(
+                        f'[Service]\nMemoryMax=1G\nExecStart=/opt/spr/current/native/spr-ceremony-linux-amd64 {command} --dir /var/lib/spr/core --listen 127.0.0.1:{port} --public-url http://127.0.0.1:8080\n')
+                (root / 'usr/local/bin/spr-health').write_text("curl -H 'Host: 127.0.0.1:8080' http://127.0.0.1:8080/healthz\n")
+                with patch('pathlib.Path', side_effect=lambda path: root / path.lstrip('/')), patch.object(sys, 'argv', ['configure', origin, mode, operator, role if operator else '']):
+                    exec(code, {})
+                admin = (root / 'etc/systemd/system/spr-admin.service').read_text()
+                participant = (root / 'etc/systemd/system/spr-ceremony.service').read_text()
+                self.assertIn('--listen 127.0.0.1:8081', admin)
+                self.assertIn('--public-url ' + origin, admin)
+                self.assertIn('--public-url ' + origin, participant)
+                self.assertEqual('--trust-loopback-proxy' in participant, mode != 'ssm')
+                self.assertIn('Host: ' + origin.split('://')[1], (root / 'usr/local/bin/spr-health').read_text())
+                if mode == 'cloudfront':
+                    proxy = (root / 'etc/caddy/Caddyfile').read_text()
+                    self.assertIn('http://:8082', proxy)
+                    self.assertIn('reverse_proxy 127.0.0.1:8080', proxy)
+                    if operator:
+                        self.assertIn('http://:8083', proxy)
+                        self.assertIn('reverse_proxy 127.0.0.1:8081', proxy)
+                        self.assertIn('Host ' + gateway.split('://')[1], proxy)
+                        self.assertIn('--operator-origin ' + gateway, admin)
+                        self.assertIn('--operator-role ' + role, admin)
+                        self.assertIn('Environment=GOMAXPROCS=4', admin)
+                        self.assertIn('MemoryMax=12G', admin)
+                    else:
+                        self.assertNotIn('8081', proxy)
+                        self.assertNotIn('--operator-origin', admin)
+                    self.assertIn('Host example.cloudfront.net', proxy)
+
     def test_hosted_build_comparison_accepts_serialization_and_rejects_changes(self):
         with tempfile.TemporaryDirectory() as tmp:
             actual, expected = Path(tmp) / 'actual.json', Path(tmp) / 'expected.json'
@@ -34,6 +80,7 @@ class DeploymentTests(unittest.TestCase):
             return {'coordinator_key': {'sha256': 'd' * 64, 'size': 1024}, 'phase1': {'insecure_test_setup': test}, 'circuits': [{'spec': {'track': 'core'}} for _ in range(count)]}
         prepared, opened = {'lifecycle': {'phase': 'prepared'}}, {'lifecycle': {'phase': 'open'}}
         deploy.check_initial_campaign(manifest(True, 2), opened, True, 'ssm')
+        deploy.check_initial_campaign(manifest(True, 41), prepared, True, 'cloudfront')
         deploy.check_initial_campaign(manifest(False, 41), prepared, False, 'public')
         deploy.check_initial_campaign(manifest(False, 41), prepared, False, 'ssm')
         for m, cp, rehearsal, mode in [

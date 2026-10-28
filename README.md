@@ -52,10 +52,12 @@ Rehearsal proving keys are explicitly insecure. [Testing guide](docs/hosted-ui.m
 
 ## Operate
 
-With the participant and control SSM tunnels open:
+Use your AWS SSO profile; no SSM tunnel is needed:
 
 ```sh
-./spr-ceremony operator connect
+aws sso login --profile YOUR_PROFILE
+./spr-ceremony operator connect --operator-url OPERATOR_URL --profile YOUR_PROFILE
+./spr-ceremony operator open --hours 24
 ./spr-ceremony operator invite bob
 ./spr-ceremony operator status
 ./spr-ceremony operator audit
@@ -63,12 +65,12 @@ With the participant and control SSM tunnels open:
 
 `invite` saves a private invitation file and prints the contributor's command.
 Send both privately. `audit` downloads and verifies the current public transcript.
-For a public participant site, add `--url https://CEREMONY_HOST` to `connect`.
-[CLI guide](docs/operator-cli.md).
+[CLI guide](docs/operator-cli.md) · [Full Mac-to-AWS rehearsal](docs/rehearsal.md).
 
 [Deploy to AWS and invite contributors](docs/aws.md). Terraform provisions HTTPS,
 private versioned S3, encrypted storage, backups and alarms. The control panel is
-reachable through AWS SSM; the public site has no administration API.
+available through an AWS-authenticated operator gateway, with SSM as a private
+fallback. The participant site has no administration API.
 [Internal testing](docs/aws.md#internal-test-deployment) uses SSM for both interfaces
 and needs no public hostname.
 

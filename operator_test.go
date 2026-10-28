@@ -3,7 +3,10 @@ package ceremony
 import (
 	"bytes"
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -12,6 +15,9 @@ import (
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/aws/aws-sdk-go-v2/aws"
+	v4 "github.com/aws/aws-sdk-go-v2/aws/signer/v4"
 )
 
 func operatorFixture(t *testing.T) (*Store, *Operator, string) {
@@ -156,6 +162,51 @@ func (f operatorRoundTrip) RoundTrip(request *http.Request) (*http.Response, err
 	return f(request)
 }
 
+func TestOperatorSignsExactGatewayRequestAndFailsClosed(t *testing.T) {
+	_, operator, _ := operatorFixture(t)
+	operator.Config.ControlURL = ""
+	operator.Config.GatewayURL = "https://example.execute-api.eu-north-1.amazonaws.com"
+	credentials := aws.Credentials{AccessKeyID: "fixture-access", SecretAccessKey: "fixture-secret", SessionToken: "fixture-session"}
+	operator.credentials = aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) { return credentials, nil })
+	calls := 0
+	operator.client.HTTP.Transport = operatorRoundTrip(func(request *http.Request) (*http.Response, error) {
+		calls++
+		if request.Method != "POST" || request.URL.String() != operator.Config.GatewayURL+"/operator/login" || request.Header.Get("X-SPR-Manifest") != operator.Config.Manifest.SHA256 {
+			t.Fatal("operator request escaped its gateway or manifest pin")
+		}
+		body, err := io.ReadAll(request.Body)
+		must(t, err)
+		if string(body) != `{"code":"ABCD-EFGH-JKLM"}` {
+			t.Fatal("unexpected signed body")
+		}
+		at, err := time.Parse("20060102T150405Z", request.Header.Get("X-Amz-Date"))
+		must(t, err)
+		expected := request.Clone(context.Background())
+		expected.Header.Del("Authorization")
+		digest := sha256.Sum256(body)
+		must(t, v4.NewSigner().SignHTTP(context.Background(), credentials, expected, hex.EncodeToString(digest[:]), "execute-api", "eu-north-1", at))
+		if expected.Header.Get("Authorization") != request.Header.Get("Authorization") || request.Header.Get("X-Amz-Security-Token") != credentials.SessionToken {
+			t.Fatal("AWS signing did not bind the complete request")
+		}
+		return &http.Response{StatusCode: 200, Body: io.NopCloser(strings.NewReader(`{"approved":true}`)), Header: make(http.Header)}, nil
+	})
+	must(t, operator.ApproveBrowser(context.Background(), "ABCD-EFGH-JKLM"))
+	operator.credentials = aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
+		return aws.Credentials{}, fmt.Errorf("private credential detail")
+	})
+	err := operator.ApproveBrowser(context.Background(), "ABCD-EFGH-JKLM")
+	if err == nil || strings.Contains(err.Error(), "private credential detail") || calls != 1 {
+		t.Fatal("unavailable credentials were sent or exposed")
+	}
+	operator.credentials = aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) { return credentials, nil })
+	for _, origin := range []string{"http://example.execute-api.eu-north-1.amazonaws.com", "https://example.com", "https://example.execute-api.eu-north-1.amazonaws.com.evil.test", operator.Config.GatewayURL + "/path"} {
+		operator.Config.GatewayURL = origin
+		if operator.ApproveBrowser(context.Background(), "ABCD-EFGH-JKLM") == nil || calls != 1 {
+			t.Fatal("credentials sent to an unapproved origin")
+		}
+	}
+}
+
 func TestOperatorRejectsForgedInvitationsAndCorruptPublicObjects(t *testing.T) {
 	_, operator, _ := operatorFixture(t)
 	transport := http.DefaultTransport
@@ -197,5 +248,54 @@ func TestOperatorRejectsForgedInvitationsAndCorruptPublicObjects(t *testing.T) {
 	})
 	if _, _, err := operator.Audit(context.Background(), t.TempDir(), 64, io.Discard); err == nil {
 		t.Fatal("corrupt pinned manifest accepted")
+	}
+}
+
+func TestOperatorAuditRestoresFinalKeysWithoutCoordinatorCredentials(t *testing.T) {
+	s, operator, _ := operatorFixture(t)
+	// Start this marked fixture prepared to exercise the complete beacon path.
+	cp, _, err := s.checkpoint()
+	must(t, err)
+	cp.Lifecycle = Lifecycle{Phase: "prepared"}
+	ref, err := s.putJSON(cp)
+	must(t, err)
+	must(t, WriteJSON(filepath.Join(s.Dir, "checkpoint.json"), ref))
+	now := time.Now().UTC().Truncate(time.Second)
+	plan, proof := testBeacon(t, now.Add(2*time.Hour))
+	s.now = func() time.Time { return now }
+	_, err = s.OpenCeremony(plan)
+	must(t, err)
+	invitation, err := operator.Invite(context.Background(), "final-review", 24)
+	must(t, err)
+	client := NewClient(t.TempDir())
+	client.Progress = io.Discard
+	must(t, client.Run(context.Background(), invitation, Core))
+	_, err = s.CloseCeremony()
+	must(t, err)
+	s.now = func() time.Time { return plan.RoundTime.Add(time.Second) }
+	_, err = s.Finalize(filepath.Join(t.TempDir(), "coordinator-export"), proof, 64)
+	must(t, err)
+	out := filepath.Join(t.TempDir(), "independent-export")
+	work := t.TempDir()
+	point, directory, err := operator.Export(context.Background(), work, out, 64, io.Discard)
+	must(t, err)
+	public, err := Open(directory)
+	must(t, err)
+	life, checkpoint, err := public.Lifecycle()
+	must(t, err)
+	if checkpoint != point.Checkpoint || life.Phase != "finalized" || public.ManifestArtifact != point.Manifest {
+		t.Fatal("final public snapshot did not preserve its pins")
+	}
+	// Repeating an export verifies existing output without replacing it.
+	_, _, err = operator.Export(context.Background(), work, out, 64, io.Discard)
+	must(t, err)
+	// A locally changed key must not be accepted from a previously audited store.
+	key := filepath.Join(out, public.Manifest.Circuits[0].Spec.ID+".pk")
+	b, err := os.ReadFile(key)
+	must(t, err)
+	b[0] ^= 1
+	must(t, os.WriteFile(key, b, 0600))
+	if _, _, err = operator.Export(context.Background(), work, out, 64, io.Discard); err == nil {
+		t.Fatal("changed final proving key accepted")
 	}
 }

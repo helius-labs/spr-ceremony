@@ -1,12 +1,17 @@
 # AWS deployment
 
 One active coordinator, encrypted persistent EBS, private versioned S3, and Caddy
-HTTPS. Only ports 80/443 are public. Administration uses an IAM authenticated SSM
-tunnel to a separate loopback listener. No SSH keys, static AWS credentials,
+HTTPS. Direct hosting exposes 80/443; CloudFront hosting uses a private VPC origin.
+Administration uses the [AWS operator gateway](../infra/operator/README.md) or
+an IAM authenticated SSM tunnel. No SSH keys, static AWS credentials,
 invitation tokens or GitHub tokens go into Terraform or user data.
 
 Operator tools: Terraform, AWS CLI with SSM plugin, GitHub CLI, Python 3.11+.
 Participants need only a browser or the release binary.
+
+For the public rehearsal with CLI operation and no tunnels, follow the
+[Mac walkthrough](rehearsal.md). Infrastructure setup is documented in
+[public-test](../infra/public-test/README.md).
 
 ## Internal test deployment
 
@@ -46,7 +51,8 @@ terraform apply internal.tfplan
 ```
 
 From the repository root, use a release binary to prepare a marked rehearsal,
-then deploy it. `--rehearsal` refuses public deployments and unmarked campaigns.
+then deploy it. `--rehearsal` requires a marked test campaign and either SSM or
+the dedicated CloudFront rehearsal mode; it refuses direct production hosting.
 
 ```sh
 ./spr-ceremony demo --out rehearsal/aws

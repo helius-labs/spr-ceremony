@@ -4,6 +4,9 @@
 <p class="eyebrow"><span class="mark" aria-hidden="true"></span> PRIVATE CONTROL PANEL</p>
 <h1>Invite.<br><span>Contribute.</span></h1>
 <p id="status" role="status" aria-live="polite">Loading…</p>
+<section id="login" hidden><h2>Sign in with AWS</h2><p class="detail">Use your existing operator CLI to approve this browser.</p><button id="begin-login">Sign in</button><div id="pairing" hidden><pre id="login-command"></pre><button id="copy-login" class="secondary">Copy command</button><p id="login-status" class="detail"></p></div><details><summary>Connect your CLI once</summary><pre id="connect-command"></pre><p class="detail">Use the AWS profile you already sign in with.</p></details></section>
+<div id="control" hidden>
+<div class="buttons"><button id="sign-out" class="secondary" hidden>Sign out</button></div>
 <p id="test" class="notice" hidden>Test ceremony. These keys are not for production.</p>
 <section><div class="heading"><h2 id="phase">Ceremony</h2><button id="refresh" class="secondary">Refresh</button></div><p id="storage" class="detail"></p><p id="beacon" class="detail"></p><p id="leases" class="detail"></p></section>
 <section><h2>New invitation</h2>
@@ -14,9 +17,9 @@
 </section>
 <dialog id="secret" aria-labelledby="secret-name" hidden><p class="eyebrow">PRIVATE INVITATION</p><h2 id="secret-name"></h2><p id="secret-context" class="detail"></p><label for="link">Private link · shown once</label><textarea id="link" rows="4" readonly spellcheck="false" autocomplete="off"></textarea><p id="secret-expiry" class="detail"></p><div class="buttons"><button id="copy">Copy link</button><button id="download" class="secondary">Save invitation</button><button id="clear" class="secondary">Done</button></div><p class="detail">Clears in five minutes.</p></dialog>
 <section><h2>Invitations</h2><div id="invitations"></div></section>
-<details><summary>Finish the ceremony</summary><p>Wait for participants and active reservations to finish. Close before the announced beacon, publish the closure hash, then finalize with the signed beacon. Audit the transcript and verify the exported keys before integrating them.</p><p>Use the operator CLI for phase transitions. The public site lists final keys only after finalization.</p><pre>spr-ceremony close --dir /var/lib/spr/core
-spr-ceremony finalize --dir /var/lib/spr/core --beacon-file beacon.json --out final-keys
-spr-ceremony audit --dir /var/lib/spr/core --manifest-sha256 MANIFEST --checkpoint-sha256 CHECKPOINT
-spr-ceremony verify-export --dir /var/lib/spr/core --export final-keys --manifest-sha256 MANIFEST --checkpoint-sha256 CHECKPOINT</pre><p id="pins" class="detail"></p></details>
-<p class="detail">Access is controlled by AWS IAM and your SSM tunnel. Close the tunnel when finished.</p>
+<details><summary>Finish the ceremony</summary><p>Wait for participants and reservations to finish. Audit, then close before the announced beacon.</p><pre>./spr-ceremony operator audit
+./spr-ceremony operator close</pre><p>After the beacon time, finalize on AWS and verify the downloaded keys.</p><pre>./spr-ceremony operator finalize
+./spr-ceremony operator export --out final-keys</pre><p>Check a running operation with <code>operator job</code>. Final keys appear on the public site after finalization.</p><p id="pins" class="detail"></p></details>
+<p id="access-note" class="detail">Access is controlled by AWS IAM and your SSM tunnel. Close the tunnel when finished.</p>
+</div>
 </main></body></html>

@@ -1,6 +1,8 @@
 "use strict";
 const $ = id => document.getElementById(id);
 let secret, clearTimer, view, busy = false, revoking;
+const hostedOperator = location.protocol === "https:";
+let authenticated = !hostedOperator, pairingTimer;
 function say(message, error = false) { $("status").textContent = message; $("status").classList.toggle("error", error); }
 function clearSecret() {
   secret = null; $("link").value = ""; clearTimeout(clearTimer);
@@ -21,14 +23,30 @@ function controls() {
   $("resume-existing").disabled = busy || !canInvite();
   for (const button of document.querySelectorAll("#invitations button")) button.disabled = busy || (button.dataset.needsOpen === "true" && !canInvite());
 }
-async function api(path, data) {
-  const response = await fetch(`/admin/${path}`, { method: data ? "POST" : "GET", cache: "no-store", credentials: "omit", redirect: "error", headers: { "X-SPR-Admin": "1", ...(data ? { "Content-Type": "application/json" } : {}) }, body: data ? JSON.stringify(data) : undefined, signal: AbortSignal.timeout(30000) });
+async function request(path, data) {
+  const response = await fetch(path, { method: data ? "POST" : "GET", cache: "no-store", credentials: "same-origin", redirect: "error", headers: { "X-SPR-Admin": "1", ...(data ? { "Content-Type": "application/json", ...(view ? { "X-SPR-Manifest": view.manifest.sha256 } : {}) } : {}) }, body: data ? JSON.stringify(data) : undefined, signal: AbortSignal.timeout(30000) });
   if (!response.ok) {
+    if (response.status === 401 && hostedOperator) showLogin();
     // The admin API returns fixed operator-facing messages, never key material.
     const error = new Error((await response.text()).trim().slice(0, 200));
     error.adminMessage = true; throw error;
   }
   return response.json();
+}
+function api(path, data) { return request(`/admin/${path}`, data); }
+function showLogin() {
+  authenticated = false; view = null; clearSecret(); clearInterval(pairingTimer);
+  $("control").hidden = true; $("login").hidden = false;
+  $("pairing").hidden = true; $("login-command").textContent = "";
+  $("begin-login").disabled = false;
+  $("connect-command").textContent = `./spr-ceremony operator connect --operator-url '${location.origin}' --profile YOUR_AWS_PROFILE`;
+  say("Sign in to manage the ceremony.");
+}
+function showControl() {
+  authenticated = true; clearInterval(pairingTimer);
+  $("login").hidden = true; $("control").hidden = false;
+  $("sign-out").hidden = !hostedOperator;
+  if (hostedOperator) $("access-note").textContent = "AWS-authenticated session. Expires after 30 minutes. Sign out when finished.";
 }
 async function refresh() {
   view = await api("status");
@@ -115,4 +133,35 @@ $("clear").addEventListener("click", () => { clearSecret(); say("Private link cl
 $("secret").addEventListener("close", clearSecret);
 $("refresh").addEventListener("click", () => action(refresh));
 window.addEventListener("pagehide", clearSecret);
-action(async () => { await refresh(); say("Ready."); });
+$("begin-login").addEventListener("click", async () => {
+  $("begin-login").disabled = true;
+  try {
+    const challenge = await request("/session/start", {});
+    if (!/^[A-Z2-9]{4}-[A-Z2-9]{4}-[A-Z2-9]{4}$/.test(challenge.code)) throw new Error("Invalid login challenge");
+    $("login-command").textContent = `./spr-ceremony operator login ${challenge.code}`;
+    $("pairing").hidden = false; $("login-status").textContent = "Run this command for your own browser. Expires in five minutes.";
+    say("Waiting for AWS approval…");
+    let polling = false;
+    pairingTimer = setInterval(async () => {
+      if (polling) return; polling = true;
+      try {
+        const state = await request("/session/poll");
+        if (state.authenticated) { showControl(); await action(async () => { await refresh(); say("Ready."); }); }
+      } catch (error) { showLogin(); say(error.adminMessage ? error.message : "Connection interrupted. Try signing in again.", true); }
+      finally { polling = false; }
+    }, 2000);
+  } catch (error) { $("begin-login").disabled = false; say(error.adminMessage ? error.message : "Sign-in unavailable. Try again.", true); }
+});
+$("copy-login").addEventListener("click", async () => {
+  try { await navigator.clipboard.writeText($("login-command").textContent); $("login-status").textContent = "Copied. Run it in your terminal."; }
+  catch { $("login-status").textContent = "Select and copy the command above."; }
+});
+$("sign-out").addEventListener("click", async () => {
+  try { await request("/session/logout", {}); showLogin(); }
+  catch { say("Could not sign out. Try again.", true); }
+});
+action(async () => {
+  if (hostedOperator && !(await request("/session/status")).authenticated) { showLogin(); return; }
+  showControl(); await refresh(); say("Ready.");
+});
+setInterval(() => { if (authenticated && !busy && !document.hidden) action(refresh); }, 15000);

@@ -128,10 +128,10 @@ func (s *Store) adminStatus() (any, error) {
 	return map[string]any{"operator_protocol": 1, "phase": cp.Lifecycle.Phase, "beacon": cp.Lifecycle.Beacon, "manifest": s.ManifestArtifact, "checkpoint": ref, "invitations": invitations, "reservations": reservations, "insecure_test_setup": s.Manifest.Phase1.InsecureTestSetup, "s3": s.Remote != nil, "coordinator_key": s.Manifest.CoordinatorKey, "beacon_recoveries": cp.Lifecycle.Recoveries}, nil
 }
 
-// AdminHandler is only for a separate loopback listener reached through SSM.
-// IAM authenticates the tunnel. Host, peer, Origin and custom-header checks
-// reject DNS rebinding and requests initiated by an unrelated web page.
-// Never mount this handler on the public listener or reverse proxy it.
+// AdminHandler serves the separate loopback control listener. Host, peer,
+// Origin and custom-header checks reject DNS rebinding and cross-site requests.
+// SSM authenticates direct access; AdminHandlerWithGateway provides the separate
+// authenticated HTTPS adapter. Never proxy the raw handler onto a public origin.
 func (s *Store) AdminHandler(origin, publicURL string) (http.Handler, error) {
 	u, err := url.Parse(origin)
 	if err != nil || u.Scheme != "http" || u.User != nil || u.Path != "" || u.RawQuery != "" || u.Fragment != "" {

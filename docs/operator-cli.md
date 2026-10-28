@@ -1,47 +1,35 @@
 # Operator CLI
 
-Use a verified release binary. No Go or S3 credentials are needed on your laptop.
-AWS CLI and its Session Manager plugin authenticate the private control tunnel.
+Use a verified release binary and your existing AWS SSO profile. Participants
+need neither AWS access nor build tools. [Full Mac rehearsal](rehearsal.md).
 
-## Connect once
-
-For internal AWS testing, keep the participant (8080) and control (8081) SSM
-tunnels open in separate terminals. Use the instance and document names from
-the [AWS guide](aws.md#internal-test-deployment).
+## Connect and open
 
 ```sh
-./spr-ceremony operator connect
+aws sso login --profile YOUR_PROFILE
+./spr-ceremony operator connect --operator-url https://API_ID.execute-api.REGION.amazonaws.com --profile YOUR_PROFILE
+./spr-ceremony operator open --hours 24
 ```
 
-This checks both endpoints and saves `ceremony-operator.json`, containing the
-addresses and pinned manifest digest. It contains no credentials. A changed
-campaign requires an explicit new connection file; existing files are never
-overwritten. For a public participant site, use
-`operator connect --url https://CEREMONY_HOST`.
+The connection file stores public addresses and a manifest pin. AWS manages its
+own credential cache. Existing files are never overwritten; reconnect a changed
+campaign using `--config NEW_FILE`. Opening announces a future quicknet round.
+Close before that deadline and finalize after it.
 
 ## Invite and contribute
 
 ```sh
-./spr-ceremony operator invite bob
+./spr-ceremony operator invite sergei --out invitations/sergei.json
+./spr-ceremony contribute --invitation invitations/sergei.json
 ```
 
-The command saves a new mode-0600 file under `invitations/` and prints a command
-using its filename. Send the file and command privately to Bob. On his computer,
-Bob saves the invitation beside the binary and runs that command, for example:
+For someone else, run `operator invite bob` and privately send the generated
+file and printed command. The file has mode 0600; its secret never appears in
+the command. Invitations last 24 hours by default; `--hours 72` changes that.
 
-```sh
-./spr-ceremony contribute --invitation invitation-123456.json
-```
-
-The actual filename is printed by `invite`. To choose it yourself, use
-`operator invite bob --out invitations/bob.json`. Invitation secrets never appear
-in the generated command. Internal-test contributors also need the participant
-SSM tunnel; they do not need access to the control panel.
-
-The client joins the queue, adds randomness, verifies locally, uploads, and waits
-for acceptance for each circuit. Rerun the same command after an interruption.
-Accepted work is skipped. Independent contributors may run concurrently; each
-circuit permits one contributor at a time.
+The client queues, contributes, verifies, uploads and waits for acceptance for
+each circuit. Rerun after interruption. Accepted work is skipped. Contributors
+may run concurrently; each circuit accepts one contributor at a time.
 
 ## Check and manage
 
@@ -52,26 +40,37 @@ circuit permits one contributor at a time.
 ./spr-ceremony operator revoke bob
 ```
 
-`status` shows invitation IDs, accepted counts and current reservations. Use a
-unique name or the displayed ID for reissue/revoke. Reissue saves a new private
-file, invalidates the old link and preserves progress. Revoke keeps accepted work.
-New invitations last 24 hours by default; `--hours 72` changes that limit.
+Status shows the deadline, reservations and accepted counts. Reissue replaces
+access while preserving identity and progress; revoke retains accepted work.
+Use a unique pseudonym or invitation ID. Put it before flags.
 
-`audit` pins the current checkpoint through the authenticated control tunnel,
-downloads public objects and verifies signatures, Phase 1 derivation, contributions
-and checkpoint history locally. It verifies that snapshot even if other people
-contribute afterward. The full core transcript requires several GB of disk and
-substantial computation. Keep `audit/` to reuse downloads. No private invitations,
-signing keys or AWS credentials are saved there.
-
-All commands accept `--config FILE`; audit accepts `--work DIRECTORY`.
-Put a contributor name or ID before flags, for example
-`operator reissue bob --out invitations/bob-renewed.json`.
+Audit pins the current checkpoint through AWS authentication, downloads public
+objects and independently checks signatures, Phase 1 derivation, initialization,
+contributions and checkpoint history. **Full-core audits can take hours.** Keep
+`audit/` to reuse downloads. It contains no private invitations or signing keys.
 
 ## Finish
 
-Closing and finalizing remain explicit coordinator operations. The invitation
-control API cannot open, close or finalize a ceremony. Follow the
-[close, finalize and verify commands](operations.md#close-finalize-and-independently-verify)
-on the AWS coordinator through an authorized SSM shell. Final keys appear only
-after finalization. Audit the transcript and verify the export before using them.
+```sh
+./spr-ceremony operator close
+# After the announced beacon time:
+./spr-ceremony operator finalize
+./spr-ceremony operator export --out final-keys
+```
+
+Phase changes run on AWS and continue if the terminal disconnects. Use
+`operator job` to check the latest operation. Finalization publishes keys to S3;
+export downloads and independently reproduces them locally. Existing export
+files are checked, never replaced. This verification also takes substantial time.
+
+If an open ceremony misses its deadline:
+
+```sh
+./spr-ceremony operator recover-beacon --hours 24 --reason "Contribution window exceeded the planned deadline"
+```
+
+Recovery preserves verified contributions and records the old/new beacon rounds.
+All commands accept `--config FILE`; audit/export accept `--work DIRECTORY`.
+
+For a local demo or existing SSM deployment, `operator connect` uses loopback
+ports 8080/8081. AWS phase commands require the HTTPS operator endpoint.

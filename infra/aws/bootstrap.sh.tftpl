@@ -74,6 +74,39 @@ ${domain} {
 CADDY
 chmod 644 /etc/caddy/Caddyfile
 %{ endif ~}
+%{ if cloudfront ~}
+cat > /etc/caddy/Caddyfile <<'CADDY'
+{
+  auto_https off
+}
+http://:8082 {
+  request_body {
+    max_size 512MB
+  }
+  reverse_proxy 127.0.0.1:8080 {
+    header_up Host ${origin_host}
+    header_up X-Forwarded-Proto https
+    transport http {
+      response_header_timeout 30m
+      read_timeout 30m
+      write_timeout 30m
+    }
+  }
+}
+%{ if operator_origin != "" ~}
+http://:8083 {
+  request_body {
+    max_size 4MB
+  }
+  reverse_proxy 127.0.0.1:8081 {
+    header_up Host ${trimprefix(operator_origin, "https://")}
+    header_up X-Forwarded-Proto https
+  }
+}
+%{ endif ~}
+CADDY
+chmod 644 /etc/caddy/Caddyfile
+%{ endif ~}
 cat > /etc/systemd/system/spr-ceremony.service <<'SERVICE'
 [Unit]
 Description=Solana Privacy Rings coordinator
@@ -88,7 +121,7 @@ WorkingDirectory=/var/lib/spr
 Environment=AWS_REGION=${region}
 Environment=GOMAXPROCS=4
 ExecStartPre=/usr/local/bin/spr-load-signing-key
-ExecStart=/opt/spr/current/native/spr-ceremony-linux-amd64 serve --signing-key /var/lib/spr/signing/coordinator.private.asc --dir /var/lib/spr/core --s3-config /etc/spr/s3.json --listen 127.0.0.1:8080 --public-url ${origin} --web-dir /opt/spr/current/browser --native-dir /opt/spr/current/native --browser-download-origin https://${jsondecode(s3_config).bucket}.s3.${region}.amazonaws.com${public_https ? " --trust-loopback-proxy" : ""}
+ExecStart=/opt/spr/current/native/spr-ceremony-linux-amd64 serve --signing-key /var/lib/spr/signing/coordinator.private.asc --dir /var/lib/spr/core --s3-config /etc/spr/s3.json --listen 127.0.0.1:8080 --public-url ${origin} --web-dir /opt/spr/current/browser --native-dir /opt/spr/current/native --browser-download-origin https://${jsondecode(s3_config).bucket}.s3.${region}.amazonaws.com${public_https || cloudfront ? " --trust-loopback-proxy" : ""}
 Restart=on-failure
 RestartSec=10
 TimeoutStopSec=75
@@ -119,8 +152,9 @@ ConditionPathExists=/var/lib/spr/core/manifest.json
 User=spr
 Group=spr
 Environment=AWS_REGION=${region}
+Environment=GOMAXPROCS=4
 ExecStartPre=/usr/local/bin/spr-load-signing-key
-ExecStart=/opt/spr/current/native/spr-ceremony-linux-amd64 admin --signing-key /var/lib/spr/signing/coordinator.private.asc --dir /var/lib/spr/core --s3-config /etc/spr/s3.json --listen 127.0.0.1:8081 --public-url ${origin}
+ExecStart=/opt/spr/current/native/spr-ceremony-linux-amd64 admin --signing-key /var/lib/spr/signing/coordinator.private.asc --dir /var/lib/spr/core --s3-config /etc/spr/s3.json --listen 127.0.0.1:8081 --public-url ${origin}${operator_origin != "" ? " --operator-origin ${operator_origin} --operator-role ${operator_role}" : ""}
 Restart=on-failure
 RestartSec=10
 UMask=0077
@@ -135,7 +169,7 @@ RestrictSUIDSGID=true
 LockPersonality=true
 ReadWritePaths=/var/lib/spr
 LimitCORE=0
-MemoryMax=1G
+MemoryMax=${operator_origin != "" ? "12G" : "1G"}
 [Install]
 WantedBy=multi-user.target
 SERVICE
@@ -169,6 +203,6 @@ TIMER
 systemctl daemon-reload
 systemctl enable spr-ceremony spr-admin
 systemctl enable --now spr-health.timer
-%{ if public_https ~}
+%{ if public_https || cloudfront ~}
 systemctl enable --now caddy
 %{ endif ~}

@@ -74,19 +74,19 @@ def check_initial_campaign(manifest, checkpoint, rehearsal, access_mode):
     if not circuits or any(c.get('spec', {}).get('track') != 'core' for c in circuits):
         raise ValueError('Initial deployment requires core circuits only')
     if rehearsal:
-        if access_mode != 'ssm' or marked_test is not True or phase not in ['prepared', 'open']:
-            raise ValueError('Rehearsals require SSM access and an explicitly marked test campaign')
+        if access_mode not in ['ssm', 'cloudfront'] or marked_test is not True or phase not in ['prepared', 'open']:
+            raise ValueError('Rehearsals require SSM administration and an explicitly marked test campaign')
     elif marked_test is not False or len(circuits) != 41 or phase != 'prepared':
         raise ValueError('Initial deployment requires 41 production core circuits in prepared phase')
 
 
 def ssm(aws, instance, commands, tmp):
     request = tmp / 'ssm-request.json'
-    request.write_text(json.dumps({'DocumentName': 'AWS-RunShellScript', 'InstanceIds': [instance], 'Parameters': {'commands': [commands], 'executionTimeout': ['7200']}, 'TimeoutSeconds': 600}))
+    request.write_text(json.dumps({'DocumentName': 'AWS-RunShellScript', 'InstanceIds': [instance], 'Parameters': {'commands': [commands], 'executionTimeout': ['21600']}, 'TimeoutSeconds': 600}))
     request.chmod(0o600)
     command_id = json.loads(run(*aws, 'ssm', 'send-command', '--cli-input-json', 'file://' + str(request)))['Command']['CommandId']
     print('SSM deployment started:', command_id, flush=True)
-    deadline = time.monotonic() + 7500
+    deadline = time.monotonic() + 21900
     while time.monotonic() < deadline:
         time.sleep(5)
         result = subprocess.run([*aws, 'ssm', 'get-command-invocation', '--command-id', command_id, '--instance-id', instance], capture_output=True, text=True)
@@ -108,7 +108,7 @@ def main():
     parser.add_argument('--release', required=True)
     parser.add_argument('--source-sha', required=True, help='independently reviewed source commit')
     parser.add_argument('--ceremony', type=Path, help='first deployment only: prepared production core store')
-    parser.add_argument('--rehearsal', action='store_true', help='allow a marked test campaign, only on an internal SSM deployment')
+    parser.add_argument('--rehearsal', action='store_true', help='allow a marked test campaign with SSM-only administration')
     parser.add_argument('--signing-key', type=Path, help='initial deployment: private key file; defaults to ceremony/private/coordinator.private.asc')
     parser.add_argument('--replace-test-manifest', help='internal rehearsal only: archive and replace this exact existing test manifest')
     args = parser.parse_args()
@@ -117,8 +117,13 @@ def main():
     outputs = json.loads(run('terraform', '-chdir=' + args.terraform_dir, 'output', '-json'))
     get = lambda key: outputs[key]['value']
     access_mode = outputs.get('access_mode', {}).get('value', 'public')
-    if args.rehearsal and (access_mode != 'ssm' or not args.ceremony):
-        parser.error('--rehearsal requires --ceremony and access_mode = ssm')
+    operator_origin = outputs.get('operator_origin', {}).get('value', '')
+    operator_role = outputs.get('operator_role_arn', {}).get('value', '')
+    if operator_origin:
+        # Refuse to configure gateway flags on a release predating IAM support.
+        run('git', 'cat-file', '-e', args.source_sha + ':operator_gateway.go')
+    if args.rehearsal and (access_mode not in ['ssm', 'cloudfront'] or not args.ceremony):
+        parser.error('--rehearsal requires --ceremony and access_mode = ssm or cloudfront')
     if args.replace_test_manifest and (not args.rehearsal or not re.fullmatch('[a-f0-9]{64}', args.replace_test_manifest)):
         parser.error('--replace-test-manifest requires --rehearsal and a current manifest digest')
     if args.signing_key and not args.ceremony:
@@ -171,7 +176,12 @@ def main():
         key = f'deployment/{archive_sha}.tar.gz'
         run(*aws, 's3', 'cp', archive, f's3://{get("bucket")}/{key}', '--sse', 'AES256', '--only-show-errors')
         release_dir = '/opt/spr/releases/' + args.release + '-' + args.source_sha
+        if recovery:
+            # A new campaign may reuse the installed binary release. Keep its
+            # recovery pin separate from any earlier deployment of that release.
+            release_dir += '-' + recovery['manifest']['sha256']
         q = shlex.quote
+        proxy_start = 'caddy validate --config /etc/caddy/Caddyfile\nsystemctl enable --now caddy\nsystemctl reload caddy' if access_mode == 'cloudfront' else ''
         commands = f'''#!/usr/bin/env bash
 set -euo pipefail
 umask 077
@@ -213,8 +223,12 @@ install -o root -g root -m 0755 {q(release_dir + '/load-signing-key.py')} /usr/l
 printf '%s\\n' {q(get('signing_key_secret_arn'))} > /etc/spr/signing-secret
 chown root:spr /etc/spr/signing-secret
 chmod 640 /etc/spr/signing-secret
-python3 - <<'UNITS'
+python3 - {q(get('url'))} {q(access_mode)} {q(operator_origin)} {q(operator_role)} <<'UNITS'
 from pathlib import Path
+import re, shlex, sys, urllib.parse
+origin, access_mode = sys.argv[1:3]
+operator_origin, operator_role = sys.argv[3:5] if len(sys.argv) >= 5 else ('', '')
+hostname = urllib.parse.urlsplit(origin).netloc
 for name in ['spr-ceremony', 'spr-admin']:
     path = Path('/etc/systemd/system/' + name + '.service')
     text = path.read_text()
@@ -222,12 +236,65 @@ for name in ['spr-ceremony', 'spr-admin']:
         text = text.replace('ExecStart=', 'ExecStartPre=/usr/local/bin/spr-load-signing-key\\nExecStart=', 1)
     if '--signing-key ' not in text:
         text = text.replace(' --dir /var/lib/spr/core', ' --signing-key /var/lib/spr/signing/coordinator.private.asc --dir /var/lib/spr/core', 1)
+    lines = text.splitlines()
+    for n, line in enumerate(lines):
+        if not line.startswith('ExecStart='): continue
+        arguments = shlex.split(line[len('ExecStart='):])
+        arguments[arguments.index('--public-url') + 1] = origin
+        if name == 'spr-ceremony':
+            arguments = [arg for arg in arguments if arg != '--trust-loopback-proxy']
+            if access_mode != 'ssm': arguments.append('--trust-loopback-proxy')
+        if name == 'spr-admin':
+            for flag in ['--operator-origin', '--operator-role']:
+                while flag in arguments:
+                    index = arguments.index(flag); del arguments[index:index + 2]
+            if operator_origin: arguments.extend(['--operator-origin', operator_origin, '--operator-role', operator_role])
+        lines[n] = 'ExecStart=' + shlex.join(arguments)
+    text = '\\n'.join(lines) + '\\n'
+    if name == 'spr-admin' and operator_origin:
+        text = re.sub(r'^MemoryMax=.*$', 'MemoryMax=12G', text, flags=re.MULTILINE)
+        if 'Environment=GOMAXPROCS=4' not in text: text = text.replace('[Service]', '[Service]\\nEnvironment=GOMAXPROCS=4')
     path.write_text(text)
+health = Path('/usr/local/bin/spr-health')
+health.write_text(re.sub(r"(-H 'Host: )[^']*(')", lambda match: match[1] + hostname + match[2], health.read_text()))
+if access_mode == 'cloudfront':
+    Path('/etc/caddy/Caddyfile').write_text("""{{
+  auto_https off
+}}
+http://:8082 {{
+  request_body {{
+    max_size 512MB
+  }}
+  reverse_proxy 127.0.0.1:8080 {{
+    header_up Host """ + hostname + """
+    header_up X-Forwarded-Proto https
+    transport http {{
+      response_header_timeout 30m
+      read_timeout 30m
+      write_timeout 30m
+    }}
+  }}
+}}
+""")
+    if operator_origin:
+        with Path('/etc/caddy/Caddyfile').open('a') as proxy:
+            proxy.write("""
+http://:8083 {{
+  request_body {{
+    max_size 4MB
+  }}
+  reverse_proxy 127.0.0.1:8081 {{
+    header_up Host """ + urllib.parse.urlsplit(operator_origin).netloc + """
+    header_up X-Forwarded-Proto https
+  }}
+}}
+""")
 UNITS
 systemctl daemon-reload
 ln -s {q(release_dir)} "$stage/current"
 mv -Tf "$stage/current" /opt/spr/current
 systemctl start spr-ceremony spr-admin
+{proxy_start}
 ready=0
 for attempt in $(seq 1 180); do
   if curl -fsS --max-time 10 -H {q('Host: ' + urllib.parse.urlsplit(get('url')).netloc)} http://127.0.0.1:8080/healthz >/dev/null; then ready=1; break; fi
@@ -240,7 +307,7 @@ python3 -c {q(CHECK_HOSTED_BUILD)} "$stage/hosted-build.json" {q(release_dir + '
 printf '%s  %s\\n' {q(digest(assets / 'join.sh'))} "$stage/hosted-join.sh" | sha256sum --check
 '''
         ssm(aws, get('instance_id'), commands, tmp)
-        if access_mode == 'public':
+        if access_mode in ['public', 'cloudfront']:
             with urllib.request.urlopen(get('url') + '/build.json', timeout=30) as response: hosted = json.load(response)
             if hosted['source_revision'] != args.source_sha or hosted['source_modified']:
                 raise RuntimeError('Hosted build differs from reviewed release')
@@ -251,7 +318,10 @@ printf '%s  %s\\n' {q(digest(assets / 'join.sh'))} "$stage/hosted-join.sh" | sha
         else:
             print('Verified internal deployment:', get('url'))
             print('Participant tunnel: aws ssm start-session --target', get('instance_id'), '--document-name', get('participant_document'))
-        print('Control panel: aws ssm start-session --target', get('instance_id'), '--document-name', get('panel_document'))
+        if operator_origin:
+            print('Control panel:', operator_origin)
+        else:
+            print('Control panel: aws ssm start-session --target', get('instance_id'), '--document-name', get('panel_document'))
 
 
 if __name__ == '__main__':

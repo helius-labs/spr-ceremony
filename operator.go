@@ -3,6 +3,8 @@ package ceremony
 import (
 	"bytes"
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -12,16 +14,23 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
 	"syscall"
 	"time"
+
+	"github.com/aws/aws-sdk-go-v2/aws"
+	v4 "github.com/aws/aws-sdk-go-v2/aws/signer/v4"
+	awsconfig "github.com/aws/aws-sdk-go-v2/config"
 )
 
 // OperatorConfig contains public connection settings and a manifest trust pin.
-// IAM authenticates the control tunnel; this file contains no credentials.
+// IAM authenticates the gateway or control tunnel; this file contains no credentials.
 type OperatorConfig struct {
 	Format     string   `json:"format"`
 	URL        string   `json:"url"`
-	ControlURL string   `json:"control_url"`
+	ControlURL string   `json:"control_url,omitempty"`
+	GatewayURL string   `json:"operator_url,omitempty"`
+	AWSProfile string   `json:"aws_profile,omitempty"`
 	Manifest   Artifact `json:"manifest"`
 }
 
@@ -43,8 +52,10 @@ type OperatorStatus struct {
 }
 
 type Operator struct {
-	Config OperatorConfig
-	client *Client
+	Config      OperatorConfig
+	client      *Client
+	credentials aws.CredentialsProvider
+	signing     sync.Mutex
 }
 
 func validateControlURL(raw string) error {
@@ -66,10 +77,146 @@ func NewOperator(config OperatorConfig) (*Operator, error) {
 	if err := ValidateURL(config.URL); err != nil {
 		return nil, err
 	}
-	if err := validateControlURL(config.ControlURL); err != nil {
+	if err := validateOperatorConnection(config); err != nil {
 		return nil, err
 	}
 	return &Operator{Config: config, client: NewClient("")}, nil
+}
+
+func validateOperatorConnection(config OperatorConfig) error {
+	if config.GatewayURL == "" {
+		if config.AWSProfile != "" {
+			return fmt.Errorf("AWS profile requires an operator endpoint")
+		}
+		return validateControlURL(config.ControlURL)
+	}
+	if config.ControlURL != "" {
+		return fmt.Errorf("choose one operator connection")
+	}
+	_, err := operatorRegion(config.GatewayURL)
+	return err
+}
+
+// operatorRegion restricts AWS signing to an HTTPS API Gateway origin.
+func operatorRegion(raw string) (string, error) {
+	u, err := url.Parse(raw)
+	if err != nil || u.Scheme != "https" || u.User != nil || u.Path != "" || u.RawQuery != "" || u.Fragment != "" || u.Port() != "" {
+		return "", fmt.Errorf("operator endpoint must be an HTTPS API Gateway origin")
+	}
+	parts := strings.Split(u.Host, ".")
+	if len(parts) != 5 || parts[1] != "execute-api" || parts[3] != "amazonaws" || parts[4] != "com" || !safeID.MatchString(parts[0]) || !safeID.MatchString(parts[2]) {
+		return "", fmt.Errorf("operator endpoint must be an HTTPS API Gateway origin")
+	}
+	return parts[2], nil
+}
+
+// ConnectOperatorAWS authenticates with the caller's existing AWS SSO profile.
+// Only public connection settings are saved; AWS manages its credential cache.
+func ConnectOperatorAWS(ctx context.Context, gatewayURL, profile string) (OperatorConfig, error) {
+	config := OperatorConfig{Format: "spr-operator-v1", GatewayURL: strings.TrimRight(gatewayURL, "/"), AWSProfile: profile}
+	if err := validateOperatorConnection(config); err != nil {
+		return config, err
+	}
+	o := &Operator{Config: config, client: NewClient("")}
+	var remote struct {
+		URL      string   `json:"url"`
+		Manifest Artifact `json:"manifest"`
+	}
+	if err := o.admin(ctx, "config", nil, &remote); err != nil {
+		return config, err
+	}
+	config.URL, config.Manifest = remote.URL, remote.Manifest
+	o, err := NewOperator(config)
+	if err != nil {
+		return config, err
+	}
+	if _, err = o.Status(ctx); err != nil {
+		return config, err
+	}
+	_, _, err = o.manifest(ctx)
+	return config, err
+}
+
+func (o *Operator) sign(ctx context.Context, req *http.Request, body []byte) error {
+	o.signing.Lock()
+	defer o.signing.Unlock()
+	region, err := operatorRegion(o.Config.GatewayURL)
+	if err != nil {
+		return err
+	}
+	if o.credentials == nil {
+		options := []func(*awsconfig.LoadOptions) error{awsconfig.WithRegion(region)}
+		if o.Config.AWSProfile != "" {
+			options = append(options, awsconfig.WithSharedConfigProfile(o.Config.AWSProfile))
+		}
+		config, err := awsconfig.LoadDefaultConfig(ctx, options...)
+		if err != nil {
+			return fmt.Errorf("AWS profile unavailable; check your profile and run aws sso login")
+		}
+		o.credentials = config.Credentials
+	}
+	credentials, err := o.credentials.Retrieve(ctx)
+	if err != nil {
+		return fmt.Errorf("AWS login expired or unavailable; run aws sso login for your profile")
+	}
+	digest := sha256.Sum256(body)
+	if err = v4.NewSigner().SignHTTP(ctx, credentials, req, hex.EncodeToString(digest[:]), "execute-api", region, time.Now()); err != nil {
+		return fmt.Errorf("could not authenticate the operator request")
+	}
+	return nil
+}
+
+func (o *Operator) ApproveBrowser(ctx context.Context, code string) error {
+	if o.Config.GatewayURL == "" {
+		return fmt.Errorf("browser login requires an AWS operator endpoint")
+	}
+	var result struct {
+		Approved bool `json:"approved"`
+	}
+	if err := o.admin(ctx, "login", map[string]string{"code": code}, &result); err != nil {
+		return err
+	}
+	if !result.Approved {
+		return fmt.Errorf("browser approval was not confirmed")
+	}
+	return nil
+}
+
+func (o *Operator) StartJob(ctx context.Context, action string, hours int, reason string) (OperatorJob, error) {
+	var job OperatorJob
+	if o.Config.GatewayURL == "" {
+		return job, fmt.Errorf("coordinator operations require the AWS operator endpoint")
+	}
+	status, err := o.Status(ctx)
+	if err != nil {
+		return job, err
+	}
+	id, err := randomBrowserToken()
+	if err != nil {
+		return job, err
+	}
+	input := OperatorJobRequest{ID: id, Action: action, Checkpoint: status.Checkpoint.SHA256, Hours: hours, Reason: reason}
+	if err = o.admin(ctx, "run", input, &job); err != nil {
+		return job, err
+	}
+	if job.Request != input {
+		return job, fmt.Errorf("operation response differs from request")
+	}
+	return job, nil
+}
+
+func (o *Operator) Job(ctx context.Context, id string) (OperatorJob, error) {
+	var job OperatorJob
+	if o.Config.GatewayURL == "" {
+		return job, fmt.Errorf("coordinator operations require the AWS operator endpoint")
+	}
+	if err := o.admin(ctx, "job", map[string]string{"id": id}, &job); err != nil {
+		return job, err
+	}
+	if !validInvitationID(job.Request.ID) || id != "" && id != "latest" && id != job.Request.ID {
+		return job, fmt.Errorf("operation identity mismatch")
+	}
+	return job, nil
 }
 
 // ConnectOperator pins the campaign reported by the authenticated control
@@ -106,27 +253,38 @@ func (o *Operator) admin(ctx context.Context, endpoint string, input, output any
 	ctx, cancel := context.WithTimeout(ctx, 30*time.Second)
 	defer cancel()
 	var body io.Reader
+	var encoded []byte
 	method := http.MethodGet
 	if input != nil {
-		encoded, err := json.Marshal(input)
+		var err error
+		encoded, err = json.Marshal(input)
 		if err != nil {
 			return err
 		}
 		body, method = bytes.NewReader(encoded), http.MethodPost
 	}
-	req, err := http.NewRequestWithContext(ctx, method, o.Config.ControlURL+"/admin/"+endpoint, body)
+	origin, prefix := o.Config.ControlURL, "/admin/"
+	if o.Config.GatewayURL != "" {
+		origin, prefix = o.Config.GatewayURL, "/operator/"
+	}
+	req, err := http.NewRequestWithContext(ctx, method, origin+prefix+endpoint, body)
 	if err != nil {
 		return fmt.Errorf("invalid control request")
 	}
 	req.Header.Set("X-SPR-Admin", "1")
-	req.Header.Set("Origin", o.Config.ControlURL)
+	req.Header.Set("Origin", origin)
 	if input != nil {
 		req.Header.Set("Content-Type", "application/json")
 		req.Header.Set("X-SPR-Manifest", o.Config.Manifest.SHA256)
 	}
+	if o.Config.GatewayURL != "" {
+		if err = o.sign(ctx, req, encoded); err != nil {
+			return err
+		}
+	}
 	response, err := o.client.HTTP.Do(req)
 	if err != nil {
-		return fmt.Errorf("control panel unavailable; check the SSM tunnel: %w", safeRequestError(err))
+		return fmt.Errorf("operator endpoint unavailable: %w", safeRequestError(err))
 	}
 	defer response.Body.Close()
 	if response.StatusCode != http.StatusOK {
@@ -136,11 +294,11 @@ func (o *Operator) admin(ctx context.Context, endpoint string, input, output any
 		}
 		return fmt.Errorf("control request rejected (HTTP %d)", response.StatusCode)
 	}
-	encoded, err := io.ReadAll(io.LimitReader(response.Body, maxJSONBytes+1))
-	if err != nil || int64(len(encoded)) > maxJSONBytes {
+	responseBytes, err := io.ReadAll(io.LimitReader(response.Body, maxJSONBytes+1))
+	if err != nil || int64(len(responseBytes)) > maxJSONBytes {
 		return fmt.Errorf("invalid control response size")
 	}
-	return decodeRemoteJSON(bytes.NewReader(encoded), output)
+	return decodeRemoteJSON(bytes.NewReader(responseBytes), output)
 }
 
 func (o *Operator) checkStatus(status OperatorStatus) error {
@@ -294,6 +452,51 @@ func (o *Operator) Revoke(ctx context.Context, id string) error {
 // its public contributions. Public object caching makes interrupted downloads
 // reusable; no S3 credentials, invitations or signing keys enter the cache.
 func (o *Operator) Audit(ctx context.Context, work string, maxDomain uint64, progress io.Writer) (RecoveryPoint, string, error) {
+	if progress == nil {
+		progress = io.Discard
+	}
+	return o.withSnapshot(ctx, work, progress, func(s *Store) error {
+		fmt.Fprintf(progress, "Verifying %d circuits, signatures and checkpoint history…\n", len(s.Manifest.Circuits))
+		return s.Audit(Core, maxDomain)
+	})
+}
+
+// Export downloads the finalized public keys and independently reproduces them
+// from the pinned transcript. Existing output is verified, never overwritten.
+func (o *Operator) Export(ctx context.Context, work, out string, maxDomain uint64, progress io.Writer) (RecoveryPoint, string, error) {
+	if progress == nil {
+		progress = io.Discard
+	}
+	if strings.TrimSpace(out) == "" {
+		return RecoveryPoint{}, "", fmt.Errorf("choose an export directory")
+	}
+	return o.withSnapshot(ctx, work, progress, func(s *Store) error {
+		life, _, err := s.Lifecycle()
+		if err != nil {
+			return err
+		}
+		if life.Phase != "finalized" {
+			return fmt.Errorf("finalize the ceremony before exporting keys")
+		}
+		if _, err = os.Stat(out); os.IsNotExist(err) {
+			if err = s.MaterializeExport(out); err != nil {
+				return err
+			}
+		} else if err != nil {
+			return err
+		}
+		if life.FinalExport == nil || Check(filepath.Join(out, "export.json"), *life.FinalExport) != nil {
+			return fmt.Errorf("export differs from the finalized checkpoint")
+		}
+		fmt.Fprintf(progress, "Verifying final keys for %d circuits against the transcript and beacon…\n", len(s.Manifest.Circuits))
+		return s.VerifyExport(out, maxDomain)
+	})
+}
+
+func (o *Operator) withSnapshot(ctx context.Context, work string, progress io.Writer, verify func(*Store) error) (RecoveryPoint, string, error) {
+	if progress == nil {
+		progress = io.Discard
+	}
 	var point RecoveryPoint
 	status, err := o.Status(ctx)
 	if err != nil {
@@ -337,8 +540,7 @@ func (o *Operator) Audit(ctx context.Context, work string, maxDomain uint64, pro
 	if err != nil || s.ManifestArtifact != point.Manifest || checkpoint != point.Checkpoint {
 		return point, "", fmt.Errorf("cached audit snapshot differs from the requested checkpoint")
 	}
-	fmt.Fprintf(progress, "Verifying %d circuits, signatures and checkpoint history…\n", len(s.Manifest.Circuits))
-	if err = s.Audit(Core, maxDomain); err != nil {
+	if err = verify(s); err != nil {
 		return point, "", err
 	}
 	return point, directory, nil

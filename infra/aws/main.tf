@@ -20,10 +20,43 @@ variable "domain" {
 variable "access_mode" {
   type        = string
   default     = "public"
-  description = "public enables HTTPS ingress; ssm exposes both interfaces only through authenticated port forwarding."
+  description = "public uses direct HTTPS; cloudfront uses a private VPC origin; ssm keeps both interfaces private."
   validation {
-    condition     = contains(["public", "ssm"], var.access_mode)
-    error_message = "Use public or ssm."
+    condition     = contains(["public", "cloudfront", "ssm"], var.access_mode)
+    error_message = "Use public, cloudfront or ssm."
+  }
+}
+variable "cloudfront_origin_security_group" {
+  type        = string
+  default     = ""
+  description = "AWS-managed CloudFront VPC-origin security group; required for cloudfront mode."
+  validation {
+    condition     = var.cloudfront_origin_security_group == "" || can(regex("^sg-[a-f0-9]+$", var.cloudfront_origin_security_group))
+    error_message = "Use an AWS security group ID."
+  }
+}
+variable "operator_origin" {
+  type    = string
+  default = ""
+  validation {
+    condition     = var.operator_origin == "" || can(regex("^https://[a-z0-9]+\\.execute-api\\.[a-z0-9-]+\\.amazonaws\\.com$", var.operator_origin))
+    error_message = "Use the exact HTTPS operator API Gateway origin."
+  }
+}
+variable "operator_role_arn" {
+  type    = string
+  default = ""
+  validation {
+    condition     = var.operator_role_arn == "" || can(regex("^arn:aws:iam::[0-9]{12}:role/[A-Za-z0-9_+=,.@/-]+$", var.operator_role_arn))
+    error_message = "Use an exact IAM role ARN."
+  }
+}
+variable "operator_gateway_security_group" {
+  type    = string
+  default = ""
+  validation {
+    condition     = var.operator_gateway_security_group == "" || can(regex("^sg-[a-f0-9]+$", var.operator_gateway_security_group))
+    error_message = "Use the private operator Lambda security group ID."
   }
 }
 variable "name" {
@@ -109,6 +142,26 @@ resource "aws_security_group" "ceremony" {
       cidr_blocks = ["0.0.0.0/0"]
     }
   }
+  dynamic "ingress" {
+    for_each = var.access_mode == "cloudfront" ? [var.cloudfront_origin_security_group] : []
+    content {
+      from_port       = 8082
+      to_port         = 8082
+      protocol        = "tcp"
+      security_groups = [ingress.value]
+      description     = "Private CloudFront VPC origin only"
+    }
+  }
+  dynamic "ingress" {
+    for_each = var.operator_gateway_security_group != "" ? [var.operator_gateway_security_group] : []
+    content {
+      from_port       = 8083
+      to_port         = 8083
+      protocol        = "tcp"
+      security_groups = [ingress.value]
+      description     = "Authenticated operator Lambda only"
+    }
+  }
   egress {
     from_port   = 0
     to_port     = 0
@@ -184,12 +237,13 @@ resource "aws_instance" "coordinator" {
     encrypted   = true
   }
   user_data = templatefile("${path.module}/bootstrap.sh.tftpl", {
-    domain         = var.domain, region = var.region, name = var.name,
-    public_https   = var.access_mode == "public", origin = local.origin, origin_host = local.origin_host,
-    volume_id      = replace(aws_ebs_volume.data.id, "-", ""),
-    s3_config      = module.archive.s3_config,
-    signing_secret = aws_secretsmanager_secret.coordinator_key.arn,
-    key_loader     = file("${path.module}/load-signing-key.py")
+    domain          = var.domain, region = var.region, name = var.name,
+    public_https    = var.access_mode == "public", cloudfront = var.access_mode == "cloudfront", origin = local.origin, origin_host = local.origin_host,
+    volume_id       = replace(aws_ebs_volume.data.id, "-", ""),
+    s3_config       = module.archive.s3_config,
+    signing_secret  = aws_secretsmanager_secret.coordinator_key.arn,
+    key_loader      = file("${path.module}/load-signing-key.py")
+    operator_origin = var.operator_origin, operator_role = var.operator_role_arn
   })
   user_data_replace_on_change = false
   tags                        = { Name = var.name }
@@ -198,6 +252,14 @@ resource "aws_instance" "coordinator" {
     precondition {
       condition     = var.access_mode == "ssm" || var.domain != ""
       error_message = "Public access requires a hostname. Use access_mode = ssm for an internal deployment."
+    }
+    precondition {
+      condition     = var.access_mode != "cloudfront" || var.cloudfront_origin_security_group != ""
+      error_message = "CloudFront access requires its AWS-managed VPC-origin security group."
+    }
+    precondition {
+      condition     = var.operator_origin == "" || (var.access_mode == "cloudfront" && var.operator_role_arn != "" && var.operator_gateway_security_group != "")
+      error_message = "The operator gateway requires CloudFront mode, its exact IAM role and its private Lambda security group."
     }
   }
   depends_on = [aws_route_table_association.ceremony, aws_iam_role_policy_attachment.ssm, aws_iam_role_policy_attachment.archive]
@@ -311,3 +373,5 @@ output "alarm_topic" { value = aws_sns_topic.alarms.arn }
 output "data_volume" { value = aws_ebs_volume.data.id }
 
 output "signing_key_secret_arn" { value = aws_secretsmanager_secret.coordinator_key.arn }
+output "operator_origin" { value = var.operator_origin }
+output "operator_role_arn" { value = var.operator_role_arn }

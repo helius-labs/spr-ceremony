@@ -437,6 +437,8 @@ func run(args []string) error {
 	case "admin":
 		listen := f.String("listen", "127.0.0.1:8081", "private numeric loopback address; reach through AWS SSM")
 		publicURL := f.String("public-url", "", "exact participant HTTPS origin")
+		operatorURL := f.String("operator-origin", "", "optional authenticated API Gateway origin")
+		operatorRole := f.String("operator-role", "", "IAM role allowed through the dedicated private operator gateway")
 		action = func() error {
 			s, err := open()
 			if err != nil {
@@ -445,7 +447,7 @@ func run(args []string) error {
 			if err = s.RequireSigningKey(); err != nil {
 				return err
 			}
-			handler, err := s.AdminHandler("http://"+*listen, *publicURL)
+			handler, err := s.AdminHandlerWithGateway("http://"+*listen, *publicURL, *operatorURL, *operatorRole)
 			if err != nil {
 				return err
 			}
