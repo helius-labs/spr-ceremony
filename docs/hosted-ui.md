@@ -92,6 +92,35 @@ accepted work; `demo` must be given a new output directory for a fresh campaign.
 This local check does not exercise WAN/TLS, actual AWS permissions, or full core
 resource requirements. Those remain separate staging tests.
 
+## Full core browser rehearsal
+
+Reuse untouched prepared core parameters to make a separate signed test campaign.
+The helper checks every reused public object, marks the new manifest as insecure,
+and generates a fresh coordinator key. It never opens or changes the prepared
+source campaign and refuses an existing destination or contributed source.
+
+```sh
+python3 scripts/prepare-browser-rehearsal.py --binary ./spr-ceremony \
+  --from-prepared ceremony-data/core --out rehearsal/browser-core
+python3 scripts/test-hosted-core.py --binary ./spr-ceremony \
+  --dir rehearsal/browser-core --web-dir dist/browser \
+  --browser chromium --reopen --out rehearsal/browser-results
+```
+
+The second command requires the tools in `scripts/browser-requirements.txt` and
+the matching Playwright browser installation. It runs the full hosted queue,
+pauses and reloads after acceptance, resumes the same invitation ID, and verifies
+all saved receipts with the native binary. Allow several hours; use a separate
+test campaign and results directory for `--browser webkit`. Linux WebKit does
+not establish Safari compatibility on a Mac.
+
+Results contain a **private invitation file** alongside public reports. Keep the
+directory private; publish only the report, receipts and checked screenshots.
+To check completed receipt recovery and identical-output retries, reuse that
+file with `--recover --invitation PATH`, omit `--reopen`, and choose a new results
+directory. Keep the original loopback port available. These tests use local
+networking; real AWS, laptop suspension and storage-pressure drills remain separate.
+
 ## Finish the local rehearsal
 
 After both participants finish, save receipts and stop the server with Ctrl-C.

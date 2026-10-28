@@ -16,6 +16,13 @@ instance's outbound public IP is used for AWS APIs and updates. Both services
 listen only on loopback. Internal testers need AWS access and the
 [Session Manager plugin](https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html).
 
+On a Mac with Homebrew, install it once:
+
+```sh
+brew install --cask session-manager-plugin
+session-manager-plugin --version
+```
+
 ```sh
 export AWS_PROFILE=dev
 export AWS_REGION=eu-north-1
@@ -49,7 +56,9 @@ TF_WORKSPACE=internal-test python3 scripts/deploy-aws.py \
 ```
 
 Use `terraform output instance_id` in the selected workspace. Keep these two
-commands running in separate terminals:
+commands running in separate terminals. Paste each command as one complete line;
+free local ports 8080 and 8081 first. Set `AWS_PROFILE` to your configured profile
+in both terminals, or add `--profile YOUR_PROFILE` to each command.
 
 ```sh
 aws ssm start-session --target INSTANCE_ID --document-name spr-ceremony-test-participant
