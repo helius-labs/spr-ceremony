@@ -81,7 +81,7 @@ jobs:
               --bundle "$RUNNER_TEMP/browser-demo" --native "$RUNNER_TEMP/spr-browser-rehearsal" \
               --fault "$fault" --out "$RUNNER_TEMP/browser-results/fault-$fault" --timeout 30
           done
-      - name: Verify hosted queue, recovery, native handoff, and S3
+      - name: Verify CLI-only site, native contributions, operator flow and S3
         env:
           SPR_S3_ENDPOINT: http://127.0.0.1:5000
         run: |

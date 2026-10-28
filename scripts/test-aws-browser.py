@@ -29,7 +29,7 @@ async def main():
     results = []
     async with async_playwright() as pw:
         for engine in ['chromium', 'webkit']:
-            print(engine + ': invitation, browser contribution and revocation', flush=True)
+            print(engine + ': invitation, CLI contribution and revocation', flush=True)
             browser = await getattr(pw, engine).launch()
             context = await browser.new_context(viewport={'width': 390, 'height': 844})
             context.set_default_timeout(120000)
@@ -46,31 +46,18 @@ async def main():
             assert token not in admin_status, 'Control status exposed an invitation'
             assert await page.evaluate('() => localStorage.length + sessionStorage.length') == 0
             visitor = await context.new_page()
-            s3_downloads = []
-
-            def response_seen(response):
-                host = urllib.parse.urlsplit(response.url).hostname or ''
-                if '.s3.' in host and host.endswith('.amazonaws.com') and response.status in [200, 206]:
-                    s3_downloads.append(response.status)
-
-            visitor.on('response', response_seen)
             await visitor.goto(invitation)
-            await visitor.wait_for_function('() => !document.querySelector("#start").disabled')
-            assert urllib.parse.urlsplit(visitor.url).fragment == '', 'Invitation was not removed from the address bar'
-            assert 'Locally generated parameters' in await visitor.locator('#notice').inner_text()
-            await visitor.locator('#start').click()
-            await visitor.wait_for_function('() => document.querySelector("#count").textContent === "2 / 2 accepted"', timeout=300000)
-            await visitor.wait_for_function('() => document.documentElement.dataset.stage === "complete" && !document.querySelector("#native").disabled')
-            print(engine + ': contributions accepted; checking terminal handoff', flush=True)
-            print('Public UI state:', await visitor.evaluate('() => ({stage: document.documentElement.dataset.stage, nativeDisabled: document.querySelector("#native").disabled})'), flush=True)
-            assert s3_downloads, 'Browser did not exercise real S3 downloads'
+            await visitor.locator('#copy-invitation').wait_for(state='visible')
+            assert urllib.parse.urlsplit(visitor.url).fragment == ''
+            assert await visitor.locator('#start, #pause, input[type=file]').count() == 0
+            process = await asyncio.create_subprocess_exec(binary, 'join', '--work', str(out / (engine + '-work')), stdin=asyncio.subprocess.PIPE, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
+            stdout, stderr = await asyncio.wait_for(process.communicate(invitation.encode() + b'\n'), timeout=180)
+            assert process.returncode == 0, 'Native join failed'
+            assert token.encode() not in stdout + stderr
             assert await visitor.evaluate('() => localStorage.length + sessionStorage.length') == 0
             assert not await context.cookies()
             assert await visitor.evaluate('() => document.documentElement.scrollWidth <= innerWidth')
-            await visitor.locator('#native').click()
             assert not await visitor.locator('#one-liner').is_visible(), 'HTTPS installer offered on an HTTP tunnel'
-            command = await visitor.locator('#verify-command').text_content()
-            assert "--proto '=http'" in command and '--bundle provenance.json' in command
             await visitor.screenshot(path=out / (engine + '-participant.png'), full_page=True)
             print(engine + ': checking control panel progress', flush=True)
             await page.locator('#refresh').click()
@@ -83,7 +70,7 @@ async def main():
             await row.get_by_role('button', name='Revoke access', exact=True).click()
             await page.wait_for_function('() => document.querySelector("#status").textContent === "Access revoked."')
             assert (await context.request.get(public + '/v1/invitation', headers={'Authorization': 'Bearer ' + token})).status == 401
-            results.append({'engine': engine, 'accepted': 2, 'real_s3_downloads': len(s3_downloads), 'revocation': 'passed'})
+            results.append({'engine': engine, 'accepted': 2, 'native_contribution': 'passed', 'revocation': 'passed'})
             await context.close(); await browser.close()
 
         print('native: invitation, join and idempotent retry', flush=True)
@@ -115,7 +102,7 @@ async def main():
     assert all(c['contributions'] == old_counts[c['id']] + 3 for c in after['circuits']), 'Duplicate or missing contribution'
     report = {'browser': results, 'native_join_and_retry': 'passed', 'private_api_isolation': 'passed', 'checkpoint': after['checkpoint'], 'manifest': after['manifest'], 'rehearsal_only': True}
     (out / 'result.json').write_text(json.dumps(report, indent=2) + '\n')
-    print('Internal AWS browser and native contribution checks passed.')
+    print('Internal AWS CLI handoff and native contribution checks passed.')
 
 
 if __name__ == '__main__':

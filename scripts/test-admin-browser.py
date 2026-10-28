@@ -12,6 +12,7 @@ import time
 import traceback
 import urllib.request
 from playwright.async_api import async_playwright
+from cli_test_proxy import Proxy
 
 
 def port():
@@ -30,12 +31,14 @@ async def main():
     with tempfile.TemporaryDirectory(prefix='spr-admin-') as tmp:
         root = Path(tmp)
         subprocess.run([binary, 'demo', '--out', str(root / 'ceremony')], check=True, capture_output=True)
-        public, private = f'http://127.0.0.1:{port()}', f'http://127.0.0.1:{port()}'
+        upstream = port()
+        proxy = Proxy(upstream)
+        public, private = proxy.origin, f'http://127.0.0.1:{port()}'
         processes = []
         with (out / 'server.log').open('w') as log:
             try:
                 for cmd, origin, flags in [('serve', public, ['--web-dir', web]), ('admin', private, [])]:
-                    processes.append(subprocess.Popen([binary, cmd, '--dir', str(root / 'ceremony'), '--listen', origin.removeprefix('http://'), '--public-url', public, *flags], stdout=log, stderr=log))
+                    processes.append(subprocess.Popen([binary, cmd, '--dir', str(root / 'ceremony'), '--listen', f'127.0.0.1:{upstream}' if cmd == 'serve' else origin.removeprefix('http://'), '--public-url', public, *flags], stdout=log, stderr=log))
                     for _ in range(100):
                         try:
                             with urllib.request.urlopen(origin, timeout=1): break
@@ -71,36 +74,25 @@ async def main():
                         # Keep the first invitation partially complete while the
                         # operator creates another contributor and reissues it.
                         participant = await context.new_page()
-                        claims = 0
-                        async def stop_after_one(route):
-                            nonlocal claims
-                            claims += 1
-                            if claims > 1:
-                                await route.fulfill(status=503, body='Rehearsal interruption')
-                            else:
-                                await route.continue_()
-                        await participant.route('**/v1/claim', stop_after_one)
-                        invitation_pending, release_invitation = asyncio.Event(), asyncio.Event()
-                        async def hold_invitation(route):
-                            invitation_pending.set()
-                            await release_invitation.wait()
-                            await route.continue_()
-                        await participant.route('**/v1/invitation', hold_invitation)
                         await participant.goto(invitation)
-                        await asyncio.wait_for(invitation_pending.wait(), timeout=30)
-                        assert await participant.locator('#connecting-title').inner_text() == 'Checking your invitation…'
-                        assert await participant.locator('#connecting').is_visible()
-                        assert await participant.locator('#join').is_hidden()
-                        assert await participant.locator('#status').is_hidden()
-                        await participant.screenshot(path=out / f'{engine}-checking.png')
-                        release_invitation.set()
-                        await participant.wait_for_function('() => !document.querySelector("#start").disabled')
-                        assert await participant.locator('#connecting').is_hidden()
-                        await participant.locator('#start').click()
-                        await participant.wait_for_function('() => document.querySelector("#count").textContent === "1 / 2 accepted"')
-                        await participant.locator('#pause').click()
-                        await participant.wait_for_function('() => document.documentElement.dataset.stage === "paused"')
+                        await participant.locator('#copy-invitation').wait_for(state='visible')
+                        assert await participant.locator('#start, #pause, input[type=file]').count() == 0
+                        assert '#' not in participant.url
                         await participant.close()
+                        proxy.block_after_first_claim.add(token)
+                        partial = await asyncio.create_subprocess_exec(binary, 'join', '--work', str(root / 'partial-work'), stdin=asyncio.subprocess.PIPE, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
+                        partial_result = asyncio.create_task(partial.communicate(invitation.encode() + b'\n'))
+                        try:
+                            for attempt in range(150):
+                                response = await page.evaluate("async () => (await fetch('/admin/status', {headers: {'X-SPR-Admin': '1'}})).json()")
+                                if any(i['id'] == identity and i['accepted'] == 1 for i in response['invitations']):
+                                    break
+                                await asyncio.sleep(.2)
+                            else: raise RuntimeError('Partial CLI contribution did not complete')
+                        finally:
+                            if partial.returncode is None: partial.terminate()
+                            stdout, stderr = await asyncio.wait_for(partial_result, timeout=15)
+                        assert token.encode() not in stdout + stderr
                         await page.locator('#refresh').click()
                         row = page.locator(f'.invitation-row[data-id="{identity}"]')
                         await row.get_by_text(f'{engine} · 1/2 accepted', exact=True).wait_for()
@@ -145,13 +137,13 @@ async def main():
                         token = parse_qs(urlsplit(renewed).fragment)['token'][0]
                         await page.locator('#clear').click()
                         visitor_check = await context.new_page(); await visitor_check.goto(renewed)
-                        await visitor_check.wait_for_function('() => document.querySelector("#count").textContent === "2 / 2 accepted"')
+                        await visitor_check.locator(f'#records a[href="/v1/records/{identity}"]').wait_for(state='attached')
                         await visitor_check.close()
                         await page.screenshot(path=out / f'{engine}-control.png', full_page=True)
                         assert await page.evaluate('() => document.documentElement.scrollWidth <= innerWidth')
                         visitor = await context.new_page(); await visitor.goto(public)
-                        await visitor.locator('#invitation').wait_for(state='visible')
-                        await visitor.wait_for_function('() => !document.querySelector("#invitation").disabled')
+                        await visitor.locator('#native-title').wait_for(state='visible')
+                        assert await visitor.locator('#start, #pause, input[type=file]').count() == 0
                         await visitor.locator('#artifacts summary').click()
                         await visitor.wait_for_function('() => document.querySelectorAll("#keys .key-row").length === 2')
                         assert 'after' in await visitor.locator('#keys-status').inner_text()
@@ -174,16 +166,18 @@ async def main():
                         await visitor.close()
                         visitor = await context.new_page()
                         await visitor.goto(renewed)
-                        await visitor.wait_for_function('() => document.querySelector("#status").classList.contains("error")')
-                        assert await visitor.locator('#connecting').is_hidden()
-                        assert await visitor.locator('#invitation').is_visible()
-                        assert await visitor.locator('#invitation').is_enabled()
+                        await visitor.locator('#copy-invitation').wait_for(state='visible')
+                        rejected_cli = await asyncio.create_subprocess_exec(binary, 'join', '--work', str(root / 'revoked-work'), stdin=asyncio.subprocess.PIPE, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
+                        stdout, stderr = await asyncio.wait_for(rejected_cli.communicate(renewed.encode() + b'\n'), timeout=30)
+                        assert rejected_cli.returncode != 0
+                        assert token.encode() not in stdout + stderr
                         assert token not in (out / 'server.log').read_text()
                         await context.close(); await browser.close()
             finally:
                 for process in processes: process.terminate()
                 for process in processes: process.wait(timeout=15)
-    (out / 'result.json').write_text(json.dumps({'passed': ['Chromium and WebKit: partial contribution, new invitation while another is incomplete, duplicate-name guidance, named private-link dialog, Escape clears link, hidden native resume, reissue with unrelated form input, revoke/cancel, visible revoked state, preserved accepted work, private API isolation, public parameters, mobile layout, no persisted tokens']}, indent=2) + '\n')
+                proxy.close()
+    (out / 'result.json').write_text(json.dumps({'passed': ['Chromium and WebKit: partial native contribution, CLI-only participant page, new invitation while another is incomplete, duplicate-name guidance, named private-link dialog, Escape clears link, hidden native resume, reissue with unrelated form input, revoke/cancel, visible revoked state, preserved accepted work, private API isolation, public parameters, mobile layout, no persisted tokens']}, indent=2) + '\n')
     print('Control panel integration passed in Chromium and WebKit.')
 
 

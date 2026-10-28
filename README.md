@@ -25,8 +25,8 @@ Keep the computer awake. Progress shows `[1/41]` through `[41/41]`. Rerun the
 same command after interruption; accepted work is skipped. Public work and
 receipts stay in `~/.local/share/spr-ceremony/work`.
 
-Alternatively, open the invitation link and click **Contribute** in your browser.
-Choose **Use terminal** to copy the same one-liner. With an existing binary, run
+Open your invitation link to copy the command and your private invitation.
+Participation runs in the terminal. With an existing binary, run
 `./spr-ceremony join` and paste the link at its prompt. If you received an
 invitation file instead:
 
@@ -101,6 +101,6 @@ Optional; requires Go 1.27.3:
 go build -o spr-ceremony ./cmd/spr-ceremony
 ```
 
-[Local browser demo](docs/hosted-ui.md). Custom rings, batch 10 and batch 4999 are
+[Local CLI and website demo](docs/hosted-ui.md). Custom rings, batch 10 and batch 4999 are
 excluded. The engine is pinned to gnark `v0.16.4` and gnark-crypto
 `v0.22.0`.

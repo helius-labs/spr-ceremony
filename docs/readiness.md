@@ -34,10 +34,11 @@ Batch 4999 is deferred. Custom rings and batch 10 remain excluded.
   preserving excluded pins. Linux/macOS binary builds include source metadata
   and checksums.
 
-- Hosted core UI with private invitations, WebAssembly workers, renewable leases,
-  public download/output recovery, checked receipts, and native-client handoff.
-  Fixed checked assets, same-origin APIs, bounded downloads, and optional S3 CORS
-  support dedicated HTTPS hosting. [Hosting and browser checks](hosted-ui.md).
+- Hosted CLI-only participant page with private invitation copying, a terminal
+  installer, manual native downloads and public contribution records. The page
+  never submits contributions or sends invitation credentials to the server;
+  the native client authenticates invitations and receipts. Fixed checked assets
+  and same-origin APIs support HTTPS hosting. [Hosting checks](hosted-ui.md).
 - Separate operator control panel for invitation creation, revocation and progress;
   public access uses AWS IAM authentication and browser pairing. Peer/Host/Origin
   checks and strict JSON requests protect its local service boundary.
@@ -189,9 +190,10 @@ its keys in Zolana.
 1. Independent review of the MPC engine/version, Phase 1 bridge and provenance,
    contribution decoding, final beacon construction, checkpoint model, and
    Zolana key conversion. Resolve findings and freeze the reviewed source/binaries.
-2. Test the full hosted core session on intended browsers, including macOS Safari,
-   laptop suspension/reopening, storage pressure, and recovery. Linux Playwright
-   WebKit is not Safari. Measure coordinator/participant RAM, disk, runtimes, and network throughput
+2. Test the full native core session on intended Mac/Linux hardware, including
+   laptop suspension, disk pressure and recovery. Check the invitation website
+   in intended browsers; Linux Playwright WebKit is not Safari. Measure
+   coordinator/participant RAM, disk, runtimes, and network throughput
    on intended hardware. The all-41 compatibility rehearsal above passes; server
    limits and resumed test-run measurements are not hardware certification.
 3. A real AWS staging drill with the deployed IAM/bucket policy: presigned access,

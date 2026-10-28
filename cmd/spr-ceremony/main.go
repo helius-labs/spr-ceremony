@@ -497,7 +497,7 @@ func run(args []string) error {
 		base := f.String("url", "http://127.0.0.1:8080", "coordinator HTTPS origin")
 		name := f.String("name", "", "contributor pseudonym (letters, digits, underscore, hyphen)")
 		ttl := f.Duration("ttl", 24*time.Hour, "invitation lifetime")
-		linkOut := f.String("link-out", "", "optional private file for a browser invitation link (core only)")
+		linkOut := f.String("link-out", "", "optional private file for an invitation link (core only)")
 		action = func() error {
 			if e := requireOut(); e != nil {
 				return e
@@ -506,7 +506,7 @@ func run(args []string) error {
 				return e
 			}
 			if *linkOut != "" && *track != ceremony.Core {
-				return fmt.Errorf("browser invitations support core only")
+				return fmt.Errorf("invitation links support core only")
 			}
 			s, e := open()
 			if e != nil {

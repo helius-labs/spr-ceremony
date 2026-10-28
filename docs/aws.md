@@ -7,7 +7,7 @@ an IAM authenticated SSM tunnel. No SSH keys, static AWS credentials,
 invitation tokens or GitHub tokens go into Terraform or user data.
 
 Operator tools: Terraform, AWS CLI with SSM plugin, GitHub CLI, Python 3.11+.
-Participants need only a browser or the release binary.
+Participants use the release binary or the hosted terminal installer.
 
 ## Finalization resources
 
@@ -90,7 +90,7 @@ aws ssm start-session --target INSTANCE_ID --document-name spr-ceremony-test-con
 Open **http://127.0.0.1:8081** to create an invitation; its link opens the
 participant site on **http://127.0.0.1:8080**. Use these exact ports. The HTTP
 connections are local to each end of the authenticated SSM tunnel. The site
-labels the campaign as a test. Browser contributions and release binaries work;
+labels the campaign as a test. Participants use release binaries;
 the HTTPS terminal installer remains available only on a public HTTPS deployment.
 Do not expose the forwarded ports to your LAN.
 
@@ -103,7 +103,7 @@ accidental deletion.
 
 With both tunnels open, the optional `scripts/test-aws-browser.py --binary
 /path/to/verified/spr-ceremony --out /tmp/spr-aws-checks` check exercises Chromium,
-WebKit, real S3 downloads, native participation, retry and invitation revocation.
+WebKit, CLI invitation handoff, native participation, retry and invitation revocation.
 It requires the browser tools from `scripts/browser-requirements.txt` and refuses
 anything except an open two-circuit marked demo. It adds three test contributors;
 its output contains public receipts and screenshots, never private invitations.

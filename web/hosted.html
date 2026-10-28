@@ -13,48 +13,30 @@
 <main>
   <p class="eyebrow"><span class="mark" aria-hidden="true"></span> TRUSTED SETUP</p>
   <h1>Solana Privacy<br><span>Rings.</span></h1>
-  <noscript><p class="notice">Enable JavaScript or use the terminal client.</p></noscript>
+  <noscript><p class="notice">Download the terminal client from the <a href="https://github.com/helius-labs/spr-ceremony/releases">releases page</a>.</p></noscript>
   <p id="public-summary" class="detail"></p>
   <p id="notice" class="notice" hidden></p>
-  <section id="connecting" aria-labelledby="connecting-title" aria-busy="true" role="status">
-    <h2 id="connecting-title">Loading…</h2>
-    <progress max="100" aria-label="Checking invitation"></progress>
-  </section>
-  <section id="join" aria-labelledby="join-title" hidden>
-    <h2 id="join-title">Your invitation</h2>
-    <label class="file-label" for="invitation">Choose your invitation file</label>
-    <input id="invitation" type="file" accept=".json,application/json" disabled>
-    <p class="detail">Or open your private link.</p>
-  </section>
-  <section id="participant" aria-labelledby="participant-title" hidden>
-    <div class="heading"><h2 id="participant-title"></h2><span id="count">0 accepted</span></div>
-    <p id="scope" class="detail"></p>
-    <div class="buttons" id="contribute-actions">
-      <button id="start" disabled>Contribute</button>
-      <button id="pause" class="secondary" disabled>Pause</button>
-      <button id="native" class="secondary">Use terminal</button>
+  <section id="native-panel" aria-labelledby="native-title">
+    <h2 id="native-title">Contribute in your terminal.</h2>
+    <p>Mac or Linux. No compilation.</p>
+    <div id="one-liner" hidden>
+      <pre id="join-command"></pre>
+      <div class="buttons"><button id="copy-command">Copy command</button></div>
     </div>
-    <p id="circuit" class="detail"></p>
-    <progress id="progress" max="100" value="0" aria-label="Current circuit progress"></progress>
-    <p id="elapsed" class="detail"></p>
-    <p class="detail" id="keep-open">Keep this tab open. Terminal is faster.</p>
-    <div class="buttons footer-actions"><button id="receipts" class="secondary" disabled>Save receipts</button><button id="refresh" class="secondary">Refresh</button></div>
-  </section>
-  <p id="status" role="status" aria-live="polite" hidden></p>
-  <section id="native-panel" aria-labelledby="native-title" hidden>
-    <h2 id="native-title">Use your terminal.</h2>
-    <div id="one-liner" hidden><p>One command. Paste your invitation when asked.</p><pre id="join-command"></pre><div class="buttons"><button id="copy-command">Copy command</button><button id="copy-invitation" class="secondary">Copy invitation</button></div><p class="detail">The command contains no invitation. Input is hidden in your terminal.</p></div>
+    <p id="invitation-help">Get a private invitation from the operator. Paste it when the terminal asks.</p>
+    <div class="buttons" id="invitation-actions" hidden><button id="copy-invitation" class="secondary">Copy invitation</button></div>
+    <p class="detail">Invitation input is hidden. Keep your computer awake. Rerun the command to resume.</p>
+    <p id="status" role="status" aria-live="polite" hidden></p>
     <details id="manual-downloads"><summary>Download manually</summary>
-    <div id="downloads" class="downloads"></div>
-    <p id="native-unavailable" class="detail" hidden>Downloads aren’t configured on this host. Use your existing binary.</p>
-    <div class="buttons"><button id="save-invitation">Save invitation</button></div>
-    <label for="platform">Your computer</label>
-    <select id="platform"><option value="darwin-arm64">Mac · Apple silicon</option><option value="darwin-amd64">Mac · Intel</option><option value="linux-amd64">Linux · x86-64</option><option value="linux-arm64">Linux · ARM64</option></select>
-    <p class="detail">Run from your downloads folder:</p>
-    <pre id="native-command"></pre>
+      <div id="downloads" class="downloads"></div>
+      <p id="native-unavailable" class="detail" hidden>Downloads aren’t configured on this host. Use your existing binary.</p>
+      <label for="platform">Your computer</label>
+      <select id="platform"><option value="darwin-arm64">Mac · Apple silicon</option><option value="darwin-amd64">Mac · Intel</option><option value="linux-amd64">Linux · x86-64</option><option value="linux-arm64">Linux · ARM64</option></select>
+      <p class="detail">Run from your downloads folder:</p>
+      <pre id="native-command"></pre>
     </details>
     <details><summary>Verify your download</summary>
-      <p>Check the release hash and build attestation against the published source commit. A checksum from this website alone cannot authenticate it.</p>
+      <p>The one-line installer trusts this website. Verify the build attestation against an independently checked source commit for stronger assurance.</p>
       <pre id="verify-command"></pre>
       <p id="revision" class="detail"></p>
       <a href="https://github.com/helius-labs/spr-ceremony" target="_blank" rel="noopener noreferrer">Source</a>
@@ -64,15 +46,9 @@
   <details id="artifacts"><summary>Parameters &amp; keys</summary><p id="keys-status"></p><div id="parameter-links"></div><p id="public-pins" class="detail"></p><div id="keys"></div><p class="detail">Authenticate the manifest and checkpoint hashes independently. Verify the full transcript and export before using final keys.</p></details>
   <details>
     <summary>How it works</summary>
-    <p>Your computer adds fresh randomness and verifies the result. Only public data is uploaded. The coordinator verifies it again before acceptance.</p>
-    <p>One contributor per circuit. Large circuits can take about 10 minutes in a browser. Keep your computer awake.</p>
-    <p>Pause releases your reservation. Reopen your private invitation to resume. Saved output is reusable while its parent is current; unfinished computation restarts.</p>
-  </details>
-  <details>
-    <summary>Trust &amp; verification</summary>
-    <p>You trust this host’s code and your computer. A compromised host or extension could steal randomness. For an independently checked build, use the terminal client. Neither client guarantees memory erasure.</p>
-    <p>Browser storage holds public work and receipts. Your invitation stays in memory. Save your receipts: storage can be evicted. Receipt inclusion and final transcript verification are separate checks.</p>
-    <p class="detail" id="manifest"></p>
+    <p>The terminal client checks your invitation, adds fresh randomness and verifies the result. Only public contribution data is uploaded. The coordinator verifies it again before acceptance.</p>
+    <p>The client handles the queue. Press Ctrl+C to stop; run the same command to resume. Accepted contributions are skipped.</p>
+    <p>Public work and receipts stay in <code>~/.local/share/spr-ceremony/work</code>. Neither the client nor your operating system guarantees memory erasure.</p>
     <p class="detail" id="build"></p>
   </details>
 </main>

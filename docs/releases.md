@@ -1,6 +1,6 @@
 # Releases and terminal participation
 
-The hosted **Use terminal** panel provides this command with its real hostname:
+The participant page provides this command with its real hostname:
 
 ```sh
 curl --proto '=https' --tlsv1.2 -fsS https://CEREMONY_HOST/join.sh | SPR_CEREMONY_DOWNLOAD_BASE=https://CEREMONY_HOST/native bash
