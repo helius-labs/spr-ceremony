@@ -1,14 +1,13 @@
-# Contributions
+# Historical exports
 
-GitHub accounts linked by participants after completion. Account proofs are signed
-by the coordinator; they are not personal GitHub signatures. Profile names are
-recorded at linking time; numeric account IDs identify the accounts.
+The current [contributor index](../contributions/) includes every published
+completed contribution, its receipts and any GitHub account proof.
 
-| Contributor | GitHub | Contribution | Account link |
-| --- | --- | --- | --- |
-| sergey | [@sergeytimoshin](https://github.com/sergeytimoshin) · ID 123843 | [Receipts](../contributions/records/4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079/95c1746f13dfb6c37a82ffb0c3953f4e9b3b5473a82ba3f8cf3b83683c096769.json) | [Account proof](../contributions/github/4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079/95c1746f13dfb6c37a82ffb0c3953f4e9b3b5473a82ba3f8cf3b83683c096769.json) |
+These manually submitted exports retain their original URLs.
+They are copies of receipt records, not additional contributions or personal
+participant signatures. Directory numbers are not a global participant order.
 
-All accepted contributors, including those without GitHub linking: [public records](../contributions/records/).
-
-Existing numbered directories retain their original records. Numbers are per-circuit
-receipt sequences, not a universal participant order.
+- [sergeytimoshin](0001_sergeytimoshin/): [current record](../contributions/records/4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079/bb506ab2ffeaedff5428d23ed7142550c10947489aaef0afb59dce825d82a9c2.json).
+- [alexatamanov](0002_alexatamanov/): [current record](../contributions/records/4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079/9b8c057492cb6259322856608cb033c7a7181f3d85fa2e3d793b78c8b29ba8e9.json).
+- [tilo](0003_tilo/): [current record](../contributions/records/4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079/5c77c3e8f0b29cc9d10c18083dd5e3f06dc2f2c30a79d8218860382c07984551.json).
+- [rob](0004_rob/): [current record](../contributions/records/4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079/8716f602ee6ee5fa8943a96861a09e6d5ef34051022a713face8ea588ca68917.json).

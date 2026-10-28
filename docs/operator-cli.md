@@ -94,7 +94,9 @@ audit remains separate. Partial participation and invitation tokens are excluded
 The **Contribution records** GitHub workflow independently checks the pinned
 manifest, checkpoint state hashes and receipt signatures before archiving new
 records under `contributions/records/<manifest>/<invitation-id>.json`. Existing
-records are preserved. It runs about every 15 minutes when the repository
+records are preserved. The [contributor index](../contributions/) lists every
+completed invitation and its optional GitHub account proof. Older exports are
+kept as historical copies. Publication runs about every 15 minutes when the repository
 variable `SPR_RECORD_PUBLICATION_ENABLED` is `true`, or on manual dispatch.
 The coordinator has no GitHub credential; a failed mirror never blocks acceptance.
 

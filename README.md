@@ -6,8 +6,7 @@ Verified contributions. Public final keys.
 [Participant site](https://d3gz3drevfa8mb.cloudfront.net) ·
 [Control panel](https://1q82ow4q4c.execute-api.eu-north-1.amazonaws.com) ·
 [CLI releases](https://github.com/helius-labs/spr-ceremony/releases) ·
-[Attestations](attestations/) ·
-[Contribution records](contributions/)
+[Contributors](contributions/)
 
 ## Contribute
 

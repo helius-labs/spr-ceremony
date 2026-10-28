@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Append verified workflow artifacts and render the optional GitHub directory.
+"""Append verified workflow artifacts and render the contributor index.
 
 Signature verification happens in `spr-ceremony records --github-out` in the
 read-only job. This writer checks paths/structure and never replaces records.
@@ -38,26 +38,47 @@ def publish(source, root):
             target.parent.mkdir(parents=True, exist_ok=True)
             with target.open('xb') as output:
                 output.write(data)
-    rows = []
+    identities = {}
     for path in sorted((root / 'contributions/github').glob('*/*.json')):
         identity = json.loads(path.read_text())
         manifest, invitation = identity['manifest']['sha256'], identity['invitation_id']
         record_path = root / 'contributions/records' / manifest / (invitation + '.json')
         record = json.loads(record_path.read_text())
-        if identity['contributor'] != record['contributor'] or not re.fullmatch(r'[a-zA-Z0-9_-]+', record['contributor']):
+        if identity['contributor'] != record['contributor']:
             raise ValueError('Contribution identity mismatch')
-        login = identity['github_login']
-        if not re.fullmatch(r'[a-zA-Z0-9-]{1,39}', login):
+        if not re.fullmatch(r'[a-zA-Z0-9-]{1,39}', identity['github_login']):
             raise ValueError('Invalid profile name')
+        identities[(manifest, invitation)] = identity
+    campaigns = {}
+    for path in sorted((root / 'contributions/records').glob('*/*.json')):
+        record = json.loads(path.read_text())
+        if not re.fullmatch(r'[a-zA-Z0-9_-]+', record['contributor']):
+            raise ValueError('Invalid contributor name')
+        manifest, invitation = record['manifest']['sha256'], record['invitation_id']
         name = record['contributor'].replace('_', '\\_')
-        rows.append(f"| {name} | [@{login}](https://github.com/{login}) · ID {identity['github_id']} | [Receipts](../contributions/records/{manifest}/{invitation}.json) | [Account proof](../contributions/github/{manifest}/{invitation}.json) |")
-    if rows:
-        text = '# Contributions\n\nGitHub accounts linked by participants after completion. Account proofs are signed\nby the coordinator; they are not personal GitHub signatures. Profile names are\nrecorded at linking time; numeric account IDs identify the accounts.\n\n'
-        text += '| Contributor | GitHub | Contribution | Account link |\n| --- | --- | --- | --- |\n' + '\n'.join(rows) + '\n\n'
-        text += 'All accepted contributors, including those without GitHub linking: [public records](../contributions/records/).\n\nExisting numbered directories retain their original records. Numbers are per-circuit\nreceipt sequences, not a universal participant order.\n'
-        destination = root / 'attestations/README.md'
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        destination.write_text(text)
+        profile, proof = 'Not linked', '—'
+        identity = identities.get((manifest, invitation))
+        if identity:
+            login = identity['github_login']
+            profile = f"[@{login}](https://github.com/{login}) · ID {identity['github_id']}"
+            proof = f'[Account proof](github/{manifest}/{invitation}.json)'
+        row = f"| {name} | {record['total']}/41 | {profile} | [Receipts](records/{manifest}/{invitation}.json) | {proof} |"
+        campaigns.setdefault(manifest, []).append((record['contributor'].lower(), invitation, row))
+    text = '# Contributors\n\nCompleted contributions, with or without a GitHub account link. One row per\ninvitation; separate invitations remain separate contributions.\n\n'
+    for manifest, rows in sorted(campaigns.items()):
+        text += f'## Manifest `{manifest}`\n\n'
+        text += '| Contributor | Circuits | GitHub | Contribution | Account link |\n| --- | --- | --- | --- | --- |\n'
+        text += '\n'.join(row for _, _, row in sorted(rows)) + '\n\n'
+    if not campaigns:
+        text += 'No completed contributions have been published yet.\n\n'
+    text += 'Receipts and account proofs are signed by the coordinator. GitHub linking is\noptional and proves account control, not a personal signature. Recorded profile\nnames can change; numeric account IDs identify the accounts.\n\n'
+    text += '## Historical exports\n\n'
+    text += 'Older exports are retained at their original URLs; they do not add contributions\nto the table above. [Historical attestation directories](../attestations/).\n'
+    if (root / 'contributions/sergeytimoshin.json').exists():
+        text += '\n[sergeytimoshin.json](sergeytimoshin.json) is the first manual receipt export,\nsuperseded by the `sergeytimoshin` record above.\n'
+    destination = root / 'contributions/README.md'
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.write_text(text)
 
 
 if __name__ == '__main__':

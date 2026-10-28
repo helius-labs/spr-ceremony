@@ -21,7 +21,7 @@ still be valid. If it expired, ask the operator to reissue the same invitation I
 while the ceremony is open. Reissuing preserves accepted work.
 
 The site displays the account link immediately. The existing GitHub publication
-workflow verifies it and updates [`attestations/`](../attestations/) automatically
+workflow verifies it and updates [the contributor index](../contributions/) automatically
 on its next scheduled run (scheduled every 15 minutes; GitHub can delay jobs).
 No participant PR or manual JSON copying is needed. Unlinked participants remain
 in the public contribution records.
@@ -93,7 +93,7 @@ key and the `github-identity` signing domain.
 This verifies receipts and account signatures and writes public JSON under
 `github-identities/<manifest>/<invitation-id>.json`. Existing records are never
 overwritten. The repository archives these in `contributions/github/` and links
-them from `attestations/README.md`.
+them from `contributions/README.md`.
 
 On AWS, the signed artifact is stored at `objects/<sha256>` and an immutable
 pointer at `campaigns/<manifest>/github-identities/<invitation-id>.json`, inside
