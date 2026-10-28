@@ -390,3 +390,13 @@ attested release, and live Chromium/WebKit checks passed. Deployment preserved
 the complete operator status, all 140 accepted contributions and the beacon plan.
 The separate full-core audit continued on its immutable rc.13 executable without
 restarting; its result is still pending.
+
+A [production signing-key recovery check](evidence/signing-key-recovery.json)
+retrieved the manifest-specific Secrets Manager backup into a private temporary
+directory on the AWS host's memory filesystem. The released CLI matched it to
+the public transcript key; GnuPG signed a distinct recovery challenge, verified
+it against that public key and rejected altered content. Temporary keys and
+GnuPG homes were removed. No private material was printed, returned from AWS or
+placed in the repository. The live key and full operator status were unchanged.
+This verifies recovery of the coordinator identity, separately from transcript
+verification and without asserting secure memory erasure.

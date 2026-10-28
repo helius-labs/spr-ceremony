@@ -1,0 +1,60 @@
+import datetime,hashlib,json,os,stat,subprocess,tempfile
+from pathlib import Path
+
+MANIFEST='4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079'
+CHECKPOINT='8ce40de71626f9754b8019f1980be5afe9c416b00aa5d887ed7ecebe79fefe23'
+BINARY='/opt/spr/releases/v0.1.0-rc.14-28ec63125ac318a1390eddedd632469dead3281e/native/spr-ceremony-linux-amd64'
+SNAPSHOT=Path('/var/lib/spr/public-audit-rc13')/MANIFEST/CHECKPOINT
+
+def command(*args):
+    result=subprocess.run(args,capture_output=True,timeout=60)
+    if result.returncode:
+        raise RuntimeError('Recovery check command failed')
+    return result.stdout
+
+def main():
+    os.umask(0o077)
+    manifest_bytes=(SNAPSHOT/'manifest.json').read_bytes()
+    assert hashlib.sha256(manifest_bytes).hexdigest()==MANIFEST
+    manifest=json.loads(manifest_bytes)
+    key_ref=manifest['coordinator_key']
+    public=(SNAPSHOT/'objects'/key_ref['sha256']).read_bytes()
+    assert len(public)==key_ref['size'] and hashlib.sha256(public).hexdigest()==key_ref['sha256']
+    secret=Path('/etc/spr/signing-secret').read_text().strip()
+    response=json.loads(command('aws','secretsmanager','get-secret-value','--secret-id',secret,'--version-id',MANIFEST,'--output','json','--cli-connect-timeout','10','--cli-read-timeout','30'))
+    assert response['VersionId']==MANIFEST
+    private=response['SecretString'].encode()
+    assert 0<len(private)<=16384 and private.startswith(b'-----BEGIN PGP PRIVATE KEY BLOCK-----')
+    with tempfile.TemporaryDirectory(prefix='spr-key-recovery-',dir='/dev/shm') as directory:
+        root=Path(directory)
+        private_home=root/'sign';private_home.mkdir(mode=0o700)
+        public_home=root/'verify';public_home.mkdir(mode=0o700)
+        private_path=root/'private.asc';private_path.write_bytes(private)
+        assert stat.S_IMODE(private_path.stat().st_mode)==0o600
+        public_path=root/'public.asc';public_path.write_bytes(public)
+        message=root/'challenge.txt';signature=root/'challenge.asc'
+        # This domain is not an invitation or receipt payload.
+        message.write_text('SPR signing-key recovery check v1\nmanifest: '+MANIFEST+'\nnonce: '+os.urandom(32).hex()+'\n')
+        try:
+            command(BINARY,'check-signing-key','--dir',str(SNAPSHOT),'--signing-key',str(private_path))
+            command('gpg','--homedir',str(private_home),'--batch','--import',str(private_path))
+            command('gpg','--homedir',str(public_home),'--batch','--import',str(public_path))
+            listing=command('gpg','--homedir',str(public_home),'--batch','--with-colons','--fingerprint','--list-keys').decode()
+            fingerprints=[line.split(':')[9] for line in listing.splitlines() if line.startswith('fpr:')]
+            assert len(fingerprints)==1
+            command('gpg','--homedir',str(private_home),'--batch','--pinentry-mode','loopback','--passphrase','','--local-user',fingerprints[0],'--digest-algo','SHA256','--armor','--detach-sign','--output',str(signature),str(message))
+            command('gpg','--homedir',str(public_home),'--batch','--verify',str(signature),str(message))
+            message.write_bytes(message.read_bytes()+b'changed\n')
+            altered=subprocess.run(['gpg','--homedir',str(public_home),'--batch','--verify',str(signature),str(message)],capture_output=True,timeout=30)
+            assert altered.returncode!=0
+        finally:
+            for home in [private_home,public_home]:
+                subprocess.run(['gpgconf','--homedir',str(home),'--kill','all'],capture_output=True,timeout=30)
+    assert not Path(directory).exists()
+    print(json.dumps({'checked_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'manifest_sha256':MANIFEST,'checkpoint_sha256':CHECKPOINT,'secret_version_id':MANIFEST,'public_key':key_ref,'public_key_fingerprint':fingerprints[0].lower(),'native_key_match':True,'gnupg_signature_verified':True,'altered_challenge_rejected':True,'private_temporary_files_removed':True,'private_material_left_aws':False,'live_key_replaced':False,'limits':['The backup was read inside the existing AWS host using its instance role; private bytes were never printed or returned.','A temporary key and GnuPG homes were confined to /dev/shm with private permissions and removed afterward; memory erasure is not asserted.','This verifies recovery of the coordinator identity, not the MPC transcript or final keys.']}))
+
+if __name__=='__main__':
+    try:
+        main()
+    except Exception:
+        raise SystemExit('Signing-key recovery verification failed; private diagnostic output suppressed.')

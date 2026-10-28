@@ -1,0 +1,27 @@
+{
+  "checked_at": "2026-10-28T19:44:12.652631+00:00",
+  "manifest_sha256": "4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079",
+  "checkpoint_sha256": "8ce40de71626f9754b8019f1980be5afe9c416b00aa5d887ed7ecebe79fefe23",
+  "secret_version_id": "4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079",
+  "public_key": {
+    "sha256": "85a9444e4673ecee6d2fb7c549058caec4941767389549ff122b05d83334db0e",
+    "size": 477
+  },
+  "public_key_fingerprint": "96d93089e98d75696dc01bcc7542f7801944c2fa",
+  "native_key_match": true,
+  "gnupg_signature_verified": true,
+  "altered_challenge_rejected": true,
+  "private_temporary_files_removed": true,
+  "private_material_left_aws": false,
+  "live_key_replaced": false,
+  "limits": [
+    "The backup was read inside the existing AWS host using its instance role; private bytes were never printed or returned.",
+    "A temporary key and GnuPG homes were confined to /dev/shm with private permissions and removed afterward; memory erasure is not asserted.",
+    "This verifies recovery of the coordinator identity, not the MPC transcript or final keys."
+  ],
+  "ssm_command": "2a0ff078-f1aa-4e0d-b246-c27ecfceafa3",
+  "checker_source": "signing-key-recovery-check.py.txt",
+  "checker_sha256": "6de81fdb1f49422bb0d612052f29931f52cadd0b11fbdd71a42d34ca910cca8a",
+  "native_release": "v0.1.0-rc.14",
+  "full_live_operator_status_unchanged": true
+}
