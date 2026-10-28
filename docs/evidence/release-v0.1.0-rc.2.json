@@ -1,0 +1,78 @@
+{
+  "date": "2026-10-28",
+  "release": "https://github.com/helius-labs/spr-ceremony/releases/tag/v0.1.0-rc.2",
+  "source_revision": "14104185f9f6e5272c1702ecb5f8c4a7c6875b09",
+  "toolchain": "go1.27.3",
+  "release_workflow": "https://github.com/helius-labs/spr-ceremony/actions/runs/40610921470",
+  "release_workflow_conclusion": "success",
+  "immutable_release_attestation": "verified with gh release verify; all nine downloaded asset hashes matched",
+  "build_provenance": {
+    "verified_subjects": 8,
+    "verification": "Release publish job verified each subject against the source digest, binaries.yml signer workflow and GitHub-hosted runners"
+  },
+  "asset_sha256": {
+    "browser-14104185f9f6e5272c1702ecb5f8c4a7c6875b09.tar.gz": "8ee472ce09b59bcee7b6a869f613aa9c5923c19543ed97bdc55cfbc151e95a2b",
+    "build.json": "3b065d8600a331a571a90101484e2b4b495f0121c8f91da357621256140d160c",
+    "join.sh": "a4d314ea64ce0c4dcd8425adcccb351eda85fdcf42bb7db7946d119dc58dc659",
+    "provenance.json": "727ea73cb70cca8fc9f955cf588f0a97352637a4bfe6faa9d739a7289239223c",
+    "SHA256SUMS": "a61680519b76208a9207855a8cc13f57faffee6f257c937f64541e5cf850dc99",
+    "spr-ceremony-darwin-amd64": "80dbea06ff68caa8766852ef083864d2edd7d3558028a95f1b94bcdf03a40be1",
+    "spr-ceremony-darwin-arm64": "7c3c9534f9c1915022bab430f45ddbeac7ad722feb4abf795da927725596e319",
+    "spr-ceremony-linux-amd64": "62ba7a3711b3c76ea76491bd1467b28f06b2bd13ca46dc3f0fd7c30224bf87c6",
+    "spr-ceremony-linux-arm64": "0f9969ded80f82d3d2ce19d69028b7a752a61edd8fe785e9a1e2294e6706e401"
+  },
+  "native_checks": {
+    "jobs": [
+      {
+        "name": "native / native (macos-15-intel, darwin-amd64)",
+        "conclusion": "success",
+        "url": "https://github.com/helius-labs/spr-ceremony/actions/runs/40610921470/job/122564023126",
+        "startedAt": "2026-10-28T00:52:41Z",
+        "completedAt": "2026-10-28T00:53:11Z"
+      },
+      {
+        "name": "native / native (ubuntu-24.04-arm, linux-arm64)",
+        "conclusion": "success",
+        "url": "https://github.com/helius-labs/spr-ceremony/actions/runs/40610921470/job/122564023131",
+        "startedAt": "2026-10-28T00:52:42Z",
+        "completedAt": "2026-10-28T00:52:53Z"
+      },
+      {
+        "name": "native / native (ubuntu-24.04, linux-amd64)",
+        "conclusion": "success",
+        "url": "https://github.com/helius-labs/spr-ceremony/actions/runs/40610921470/job/122564023214",
+        "startedAt": "2026-10-28T00:52:40Z",
+        "completedAt": "2026-10-28T00:52:52Z"
+      },
+      {
+        "name": "native / native (macos-14, darwin-arm64)",
+        "conclusion": "success",
+        "url": "https://github.com/helius-labs/spr-ceremony/actions/runs/40610921470/job/122564023232",
+        "startedAt": "2026-10-28T00:52:39Z",
+        "completedAt": "2026-10-28T00:52:52Z"
+      }
+    ],
+    "checks": [
+      "Signed binary verified before execution",
+      "Native contribution, retry and export verification on marked test circuits",
+      "Hidden invitation input",
+      "Terminal echo restored after Ctrl-C and SIGTERM"
+    ]
+  },
+  "https_installer": {
+    "https_one_liner": "passed",
+    "hidden_invitation": "passed",
+    "real_native_contributions": 2,
+    "trusted_test_ca_required": true,
+    "source_revision": "14104185f9f6e5272c1702ecb5f8c4a7c6875b09",
+    "installer_sha256": "a4d314ea64ce0c4dcd8425adcccb351eda85fdcf42bb7db7946d119dc58dc659",
+    "environment": "Linux amd64, local Caddy HTTPS proxy, private test CA and marked demo circuits",
+    "invitation_in_captured_output_or_logs": false
+  },
+  "limitations": [
+    "No live AWS deployment or AWS restore drill",
+    "No independent security audit",
+    "No production contribution campaign or final keys",
+    "Native platform smoke tests use small fixtures; full-core hardware performance and macOS Safari are separate launch checks"
+  ]
+}

@@ -125,13 +125,25 @@ after deduplicating shared parameters. Archive capacity must also cover accepted
 contributions, final keys, temporary files, and retained object versions.
 [Per-circuit payload evidence](evidence/core-payloads.json) records these counts.
 
-The [participant binary workflow](https://github.com/helius-labs/spr-ceremony/actions/runs/40566501764)
+The earlier [participant binary workflow](https://github.com/helius-labs/spr-ceremony/actions/runs/40566501764)
 built all four Linux/macOS targets and signed their provenance. Downloaded checksums
 and the GitHub attestation were verified. All four binaries were reproduced byte
 for byte in the pinned Go container with the same module-cache path as CI. The
 Linux amd64 binary was executed and
 scanned; the other architectures were cross-compiled but not executed on native
 hardware. [Artifact evidence](evidence/binary-provenance.json) records the digests.
+
+The immutable [v0.1.0-rc.2 release](https://github.com/helius-labs/spr-ceremony/releases/tag/v0.1.0-rc.2)
+was built from `14104185f9f6e5272c1702ecb5f8c4a7c6875b09`. Its release pipeline
+verified all eight build attestations and executed contribution, export and
+hidden-input/cancellation checks on native Linux and macOS ARM64/x86-64 runners.
+Downloaded assets matched the immutable release attestation. The published
+HTTPS installer completed two real contributions to marked test circuits with
+hidden invitation input and no invitation token in captured output or logs.
+This used a local HTTPS server and test CA, not an AWS deployment or a production
+campaign. [Release evidence](evidence/release-v0.1.0-rc.2.json) records hashes,
+workflow results and limits; this does not certify full-core performance on
+every platform or execution in macOS Safari.
 
 A live quicknet response was verified against the chain hash published by drand,
 including an exact-round fetch from a second endpoint and rejection of altered

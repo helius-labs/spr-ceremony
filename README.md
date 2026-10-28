@@ -3,6 +3,9 @@
 A trusted setup for **41 core circuits**. Browser or terminal. Private invitations.
 Verified contributions. Public receipts and final keys.
 
+Release candidate: [v0.1.0-rc.2](https://github.com/helius-labs/spr-ceremony/releases/tag/v0.1.0-rc.2).
+The public campaign is not open; launch gates are below.
+
 Custom rings, batch 10 and batch 4999 are excluded. The cryptographic engine is
 pinned to gnark `v0.16.4` and gnark-crypto `v0.21.1-0.20260913224755-1409fe592052`.
 

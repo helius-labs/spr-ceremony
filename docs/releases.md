@@ -44,7 +44,7 @@ uploads a draft, then publishes an immutable release. Existing versions are not
 overwritten. Keep release immutability enabled in repository settings.
 
 ```sh
-gh workflow run binaries.yml --ref main -f version=v0.1.0-rc.1
+gh workflow run binaries.yml --ref main -f version=NEW_VERSION
 ```
 
 GitHub downloads require repository access. The AWS deployment helper verifies
