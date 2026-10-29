@@ -1,0 +1,678 @@
+{
+  "format": "spr-contribution-record-v1",
+  "status": "accepted",
+  "manifest": {
+    "sha256": "4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079",
+    "size": 31586
+  },
+  "checkpoint": {
+    "sha256": "856cb1c3966b50ddcce666e38dad24540fca0c47cbec55336fd24520bb938165",
+    "size": 7065
+  },
+  "coordinator_key": {
+    "sha256": "85a9444e4673ecee6d2fb7c549058caec4941767389549ff122b05d83334db0e",
+    "size": 477
+  },
+  "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+  "contributor": "martin-ochoa",
+  "track": "core",
+  "total": 41,
+  "receipts": [
+    {
+      "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrjf40JEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmd4B8GyhZIgkF1m/Ondixs7FiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAIQ+AQD5ZJbD0do/VIx+q5SkPfgxsxwVTLX6rdSpeguhUlxb0gD7BLMW\nrBAIa3tYsakCoGbFpd22Y9T7l5B1Z+hV/RR0NgM=\n-----END PGP SIGNATURE-----",
+      "circuit": "merge_24_1",
+      "sequence": 11,
+      "contributor": "martin-ochoa",
+      "parent": {
+        "sha256": "97c2714b9b47232918cf484d7dc5f77470b5afe2b6a066867a08a4d9ed6aff39",
+        "size": 50125003
+      },
+      "output": {
+        "sha256": "432d55b9e27e81fc4e00eae9d556e372e34251888f8e46719ef58ed71d6f209a",
+        "size": 50125003
+      },
+      "accepted_at": "2026-10-29T17:17:01.024820333Z"
+    },
+    {
+      "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrjf98JEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmeXv1QZ1IBhcEDVOt6cZddvFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAOulAQCL3ad14bCdzPZxfDtzVdeWdzzH5Un5jxbbH4FvEDmGsQD/ddV2\nCh9Yi0MpqeP8GP+9z0zkoK5mSxJKbpET/xnBEAw=\n-----END PGP SIGNATURE-----",
+      "circuit": "merge_52_1",
+      "sequence": 11,
+      "contributor": "martin-ochoa",
+      "parent": {
+        "sha256": "dfeb0fc65b3e871520af42427c65108e22005f95ce1b766e8ed600e0f5a5dfa9",
+        "size": 102801483
+      },
+      "output": {
+        "sha256": "79f32ff3ec86868c91111f9090549274fe4daf80f04eab338b72704a79ce5651",
+        "size": 102801483
+      },
+      "accepted_at": "2026-10-29T17:18:23.67958934Z"
+    },
+    {
+      "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrjf2MJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmcXKCjjtk8MbkyWbAyFk1oUFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAJU8AP9A3f3WGPlSEdbhe7tXGitLym09IZuMOzKxjRTZRWOPfwEAr8lk\nsnRdYrfMdQK3fV6Kq77oWG4BJCz3vGEfTDzxnQs=\n-----END PGP SIGNATURE-----",
+      "circuit": "merge_8_1",
+      "sequence": 11,
+      "contributor": "martin-ochoa",
+      "parent": {
+        "sha256": "dee38d9b71b6743bd4d392e846f984b611d8520f9f819ce9590c200bf2f1407f",
+        "size": 14056139
+      },
+      "output": {
+        "sha256": "7208e4d8a06ca5a7ffc03095d1e19c048f997348726f620c2e87e1eb673dd312",
+        "size": 14056139
+      },
+      "accepted_at": "2026-10-29T17:16:19.638606758Z"
+    },
+    {
+      "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjfXYJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmfmCpNxQdk/sYc9y4EKW7XUFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAFquAP45BqyPbx9IOyVGBiml7x56T2PTm1rbr3ngGlcpdnexKwEA+6zz\nlnztj9ct4kHfX6OM64lg9R+kEFrPLfv5SogJvQc=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_12_2",
+      "sequence": 11,
+      "contributor": "martin-ochoa",
+      "parent": {
+        "sha256": "8aeab31c5c4421af15aa4859dc9a8d4c978ff6cb01ec5f50a71a277ac33e06be",
+        "size": 25588363
+      },
+      "output": {
+        "sha256": "99d75a2d240a3eaef53ddfeb521ed44065109d26eab668942d882915955afff4",
+        "size": 25588363
+      },
+      "accepted_at": "2026-10-29T17:08:06.512006051Z"
+    },
+    {
+      "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjfY0JEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmdQ5Q4p1uBpU32fE+/5n4CnFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAACz/AQDYgcF7PAulhdTZ83MzG0zWWcXpoauQPX3l0rKp86ZxJwEAkIuZ\nlutHyhTpK4oMnfYL6O6CO0gjK0sc4yBxxeEQ5QI=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_12_4",
+      "sequence": 11,
+      "contributor": "martin-ochoa",
+      "parent": {
+        "sha256": "9455753a788b3ca3e6696c5e884f58dd758a850b2266560a94200dc1168073d4",
+        "size": 25711051
+      },
+      "output": {
+        "sha256": "14f9af4e7e2e03029330970db46f962ba5ddd662ed929e549fcb99a5d160fc63",
+        "size": 25711051
+      },
+      "accepted_at": "2026-10-29T17:08:29.727472937Z"
+    },
+    {
+      "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjfaQJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmfzGf3ysFgfYpnbAs30XnS9FiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAALGQAPsGKo3W7cNBdF6DUAKIseUbrNK3wqMhwA2WrAiG1JBR+gD+I1Fz\njM0gSdE5uh6r2yh8ESyAsQhi4afFzxya76BfEgk=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_12_8",
+      "sequence": 11,
+      "contributor": "martin-ochoa",
+      "parent": {
+        "sha256": "354dc9d1e88f3afa44512b33f61dd24b800175b74baa0adaba3dd15788aba5f7",
+        "size": 25996363
+      },
+      "output": {
+        "sha256": "f4891b10ae47cfe81518c9e30232dc457ea8514bda507fa2a25cc610906ef277",
+        "size": 25996363
+      },
+      "accepted_at": "2026-10-29T17:08:52.901056584Z"
+    },
+    {
+      "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrjfb4JEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmdZ6HBA6zd+7hHrCU1IMeQsFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAABY1AQD6r+WJ86wUwIRXi+WddLlzExOAONpER0jbQbp6DaE1AwEA+PcM\nhFR4vaKWkRxlEdSDAXXOGABik+8bcQLekbrHsQw=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_16_2",
+      "sequence": 11,
+      "contributor": "martin-ochoa",
+      "parent": {
+        "sha256": "45a0ef3aed7ee9aa2d3ef7b9b2823377b0a89160a93c708c20b44e9be77f10d1",
+        "size": 28444171
+      },
+      "output": {
+        "sha256": "c3cae60511a3a3f02a1bd5d1157ae4d23390be2aeb52979e82fb7cf62ebf3982",
+        "size": 28444171
+      },
+      "accepted_at": "2026-10-29T17:09:18.372439824Z"
+    },
+    {
+      "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjfdcJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmfcw4Sl6++3uW694yAKANYhFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAADAdAP46lobJHsbT/3SxBdQGis45FZ/QoVEFdoYJ5YTBMB4QxwD/S95I\nwEnbsGAk+O5RmGNfMcxEb0GF1/F6T/Mp0aCK2ww=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_16_4",
+      "sequence": 11,
+      "contributor": "martin-ochoa",
+      "parent": {
+        "sha256": "eb5667c140d3315a3b42e1f586560777d36452f49b65fc801a1022f8cd090afd",
+        "size": 28568907
+      },
+      "output": {
+        "sha256": "2db62dc879ba71098682b44cb4c9c4c0aa5248acbf62096f7dcf1808d5d4cf2c",
+        "size": 28568907
+      },
+      "accepted_at": "2026-10-29T17:09:43.824149662Z"
+    },
+    {
+      "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjffAJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmfkEHSOOJAUfRKtyblaoZpqFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAAcXAQCcvonblXHg0yoh2boGEYaJnMQ2E0nyMHYM8gsWn5kxTAEAvGKH\n4yrUR2h7vd9PAYpexCpx3gNkXfGf7fP9lkpYqg8=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_16_8",
+      "sequence": 11,
+      "contributor": "martin-ochoa",
+      "parent": {
+        "sha256": "4cf7debae2905abfcbd08fbecd5da61c91977fec9fbc909bc7fcd900a098d806",
+        "size": 28858315
+      },
+      "output": {
+        "sha256": "5d322a927c26417408b2c1270e2035a2bd12eb96e38cf39fee9330dc253cfea9",
+        "size": 28858315
+      },
+      "accepted_at": "2026-10-29T17:10:08.775153602Z"
+    },
+    {
+      "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjfHYJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmfaOGaJ3xPhk8H0ilUr56ylFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAOZRAQCTl6/siWUyMgoPhiyVERY3fLj4GOFHOrl4sdnbbAbonwEAtAaO\n73hyXrO0/reiCjRLt5CwBRk4+BPR30V+6RVyzgA=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_1_16",
+      "sequence": 11,
+      "contributor": "martin-ochoa",
+      "parent": {
+        "sha256": "7a263181065680c3c7a2fed7f81c05a89a2615e0d4eb3d5c338c240250e361cb",
+        "size": 3988651
+      },
+      "output": {
+        "sha256": "60608fef9c9b1617fcb7590f85e33d40408e7f400cf24c17b6a3f9219255c9c9",
+        "size": 3988651
+      },
+      "accepted_at": "2026-10-29T17:03:50.591936551Z"
+    },
+    {
+      "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjfFwJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmdIZgX1CdnoWy18R+cwpInIFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAPW9AP95Kdegf6h/R27PBA1J/0CxyyMY+QDC9eWLQt40sJCshgD9FNHs\nsJlOudzHnjV2uInhhkar3CYxxnz8V2+9YfH4RgY=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_1_2",
+      "sequence": 11,
+      "contributor": "martin-ochoa",
+      "parent": {
+        "sha256": "c5babfb6445a8c2fcb5f8cac9a5eba72c93f51d62d927e7ba207a7b6a733f3cd",
+        "size": 2025451
+      },
+      "output": {
+        "sha256": "c7f131e659e30c872c06c8cf498dab9dbecbae0e76e4f332b93458d51ed1b900",
+        "size": 2025451
+      },
+      "accepted_at": "2026-10-29T17:03:24.982434147Z"
+    },
+    {
+      "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjfGEJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmf0vsg8Ve/r2Rbd7fBnH0IOFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAHAsAQC3Gd4V+uNcAdY2jQmovqUC9Sm+arRzZ3VhOyKc8+HQXAD9FJNi\nTTMaF3DdjPRiy43AKiTt1fxyYY0z4OU9iEQUoQo=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_1_4",
+      "sequence": 11,
+      "contributor": "martin-ochoa",
+      "parent": {
+        "sha256": "e7bae442f0f3d77daf565c2ce06b2f0f2dd60483f9d9f16d1f5d2514ba12b1fd",
+        "size": 3191083
+      },
+      "output": {
+        "sha256": "19aaf3e9beb3c6ef612e1f2fc366c720433af2a25557757af5fbc005bbb5fcbd",
+        "size": 3191083
+      },
+      "accepted_at": "2026-10-29T17:03:29.68457157Z"
+    },
+    {
+      "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjfGYJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmfliFILwa/oYnUx3vmhec0qFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAALPiAP9MzYM5NTGynIe0rf1HU2KSeSbKYmMHJSPGtnUVGha7IgEAsyj4\nZnY8iRaRxBB7kRTPUyaHtb+g+tifkm0kOdYeOw0=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_1_8",
+      "sequence": 11,
+      "contributor": "martin-ochoa",
+      "parent": {
+        "sha256": "43e5f17f42499caa6b50836e417c5295ad1cb1c9258218b631bf6aa4e30b99a1",
+        "size": 3465131
+      },
+      "output": {
+        "sha256": "bf075665790272871173189d5937951f294969fab051f946069b5b144176cb68",
+        "size": 3465131
+      },
+      "accepted_at": "2026-10-29T17:03:34.617410395Z"
+    },
+    {
+      "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrjfh4JEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmd3iSy9D6rVhEaHI632pdeiFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAKpzAP48MA514dJWRJEumduONHoqa/zRJAHkX6Ech/z0VTsSPAEAv7L2\n7QRi3IQTvRT0Z2mgy91fX3zU+0doGuby9mEWHA0=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_24_2",
+      "sequence": 11,
+      "contributor": "martin-ochoa",
+      "parent": {
+        "sha256": "b0cdb31d9306096d86cb353f86657900d8baf4c75e2d0f3d5907c7f2ce391f0f",
+        "size": 50976011
+      },
+      "output": {
+        "sha256": "bd3b573fc58cb0fbf137e222edad12496eeed146305e58d15b164becb3726cc2",
+        "size": 50976011
+      },
+      "accepted_at": "2026-10-29T17:10:54.505827291Z"
+    },
+    {
+      "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjfkoJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmdHuKhVK7d96ey5627EPIOeFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAALaAQDGpasPX0xwQ6vwyk5uLrx8HufErU0ADAjeZbYlGxj9zwD+MaCf\n4Zkq9Zhq4aN5EN5KkjXRdqlevRtUJM8xELMHNQo=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_24_4",
+      "sequence": 11,
+      "contributor": "martin-ochoa",
+      "parent": {
+        "sha256": "b612d1dc39b0b994c0f12fc7f7a3d3a1c71b3ae5f1af4af43d471b58ee8b8238",
+        "size": 51104843
+      },
+      "output": {
+        "sha256": "3fe7ef1674d3590f1dcf597face2267af86f1e7791baf8a4ab3942bc126ff8c1",
+        "size": 51104843
+      },
+      "accepted_at": "2026-10-29T17:11:38.414348177Z"
+    },
+    {
+      "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjfJYJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmdckQW9ljbaXfV/L4s8gTSaFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAMm6AP487IzZqSKwdwtqn3LvNR/F5zdcQ38t5+fWLrW4Z25O9QEAnHKb\n0siDXuOoIpafc2xfGZZy0euzIyWv7EzR722WlQ8=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_2_16",
+      "sequence": 11,
+      "contributor": "martin-ochoa",
+      "parent": {
+        "sha256": "d3de00e4312689680bc4b515d0317e49f67a6c967fc896ab8356d3c81db5c8f6",
+        "size": 6810763
+      },
+      "output": {
+        "sha256": "c6da2e62539d2f5e20dbd47a2dd07407d9cf320bd024b49e5c969b7a21103d50",
+        "size": 6810763
+      },
+      "accepted_at": "2026-10-29T17:04:22.344327993Z"
+    },
+    {
+      "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjfGsJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmc8G1ddJV6yzj4cG/mavW94FiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAEFBAQCpmJVmEgLTC40nmkdS5pwBGysh1eVHtrYhhNVko5k8agD9Hktd\nNaqpceFZludU2EL2/OkaaBoHbQ91q9Def4WXqw8=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_2_2",
+      "sequence": 11,
+      "contributor": "martin-ochoa",
+      "parent": {
+        "sha256": "4a311d3d1e2c175a7bf5d28f46ae9b474aa1ebe44637618cb091357147c10f0d",
+        "size": 3795403
+      },
+      "output": {
+        "sha256": "dc4ad510595c6f3148eeac9b9598f424b72c2eeab0118a371971ab936b48e4bc",
+        "size": 3795403
+      },
+      "accepted_at": "2026-10-29T17:03:39.850376601Z"
+    },
+    {
+      "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjfHEJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmdkfO+gFoAbOj+vKv+GxGysFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAFtZAP4xlcciuO7oGMDZXGqJvLgDsaivQtbm0shqCMj+/y8wCQD/RwxA\nQVmHnfk8DbsJBsLg/V+Wu0J93EGAiuzk0Q+rDwo=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_2_4",
+      "sequence": 11,
+      "contributor": "martin-ochoa",
+      "parent": {
+        "sha256": "8835697267ad7248f0470a4aa108b85f4a1f797649cccfc2d41fd8a75b5d20f0",
+        "size": 3912971
+      },
+      "output": {
+        "sha256": "5144139903d06c2d7e4c1a7dd91801d7b6330eeb7a3d2dfba0a99e28010e140b",
+        "size": 3912971
+      },
+      "accepted_at": "2026-10-29T17:03:45.25644421Z"
+    },
+    {
+      "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjfH4JEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmfq73y4skfvxAaIfS3/+6c1FiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAMXBAP9bg+PF7Y9V/MzZLjOsBt27D+xfin1sBBTnHVA8uhdBzAEA6a/T\n4DrBSuCRPqMaUlu4dTC5HOqT9a4ctEwiMxfytwg=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_2_8",
+      "sequence": 11,
+      "contributor": "martin-ochoa",
+      "parent": {
+        "sha256": "9cc913172981f2c94e1b2967ba37aca222c72adbfbb4f3e1a3b7bd0caec3e2bf",
+        "size": 6285195
+      },
+      "output": {
+        "sha256": "a77416a5b7829c46f4821c21b6a71bef71adea29eb6a86b7d7e4440ab8938479",
+        "size": 6285195
+      },
+      "accepted_at": "2026-10-29T17:03:58.018084983Z"
+    },
+    {
+      "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjfnkJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmdK0QNasw9vF5KMPY7ba8G/FiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAANuDAQC1mgJn71XlOzi+rXuG74tDi7ooVT0BOL8knmv0rsFcPQD+NAiK\nXL5SYVHkioMORMsmnkB1XU96TCeyMb3up+fVjwg=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_32_2",
+      "sequence": 11,
+      "contributor": "martin-ochoa",
+      "parent": {
+        "sha256": "a3955ba868a0a9b301f3ceb4a72b54f106a5f4f793990edf33a1f09faaab2805",
+        "size": 56727947
+      },
+      "output": {
+        "sha256": "95538d3199d6f2da68be2c20e4b5a31a01a3156f56b2818953bb7c1b43d18f7e",
+        "size": 56727947
+      },
+      "accepted_at": "2026-10-29T17:12:25.938453209Z"
+    },
+    {
+      "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjfIYJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmcupKq+oD3zcAVLl/bpVK1sFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAHXYAQD3QWk1TGVWFTAoy2nWexV3noKkCFHTN17Xce03QCG87AEArnlQ\n1gRcqY2zTiFh1iXtvh2HzCLC0wJZkBwXU776Wwc=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_3_2",
+      "sequence": 11,
+      "contributor": "martin-ochoa",
+      "parent": {
+        "sha256": "0399596cf95bef81e46655f2d4e02b5f5139ea27663dcfbd45e9f5953308d297",
+        "size": 6596011
+      },
+      "output": {
+        "sha256": "ff8dc18840343e0e7ddef5bbff85f8daa65dde18ef7bef37e6b7ff5794982414",
+        "size": 6596011
+      },
+      "accepted_at": "2026-10-29T17:04:06.124425252Z"
+    },
+    {
+      "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjfI4JEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmeMpd3+jFTY4TSXJhFVDahoFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAL5pAP4wBoB6ErFIi8+ChrYct7RFxRj69kS/6OjJAC/+abRyPQEA3pNC\n4gyq1yVxq4b2JR/WoreXGSKXbXRVHuiWUi45Fg0=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_3_4",
+      "sequence": 11,
+      "contributor": "martin-ochoa",
+      "parent": {
+        "sha256": "7269a01216072323953c0359f28fa7816c693669bfefedc11ccc485cf684d40c",
+        "size": 6714091
+      },
+      "output": {
+        "sha256": "b088962e77ad8b87154fea3fb4d45a1ba248bed6cd6a1875baa2e0c92e1b5337",
+        "size": 6714091
+      },
+      "accepted_at": "2026-10-29T17:04:14.171154019Z"
+    },
+    {
+      "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjfJ4JEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmdOM78l4kf8fao2l0Ke6YyEFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAO3UAQCt7AOPnmTG7Lo3g8fb37oLCKYEqg2vK6TdNDaLDB4U6wD/VWgB\nAoUC2g4drLMofTMdOBWtGWZUNJHV4XTdARpxNwI=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_3_8",
+      "sequence": 11,
+      "contributor": "martin-ochoa",
+      "parent": {
+        "sha256": "fa8a245551e99ca71a6ffbb762ebc56718fc7ff6c8df7db8df9bf44dd598067d",
+        "size": 6990187
+      },
+      "output": {
+        "sha256": "88d10b2f8fd228654d5063cd197e103a6ee9144dfdd94347163b26937c8aa7e5",
+        "size": 6990187
+      },
+      "accepted_at": "2026-10-29T17:04:30.766361118Z"
+    },
+    {
+      "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrjfq8JEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmekYHb3DLkYnEIbeVdrm1ELFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAFmyAP9gyp2DavzFWS//ucVpNErb+P/Xbea5sCwgJ+V434RXHQEAoYGD\ni4mf5jOR8ZmqUCkzlOgZ53BhgkUdDT1p+P7hGgc=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_40_2",
+      "sequence": 11,
+      "contributor": "martin-ochoa",
+      "parent": {
+        "sha256": "b47962502e3ba9a06fb13998aa8958920042bd86970a52f4754c9082e25c75ff",
+        "size": 62382731
+      },
+      "output": {
+        "sha256": "c519758f23e4295eacaca74fbe5b96e3473b6bafb7c705280d1e623b7a06a451",
+        "size": 62382731
+      },
+      "accepted_at": "2026-10-29T17:13:19.495866571Z"
+    },
+    {
+      "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjfwEJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmcQ07E1qzDW7dJG/emd+M7EFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAEeIAQCASzh2HLMuLJn2HiLg+gd01F14rfUpksEslWkkZ7+xPwEAhFCd\nLIhkwLGfauB0UMEpLTwu5WiICCUMoM1zuCjz9Ak=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_48_2",
+      "sequence": 11,
+      "contributor": "martin-ochoa",
+      "parent": {
+        "sha256": "3b53f19d11d5933a4e60956bd9226b9f91026417eefab81af74630dc96ee072b",
+        "size": 101634955
+      },
+      "output": {
+        "sha256": "48b7d06c299ef4dfb9080969cea258bfb4a62db6bce720db8c5e692671dabac0",
+        "size": 101634955
+      },
+      "accepted_at": "2026-10-29T17:14:41.653745826Z"
+    },
+    {
+      "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrjf1UJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmcs1ugcMy5sAgEKNLAGuJr/FiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAOkmAP9yrNTKmdFpYX69esl0dWV4LAPVjfIwRqUrV6TOniMiiAEAr0S0\nzciWkVqqC23TvoHQtxhPJZ2Y+RyTN7yWPT3fPwE=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_49_2",
+      "sequence": 11,
+      "contributor": "martin-ochoa",
+      "parent": {
+        "sha256": "62771431064ec4a39ca7f67e3b4a2103ccd2b1ef6f276ee462898bb074a31441",
+        "size": 102341995
+      },
+      "output": {
+        "sha256": "4595954fcd653517baefa7301303c6dff8d8593b60b3965a05d32305b5fc21d1",
+        "size": 102341995
+      },
+      "accepted_at": "2026-10-29T17:16:05.312736776Z"
+    },
+    {
+      "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjfNYJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmcZUIe4qNlqdZN4tZxqC4kaFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAKexAQDpHsVnPlDSpmX52/GfBqMwlfGvju88q9on3tnwM34XEwEAyUeq\na8YxNV7zqR6B+K4kgqtFfHr3EEJTfZvxQLmbewY=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_4_16",
+      "sequence": 11,
+      "contributor": "martin-ochoa",
+      "parent": {
+        "sha256": "43a5fb8864c673c111852e5bc09416c0eb8698920935e0db4f4f25a1f9bfc964",
+        "size": 8225355
+      },
+      "output": {
+        "sha256": "5e6ad8f970abf3c859851a4caa97dff31181503b33b29bd917981c6ad7fe5a51",
+        "size": 8225355
+      },
+      "accepted_at": "2026-10-29T17:05:26.061640014Z"
+    },
+    {
+      "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjfKcJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmdeVSCm4LzKF6MLitoKDjbzFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAHD2AP9UZGAO2QyT0Cn8HC28z5WUb8nwXO/eQJ3qp2efxdftrgEA/M8p\nzp2VfLkHYEqjTnyWk9N+T9OiSe3xoCrDySgxXQ4=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_4_2",
+      "sequence": 11,
+      "contributor": "martin-ochoa",
+      "parent": {
+        "sha256": "f21ee61b6d7f25fe2f8aab31985d4d4abef2622e037915b776a4fb0796c004e9",
+        "size": 7299979
+      },
+      "output": {
+        "sha256": "2ecd2f0f0d839cc00b377be4adfad5c79a217208a4d931108eb9cd5abd76dd95",
+        "size": 7299979
+      },
+      "accepted_at": "2026-10-29T17:04:39.542090118Z"
+    },
+    {
+      "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjfLAJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmcgNHr3c5w887bWY3uFPgNbFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAJ6XAQCwkpiPrUjXgpckSXOD1WCUK4EY3hfIdf+sUSK8uvHy2QD9HS+l\nHahMse8QbnYC4XWAyUBV+dNTrqQORUSuP8FHFwI=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_4_4",
+      "sequence": 11,
+      "contributor": "martin-ochoa",
+      "parent": {
+        "sha256": "19bb4aea78f158d600dfcd46f2f16b046bdfa6209f895c0a7b539e2e8784c430",
+        "size": 7418571
+      },
+      "output": {
+        "sha256": "eefc36a0d2ac45549b55d2849376130b0700bee9f65f5dc3388f8f7b6f93ea87",
+        "size": 7418571
+      },
+      "accepted_at": "2026-10-29T17:04:48.425851767Z"
+    },
+    {
+      "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqoEABYIAF0FgmrjfLkJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmeIFCrsspJ8F8/mOum3lw2fFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAOgrAPdAn3Dgu1Ajhc5BUdn7Go5CQvf1h5SBWGh4trY3VbipAQCiIs4P\ny3+kCPcHyjNMoW2AJEwVGhDCB9WzjQKpNYRnCg==\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_4_8",
+      "sequence": 11,
+      "contributor": "martin-ochoa",
+      "parent": {
+        "sha256": "5030621b91a45e11f5d015f8fb4143070c5ae643738a3403c2b417993eee2896",
+        "size": 7695691
+      },
+      "output": {
+        "sha256": "97d5c098b9394431de46d89546456d4c9a68f25de67b80c00cd6ea4f3c556fcc",
+        "size": 7695691
+      },
+      "accepted_at": "2026-10-29T17:04:57.418562611Z"
+    },
+    {
+      "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjfQwJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmfB+hXhkI8zMkWKpVbkgkw4FiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAIRtAQD88giPBOkCK9Bdg8kTisTT4Y7TklDqtR0+iaT4g/1K/gD+JBXo\nLU/8VXtTygs9U/hD8SBJvhRXEV3Vh+tkX1pv/wQ=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_5_16",
+      "sequence": 11,
+      "contributor": "martin-ochoa",
+      "parent": {
+        "sha256": "435b084b3f9a52fdc860bb844423eb7a24c1bde16f0cfce35519c5b437bccc60",
+        "size": 13146155
+      },
+      "output": {
+        "sha256": "0c12815b07b2b0a83898942d404c435dc7c44497da6365bc891636db930dc9e2",
+        "size": 13146155
+      },
+      "accepted_at": "2026-10-29T17:06:20.665114767Z"
+    },
+    {
+      "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjfMIJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmcoa4Lfyq97RxLhlI8QsKT0FiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAGjjAQDZly0r1weakFQZpfGdYkmpwrYze/Wdzdbm1Nn6m2mVpwD+PgBK\nQBvsq3HgQlVC8pAoiwH1VVWG3FKSoF23VznCvAU=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_5_2",
+      "sequence": 11,
+      "contributor": "martin-ochoa",
+      "parent": {
+        "sha256": "1b7efa16ddb2b251e72c73496bd73affeb6ce7533c6dbc8737e6cf6c575fb615",
+        "size": 8022891
+      },
+      "output": {
+        "sha256": "f0fe224c55277c1e12efc6a430420c62d111ff3af5c5f89ba482eaae38bba4ea",
+        "size": 8022891
+      },
+      "accepted_at": "2026-10-29T17:05:06.777553007Z"
+    },
+    {
+      "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjfMwJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmfxzutexcA6lauixtb9cmh7FiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAIQoAQC4M/MNKswLtPmYz1Y2dIAmiY94Ub9sGdxr+PpCWpQw6wD/VoS+\nhh9cpRhsDTp2nS8O8cVS52CJjHszr6Eaqv+XcAY=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_5_4",
+      "sequence": 11,
+      "contributor": "martin-ochoa",
+      "parent": {
+        "sha256": "adb9b78a0b69f8fc6fcc81b80a2a43123842b9a12ef700e34481c0aa4fae048f",
+        "size": 8141995
+      },
+      "output": {
+        "sha256": "7924f38352281c598346fe24ee84e3ec0a56692bc9ee004cb85f76b2581faf77",
+        "size": 8141995
+      },
+      "accepted_at": "2026-10-29T17:05:16.386150551Z"
+    },
+    {
+      "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjfOMJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmf9o3cWqzsyMUurtEVDGE3DFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAGxsAQCXRyHmUwVFF4ccCXzGj30wEd5omv143qYKyq4hA14IwwD/W7T3\nWo3Y4+ZMQYAgUhMjm7djX14O5+sYYvcSHgmPpwg=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_5_8",
+      "sequence": 11,
+      "contributor": "martin-ochoa",
+      "parent": {
+        "sha256": "e8f7823e07e820534759af3eb2d627e0d2fcbe23dfda3d91b89a1c0bf09ebc67",
+        "size": 12614443
+      },
+      "output": {
+        "sha256": "691b3a346d1e9bc5d8ad1acdc7ab468a4278951e6140901e2931fc8d80eb152c",
+        "size": 12614443
+      },
+      "accepted_at": "2026-10-29T17:05:39.707243227Z"
+    },
+    {
+      "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjfPEJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmcoQ0ZFdEI6cgWbS3UnGck6FiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAEZ2AP4vXC+e2eTlR8vsUcZKmYsOeCHLcpAX9xTVx6UMWuERNwEAgC/I\nvI1IaNmtHz73lkvmtxt9YRD16Muzz0qNPsN88Qk=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_6_2",
+      "sequence": 11,
+      "contributor": "martin-ochoa",
+      "parent": {
+        "sha256": "673a7853247747ed80c88de5914b397b4a505f46bac48595a383e00a852874af",
+        "size": 12922187
+      },
+      "output": {
+        "sha256": "0d350dc8d4d5c2d34e077b95067ed88fe621172bfdde8b79170893afcd7fe021",
+        "size": 12922187
+      },
+      "accepted_at": "2026-10-29T17:05:53.73455708Z"
+    },
+    {
+      "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjfP8JEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmeFqb5ECCnFwqOL1fJoggRNFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAM6fAP9Rph3ptbfzoEGcSMdfsblGsZrdrE9n15EFAEKXN+qO7wD/XH1E\nPJC8LDgXvmJt4VhQghqiWofuytb9DfQT/IFpKwg=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_6_4",
+      "sequence": 11,
+      "contributor": "martin-ochoa",
+      "parent": {
+        "sha256": "c00932f4a86e423be478059c704d4855c085d6999d4452dc435196aa754610cc",
+        "size": 13041803
+      },
+      "output": {
+        "sha256": "bddecfe041b13ff0a4605ff1a43b91bf94bcc132ebc385e37c30e2ef05c966b2",
+        "size": 13041803
+      },
+      "accepted_at": "2026-10-29T17:06:07.773253761Z"
+    },
+    {
+      "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjfRoJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmcT3YD+OB4Zn+lxXBwes8D3FiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAF5tAP9PtPoTZKp8s4T/lqVtZCzL373Pgw4NRt6OFJUMFsj0TwD+KbuY\ntt0OHRephS8qW155holR+TOGRPmNryXdv/bvKg0=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_6_8",
+      "sequence": 11,
+      "contributor": "martin-ochoa",
+      "parent": {
+        "sha256": "7b58f3deabd4cf73de4dbb582b9b054d1cf6971d99504ee909614b57341c3d02",
+        "size": 13320971
+      },
+      "output": {
+        "sha256": "1b5d68206219dcf3cbf7b0627c5bef8ee27321822fca117fb701d27e5d2371db",
+        "size": 13320971
+      },
+      "accepted_at": "2026-10-29T17:06:34.522201007Z"
+    },
+    {
+      "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjfV8JEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmdRDbQFpoCMT1mWLz5Lfo20FiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAKhAAP9ZwFCc+wV0Qot0n5cw+Q+IkWN42bQN48oOknc4hlB8CwEAyqDw\nOUBhbVm72o8Pu93tWE5Q5o2NBm6syu+nGCpnvww=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_8_16",
+      "sequence": 11,
+      "contributor": "martin-ochoa",
+      "parent": {
+        "sha256": "b90196ab0cc0bf4cb07fa7c9dd7c9a41817f164deadbeb2b84eeeef3e1b7b12e",
+        "size": 15291851
+      },
+      "output": {
+        "sha256": "156aa698f521941b500f55d61fc13ee13e6aa2998c1bdcdb05b7a9a277d3f5a0",
+        "size": 15291851
+      },
+      "accepted_at": "2026-10-29T17:07:43.662134147Z"
+    },
+    {
+      "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjfTQJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmdew5JGlU9PGHEMBbWw30QoFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAALpuAQCd+1C7lveiPjf0uulLccWNO5r+Gl/OpSuAxn/e3vucHgD/bekC\nx86nW2B9c7zrWNqIMpyz5LbHZKSlHgHWRakaUgk=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_8_2",
+      "sequence": 11,
+      "contributor": "martin-ochoa",
+      "parent": {
+        "sha256": "c9a8fb6992434cab03a70a9f38f5a683504e979c35455b5828a4a2daa99d60ae",
+        "size": 14352139
+      },
+      "output": {
+        "sha256": "b52315c37d1dceac8ea925c8180106e1e314434ab41ec7537c33bab496d77247",
+        "size": 14352139
+      },
+      "accepted_at": "2026-10-29T17:07:00.073654514Z"
+    },
+    {
+      "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjfUIJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmdguLj/rVT3AURypbwtkd+sFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAOSrAP9PXu73rOfuXJc58XAYzIvNHKwPycLHtXZ4+/JWz3eToAEA1VpG\nHWU9ElIn9ZEcUK24c2H3ilRe2qPh3+7YM2WBkQY=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_8_4",
+      "sequence": 11,
+      "contributor": "martin-ochoa",
+      "parent": {
+        "sha256": "9e2acba6dc6add86c73917325150f9ba2e25fc26af3d6d1dd9942afcb1c3020a",
+        "size": 14472779
+      },
+      "output": {
+        "sha256": "32646bfea84157e8276bc52ee8ea349b559439ad679285f49f493817499ce775",
+        "size": 14472779
+      },
+      "accepted_at": "2026-10-29T17:07:14.05700709Z"
+    },
+    {
+      "invitation_id": "b104feb7464f26bc0737a9f75b9e8454ef538aa70647984853fa093ad526ebfb",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjfVAJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmeX8mx367SHqaJoyP/J2LtwFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAG3sAP44JvjdjzW15cnBXjDzAmlhwOo5FLY1yIN7l5Ok8tB/WQEA5Sqt\nDU8BH8m1GVvKy6EVdGsPgWzUFeHkMRsG6XSk7gA=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_8_8",
+      "sequence": 11,
+      "contributor": "martin-ochoa",
+      "parent": {
+        "sha256": "2c77c91b7cd9bbccabd805db73e6f5ff7fe022af75e5f209cebba6223602931c",
+        "size": 14753995
+      },
+      "output": {
+        "sha256": "7ba24397ec8a13ee941a7eae67a50adcc4215c9c2efc75631065f93f00a7e3f0",
+        "size": 14753995
+      },
+      "accepted_at": "2026-10-29T17:07:28.946364034Z"
+    }
+  ]
+}
