@@ -1,0 +1,36 @@
+{
+  "checked_at": "2026-10-29T17:53:09.976422+00:00",
+  "release": "https://github.com/helius-labs/spr-ceremony/releases/tag/v0.1.0-rc.16",
+  "source_revision": "55b4d80b8aa6478d41a2c5549b584a61b3f9aaf5",
+  "check_workflow": 40924161957,
+  "release_workflow": 40924623691,
+  "release_result": "success on all four native platforms",
+  "downloaded_installer_provenance_verified": true,
+  "downloaded_linux_binary_provenance_verified": true,
+  "downloaded_binary_version_verified": true,
+  "sha256": {
+    "build.json": "6e5ebf46f08da71142c245621c1b449492feece791bac68c18e6427850ef776d",
+    "join.sh": "f95766a74093f1ea42a9e62da7641b215233b80a62bc65199b55d177e4fd26ff",
+    "spr-ceremony-darwin-amd64": "bc012e5fc1615ddc92ecd237995438a6e8193300e89a14b7409c562e0e26dde4",
+    "spr-ceremony-darwin-arm64": "7c06e400efff60c871837d98016963a5a52d620651908d02587654d734c2f10c",
+    "spr-ceremony-linux-amd64": "9f7cd77c1347561aee486f8479fac857fb5e5f1e135a0090eb1348a29b31bf15",
+    "spr-ceremony-linux-arm64": "3f1b17f6df4bea9a485bcfe7ec73f9359304dc3e28074d59b74ffc7e3c2a86a2",
+    "browser-55b4d80b8aa6478d41a2c5549b584a61b3f9aaf5.tar.gz": "c7feb0caa2221a0fcc9c69734a9156ec59fe7571918e2c808fb05236aea2acb6"
+  },
+  "browser_checks": {
+    "passed": [
+      "chromium: HTTPS CLI-only page, private clipboard handoff, no browser engine/storage/auth requests, native contribution and idempotent rerun, signed records, mobile layout",
+      "chromium: unlinked record button, link-only command, expired OAuth recovery, private-token isolation and clipboard fallback",
+      "chromium: optional GitHub link, fragment removal, account preview, explicit consent and public account proof (mock OAuth provider)",
+      "webkit: HTTPS CLI-only page, private clipboard handoff, no browser engine/storage/auth requests, native contribution and idempotent rerun, signed records, mobile layout",
+      "webkit: unlinked record button, link-only command, expired OAuth recovery, private-token isolation and clipboard fallback",
+      "webkit: optional GitHub link, fragment removal, account preview, explicit consent and public account proof (mock OAuth provider)"
+    ]
+  },
+  "python_tests_passed": 24,
+  "deployed": false,
+  "limits": [
+    "AWS deployment requires an agreed maintenance window; the public site remains on rc.15.",
+    "Browser OAuth checks use a simulated provider. Existing server-side OAuth and invitation authorization are unchanged."
+  ]
+}
