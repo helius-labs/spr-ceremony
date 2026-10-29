@@ -1,0 +1,18 @@
+{
+  "format": "spr-github-identity-v1",
+  "manifest": {
+    "sha256": "4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079",
+    "size": 31586
+  },
+  "coordinator_key": {
+    "sha256": "85a9444e4673ecee6d2fb7c549058caec4941767389549ff122b05d83334db0e",
+    "size": 477
+  },
+  "invitation_id": "8d2da9912281e63b0b26c6411382f8dec4d7fbe29056c2962c641f81c04608cb",
+  "contributor": "santipu-alt",
+  "receipts_sha256": "88a0c8c7f4159fe7d214a40f1cd9316f8346327822240fa6cfe9e3936735c333",
+  "github_id": 285623979,
+  "github_login": "santipu-alt",
+  "linked_at": "2026-10-29T10:20:06.2972783Z",
+  "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjHdYJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmcfVaHG4TbcyRoVaQNRvrf3FiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAHPbAP9kBY93/uDH0JJP24vv26vjkZHupB64bOojH7dQ97t+NQD9ECkA\n4qoiW3v5QEXFuKs2MTdZMvoZ+/0nIhRiuTUXIQk=\n-----END PGP SIGNATURE-----"
+}
