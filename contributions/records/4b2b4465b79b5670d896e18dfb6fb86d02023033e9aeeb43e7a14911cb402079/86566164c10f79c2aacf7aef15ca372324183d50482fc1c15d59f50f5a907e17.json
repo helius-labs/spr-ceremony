@@ -1,0 +1,678 @@
+{
+  "format": "spr-contribution-record-v1",
+  "status": "accepted",
+  "manifest": {
+    "sha256": "4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079",
+    "size": 31586
+  },
+  "checkpoint": {
+    "sha256": "f4d7f07132cb4ef85f5ef16b3859bced62d44c62db7d8df294a3b92fc24a723d",
+    "size": 7065
+  },
+  "coordinator_key": {
+    "sha256": "85a9444e4673ecee6d2fb7c549058caec4941767389549ff122b05d83334db0e",
+    "size": 477
+  },
+  "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+  "contributor": "blocksonachain",
+  "track": "core",
+  "total": 41,
+  "receipts": [
+    {
+      "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjcmwJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmf79CAUPNOUnO/2Z1HlfJ0SFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAACcYAP9KLc6e4mM3+8x47vqDXVnAySCbHEBKokTQ2E8stjuixAEA387p\nTgNG8OnyFrrT5ibN/ReCyZhm4JPgZmsUEypUNAk=\n-----END PGP SIGNATURE-----",
+      "circuit": "merge_24_1",
+      "sequence": 10,
+      "contributor": "blocksonachain",
+      "parent": {
+        "sha256": "3e0fc71d56898082f10a70d771d8e6c787def41f2e034c4f1dff810a0dc2e5f4",
+        "size": 50125003
+      },
+      "output": {
+        "sha256": "97c2714b9b47232918cf484d7dc5f77470b5afe2b6a066867a08a4d9ed6aff39",
+        "size": 50125003
+      },
+      "accepted_at": "2026-10-29T16:21:00.389967845Z"
+    },
+    {
+      "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjctYJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmesr2nZHrufudVAZFr6IAqNFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAJtjAP0TOe4q898NmKBjdcVv7Y3eVgMdlLHxfSMK4aDXrSHHZQEAsujz\nf1Z1gLgJQjtPC71oibpKQ3eobvp3cGqbcVeDrws=\n-----END PGP SIGNATURE-----",
+      "circuit": "merge_52_1",
+      "sequence": 10,
+      "contributor": "blocksonachain",
+      "parent": {
+        "sha256": "4c639512c3b3888c190b3825ea366af14e4c32ad57051255aa99d746a78a2490",
+        "size": 102801483
+      },
+      "output": {
+        "sha256": "dfeb0fc65b3e871520af42427c65108e22005f95ce1b766e8ed600e0f5a5dfa9",
+        "size": 102801483
+      },
+      "accepted_at": "2026-10-29T16:22:46.651002173Z"
+    },
+    {
+      "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjcjgJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmfyUY0GyBauxYR1qxU6jsI/FiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAADqMAQDLzcrmdKMED68hCxrq0BbN1/gIpMmZWmme/pObn8cFogEAzNhQ\nW0V4EMv7+AgrjNfJsbosDBTs8Z4NIZ+XYflnHwM=\n-----END PGP SIGNATURE-----",
+      "circuit": "merge_8_1",
+      "sequence": 10,
+      "contributor": "blocksonachain",
+      "parent": {
+        "sha256": "06515ef28c9adea130ac3cb44c3afca2ec0bb850705de607d628f326e6e59f50",
+        "size": 14056139
+      },
+      "output": {
+        "sha256": "dee38d9b71b6743bd4d392e846f984b611d8520f9f819ce9590c200bf2f1407f",
+        "size": 14056139
+      },
+      "accepted_at": "2026-10-29T16:20:08.203940569Z"
+    },
+    {
+      "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrjb8AJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmf8RSRMUMoMYB4cPmIg8znPFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAE9eAQC6Zmq/yP5kZmrdEHcKMUKAwb7vhxpXIzbdrpzJWVM0YQD/Uome\nz6pZPh3R0oEfB0nSAOwXAfZhsNdKnBXnyi+RSQg=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_12_2",
+      "sequence": 10,
+      "contributor": "blocksonachain",
+      "parent": {
+        "sha256": "d79b0418727f0d4b8ee68708a2484e47d36655fb73400bfcf94524fb5bb9e7bf",
+        "size": 25588363
+      },
+      "output": {
+        "sha256": "8aeab31c5c4421af15aa4859dc9a8d4c978ff6cb01ec5f50a71a277ac33e06be",
+        "size": 25588363
+      },
+      "accepted_at": "2026-10-29T16:09:36.113649256Z"
+    },
+    {
+      "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrjb9cJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmf18ufmr6CFGPazv3UoXKL1FiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAM4aAQDlyhkTf3p+T1OTPlJ9ZcQR6UY2ii7MEMXp2zoc6EDW3QEAoP/J\nD5seq9zr3Pjh/R4iX3Mlu6S8pezv2TCTcQEU5AY=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_12_4",
+      "sequence": 10,
+      "contributor": "blocksonachain",
+      "parent": {
+        "sha256": "4731194045fce457412b4466b13360e37b94adbd8d850bdead27ee5eca43efaa",
+        "size": 25711051
+      },
+      "output": {
+        "sha256": "9455753a788b3ca3e6696c5e884f58dd758a850b2266560a94200dc1168073d4",
+        "size": 25711051
+      },
+      "accepted_at": "2026-10-29T16:09:59.178346703Z"
+    },
+    {
+      "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrjb/QJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmcj9+5oK+lIgOj/bl4Y60ZIFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAL4XAQCnaxjSn8LF9KsbRB5bd+yuBpDGeaIBI6oLVkkRa8CIQwD/eEwL\nlYjIcOWhv44tk9kspH6Df/gHPqphJwnFNZRbdQg=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_12_8",
+      "sequence": 10,
+      "contributor": "blocksonachain",
+      "parent": {
+        "sha256": "5000bbbff49c86c572383768326c0a443d17e007677c74a2a761ea8bae62d6dc",
+        "size": 25996363
+      },
+      "output": {
+        "sha256": "354dc9d1e88f3afa44512b33f61dd24b800175b74baa0adaba3dd15788aba5f7",
+        "size": 25996363
+      },
+      "accepted_at": "2026-10-29T16:10:28.685911552Z"
+    },
+    {
+      "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjcBYJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcme2ab0FubrF7e/lRuOraGlVFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAG/mAQD5Yz52nYF9zEtaVR2pzfNNYdBLAt8+0U31vCgAkKj/tgD/WoB1\nculZAc8e4/w07t3EHzm/qI5Ly4JSJaLCu7bsTg4=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_16_2",
+      "sequence": 10,
+      "contributor": "blocksonachain",
+      "parent": {
+        "sha256": "ddc2f8a73be665797877c4b21ba117b17ff698f2171727500355aaa392eb957e",
+        "size": 28444171
+      },
+      "output": {
+        "sha256": "45a0ef3aed7ee9aa2d3ef7b9b2823377b0a89160a93c708c20b44e9be77f10d1",
+        "size": 28444171
+      },
+      "accepted_at": "2026-10-29T16:11:02.882476565Z"
+    },
+    {
+      "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjcDYJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmeK4KAC462U9Mmb+qDIV321FiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAEmHAP4rJT6sE3zo1fq5BQK+mUYPgscmdltF7/ztiakc4nS4xAD9GIQz\nQaEQY0tUhxXqOs8V3WubkWRDgk1UoJYGPZoJ1Q8=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_16_4",
+      "sequence": 10,
+      "contributor": "blocksonachain",
+      "parent": {
+        "sha256": "4e34ce9ef550f98885a135ad4f322b14369c55b45b527179a943fcba72e9b211",
+        "size": 28568907
+      },
+      "output": {
+        "sha256": "eb5667c140d3315a3b42e1f586560777d36452f49b65fc801a1022f8cd090afd",
+        "size": 28568907
+      },
+      "accepted_at": "2026-10-29T16:11:34.408399192Z"
+    },
+    {
+      "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjcFYJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmd8isn93UAlt3nUkbtggKslFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAABIVAP4mZ47wMaZwKrfIpwY+y48DCwb6DghAL27pv48V7GPQNAD5AbM9\noZ1HG+uj6Y7EoN3cBAhmZOVFOSPghkRrM0ZfcAY=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_16_8",
+      "sequence": 10,
+      "contributor": "blocksonachain",
+      "parent": {
+        "sha256": "886f8425acc7f1b0ef8c94cf6623d37962fb1bfbfc4b5e9073b5ae268a7dadaf",
+        "size": 28858315
+      },
+      "output": {
+        "sha256": "4cf7debae2905abfcbd08fbecd5da61c91977fec9fbc909bc7fcd900a098d806",
+        "size": 28858315
+      },
+      "accepted_at": "2026-10-29T16:12:06.320665709Z"
+    },
+    {
+      "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjbqoJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcme84TIA3I+M1Gui12zpJHDcFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAN2+AQCusdOGawpEaAfPplnyymm5UjFLi4+9I89Oj5Sk0X0MGAEA5Uib\nnYxq98ZV0SaAjoy7bSgbRDBasDho7uSlT3EeMAk=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_1_16",
+      "sequence": 10,
+      "contributor": "blocksonachain",
+      "parent": {
+        "sha256": "b4aa93fe2e1b99b2d5e92e38e467f70af1e49bbea1a85017835b143845bd49c0",
+        "size": 3988651
+      },
+      "output": {
+        "sha256": "7a263181065680c3c7a2fed7f81c05a89a2615e0d4eb3d5c338c240250e361cb",
+        "size": 3988651
+      },
+      "accepted_at": "2026-10-29T16:04:58.682716225Z"
+    },
+    {
+      "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrjbo0JEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmfl/bZRlCuVqFinMVbCkoz4FiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAAfFAP9M2gy2hwzIOflR4SEpbLrIYOZB4gsta5JCZS+PcpzA+wD/UvvQ\nq5fbwaPgSMhiDpRMpbnv4BVXaTslFZaYcSD1HAM=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_1_2",
+      "sequence": 10,
+      "contributor": "blocksonachain",
+      "parent": {
+        "sha256": "325e7d0dd28d9ca0ea9d2fea70884cc758c9e64962776e5d11fd9306d1681d35",
+        "size": 2025451
+      },
+      "output": {
+        "sha256": "c5babfb6445a8c2fcb5f8cac9a5eba72c93f51d62d927e7ba207a7b6a733f3cd",
+        "size": 2025451
+      },
+      "accepted_at": "2026-10-29T16:04:29.661651812Z"
+    },
+    {
+      "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjbpIJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmdkWjAPpkzoiBJoZkC60seTFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAODTAP0cbiciTDlhpH7jzKNtrMRVYBEOci0cGfYebf1dGrSpZgEAqPJA\nV/KXKASVo5UojaFGam+76hN2T3xUTYvP0ekQ6w8=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_1_4",
+      "sequence": 10,
+      "contributor": "blocksonachain",
+      "parent": {
+        "sha256": "2d949e6ff261efb2139a6374679e906332f0fadc15dc37367718263627330116",
+        "size": 3191083
+      },
+      "output": {
+        "sha256": "e7bae442f0f3d77daf565c2ce06b2f0f2dd60483f9d9f16d1f5d2514ba12b1fd",
+        "size": 3191083
+      },
+      "accepted_at": "2026-10-29T16:04:34.840831045Z"
+    },
+    {
+      "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjbpgJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmdTCJYyDinRGqI/WNPJYmMHFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAALhgAQD0w6WrrCKi9ZE51S0w6858EbMFxPZvmbeDYwL1AkLUfAD/bZjN\n2lTesyMa3iRCpB5p1L8fqp4iBZME4xXmsDlVIQc=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_1_8",
+      "sequence": 10,
+      "contributor": "blocksonachain",
+      "parent": {
+        "sha256": "25ee57863eb8601606325bd508a88f34a454687c852d5041ae363ee84b16d012",
+        "size": 3465131
+      },
+      "output": {
+        "sha256": "43e5f17f42499caa6b50836e417c5295ad1cb1c9258218b631bf6aa4e30b99a1",
+        "size": 3465131
+      },
+      "accepted_at": "2026-10-29T16:04:40.419740306Z"
+    },
+    {
+      "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjcIwJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmcmoIt1TF373fli8FuosSSZFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAFf+AQCg76RuaBro4u0y6NF6ckTgAK+7nqJNUlem4Mt35zxQ2QEA0z9z\nKqDcGfUmMENtmmwRXXrvQ7dA/7LHylinXXComQw=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_24_2",
+      "sequence": 10,
+      "contributor": "blocksonachain",
+      "parent": {
+        "sha256": "e3001d77fd546a9dbccdea81a604811598802039c3c6974fb4ba0f3d7fd6ba76",
+        "size": 50976011
+      },
+      "output": {
+        "sha256": "b0cdb31d9306096d86cb353f86657900d8baf4c75e2d0f3d5907c7f2ce391f0f",
+        "size": 50976011
+      },
+      "accepted_at": "2026-10-29T16:13:00.057906117Z"
+    },
+    {
+      "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjcMMJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmem3B/Kt8zka69bsNmvGcOuFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAPpOAP49nAveA2seoOwpaLqg/sVCasbI52ssPdM4CBGsN0Q1YAEA3yCN\netwacvqiHrkyOS1SA27+qpmsr7BBTsxJdMWzFAw=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_24_4",
+      "sequence": 10,
+      "contributor": "blocksonachain",
+      "parent": {
+        "sha256": "7837f3abe37fa9aec1ae7e212f52b6a29f3b733d5261920e4e289416e2cd7e03",
+        "size": 51104843
+      },
+      "output": {
+        "sha256": "b612d1dc39b0b994c0f12fc7f7a3d3a1c71b3ae5f1af4af43d471b58ee8b8238",
+        "size": 51104843
+      },
+      "accepted_at": "2026-10-29T16:13:55.261007153Z"
+    },
+    {
+      "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrjbs8JEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmeMljj9DNCczPrtGsYlWoMbFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAOoBAQDnCKIzHzblYRPKt1LLIy3O4E1TiyJzphZl1m9Ixj9TAQD9GIh4\nug9dVbYpEDdwXa+QeO8iKn2VE9TLxBXVvLHV6gY=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_2_16",
+      "sequence": 10,
+      "contributor": "blocksonachain",
+      "parent": {
+        "sha256": "01d086e7600826e006855ece5e14bb1ab758b3ce079cc37f4aec43ae80f23a5e",
+        "size": 6810763
+      },
+      "output": {
+        "sha256": "d3de00e4312689680bc4b515d0317e49f67a6c967fc896ab8356d3c81db5c8f6",
+        "size": 6810763
+      },
+      "accepted_at": "2026-10-29T16:05:35.654649336Z"
+    },
+    {
+      "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrjbp4JEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmf5WD/VxlmuuHij7i+xL4SbFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAKe7AQDLgjG1G7IPd4K/gd0Av+s/P2xrnDpB2mmRMFr4WeRQBAEA3I7Q\nUWWWsPJjCW7jU8W12Im8lTPSNcSFsFIHwTjnhA8=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_2_2",
+      "sequence": 10,
+      "contributor": "blocksonachain",
+      "parent": {
+        "sha256": "3c10f1ffa8164191fbad14e4a165fac2527d4e00c496e859e500e001926e3b10",
+        "size": 3795403
+      },
+      "output": {
+        "sha256": "4a311d3d1e2c175a7bf5d28f46ae9b474aa1ebe44637618cb091357147c10f0d",
+        "size": 3795403
+      },
+      "accepted_at": "2026-10-29T16:04:46.346370577Z"
+    },
+    {
+      "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjbqQJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmdSu+HlI469TLttgAXdTjt0FiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAIztAP4+Xf0R7vvAGFpMgPU/OOe2RAHpXQ83pg5B0iwgDD87HAEAhhcr\nLqJwZTapvBW++qD8kLJ4FbEa6pr7g+c957ZGqQ0=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_2_4",
+      "sequence": 10,
+      "contributor": "blocksonachain",
+      "parent": {
+        "sha256": "0bbee95a6b70cbd043691c73219e562a70136c464ee05cd94a3729dee6152221",
+        "size": 3912971
+      },
+      "output": {
+        "sha256": "8835697267ad7248f0470a4aa108b85f4a1f797649cccfc2d41fd8a75b5d20f0",
+        "size": 3912971
+      },
+      "accepted_at": "2026-10-29T16:04:52.411003251Z"
+    },
+    {
+      "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjbrMJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmc6mAO0W3zv0JVJJ20U2yaZFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAKKfAP4mUsl4aSoiuxVtRbsdv7KweLzBQqB95Bcq8/TyjC805QD9F2ym\ndehYNlb54EN/M6tgX3WXl+FTdRXKTOEw1orSxAA=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_2_8",
+      "sequence": 10,
+      "contributor": "blocksonachain",
+      "parent": {
+        "sha256": "feec2b3ae7dabaa1d3976443f2f186d58e908116134808e89130a0624df01cf9",
+        "size": 6285195
+      },
+      "output": {
+        "sha256": "9cc913172981f2c94e1b2967ba37aca222c72adbfbb4f3e1a3b7bd0caec3e2bf",
+        "size": 6285195
+      },
+      "accepted_at": "2026-10-29T16:05:07.778388455Z"
+    },
+    {
+      "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjcQgJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmeQZ6lZtigEJZUQ/9wkeK0cFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAMypAQCPuB/8P/I2Z5ayUQcCQH6Y76mWYFcrSMeBbJ1VQ06o0wEA3ar3\nX/rPvcGRPtnMiHbbZxIimcorgiwpIHVfEX+a4wk=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_32_2",
+      "sequence": 10,
+      "contributor": "blocksonachain",
+      "parent": {
+        "sha256": "4562470f0c41b4bbe8832d854f255fa3d5363ae8be211349a01c5ab7280efefd",
+        "size": 56727947
+      },
+      "output": {
+        "sha256": "a3955ba868a0a9b301f3ceb4a72b54f106a5f4f793990edf33a1f09faaab2805",
+        "size": 56727947
+      },
+      "accepted_at": "2026-10-29T16:15:04.421751846Z"
+    },
+    {
+      "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjbrwJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmfeA6kWC9jiceJME5nTAjv0FiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAAuIAQDjHVK2AHHUV3be0ajP1g6APpiGNayzKxnT1rQ8lexwbgEAqJ04\n6OhAQMdsMX3p2eNezqlaH9nmGA3c5g8STE4fZgk=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_3_2",
+      "sequence": 10,
+      "contributor": "blocksonachain",
+      "parent": {
+        "sha256": "6e8db0a3c0166b50bf58104976e3e11a5d96cd4a70b2b4652223f5c6c36dbd22",
+        "size": 6596011
+      },
+      "output": {
+        "sha256": "0399596cf95bef81e46655f2d4e02b5f5139ea27663dcfbd45e9f5953308d297",
+        "size": 6596011
+      },
+      "accepted_at": "2026-10-29T16:05:16.87802983Z"
+    },
+    {
+      "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjbsYJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmf1rDJPYW+bqXSOUJqjczPYFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAJmXAQCTDrxVjDOfvyY8hQDwypEIkh0w9dA6Y3TC0/Tl8vGB8gD/Sqpy\n1J0fUfOCx1yWyFKadSksoSGWuoSfp0Tz35yM9g0=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_3_4",
+      "sequence": 10,
+      "contributor": "blocksonachain",
+      "parent": {
+        "sha256": "d3c315977014f05936c9d9efc30ee94ff044e6ad38573374481dee83aec868c7",
+        "size": 6714091
+      },
+      "output": {
+        "sha256": "7269a01216072323953c0359f28fa7816c693669bfefedc11ccc485cf684d40c",
+        "size": 6714091
+      },
+      "accepted_at": "2026-10-29T16:05:26.512906615Z"
+    },
+    {
+      "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjbtYJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmcQesHVkQAdoNEH0/944HP8FiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAOyTAQCC8YIF6t7ub9sCSklt9/w6Em+I1Tr4biMc1fsnBOkNrAD/VJ7J\nTP7LJt1ufidKJtVjOmL5f8MNR+ZVelgv81sUfg4=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_3_8",
+      "sequence": 10,
+      "contributor": "blocksonachain",
+      "parent": {
+        "sha256": "e3e20bf6e56981d2b59e7f2cbd47d75a7a909687f9dc471fc309a4f9a48dbab7",
+        "size": 6990187
+      },
+      "output": {
+        "sha256": "fa8a245551e99ca71a6ffbb762ebc56718fc7ff6c8df7db8df9bf44dd598067d",
+        "size": 6990187
+      },
+      "accepted_at": "2026-10-29T16:05:42.027002191Z"
+    },
+    {
+      "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjcU8JEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmdTL24XGXq2V+ejEVVFS7lSFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAKl+AP0Sc7em11WrPyp6T3hRXmUJ7ClkwqTpFtpCXboajiI+wgD+J3Pp\nVtnHXnuZvyVDeK0YHp6RjK1sz23Bm35QkHd8Ugo=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_40_2",
+      "sequence": 10,
+      "contributor": "blocksonachain",
+      "parent": {
+        "sha256": "0ad03e9dda0dbfceca8b3607012524fc9f80e456de79b93b4ed6caa6418fa0fa",
+        "size": 62382731
+      },
+      "output": {
+        "sha256": "b47962502e3ba9a06fb13998aa8958920042bd86970a52f4754c9082e25c75ff",
+        "size": 62382731
+      },
+      "accepted_at": "2026-10-29T16:16:15.528492826Z"
+    },
+    {
+      "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjcbwJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmdV8m1HuwellyTqTPeaysAHFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAASUAP9llk8MFZTV99owEhdx49J/pQL4uE+zSbCjQGRkNUMZKAD+MrCE\n1YwMnacNNGDpYGjUV54436XtE9wHiJaeZk6gBQw=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_48_2",
+      "sequence": 10,
+      "contributor": "blocksonachain",
+      "parent": {
+        "sha256": "df90f1d80fb36721c5fb32458e2fb99e85e4ec766af43582fc6f9761c2e80507",
+        "size": 101634955
+      },
+      "output": {
+        "sha256": "3b53f19d11d5933a4e60956bd9226b9f91026417eefab81af74630dc96ee072b",
+        "size": 101634955
+      },
+      "accepted_at": "2026-10-29T16:18:04.018162416Z"
+    },
+    {
+      "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjciYJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmf8mXh3KK4MQBEDfhJCiZ85FiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAG0pAP4gM12+4CAxNomhtxTPF54S5gaZo/oon5fsRh7CYlBOoQEAoSbQ\nek4T75EyW2m7sa0yGX08Pobow0JWkjxP8osU4Qs=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_49_2",
+      "sequence": 10,
+      "contributor": "blocksonachain",
+      "parent": {
+        "sha256": "3315fd6d4cacf12c8da5e9f3429a7eaf548a5fb2d9872935f3770af79a372c4e",
+        "size": 102341995
+      },
+      "output": {
+        "sha256": "62771431064ec4a39ca7f67e3b4a2103ccd2b1ef6f276ee462898bb074a31441",
+        "size": 102341995
+      },
+      "accepted_at": "2026-10-29T16:19:50.001855232Z"
+    },
+    {
+      "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjbxUJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcme/tk/mE2QR14DBrpx8AsZfFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAB9qAP9pjrS8yix5k6I0bTiNxUM0JAPsV6JtLx/wwFVDWlfDjgEA6tLT\nOJ+NbHazV6MXh0udRMQNhjieWSgZPUNbdSuc/Q4=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_4_16",
+      "sequence": 10,
+      "contributor": "blocksonachain",
+      "parent": {
+        "sha256": "cc44361026ab5fcd607b3bce0a1a75aa49d49318d29d3335d857adfbd44efa02",
+        "size": 8225355
+      },
+      "output": {
+        "sha256": "43a5fb8864c673c111852e5bc09416c0eb8698920935e0db4f4f25a1f9bfc964",
+        "size": 8225355
+      },
+      "accepted_at": "2026-10-29T16:06:45.14440752Z"
+    },
+    {
+      "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrjbt8JEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmdk7ZaBn0MzIqv9plctmwHbFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAADp1AP9j7w33yb7TaYaYuZkq27AcnAzUKa6dq+mPDou7wKA4bwD/cs8D\nB1u3b6GchK9IkyjHUw1FqEQVvTCRyipNKEz9Jww=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_4_2",
+      "sequence": 10,
+      "contributor": "blocksonachain",
+      "parent": {
+        "sha256": "ac6801c8ba59c7c08ad71ca3f9726a1ebc56004b160902e8c94b7d8ebf1a1cd0",
+        "size": 7299979
+      },
+      "output": {
+        "sha256": "f21ee61b6d7f25fe2f8aab31985d4d4abef2622e037915b776a4fb0796c004e9",
+        "size": 7299979
+      },
+      "accepted_at": "2026-10-29T16:05:51.323140947Z"
+    },
+    {
+      "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjbukJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmcxUQS8r/su+xja2HSoRJ6RFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAF3/AQCE/DT7YsxpCO0mLTSdVSmLcYQXPo9zRyju727fAOf8ygD+JMFQ\nNya95h2T3qrmoHacvlOq+AcUP+j9J7k9UwgS1AQ=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_4_4",
+      "sequence": 10,
+      "contributor": "blocksonachain",
+      "parent": {
+        "sha256": "2190cc30d0ae082eaf66d4b151f23febe839a9728600d7e605f46602dd8b61b5",
+        "size": 7418571
+      },
+      "output": {
+        "sha256": "19bb4aea78f158d600dfcd46f2f16b046bdfa6209f895c0a7b539e2e8784c430",
+        "size": 7418571
+      },
+      "accepted_at": "2026-10-29T16:06:01.206646369Z"
+    },
+    {
+      "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjbvMJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmeoE10nJnk24s1vUmUU8N7XFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAGvvAQCvIc3MB9Wa4QqgpMeMiavlA9G2/n1gdXh9fIM8OtrB0gD+LpxT\noXgoM3jQslE4H7t+/4+E/51SmNodL6CFotHf7wo=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_4_8",
+      "sequence": 10,
+      "contributor": "blocksonachain",
+      "parent": {
+        "sha256": "bb35762e12662dabbe93b53063b9e7dc7d12eac13cab9394b09cedce8a5eb958",
+        "size": 7695691
+      },
+      "output": {
+        "sha256": "5030621b91a45e11f5d015f8fb4143070c5ae643738a3403c2b417993eee2896",
+        "size": 7695691
+      },
+      "accepted_at": "2026-10-29T16:06:11.392171234Z"
+    },
+    {
+      "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrjb1MJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmchG8wSjAjEzxNNF/jKuwEvFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAK5UAP0Xq5BWLjW3mWMd33u/vKb/5szh9686Dxms5uWIIgsCewD/QTpi\nF8MEzx3KLBdpFRaZcLxS6IJ8DqZXK1VQgzjPRAo=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_5_16",
+      "sequence": 10,
+      "contributor": "blocksonachain",
+      "parent": {
+        "sha256": "15a8c823da803fee67b4413a376fbee38aaf10dc7717858929002a14f51e0e92",
+        "size": 13146155
+      },
+      "output": {
+        "sha256": "435b084b3f9a52fdc860bb844423eb7a24c1bde16f0cfce35519c5b437bccc60",
+        "size": 13146155
+      },
+      "accepted_at": "2026-10-29T16:07:47.021143702Z"
+    },
+    {
+      "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrjbv4JEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmd1Or9lQ73k0XwDtDJF+0XrFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAKkMAQDxl5kkqwOnpwtjft1+8E5XQSPDNjrpDdNBLcqorCcJPAD/T4Ax\n42cUZ51KgE6iQKYi6WwWcnbgWUoGzFNi7uCiPQI=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_5_2",
+      "sequence": 10,
+      "contributor": "blocksonachain",
+      "parent": {
+        "sha256": "ac0a5b3561c655d056a37385752935b89af39d531208e838d38a9d8630eee0b7",
+        "size": 8022891
+      },
+      "output": {
+        "sha256": "1b7efa16ddb2b251e72c73496bd73affeb6ce7533c6dbc8737e6cf6c575fb615",
+        "size": 8022891
+      },
+      "accepted_at": "2026-10-29T16:06:22.739795292Z"
+    },
+    {
+      "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjbwoJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmfidAln5ARETbZhtH4BerDHFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAKMBAP4iss+4GmP9yYL4toVTct9H7PhCo4qrHVAVhGdiHRLuiwEA+rxK\nbyvBOuPetW4/iH11WDktZNzf2tIlPqVXVMUh3QE=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_5_4",
+      "sequence": 10,
+      "contributor": "blocksonachain",
+      "parent": {
+        "sha256": "9575ce05df216d404b0255bad022c59378a14a037c561420379188dff7195fa0",
+        "size": 8141995
+      },
+      "output": {
+        "sha256": "adb9b78a0b69f8fc6fcc81b80a2a43123842b9a12ef700e34481c0aa4fae048f",
+        "size": 8141995
+      },
+      "accepted_at": "2026-10-29T16:06:34.479758652Z"
+    },
+    {
+      "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjbyQJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmeSknvue9nFyh6NBQnyyeW6FiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAANOlAQCFjlnUdtzqFVKQsDMTGI06cu6GOzWRYFBJMop8LRJx0gEA2/oN\neKBlIlvebSzY1V1G31aCauk4Izc8z5o8ejq5/wM=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_5_8",
+      "sequence": 10,
+      "contributor": "blocksonachain",
+      "parent": {
+        "sha256": "e49297be5445bebe3f45d9336751001ba2956e3d2445f0d5bc314f4ecea3aaaf",
+        "size": 12614443
+      },
+      "output": {
+        "sha256": "e8f7823e07e820534759af3eb2d627e0d2fcbe23dfda3d91b89a1c0bf09ebc67",
+        "size": 12614443
+      },
+      "accepted_at": "2026-10-29T16:07:00.659825507Z"
+    },
+    {
+      "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjbzMJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmeosMzCStQiTLcCS2gTt6NXFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAKXcAQD2yThmxuBZkSmIhMXXbkCbWgRkp4uNigCKswzcTksiRgEA4GMZ\naaSQ5XgL9aBSPvNc14AMENW32xymPUxV7buapgQ=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_6_2",
+      "sequence": 10,
+      "contributor": "blocksonachain",
+      "parent": {
+        "sha256": "39ce543216b9516e93d08b3075a388f8232b4903fded92470e98ff1a6342d35f",
+        "size": 12922187
+      },
+      "output": {
+        "sha256": "673a7853247747ed80c88de5914b397b4a505f46bac48595a383e00a852874af",
+        "size": 12922187
+      },
+      "accepted_at": "2026-10-29T16:07:15.89223668Z"
+    },
+    {
+      "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrjb0MJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmeRIwTZzASpYvURDuy2QImSFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAKbBAPwMKOzRKm4T/SFSgxNT3F3IplkUoWTNXBIOsxQzPyMXCgEA2mH8\nOmOUAO3fqbQJV2VHegCEb2kqcnNVD75zlY/pQwI=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_6_4",
+      "sequence": 10,
+      "contributor": "blocksonachain",
+      "parent": {
+        "sha256": "ef1bfd12fffc09ec7f7bc79e013c94b9bf91dfd851a8220a8c171bcce6eb33ff",
+        "size": 13041803
+      },
+      "output": {
+        "sha256": "c00932f4a86e423be478059c704d4855c085d6999d4452dc435196aa754610cc",
+        "size": 13041803
+      },
+      "accepted_at": "2026-10-29T16:07:31.55229154Z"
+    },
+    {
+      "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrjb2IJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmeYoYYhJpjDjmUe/R7udx19FiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAHSrAPoDcA/bTYD128+VwredRIBQgmdcQLt9tqLf8t/Q68zSngEArhjl\nrOwwD2n512KHpqAY4tqDoCNokRSi9pzRD5pU8Qo=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_6_8",
+      "sequence": 10,
+      "contributor": "blocksonachain",
+      "parent": {
+        "sha256": "a3763bb4e3fe54ecb99bebf032dc661d1e36bb86223815ddea674096f417ac08",
+        "size": 13320971
+      },
+      "output": {
+        "sha256": "7b58f3deabd4cf73de4dbb582b9b054d1cf6971d99504ee909614b57341c3d02",
+        "size": 13320971
+      },
+      "accepted_at": "2026-10-29T16:08:02.862202486Z"
+    },
+    {
+      "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrjb6QJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmegerseKDmecfsERPhCBBXxFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAOwrAQCx89MkFbM5n6MmCjI/r2DFaFED8N6fAjzIc4kpQ/UoewEA6ltr\n6EWPZhS7l5/Fzf/b4NOHjFUd+dQmao3NpOjviA4=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_8_16",
+      "sequence": 10,
+      "contributor": "blocksonachain",
+      "parent": {
+        "sha256": "1aff08360181615a8a3e8b323f807544c9980ed5a8db0125fa61d3e5ba2d9de5",
+        "size": 15291851
+      },
+      "output": {
+        "sha256": "b90196ab0cc0bf4cb07fa7c9dd7c9a41817f164deadbeb2b84eeeef3e1b7b12e",
+        "size": 15291851
+      },
+      "accepted_at": "2026-10-29T16:09:08.326363273Z"
+    },
+    {
+      "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrjb28JEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmdT1QlSN3HaxoClOsZ8MaBRFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAANj4AQCZSsKqZPCSBNsNVBYOQBdPujeEXEVf0TZy9WLluC6mMAEAigot\ne4r31gB8qdf4+CdPedKPMZhtG6JLXIk1Y6H5iAw=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_8_2",
+      "sequence": 10,
+      "contributor": "blocksonachain",
+      "parent": {
+        "sha256": "0a1104d620ec1209657a1933be039d3e01222c49c4855fa6888ed19b790294ac",
+        "size": 14352139
+      },
+      "output": {
+        "sha256": "c9a8fb6992434cab03a70a9f38f5a683504e979c35455b5828a4a2daa99d60ae",
+        "size": 14352139
+      },
+      "accepted_at": "2026-10-29T16:08:15.183960399Z"
+    },
+    {
+      "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrjb4AJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmcAaOO3UiUt59trOZwJWBgQFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAFJyAP4jOCPkPubKW+TDDf+8ayDdv+tAyA5ObWT61Mx0nJPMbAD8DdDk\nAJrzVMm8rw/NXb8Y4gBPhVDsrwH2iZCrt+mh2ww=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_8_4",
+      "sequence": 10,
+      "contributor": "blocksonachain",
+      "parent": {
+        "sha256": "4f7cc889ea9d10def83e343342b070081a5b0f83ad448ed23244854128be3f29",
+        "size": 14472779
+      },
+      "output": {
+        "sha256": "9e2acba6dc6add86c73917325150f9ba2e25fc26af3d6d1dd9942afcb1c3020a",
+        "size": 14472779
+      },
+      "accepted_at": "2026-10-29T16:08:32.059476818Z"
+    },
+    {
+      "invitation_id": "86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrjb5EJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmf+M17x69rd88fz9iVlps0gFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAGnpAQDOTaygs/CroZWmgsg0lNa7q0v4HybidbiuK8Lv9gZ5mAEAhokF\nuJE5e8ucFH5jW5Sqq1NFz4REexecmuyC6Ed6LgE=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_8_8",
+      "sequence": 10,
+      "contributor": "blocksonachain",
+      "parent": {
+        "sha256": "d234193e2a7eb55e8f7ab6c0e56b8342a801beedfee617e00f478b67e9589266",
+        "size": 14753995
+      },
+      "output": {
+        "sha256": "2c77c91b7cd9bbccabd805db73e6f5ff7fe022af75e5f209cebba6223602931c",
+        "size": 14753995
+      },
+      "accepted_at": "2026-10-29T16:08:49.416200768Z"
+    }
+  ]
+}
