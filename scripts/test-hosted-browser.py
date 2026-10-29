@@ -83,7 +83,7 @@ async def main():
                           Object.defineProperty(globalThis, 'Worker', {value: undefined});
                           Object.defineProperty(globalThis, 'WebAssembly', {value: undefined});
                           Object.defineProperty(globalThis, 'indexedDB', {get() { throw new Error('Browser storage must not be used'); }});
-                          Object.defineProperty(navigator, 'clipboard', {value: {writeText: async text => { window.testClipboard = text; }}});
+                          Object.defineProperty(navigator, 'clipboard', {configurable: true, value: {writeText: async text => { window.testClipboard = text; }}});
                         ''')
                         page = await context.new_page(); requests, errors = [], []
                         page.on('request', lambda r: requests.append((r.method, r.url, r.headers)))
@@ -137,6 +137,56 @@ async def main():
                         assert not await context.cookies()
                         assert await page.evaluate('() => localStorage.length + sessionStorage.length') == 0
                         checks.append(engine + ': HTTPS CLI-only page, private clipboard handoff, no browser engine/storage/auth requests, native contribution and idempotent rerun, signed records, mobile layout')
+                        # Completed unlinked records expose a private-invitation
+                        # handoff, never an unauthenticated ownership claim.
+                        await page.goto(origin)
+                        await page.locator('#join-command').wait_for(state='attached')
+                        row = page.locator('#records .key-row').filter(has=page.locator(f'a[href="/v1/records/{invitation["id"]}"]'))
+                        await page.locator('summary', has_text='Contributions').click()
+                        await row.get_by_role('button', name='Link GitHub', exact=True).click()
+                        await page.wait_for_function("document.getElementById('github-retry-command').textContent.endsWith(' -s -- link-github')")
+                        await page.locator('#copy-github-command').click()
+                        retry = await page.evaluate('window.testClipboard')
+                        assert retry == command + ' -s -- link-github'
+                        assert invitation['token'] not in retry
+                        assert 'original private invitation' in await page.locator('#github-retry').inner_text()
+                        assert await page.locator('#native-panel').is_hidden()
+                        assert not any(method == 'POST' for method, _, _ in requests)
+                        # Server outages must not label existing accounts unlinked.
+                        async def identity_outage(route):
+                            await route.fulfill(status=503, body='unavailable')
+                        identity_url = origin + '/v1/github/identities/' + invitation['id']
+                        await page.route(identity_url, identity_outage)
+                        await page.goto(origin)
+                        await page.locator(f'#records a[href="/v1/records/{invitation["id"]}"]').wait_for(state='attached')
+                        await page.wait_for_timeout(100)
+                        assert await row.get_by_role('button', name='Link GitHub', exact=True).count() == 0
+                        await page.unroute(identity_url, identity_outage)
+                        # Expired tickets, sessions and callback failures all
+                        # provide the same usable one-liner recovery path.
+                        async def expired_github(route):
+                            await route.fulfill(status=410, body='expired')
+                        for path in ['/v1/github/begin', '/v1/github/session']:
+                            await page.route(origin + path, expired_github)
+                        for fragment in ['a' * 64, 'confirm', 'failed', 'retry']:
+                            await page.goto(origin + '/#github=' + fragment)
+                            if fragment == 'a' * 64:
+                                await page.locator('#github-begin').click()
+                            await page.locator('#github-retry').wait_for(state='visible')
+                            await page.wait_for_function("document.getElementById('github-retry-command').textContent.endsWith(' -s -- link-github')")
+                            await page.locator('#copy-github-command').click()
+                            assert await page.evaluate('window.testClipboard') == retry
+                            assert '#' not in page.url
+                            assert fragment != 'a' * 64 or fragment not in await page.locator('body').inner_text()
+                            assert await page.locator('#github-actions').is_hidden()
+                        await page.evaluate("Object.defineProperty(navigator, 'clipboard', {value: {writeText: async () => { throw new Error('denied'); }}, configurable: true})")
+                        await page.locator('#copy-github-command').click()
+                        assert 'Select and copy' in await page.locator('#github-copy-status').inner_text()
+                        await page.screenshot(path=out / (engine + '-github-retry.png'), full_page=True)
+                        assert await page.evaluate('() => document.documentElement.scrollWidth <= innerWidth')
+                        for path in ['/v1/github/begin', '/v1/github/session']:
+                            await page.unroute(origin + path, expired_github)
+                        checks.append(engine + ': unlinked record button, link-only command, expired OAuth recovery, private-token isolation and clipboard fallback')
                         # UI-only provider simulation. The Go HTTP tests verify
                         # cookies, PKCE/state, signatures, consent and S3 recovery.
                         github_ticket, confirmation = 'a' * 64, 'b' * 64
@@ -174,6 +224,7 @@ async def main():
                         assert len(confirmed) == 1
                         assert 'Linked @alice-github' in await page.locator('#github-status').inner_text()
                         await page.locator('#records a[href="https://github.com/alice-github"]').wait_for(state='attached')
+                        assert await row.get_by_role('button', name='Link GitHub', exact=True).count() == 0
                         assert not errors, errors
                         await page.screenshot(path=out / (engine + '-github.png'), full_page=True)
                         checks.append(engine + ': optional GitHub link, fragment removal, account preview, explicit consent and public account proof (mock OAuth provider)')

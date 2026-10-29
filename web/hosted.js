@@ -11,6 +11,16 @@ function readInvitationLink() {
   const fragment = new URLSearchParams(location.hash.slice(1));
   history.replaceState(null, "", location.pathname);
   invitationLink = undefined;
+  githubTicket = githubConfirmation = undefined;
+  $("github-panel").hidden = true;
+  $("native-panel").hidden = false;
+  $("github-retry").hidden = true;
+  $("github-actions").hidden = false;
+  $("github-begin").hidden = $("github-confirm").hidden = true;
+  $("github-begin").disabled = $("github-confirm").disabled = false;
+  $("github-proof").replaceChildren();
+  $("github-title").textContent = "Link GitHub.";
+  $("github-status").textContent = "Optional. Publish your GitHub profile alongside your accepted contribution.";
   $("invitation-actions").hidden = true;
   $("invitation-help").textContent = "Get a private invitation from the operator. Paste it when the terminal asks.";
   if (!fragment.size) return;
@@ -20,7 +30,7 @@ function readInvitationLink() {
     const value = fragment.get("github");
     if (hex(value)) { githubTicket = value; $("github-begin").hidden = false; }
     else if (value === "confirm") void showGitHubConfirmation();
-    else $("github-status").textContent = "GitHub linking did not finish. Run spr-ceremony link-github to try again.";
+    else showGitHubRecovery(value === "retry" ? "Get a fresh GitHub link." : "GitHub linking did not finish. Get a fresh link below.");
     return;
   }
   const token = fragment.get("token"), pin = fragment.get("manifest");
@@ -36,6 +46,7 @@ window.addEventListener("hashchange", readInvitationLink);
 function commands() {
   const name = `spr-ceremony-${$("platform").value}`;
   $("native-command").textContent = `chmod +x ${name}\n./${name} join`;
+  $("github-retry-command").textContent = $("join-command").textContent ? `${$("join-command").textContent} -s -- link-github` : `chmod +x ${name}\n./${name} link-github`;
   const hash = config.native.find(x => x.name === name)?.sha256;
   const bundle = config.provenance === "/native/provenance.json";
   const transport = location.protocol === "https:" ? "--proto '=https' --tlsv1.2" : "--proto '=http'";
@@ -117,6 +128,23 @@ void publicRecords();
 // Invitation fragments never leave this page. Only the separate, short-lived
 // GitHub flow uses a cookie; contributions still run exclusively in the CLI.
 
+function showGitHubRecovery(message) {
+  githubTicket = githubConfirmation = undefined;
+  $("github-panel").hidden = false;
+  $("native-panel").hidden = true;
+  $("github-title").textContent = "Link GitHub.";
+  $("github-status").textContent = message;
+  $("github-actions").hidden = true;
+  $("github-retry").hidden = false;
+  $("github-proof").replaceChildren();
+  $("github-copy-status").textContent = "";
+}
+$("copy-github-command").addEventListener("click", async () => {
+  try {
+    await navigator.clipboard.writeText($("github-retry-command").textContent);
+    $("github-copy-status").textContent = "Command copied. Run it in your terminal, then paste your original invitation.";
+  } catch { $("github-copy-status").textContent = "Select and copy the command above."; }
+});
 async function githubRequest(path, body) {
   const response = await fetch(path, {method: body === undefined ? "GET" : "POST", credentials: "same-origin", redirect: "error", cache: "no-store", headers: body === undefined ? {} : {"Content-Type": "application/json"}, body: body === undefined ? undefined : JSON.stringify(body), signal: deadline()});
   if (!response.ok) throw new Error("GitHub linking failed");
@@ -137,7 +165,7 @@ async function showGitHubConfirmation() {
     githubConfirmation = session.confirm;
     $("github-status").textContent = `Link @${session.github_login} to ${session.contributor} · ${session.total}/${session.total} accepted? This will be public.`;
     $("github-confirm").hidden = false;
-  } catch { $("github-status").textContent = "Link expired. Run spr-ceremony link-github to try again."; }
+  } catch { showGitHubRecovery("Link expired or unavailable. Get a fresh link below."); }
 }
 $("github-begin").addEventListener("click", async () => {
   $("github-begin").disabled = true;
@@ -147,7 +175,7 @@ $("github-begin").addEventListener("click", async () => {
     require(target.origin === "https://github.com" && target.pathname === "/login/oauth/authorize" && !target.username && !target.password && !target.hash, "Invalid GitHub authorization URL");
     githubTicket = undefined;
     location.assign(target.href);
-  } catch { $("github-status").textContent = "Link expired or unavailable. Run spr-ceremony link-github to try again."; }
+  } catch { showGitHubRecovery("Link expired or unavailable. Get a fresh link below."); }
 });
 $("github-confirm").addEventListener("click", async () => {
   $("github-confirm").disabled = true;
@@ -155,12 +183,13 @@ $("github-confirm").addEventListener("click", async () => {
     const identity = await githubRequest("/v1/github/confirm", {confirm: githubConfirmation});
     require(identity.format === "spr-github-identity-v1" && hex(identity.invitation_id), "Invalid GitHub identity");
     githubConfirmation = undefined;
-    $("github-confirm").parentElement.hidden = true;
+    $("github-actions").hidden = true;
+    $("github-retry").hidden = true;
     $("github-title").textContent = "GitHub linked.";
     $("github-status").textContent = `Linked @${identity.github_login}. Your public record is ready. GitHub publication follows automatically.`;
-    const link = document.createElement("a"); link.href = `/v1/github/identities/${identity.invitation_id}`; link.textContent = "Download signed account link"; $("github-panel").append(link);
+    const link = document.createElement("a"); link.href = `/v1/github/identities/${identity.invitation_id}`; link.textContent = "Download signed account link"; $("github-proof").replaceChildren(link);
     await publicRecords();
-  } catch { $("github-status").textContent = "Could not publish the link. Retry with spr-ceremony link-github, using the original GitHub account if already linked."; }
+  } catch { showGitHubRecovery("Could not publish the link. Get a fresh link below and use the same GitHub account if already linked."); }
 });
 async function showGitHubIdentity(row, record, manifest) {
   try {
@@ -169,5 +198,13 @@ async function showGitHubIdentity(row, record, manifest) {
     const profile = document.createElement("a"); profile.href = `https://github.com/${identity.github_login}`; profile.rel = "noopener noreferrer"; profile.textContent = `@${identity.github_login} · GitHub verified`; profile.title = `Account ID ${identity.github_id}; linked ${identity.linked_at}`;
     const proof = document.createElement("a"); proof.href = `/v1/github/identities/${record.invitation_id}`; proof.textContent = "Account proof";
     row.append(profile, proof);
-  } catch { /* Account linking is optional; receipt visibility never depends on it. */ }
+  } catch (error) {
+    if (error.status !== 404) return;
+    const button = document.createElement("button"); button.className = "secondary"; button.textContent = "Link GitHub";
+    button.addEventListener("click", () => {
+      showGitHubRecovery(`Link GitHub to ${record.contributor}. Use the invitation for this contribution.`);
+      $("github-panel").scrollIntoView({behavior: "smooth", block: "start"});
+    });
+    row.append(button);
+  }
 }

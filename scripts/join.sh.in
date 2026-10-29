@@ -3,6 +3,11 @@
 spr_main() {
 set -euo pipefail
 umask 077
+spr_action="${1:-join}"
+if [[ $# -gt 1 ]] || [[ "$spr_action" != join && "$spr_action" != link-github ]]; then
+  echo 'Usage: join.sh [join|link-github]' >&2
+  exit 1
+fi
 spr_version='@VERSION@'
 spr_revision='@REVISION@'
 spr_base="${SPR_CEREMONY_DOWNLOAD_BASE:-https://github.com/helius-labs/spr-ceremony/releases/download/$spr_version}"
@@ -44,6 +49,10 @@ if [[ ! -r /dev/tty ]]; then
   exit 1
 fi
 spr_work="${SPR_CEREMONY_WORK:-$HOME/.local/share/spr-ceremony/work}"
-"$spr_binary" join --work "$spr_work" </dev/tty
+if [[ "$spr_action" == link-github ]]; then
+  "$spr_binary" link-github </dev/tty
+else
+  "$spr_binary" join --work "$spr_work" </dev/tty
+fi
 }
-spr_main
+spr_main "$@"

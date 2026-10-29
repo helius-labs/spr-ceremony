@@ -19,7 +19,16 @@
   <section id="github-panel" hidden aria-labelledby="github-title">
     <h2 id="github-title">Link GitHub.</h2>
     <p id="github-status" role="status" aria-live="polite">Optional. Publish your GitHub profile alongside your accepted contribution.</p>
-    <div class="buttons"><button id="github-begin" hidden>Continue with GitHub</button><button id="github-confirm" hidden>Publish link</button></div>
+    <div class="buttons" id="github-actions"><button id="github-begin" hidden>Continue with GitHub</button><button id="github-confirm" hidden>Publish link</button></div>
+    <div id="github-retry" hidden>
+      <p>Run this in your terminal and paste your original private invitation. Open the new GitHub link it prints within 10 minutes.</p>
+      <pre id="github-retry-command">./spr-ceremony link-github</pre>
+      <div class="buttons"><button id="copy-github-command">Copy retry command</button></div>
+      <p id="github-copy-status" class="detail" role="status" aria-live="polite"></p>
+      <p class="detail">Your contributions are already saved. This only links your account. If your invitation has expired, ask the operator to reissue it for the same contributor.</p>
+      <details><summary>Already have the CLI?</summary><pre>./spr-ceremony link-github</pre><p class="detail">With an invitation file: <code>./spr-ceremony link-github --invitation alice.json</code></p></details>
+    </div>
+    <div id="github-proof"></div>
     <p class="detail">Public profile only. No repository or email access. The coordinator signs this account link.</p>
   </section>
   <section id="native-panel" aria-labelledby="native-title">

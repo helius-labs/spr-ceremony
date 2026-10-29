@@ -9,7 +9,18 @@ After completion, the CLI prints a private **Link GitHub** URL. Open it, continu
 with GitHub, check the displayed account and contributor, then choose **Publish
 link**. The link expires after ten minutes and can be opened once.
 
-Already finished? With a current binary:
+Already finished or the GitHub link expired? In the site's **Contributions** list,
+choose **Link GitHub** beside your completed record, then **Copy retry command**.
+Run it in your terminal and paste the original invitation. It downloads the client
+and runs only account linking; it does not repeat contributions. The same command
+appears on expired-link screens. This UI and installer mode require a release
+containing the recovery controls.
+
+With the previous installer, rerun your original contribution one-liner with the
+same invitation while the ceremony is open. Completed circuits are skipped and a
+fresh GitHub link is printed.
+
+With a current binary:
 
 ```sh
 ./spr-ceremony link-github
