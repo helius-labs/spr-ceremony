@@ -1,0 +1,18 @@
+{
+  "format": "spr-github-identity-v1",
+  "manifest": {
+    "sha256": "4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079",
+    "size": 31586
+  },
+  "coordinator_key": {
+    "sha256": "85a9444e4673ecee6d2fb7c549058caec4941767389549ff122b05d83334db0e",
+    "size": 477
+  },
+  "invitation_id": "c032509d03e5f8354a971e3bb8a8ec0aea10508746fe0268ceef8e5bd3f59467",
+  "contributor": "catmcgee",
+  "receipts_sha256": "f05764a8fb3d9cfc53cd9cfef199807407d9aa26925be0c91b7ac4a29970988e",
+  "github_id": 36869747,
+  "github_login": "catmcgee",
+  "linked_at": "2026-10-29T14:30:16.679376665Z",
+  "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrjWHgJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmfYiTqA+lVSljESq0qEwLxvFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAG7TAP41ENnVTcfhgSiXllHPjekL9gOiKuNPwBqX5EPG8ZgL6wD+Owms\nk49atIZVH2+Tfat4MfLcB1x4dwU1HxQL3JYXQAo=\n-----END PGP SIGNATURE-----"
+}
