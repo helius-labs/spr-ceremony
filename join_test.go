@@ -90,6 +90,10 @@ func TestInvalidPrivateLinksNeverEchoSecrets(t *testing.T) {
 		t.Fatal("link parsing changed identity")
 	}
 	for _, bad := range []string{
+		"https://ceremony.example/", // The browser removes the private fragment.
+		"'" + valid + "'", "<" + valid + ">", "[Invitation](" + valid + ")",
+		"https://ceremony.example/#token=" + token,
+		"https://ceremony.example/#manifest=" + pin,
 		"http://ceremony.example/#token=" + token + "&manifest=" + pin,
 		"https://user:" + token + "@ceremony.example/#token=" + token + "&manifest=" + pin,
 		strings.Replace(valid, "/#", "/path#", 1), valid + "&extra=1", valid + "&token=" + token,
@@ -98,6 +102,9 @@ func TestInvalidPrivateLinksNeverEchoSecrets(t *testing.T) {
 		_, _, _, err := ParseInvitationLink(bad)
 		if err == nil || strings.Contains(err.Error(), token) || strings.Contains(err.Error(), bad) {
 			t.Fatal("unsafe link accepted or echoed")
+		}
+		if !strings.Contains(err.Error(), "Copy invitation") {
+			t.Fatal("missing private-link recovery instructions")
 		}
 	}
 }

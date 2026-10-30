@@ -5,7 +5,11 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 	"testing"
+	"time"
+
+	openpgp "github.com/ProtonMail/go-crypto/openpgp/v2"
 )
 
 func TestSignaturesAndStablePublicKey(t *testing.T) {
@@ -44,6 +48,59 @@ func TestSignaturesAndStablePublicKey(t *testing.T) {
 	}
 	if Verify(private, payload, signature) == nil {
 		t.Fatal("accepted private key material as a public key")
+	}
+}
+
+func TestSignatureTimeWindowDiagnostic(t *testing.T) {
+	now := time.Now().UTC().Truncate(time.Second)
+	keyConfig := config()
+	keyConfig.Time = func() time.Time { return now.Add(-2 * time.Hour) }
+	entity, err := openpgp.NewEntity("Time window test", "", "", keyConfig)
+	if err != nil {
+		t.Fatal(err)
+	}
+	entity.Subkeys = nil
+	s, err := signer(entity)
+	if err != nil {
+		t.Fatal(err)
+	}
+	payload := []byte("signed receipt for time validation")
+	for _, tc := range []struct {
+		name     string
+		created  time.Time
+		lifetime uint32
+		valid    bool
+	}{
+		{"valid", now.Add(-time.Minute), 0, true},
+		{"future", now.Add(time.Hour), 0, false},
+		{"expired", now.Add(-time.Hour), 60, false},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			cfg := config()
+			cfg.Time = func() time.Time { return tc.created }
+			cfg.SigLifetimeSecs = tc.lifetime
+			var signature bytes.Buffer
+			if err := openpgp.ArmoredDetachSign(&signature, []*openpgp.Entity{entity}, bytes.NewReader(payload), &openpgp.SignParams{Config: cfg}); err != nil {
+				t.Fatal(err)
+			}
+			err := Verify(s.Public(), payload, signature.String())
+			if tc.valid {
+				if err != nil {
+					t.Fatal(err)
+				}
+			} else if err == nil || !strings.Contains(err.Error(), "outside its valid time window") || !strings.Contains(err.Error(), "automatic date and time") {
+				t.Fatalf("expected time window rejection with recovery instructions, got %v", err)
+			}
+			// Payload tampering must still fail cryptographic verification, even
+			// when the original signature is also outside its time window.
+			err = Verify(s.Public(), []byte("changed receipt"), signature.String())
+			if err == nil || err.Error() != "invalid coordinator signature" {
+				t.Fatalf("expected tampering rejection without clock advice, got %v", err)
+			}
+		})
+	}
+	if err := Verify(s.Public(), payload, "not a signature"); err == nil || err.Error() != "invalid coordinator signature" {
+		t.Fatalf("expected malformed signature rejection, got %v", err)
 	}
 }
 

@@ -11,6 +11,26 @@ memory for copying. The page does not send the invitation to the coordinator;
 the CLI validates its signature, expiry and manifest pin before participating.
 Reloading clears the invitation. Reopen the original private link when needed.
 
+## Contribution recovery
+
+For `invalid invitation link`, reopen the original private link and click **Copy
+invitation**. Paste that value at **Invitation link (hidden)** in the terminal.
+Do not copy the browser address bar: the page removes the private fragment after
+opening. This error is a local format check, before any request to the coordinator;
+reissuing the invitation is not needed just to correct a paste.
+
+If the CLI reports that a coordinator signature is outside its valid time window,
+enable automatic date and time on your computer, then rerun the same command with
+the same invitation. On macOS, use **System Settings → General → Date & Time →
+Set time and date automatically**. Earlier clients report only `invalid coordinator
+signature`; that message can have other causes too.
+
+Keep the existing workspace. An upload may already have been accepted before
+the client failed to verify its receipt; rerunning checks progress and skips
+accepted circuits. If verification still fails, stop and contact the operator
+with the circuit name and error, keeping the invitation private. Do not disable
+signature checks or manually advance the clock to match an unverified message.
+
 ## Local test
 
 ```sh

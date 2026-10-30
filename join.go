@@ -13,7 +13,9 @@ import (
 // ParseInvitationLink never includes the supplied link in an error. The fragment
 // carries a bearer token and must not appear in logs, argv, or HTTP request URLs.
 func ParseInvitationLink(raw string) (origin, token, pin string, err error) {
-	invalid := func() (string, string, string, error) { return "", "", "", fmt.Errorf("invalid invitation link") }
+	invalid := func() (string, string, string, error) {
+		return "", "", "", fmt.Errorf("invalid invitation link; reopen the original private invitation and choose Copy invitation, then paste it at this prompt; the browser address bar does not retain the full link")
+	}
 	if len(raw) > 8192 {
 		return invalid()
 	}

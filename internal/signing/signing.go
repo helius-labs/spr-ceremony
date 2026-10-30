@@ -6,11 +6,13 @@ import (
 	"bytes"
 	"crypto"
 	"encoding/hex"
+	"errors"
 	"fmt"
 	"strings"
 	"sync"
 
 	"github.com/ProtonMail/go-crypto/openpgp/armor"
+	pgperrors "github.com/ProtonMail/go-crypto/openpgp/errors"
 	"github.com/ProtonMail/go-crypto/openpgp/packet"
 	openpgp "github.com/ProtonMail/go-crypto/openpgp/v2"
 )
@@ -141,6 +143,11 @@ func Verify(public, payload []byte, signature string) error {
 		return err
 	}
 	sig, verified, err := openpgp.VerifyArmoredDetachedSignature(openpgp.EntityList{entity}, bytes.NewReader(payload), strings.NewReader(signature), config())
+	// OpenPGP reports both future-dated and expired signatures with this error.
+	// Keep rejecting them; never retry verification with a different clock.
+	if errors.Is(err, pgperrors.ErrSignatureExpired) {
+		return fmt.Errorf("invalid coordinator signature: outside its valid time window; enable automatic date and time, then retry; if it persists, contact the operator")
+	}
 	if err != nil || sig == nil || verified == nil || sig.SigType != packet.SigTypeBinary || sig.Hash != crypto.SHA256 || !bytes.Equal(verified.PrimaryKey.Fingerprint, entity.PrimaryKey.Fingerprint) {
 		return fmt.Errorf("invalid coordinator signature")
 	}
