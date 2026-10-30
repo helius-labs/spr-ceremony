@@ -19,6 +19,7 @@ invitation; separate invitations remain separate contributions.
 | sergey | 41/41 | [@sergeytimoshin](https://github.com/sergeytimoshin) · ID 123843 | [Receipts](records/4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079/95c1746f13dfb6c37a82ffb0c3953f4e9b3b5473a82ba3f8cf3b83683c096769.json) | [Account proof](github/4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079/95c1746f13dfb6c37a82ffb0c3953f4e9b3b5473a82ba3f8cf3b83683c096769.json) |
 | sergeytimoshin | 41/41 | Not linked | [Receipts](records/4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079/bb506ab2ffeaedff5428d23ed7142550c10947489aaef0afb59dce825d82a9c2.json) | — |
 | tilo | 41/41 | Not linked | [Receipts](records/4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079/5c77c3e8f0b29cc9d10c18083dd5e3f06dc2f2c30a79d8218860382c07984551.json) | — |
+| valardragon | 41/41 | [@ValarDragon](https://github.com/ValarDragon) · ID 6440154 | [Receipts](records/4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079/fc1444333a3d625512b8bc918220895b47cdb8cee9c28e545b68769441c3ac77.json) | [Account proof](github/4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079/fc1444333a3d625512b8bc918220895b47cdb8cee9c28e545b68769441c3ac77.json) |
 
 Receipts and account proofs are signed by the coordinator. GitHub linking is
 optional and proves account control, not a personal signature. Recorded profile

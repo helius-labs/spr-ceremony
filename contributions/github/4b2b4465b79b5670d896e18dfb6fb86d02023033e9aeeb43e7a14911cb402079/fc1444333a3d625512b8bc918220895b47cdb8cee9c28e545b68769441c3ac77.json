@@ -1,0 +1,18 @@
+{
+  "format": "spr-github-identity-v1",
+  "manifest": {
+    "sha256": "4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079",
+    "size": 31586
+  },
+  "coordinator_key": {
+    "sha256": "85a9444e4673ecee6d2fb7c549058caec4941767389549ff122b05d83334db0e",
+    "size": 477
+  },
+  "invitation_id": "fc1444333a3d625512b8bc918220895b47cdb8cee9c28e545b68769441c3ac77",
+  "contributor": "valardragon",
+  "receipts_sha256": "88a01423faa9f58eacf05b4c9b69cce507c20345e76055a356fdc2053dbf1c13",
+  "github_id": 6440154,
+  "github_login": "ValarDragon",
+  "linked_at": "2026-10-30T10:14:49.248094701Z",
+  "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrkbhkJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmcOgNQqxxatTcOXxL10HbajFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAEPLAP958ZA4jfFCMn5DaSTdbtP3wrqXq0wfIuI3KrZEtrPiswEAvgQI\n7ORjWuaS7bKGVlS+2IoUhu0Ih8AKSqGK8QcgGQo=\n-----END PGP SIGNATURE-----"
+}
