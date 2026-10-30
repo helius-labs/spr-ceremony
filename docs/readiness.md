@@ -432,3 +432,10 @@ circuit specs, constraint counts and domains matched the live manifest pinned
 to `ff04c625ceb43c688cd048549e00a5dabc0c6ee6`. The six intervening commits
 therefore do not require replacing these circuit parameters. The live ceremony
 was unchanged. [Comparison evidence](evidence/core-main-circuit-match.json).
+
+[v0.1.0-rc.16](evidence/release-v0.1.0-rc.16.json) was deployed on October 30.
+Completed unlinked records now offer a Link GitHub button; expired-link screens
+provide a copyable installer command that runs only account linking. Live
+Chromium and WebKit checks passed, along with runtime and hosted asset checks.
+All 531 accepted circuit contributions, the checkpoint and ceremony settings
+remained unchanged across deployment.

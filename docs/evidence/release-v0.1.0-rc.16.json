@@ -28,9 +28,65 @@
     ]
   },
   "python_tests_passed": 24,
-  "deployed": false,
+  "deployed": true,
   "limits": [
-    "AWS deployment requires an agreed maintenance window; the public site remains on rc.15.",
-    "Browser OAuth checks use a simulated provider. Existing server-side OAuth and invitation authorization are unchanged."
-  ]
+    "Live browser checks cover recovery controls and public-record buttons without sending invitations or completing a new OAuth login. Existing server-side OAuth and invitation authorization are unchanged."
+  ],
+  "deployment": {
+    "checked_at": "2026-10-30T07:38:20.120023+00:00",
+    "status_unchanged": true,
+    "accepted": 531,
+    "reservations": 0,
+    "checkpoint": "222cb31118c73b68987416a142741a7892684ba33926646ecb85552b0511d6f9",
+    "checks": {
+      "/healthz": {
+        "status": 200,
+        "sha256": "6489d6d7a33c5d40e18fc61eeb6c34c341279ee61816394dde5189aa4ad8fae5"
+      },
+      "/build.json": {
+        "status": 200,
+        "sha256": "3f830299c82a7ab6429345ca8b2e64d3fb207889727a982eeb48c9016006aae1"
+      },
+      "/join.sh": {
+        "status": 200,
+        "sha256": "f95766a74093f1ea42a9e62da7641b215233b80a62bc65199b55d177e4fd26ff"
+      },
+      "/hosted.js": {
+        "status": 200,
+        "sha256": "1c60963bd4ca39cfaa16e7eba9d90cd4d8b030bded11c0bb0df83f93fbc6fa53"
+      }
+    },
+    "url": "https://d3gz3drevfa8mb.cloudfront.net",
+    "ssm_command": "8994d99f-db34-4b83-b7ea-6d377d55670d",
+    "runtime_check": {
+      "revision": "55b4d80b8aa6478d41a2c5549b584a61b3f9aaf5",
+      "go": "go1.27.3",
+      "gnark_crypto": "v0.22.0",
+      "finalize_workers": 24,
+      "gomaxprocs": 96,
+      "memory_max_bytes": 103079215104,
+      "services_active": true
+    },
+    "github_oauth_private_config_permissions_verified": true,
+    "live_browser_checks": [
+      {
+        "browser": "chromium",
+        "recovery_command": true,
+        "private_invitation_required": true,
+        "only_get_requests": true,
+        "mobile_layout": true,
+        "errors": [],
+        "unlinked_button_verified": true
+      },
+      {
+        "browser": "webkit",
+        "recovery_command": true,
+        "private_invitation_required": true,
+        "only_get_requests": true,
+        "mobile_layout": true,
+        "errors": [],
+        "unlinked_button_verified": true
+      }
+    ]
+  }
 }
