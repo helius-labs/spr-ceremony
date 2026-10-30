@@ -1,0 +1,18 @@
+{
+  "format": "spr-github-identity-v1",
+  "manifest": {
+    "sha256": "4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079",
+    "size": 31586
+  },
+  "coordinator_key": {
+    "sha256": "85a9444e4673ecee6d2fb7c549058caec4941767389549ff122b05d83334db0e",
+    "size": 477
+  },
+  "invitation_id": "a5a1401ef952d51673af0a1ff20cf93aa254b59abc9f54d5c800c515b6c7382f",
+  "contributor": "l0ste",
+  "receipts_sha256": "38ab9c990bbc40d0df00ef7907ce0dba21b0c3d9c5af6d36069d2f49d643cd65",
+  "github_id": 125566964,
+  "github_login": "L0STE",
+  "linked_at": "2026-10-30T16:22:13.475584752Z",
+  "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrkxDUJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmczv2omg9eW6j++KoGP8xbEFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAADxFAQClRUPFAlZuM1Dp0zQiy88fx86U9sLQds1QoRKtBub6dQD9FKv+\nZMKifjy2/hBo/QNB+XXG3dzUB/WikSf5kDNx9wE=\n-----END PGP SIGNATURE-----"
+}
