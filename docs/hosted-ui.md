@@ -19,7 +19,12 @@ Do not copy the browser address bar: the page removes the private fragment after
 opening. This error is a local format check, before any request to the coordinator;
 reissuing the invitation is not needed just to correct a paste.
 
-If the CLI reports that a coordinator signature is outside its valid time window,
+After upload, the client automatically waits up to ten seconds when a receipt
+signature fails only its time-window check. It verifies the same receipt against
+the actual local clock and never repeats the upload or computation during this
+wait. Other signature failures stop immediately.
+
+If the CLI still reports that a coordinator signature is outside its valid time window,
 enable automatic date and time on your computer, then rerun the same command with
 the same invitation. On macOS, use **System Settings → General → Date & Time →
 Set time and date automatically**. Earlier clients report only `invalid coordinator

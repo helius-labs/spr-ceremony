@@ -3,12 +3,14 @@ package ceremony
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/helius-labs/spr-ceremony/internal/signing"
 )
@@ -73,6 +75,34 @@ func (c *Client) verifyReceipt(i Invitation, r Receipt) error {
 		return nil
 	}
 	return verifySignedJSON(i.signingPublicKey, "receipt", i.ManifestSHA256, r)
+}
+
+// retrySignatureTimeWindow never changes the verifier's clock or trusts the
+// coordinator's clock. Wait only for the typed time-window failure, at most ten
+// seconds, without repeating an upload or contribution.
+func retrySignatureTimeWindow(ctx context.Context, verify func() error, waiting func()) error {
+	deadline := time.Now().Add(10 * time.Second)
+	announced := false
+	for {
+		if err := ctx.Err(); err != nil {
+			return err
+		}
+		err := verify()
+		if !errors.Is(err, signing.ErrSignatureTimeWindow) || !time.Now().Before(deadline) {
+			return err
+		}
+		if !announced {
+			waiting()
+			announced = true
+		}
+		wait := time.NewTimer(min(time.Second, time.Until(deadline)))
+		select {
+		case <-ctx.Done():
+			wait.Stop()
+			return ctx.Err()
+		case <-wait.C:
+		}
+	}
 }
 
 func offlineReceiptVerifier(work string, i Invitation) (func(Receipt) error, error) {

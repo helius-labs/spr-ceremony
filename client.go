@@ -238,7 +238,9 @@ func (c *Client) runJob(ctx context.Context, i Invitation, job Job, track string
 	if receipt.Circuit != id || receipt.Sequence != job.Sequence || receipt.Parent != job.Input || receipt.Output != cached.Output || receipt.Contributor != i.Contributor || receipt.InvitationID != i.ID {
 		return fmt.Errorf("acceptance receipt mismatch")
 	}
-	if e = c.verifyReceipt(i, receipt); e != nil {
+	if e = retrySignatureTimeWindow(ctx, func() error { return c.verifyReceipt(i, receipt) }, func() {
+		fmt.Fprintf(c.Progress, "[%s] %s: waiting briefly to verify receipt timestamp…\n", progress, id)
+	}); e != nil {
 		return e
 	}
 	if e = WriteJSON(filepath.Join(dir, "receipt.json"), receipt); e != nil {

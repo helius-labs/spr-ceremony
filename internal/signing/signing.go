@@ -21,6 +21,10 @@ const MaxKeyBytes = 16 << 10
 const MaxSignatureBytes = 8 << 10
 const MaxPayloadBytes = 256 << 10
 
+// ErrSignatureTimeWindow is a rejected signature, never permission to bypass
+// verification. Clients may wait briefly and retry against their real clock.
+var ErrSignatureTimeWindow = errors.New("invalid coordinator signature: outside its valid time window; enable automatic date and time, then retry; if it persists, contact the operator")
+
 type Signer struct {
 	mu          sync.Mutex
 	entity      *openpgp.Entity
@@ -146,7 +150,7 @@ func Verify(public, payload []byte, signature string) error {
 	// OpenPGP reports both future-dated and expired signatures with this error.
 	// Keep rejecting them; never retry verification with a different clock.
 	if errors.Is(err, pgperrors.ErrSignatureExpired) {
-		return fmt.Errorf("invalid coordinator signature: outside its valid time window; enable automatic date and time, then retry; if it persists, contact the operator")
+		return ErrSignatureTimeWindow
 	}
 	if err != nil || sig == nil || verified == nil || sig.SigType != packet.SigTypeBinary || sig.Hash != crypto.SHA256 || !bytes.Equal(verified.PrimaryKey.Fingerprint, entity.PrimaryKey.Fingerprint) {
 		return fmt.Errorf("invalid coordinator signature")
