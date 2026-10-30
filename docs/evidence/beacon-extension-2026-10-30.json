@@ -1,0 +1,17 @@
+{
+  "announced_at": "2026-10-30T10:20:41.675955+00:00",
+  "manifest_sha256": "4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079",
+  "announced_checkpoint": {
+    "sha256": "7e49af0686ae0892fc1dcc2805cedbb7c27413fc20b4e9f2c5080b518b5888b4",
+    "size": 7106
+  },
+  "chain_hash": "52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971",
+  "old_round": 33522064,
+  "old_deadline": "2026-10-30T14:12:36Z",
+  "new_round": 33536464,
+  "new_deadline": "2026-10-31T02:12:36Z",
+  "scheduled_at": "2026-10-30T14:12:41Z",
+  "binary_sha256": "9f7cd77c1347561aee486f8479fac857fb5e5f1e135a0090eb1348a29b31bf15",
+  "binary_release": "v0.1.0-rc.16",
+  "reason": "Operator requested 12 additional hours for contributions; announced before the original beacon deadline."
+}

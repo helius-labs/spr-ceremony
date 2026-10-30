@@ -152,3 +152,34 @@ All commands accept `--config FILE`; audit/export accept `--work DIRECTORY`.
 
 For a local demo or existing SSM deployment, `operator connect` uses loopback
 ports 8080/8081. AWS phase commands require the HTTPS operator endpoint.
+
+### Announced 12-hour extension
+
+For the October 30 campaign, the operator requested an additional 12 hours
+before the original deadline. The [public announcement](evidence/beacon-extension-2026-10-30.json)
+pins quicknet round **33536464**, October 31 at **02:12:36 UTC**. The existing
+recovery protocol activates it after the old deadline; contributions briefly
+pause while recovery runs. Invitations retain their separate expiry times.
+
+The AWS timer `spr-beacon-extension-33536464.timer` invokes
+`scripts/recover-beacon-scheduled.py` at October 30, 14:12:41 UTC. The helper
+checks the manifest, binary digest, old beacon, lifecycle and execution window,
+then calls the released CLI with the current checkpoint pin and S3 config. It
+never edits ceremony files directly. The CLI audits checkpoints, checks public
+object hashes and records the transition through conditional S3 publication.
+An already completed transition is a no-op; a changed or closed plan is rejected.
+The timer persists across reboots; failures have at most three attempts per hour.
+
+Operator inspection on the coordinator:
+
+```sh
+systemctl status spr-beacon-extension-33536464.timer
+journalctl -u spr-beacon-extension-33536464.service --no-pager
+```
+
+Check `operator status` after the scheduled time to confirm the new round. This
+schedule does not close or finalize the ceremony. To cancel before it runs:
+
+```sh
+sudo systemctl disable --now spr-beacon-extension-33536464.timer
+```
