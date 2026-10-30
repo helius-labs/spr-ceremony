@@ -1,0 +1,12 @@
+[Unit]
+Description=Announced SPR beacon extension to 2026-10-31 02:12:36 UTC
+
+[Timer]
+OnCalendar=2026-10-30 14:12:41 UTC
+AccuracySec=1s
+RandomizedDelaySec=0
+Persistent=true
+Unit=spr-beacon-extension-33536464.service
+
+[Install]
+WantedBy=timers.target

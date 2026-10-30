@@ -1,0 +1,25 @@
+[Unit]
+Description=Apply announced 12-hour SPR beacon extension
+Wants=network-online.target
+After=network-online.target
+RequiresMountsFor=/var/lib/spr
+StartLimitIntervalSec=1h
+StartLimitBurst=3
+
+[Service]
+Type=oneshot
+User=spr
+Group=spr
+Environment=GOMAXPROCS=4
+Environment=AWS_REGION=eu-north-1
+ExecStart=/usr/bin/python3 /usr/local/lib/spr/recover-beacon-scheduled.py --plan /etc/spr/beacon-extension-33536464.json --dir /var/lib/spr/core --binary /opt/spr/releases/v0.1.0-rc.16-55b4d80b8aa6478d41a2c5549b584a61b3f9aaf5/native/spr-ceremony-linux-amd64 --s3-config /etc/spr/s3.json
+TimeoutStartSec=35min
+Restart=on-failure
+RestartSec=60
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/spr/core
+MemoryMax=4G
+Nice=5

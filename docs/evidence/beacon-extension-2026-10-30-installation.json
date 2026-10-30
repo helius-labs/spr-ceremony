@@ -1,0 +1,32 @@
+{
+  "checked_at": "2026-10-30T10:22:49.514243+00:00",
+  "ssm_command": "0553e831-2b77-4f47-a62f-91b68b84d77c",
+  "source_revision": "84b1c40",
+  "helper_sha256": "c2e5ca8e40764ebb5ab0528ddea64be0157770532e2b43a428aca019a5bf4c05",
+  "announcement_sha256": "087989dec13f92577797695dbc1be4ed4f3657691198c8cefe084f49dc966df1",
+  "timer_enabled": true,
+  "timer_active": true,
+  "scheduled_at": "2026-10-30T14:12:41Z",
+  "target_round": 33536464,
+  "target_deadline": "2026-10-31T02:12:36Z",
+  "preflight": "passed as coordinator service user",
+  "services_active": true,
+  "coordinator_restarted": false,
+  "recovery_executed": false,
+  "current_checkpoint": {
+    "sha256": "7e49af0686ae0892fc1dcc2805cedbb7c27413fc20b4e9f2c5080b518b5888b4",
+    "size": 7106
+  },
+  "current_beacon_round": 33522064,
+  "validation": [
+    "Scheduled-helper tests passed, including timing and lifecycle guards, idempotency, concurrent post-recovery contributions and failed CLI execution.",
+    "Existing Go recovery test passed: preserves contributions, audits, finalizes with replacement beacon and rejects the old beacon.",
+    "28 Python tests passed.",
+    "Systemd units validated; enabled persistent timer and inactive recovery service confirmed."
+  ],
+  "limits": [
+    "The timer is installed and checked, but the future recovery has not run yet.",
+    "Contributions pause at the original deadline until recovery publishes successfully.",
+    "Invitation expirations are unchanged."
+  ]
+}
