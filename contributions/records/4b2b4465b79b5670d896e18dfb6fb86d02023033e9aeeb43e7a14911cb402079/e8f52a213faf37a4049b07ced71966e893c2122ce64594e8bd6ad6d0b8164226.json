@@ -1,0 +1,678 @@
+{
+  "format": "spr-contribution-record-v1",
+  "status": "accepted",
+  "manifest": {
+    "sha256": "4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079",
+    "size": 31586
+  },
+  "checkpoint": {
+    "sha256": "ac3c7624c8a19e8f0d56cc2e2e819330a91a7c69c54702eb1887f119507a3eb0",
+    "size": 9095
+  },
+  "coordinator_key": {
+    "sha256": "85a9444e4673ecee6d2fb7c549058caec4941767389549ff122b05d83334db0e",
+    "size": 477
+  },
+  "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+  "contributor": "deanmlittle",
+  "track": "core",
+  "total": 41,
+  "receipts": [
+    {
+      "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrk1FYJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmcvzRz1MY0hBlfDI1IT5Ao/FiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAFb3AQDqoWhhPbFIgfIVC6ew/VoZwZMBRNp1n4UtdapJShABEAEA7/D9\nQzqiwmkIg4jncHBEhF2V6GeEI2bjHZkw/23h+wY=\n-----END PGP SIGNATURE-----",
+      "circuit": "merge_24_1",
+      "sequence": 15,
+      "contributor": "deanmlittle",
+      "parent": {
+        "sha256": "cc6bef3bf4352d4128391d0319894c0dd96b80fefa79b8d71a229259766f60cf",
+        "size": 50125003
+      },
+      "output": {
+        "sha256": "e24dff3e2481dc17bc4feadeb02110b4f15a3763daa1e9a022af04dad60e3df2",
+        "size": 50125003
+      },
+      "accepted_at": "2026-10-30T17:31:02.198278053Z"
+    },
+    {
+      "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrk1XAJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmcJYMCWHsPorzY2sPgzChgmFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAHivAP9lg7cczLnqSdSYnRgz41Z8mv/5LNZIEkWoEtK5aC8NkgD/eLZN\nBuuXS/Fl27EUjfJC/iz3j4x1M30YUsr8wx9U4AY=\n-----END PGP SIGNATURE-----",
+      "circuit": "merge_52_1",
+      "sequence": 15,
+      "contributor": "deanmlittle",
+      "parent": {
+        "sha256": "2d04a5f2b7f0d4f695e11a07ce22ce9bae823aecfb3306b9ab9ab8952cb70345",
+        "size": 102801483
+      },
+      "output": {
+        "sha256": "05677e0af9e31b8fa9508d6699be89570e131f8a0eca7d501139588cc1863a27",
+        "size": 102801483
+      },
+      "accepted_at": "2026-10-30T17:35:44.723126549Z"
+    },
+    {
+      "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrk0/YJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmdFnVPMfAHnxI62HoopDgdYFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAGbnAQD7SNla8RdPeXjruVavY4IZkBq0c1JDYiVUIRDjCP9mfQD/ZPwt\ne5z2ehpRxnW+uuAeqBJ4RLLpi576iz7Rn/nNpgE=\n-----END PGP SIGNATURE-----",
+      "circuit": "merge_8_1",
+      "sequence": 15,
+      "contributor": "deanmlittle",
+      "parent": {
+        "sha256": "6672e391d6702da5cb5e6c96dda3208a7d89963ddaab54f6d813b7c1d5ec0308",
+        "size": 14056139
+      },
+      "output": {
+        "sha256": "86bdd97d87f60f0955f6cc0fc3a6877c5831f191ed9eb9f12fa245dce99f3f94",
+        "size": 14056139
+      },
+      "accepted_at": "2026-10-30T17:29:26.67229263Z"
+    },
+    {
+      "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrkz8wJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmcTzFEGg8ec4m8TDyFDQqNSFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAId7APwMmECX5yi+YSD+cbXkHN4EuuTDSx9WiQvM+5BfZYZd5wD7BKN+\nxhY+p3DUVEBBFuzPxmKh0GYoQQNp2DVrnstj2g4=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_12_2",
+      "sequence": 15,
+      "contributor": "deanmlittle",
+      "parent": {
+        "sha256": "9a744c469430eef8c5fccf71ec677e8de716bb1eaaf54076ac701a3b5b46b619",
+        "size": 25588363
+      },
+      "output": {
+        "sha256": "a999d80afa7e4e685aae8d3ef296e50619a7a222b93a19740877455778a057d7",
+        "size": 25588363
+      },
+      "accepted_at": "2026-10-30T17:11:40.249619164Z"
+    },
+    {
+      "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrkz+YJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmcs/qCA9o6V0qZ/dU+/9TThFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAHb9AQClCEr1LZSg78Upl55y2AQ3uT2DQNR3SCe8UbnUZUCVlAEAvDN2\njIXqNIM4b+92JQY2+a5sV2apYZv+8SbRJ9AVWQ0=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_12_4",
+      "sequence": 15,
+      "contributor": "deanmlittle",
+      "parent": {
+        "sha256": "1d6f2137e7525c2be336c2e803bfb17cf93a27bf605c59acdf62487c464120ca",
+        "size": 25711051
+      },
+      "output": {
+        "sha256": "e3ff5539cec2e3fc04a58c2a7552dced20f675c5b1acb9f89f29cc78a2001a5f",
+        "size": 25711051
+      },
+      "accepted_at": "2026-10-30T17:12:06.347739754Z"
+    },
+    {
+      "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrk0AAJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmf+/ljQ4eS3fHO7RozRlVdQFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAL9HAP9afTPwzfTuaOL13IMnAKtpjdmNjKguLULV9NiJNAvdrwEA99rY\nOXv9eCPO9j50+arXmquP8gsnAr34lNEmXL5SYwo=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_12_8",
+      "sequence": 15,
+      "contributor": "deanmlittle",
+      "parent": {
+        "sha256": "646151c7c1112b14898894666ad0fcd3d7ee88f080aaeb512a879ae8270f415d",
+        "size": 25996363
+      },
+      "output": {
+        "sha256": "7fcb344aa521f604a80f5e57cd14601bbcaa8b15283d407f8ce8d72d0241af49",
+        "size": 25996363
+      },
+      "accepted_at": "2026-10-30T17:12:32.827335723Z"
+    },
+    {
+      "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrk0BwJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmfNUbx3LHrjtzcsPdwb1XTJFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAO66AQDcFxaXSVOaLnwSi5t5GauygpkRIPFSkitp2DPlW1XIeQEA4sp6\nVLTcdUXaQwNpmsBRWaqoBTsSF0hkTvWWRJH3gQs=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_16_2",
+      "sequence": 15,
+      "contributor": "deanmlittle",
+      "parent": {
+        "sha256": "9c237840021e2dbe994989cf8123f01f47d5a9268be6149b14fed300f234c930",
+        "size": 28444171
+      },
+      "output": {
+        "sha256": "cb53a43bb8a8e19b4150f7f9ede5314858d2196501814efa2fed45815650656a",
+        "size": 28444171
+      },
+      "accepted_at": "2026-10-30T17:13:00.000233973Z"
+    },
+    {
+      "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrk0D0JEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmceZAv+1TF9kQ3fNa6gw0LIFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAOdAAQDfBsR/PhhkNz1HIYmU6GwC3ZG0F6NmOF359ymB4RCZNwD/f0yk\nB7n8FtRICA3eRx2hqB5LSJCzURs7xFhb2y1EPg4=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_16_4",
+      "sequence": 15,
+      "contributor": "deanmlittle",
+      "parent": {
+        "sha256": "baee7e0139034ae7268bcd4b5612b957415aa1eab5046f90628f0534e6d5ae98",
+        "size": 28568907
+      },
+      "output": {
+        "sha256": "da87e57e9229a4598bcccf5fac4aa49db7bfaffd72bfbd2c9f9f46158b3efa92",
+        "size": 28568907
+      },
+      "accepted_at": "2026-10-30T17:13:33.088593613Z"
+    },
+    {
+      "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrk0rUJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmfNZX98obMyFAPGkU2iPIuCFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAJILAQCWrsTSadhKTue0/ONaSWNjLWenB3I5cQviOi8uvMNA4wEA1RY7\n98mx+L9alII4RvHburfjByp9gp2P4by/AlSVrgk=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_16_8",
+      "sequence": 15,
+      "contributor": "deanmlittle",
+      "parent": {
+        "sha256": "494986523b8374ba63afe348bca21b721af058a7fae111a387785bd02b75f792",
+        "size": 28858315
+      },
+      "output": {
+        "sha256": "ed08d594449a0ab07bac2fc8bb6d176fceef0a600e7eb9cbbec746cfd0fc0d61",
+        "size": 28858315
+      },
+      "accepted_at": "2026-10-30T17:24:05.145228613Z"
+    },
+    {
+      "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrkziUJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmeYkk67mi0Yq+SjbaBswkNeFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAILDAP4rNppMh9oYcLcn34iltYFcq7EXhkrCbGoN2/buDwJCRQD+LhZC\nopGU0GsUbc6Gklh5LR53eVndrDGm2G9jW+uLRAs=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_1_16",
+      "sequence": 15,
+      "contributor": "deanmlittle",
+      "parent": {
+        "sha256": "7e289d372f1e06f2381743275a17b1bdc431ce2901a47622a8a8fd64abd41bbe",
+        "size": 3988651
+      },
+      "output": {
+        "sha256": "dfe716a5f02264343f8580c0ab40f4f7f24dc1c3f9d0f769404e16a7d3e24aa8",
+        "size": 3988651
+      },
+      "accepted_at": "2026-10-30T17:04:37.246996572Z"
+    },
+    {
+      "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrkzCQJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmfMzPwqKpv/oQHX+H7jrM1SFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAABqOAP4pIVuQQm2m4aWdUp5nO92upXNjdoo1DjM1ZYxoK6aJqgD7B+Or\nEiylJO6GxqUUAvBA32K5i93LEoUnsHu8TivfJQI=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_1_2",
+      "sequence": 15,
+      "contributor": "deanmlittle",
+      "parent": {
+        "sha256": "6201f225dc8209bac2473cc90b3bdbe0887996c95fb11e015be936e83fe7a88f",
+        "size": 2025451
+      },
+      "output": {
+        "sha256": "35fb6125e3fee914b292203d7f22f8db2e47e74f6b772f2c1f57843215a2d7f4",
+        "size": 2025451
+      },
+      "accepted_at": "2026-10-30T16:56:04.696745348Z"
+    },
+    {
+      "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrkzFIJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmegXD8VlLbM4A5Vgib9OA96FiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAMs0AP91e+iPHq1sz15eHTKxTXm3uTqi+TTzBwBMlfA6G1B72AEAglTx\nk77PApl7S5Yk0jg6Gu4aJnCDfXvlKZhzx9GtsAE=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_1_4",
+      "sequence": 15,
+      "contributor": "deanmlittle",
+      "parent": {
+        "sha256": "7fdd749436679ef4c3d70ee9a25b2593fa0e3c7fbd255f2b9802838dfdac5581",
+        "size": 3191083
+      },
+      "output": {
+        "sha256": "43d26c15317c7970c0173871e1311d949b1c4b341874632dccc66f0db71a073e",
+        "size": 3191083
+      },
+      "accepted_at": "2026-10-30T16:56:50.512404579Z"
+    },
+    {
+      "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrkzVIJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmeu3nD1o6sD+AwRbjk6oWq8FiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAABMOAP93dp0DITZHVxCQChG8fllFClwbnFVXqy5jIy2O6tZMFAEAjPgX\nrfuoohbNyw7kDkbmkSSY8w+b8cPLqNkH5gu5GgQ=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_1_8",
+      "sequence": 15,
+      "contributor": "deanmlittle",
+      "parent": {
+        "sha256": "2097030966804b8b754eb740e93335f374ca87006aabc2334a6ce071a3e9aaaf",
+        "size": 3465131
+      },
+      "output": {
+        "sha256": "71ef80831fcc90a0974b8a56d48771e9bacef27fc4b642fcd25496c49c7be053",
+        "size": 3465131
+      },
+      "accepted_at": "2026-10-30T17:01:06.477967896Z"
+    },
+    {
+      "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrk0toJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmcLxls/tNtThNUdTlM4aRK7FiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAFrxAQCq4QxQzjr+9Hnrok4NW56fscVz+ex7cGmKsdlnxrZ1KAEA9tLh\n82rRbCPbdn0FHOQIdYeZXuksKMnueEyT5pddHAI=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_24_2",
+      "sequence": 15,
+      "contributor": "deanmlittle",
+      "parent": {
+        "sha256": "e9abbf84747044be95bf98d8fb1e9120a21bc8ffdc44429d398045d036aa0d89",
+        "size": 50976011
+      },
+      "output": {
+        "sha256": "0458454b12df59118482e7c286b69f146c7d36cb9dfe808ebc37e8545b910437",
+        "size": 50976011
+      },
+      "accepted_at": "2026-10-30T17:24:42.06290949Z"
+    },
+    {
+      "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrk0wIJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmfkOc7HdUPCzfMRBAiS4A2KFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAK/BAP9Ct1T2yDginZGUSikk5C5aiXDFH3QCVrmnmvyWFVOsEwEAvsz2\nWhLHLSyMoKeNuNVo5cNdrIT9ekfB74dBmmrIaw8=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_24_4",
+      "sequence": 15,
+      "contributor": "deanmlittle",
+      "parent": {
+        "sha256": "4908da0dfb9fed8135f3bc532b925b0c1d33140f2daf51fc00bd24f595fe2a70",
+        "size": 51104843
+      },
+      "output": {
+        "sha256": "1fffb60caad37e6aeb6ca704ab0e7c9f3a4047a27dd2ea4887f2b418a76ba446",
+        "size": 51104843
+      },
+      "accepted_at": "2026-10-30T17:25:22.946538205Z"
+    },
+    {
+      "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrkzpcJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmeeGtNOqLkcFRawSGx5geObFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAKjYAP90W+NADMXvAawluwPFArnzDgkgLwgy4Bu+ZsJ04HFlhQEAlLY7\n43rJoqeUSeP+JPS11EB8rvuIFY+0D63jgX+GjAk=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_2_16",
+      "sequence": 15,
+      "contributor": "deanmlittle",
+      "parent": {
+        "sha256": "302d85bc3ff9168a2e0c419b33bddb21044ed9a7edb3ab1afee0d0954e63e6b8",
+        "size": 6810763
+      },
+      "output": {
+        "sha256": "b1fa93ce2a505c9486054dba16ec4f0337c257d5d811442e402b2d4d27a81023",
+        "size": 6810763
+      },
+      "accepted_at": "2026-10-30T17:06:31.159942894Z"
+    },
+    {
+      "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqoEABYIAF0FgmrkzX0JEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmfO+I2CdZML5L2kflhdkFXZFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAAPGAP9Bo6+zxaMs8f5mLiW//SZkg209VD5ttWG6+T0gUFR36wDyAtML\nhLE7uryaxDPoj3SRD5T8E1sN46ZxOp3QPQzfCw==\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_2_2",
+      "sequence": 15,
+      "contributor": "deanmlittle",
+      "parent": {
+        "sha256": "0f96819e487d64fbe4af0bd344ea716c9edbc9378eacf7b57ae22ae33662da78",
+        "size": 3795403
+      },
+      "output": {
+        "sha256": "7f2210ba2c47e457d7698382dc5da9e0ee905395c2a66ef7bb6960968eb37821",
+        "size": 3795403
+      },
+      "accepted_at": "2026-10-30T17:01:49.57829463Z"
+    },
+    {
+      "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrkzawJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmdPJvJLUKYVzOoctiVPj2jgFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAADkFAP0cOqZL56mWnXXxgK7dc0pCc2P4lyr+rpnWP33/FqxdMAD+PEL9\n5MjmJrynE1BYiKMKSqNfJATmoGYUN0f5agLyAwE=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_2_4",
+      "sequence": 15,
+      "contributor": "deanmlittle",
+      "parent": {
+        "sha256": "281569ec1e1f8be31c989c14f760fae2c76669f6812feec6b68b3cb6b254f3bf",
+        "size": 3912971
+      },
+      "output": {
+        "sha256": "5b9ba42c7a95508a27b8ac0118359d04a6789bdf0b8dfcf2a1ebf4e124d1b225",
+        "size": 3912971
+      },
+      "accepted_at": "2026-10-30T17:02:36.618424532Z"
+    },
+    {
+      "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrkzlkJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmdRIJFMBeTeVZKZ+70YLBvXFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAACh2AP9x7ysFs7RsPYeTANV2gmqxDjfjishD+01R9P9QWLI7nQEAx7e9\nEKHvnllZIkKtRLy1jGbYgwqZ+JxY36/aaLXphQw=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_2_8",
+      "sequence": 15,
+      "contributor": "deanmlittle",
+      "parent": {
+        "sha256": "13b1191ef834a89194d695093832d89ac0d8f95dbb3596a466e081e6a586a361",
+        "size": 6285195
+      },
+      "output": {
+        "sha256": "1567971ce823fcb4d0522b062cc5113c68168b033767f5bd9a2db40904628833",
+        "size": 6285195
+      },
+      "accepted_at": "2026-10-30T17:05:29.799491907Z"
+    },
+    {
+      "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrk0zAJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmfYumxdLizHmP/T32Pml1y8FiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAKBjAP43TIgdcOdOCzo/9YLWdIuSJ4RBo6FjphaEb8hjBINB9QEAhbX+\n0Ww/sxJhl9rVO3mESFwJt7lpJZL1SXv6Vn2Ujg4=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_32_2",
+      "sequence": 15,
+      "contributor": "deanmlittle",
+      "parent": {
+        "sha256": "3269a34a54a341f0d4ed724c338cb24cd95b064621e87b0a711ed46ece6d0c8b",
+        "size": 56727947
+      },
+      "output": {
+        "sha256": "fd398c4bd37a150f4462ee699d1c325c780d3c1caf42cd685a11cf98e171fd3b",
+        "size": 56727947
+      },
+      "accepted_at": "2026-10-30T17:26:08.934483698Z"
+    },
+    {
+      "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrkzoAJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmcI4Lt0M9JlO5dAHDM4WXeKFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAH+RAP9l8RUIy6TuYYo2HitKAj4btvgyKO7CsEvgZAp5A0pvtQD+OyiZ\nd7GE8UbbJCnR2d1ICrPliO8dP34sRrkmF9nuwAs=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_3_2",
+      "sequence": 15,
+      "contributor": "deanmlittle",
+      "parent": {
+        "sha256": "5a949ffc6299eff0efb5a5fde503b2d1f05806dc6b4080fc36cf1cf2f7315711",
+        "size": 6596011
+      },
+      "output": {
+        "sha256": "e4ce86109060ea20d2841fbc1952fd95d80b5092df673b253ef27696536bc756",
+        "size": 6596011
+      },
+      "accepted_at": "2026-10-30T17:06:08.383151436Z"
+    },
+    {
+      "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrkzooJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmdVWX9VZIH81YU+0lVCbJulFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAB7YAQCS3U1zLGzwIowCTNfU8CJDRnQkFEOFwpGlGg20BouzzgEA5CeE\nWsDA8pA9FbVC9+rUlv6yPGuQPX2cuWfen/2ByQE=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_3_4",
+      "sequence": 15,
+      "contributor": "deanmlittle",
+      "parent": {
+        "sha256": "97cf2dcdc6ff6615487a387d58b797768c0951291c35389a75266fb8a17d7f76",
+        "size": 6714091
+      },
+      "output": {
+        "sha256": "9d4e1b90d2a2522e41e32ca31131e8d699f93ede2d283eb19d8b0e7752f8a0e7",
+        "size": 6714091
+      },
+      "accepted_at": "2026-10-30T17:06:18.155939328Z"
+    },
+    {
+      "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrkzqIJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmcqcNFh7SAE54RKaNcB8LrtFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAEKXAQDT4qNIsf9nYUmw+cORlljwwLddfHN15atOGpJjxSDAogD/ZBVh\n/wfCpkgw4WPVD+4FzTvSIX4DaLjgnK8Pbl/0Ugo=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_3_8",
+      "sequence": 15,
+      "contributor": "deanmlittle",
+      "parent": {
+        "sha256": "d2d7e48a0d91cadba56d2c19289a2005562bb2864e2b3d0e1f59f61e54adbe2e",
+        "size": 6990187
+      },
+      "output": {
+        "sha256": "d632123fc63ae71eb85b1bfaecf4c9e10813e20678ac373642797ce634e74edd",
+        "size": 6990187
+      },
+      "accepted_at": "2026-10-30T17:06:42.751407472Z"
+    },
+    {
+      "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrk01wJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmeZ50p9Dxq8E4dn9f7sRVekFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAKfSAQDhUMC4DWJsZh4MrpCqKzu3Rb5FEwJoTWqSoOi8gf8kPQD/XkG6\nx1St355f5HKTeN1poQBpXBMLK+Z69n8a8PUYQwU=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_40_2",
+      "sequence": 15,
+      "contributor": "deanmlittle",
+      "parent": {
+        "sha256": "bdb20fb5e26f12ed116faf8da180f5c47d69a3ddc1423a4cc05c3a4c914326ea",
+        "size": 62382731
+      },
+      "output": {
+        "sha256": "0620ea664dd175358d2cf6de2107e261c0463e2148c1108ff12bd3b6d9e9febb",
+        "size": 62382731
+      },
+      "accepted_at": "2026-10-30T17:26:52.948292807Z"
+    },
+    {
+      "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrk054JEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmdnKX+G+j2AZfx9fZS2TrY7FiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAA/RAQCso1wI6DnIQnjOPkynXn9GPxN+/l1poX3Lah5iucReWwD+LpIp\nLva+F52oVMvc9PVF8mOEtg0lweE0dCzRhUqJ0Aw=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_48_2",
+      "sequence": 15,
+      "contributor": "deanmlittle",
+      "parent": {
+        "sha256": "83d2ae7252b60fbab00eac008bb35d42183f804bf5faf1b562221376b64eadc6",
+        "size": 101634955
+      },
+      "output": {
+        "sha256": "28694c83dd9076722e78666137837e98bf562f38325ed5cb8b7d5aa48f4525bc",
+        "size": 101634955
+      },
+      "accepted_at": "2026-10-30T17:27:58.985673784Z"
+    },
+    {
+      "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrk0+UJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmet9NWIWfeGLyw9Rnd8Itj6FiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAM5rAQDkoHN/i2XTbroQFksFAuXODSV6B8JLdrVkrE69Q2X/QQD/beLA\nZpe1dhGSawBnFt8SNfLgEVELGgKQQR/NVjRSlQY=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_49_2",
+      "sequence": 15,
+      "contributor": "deanmlittle",
+      "parent": {
+        "sha256": "c600e8f048b2c410ee99d3d056180f4ec40c42cb9d2e5a3c96021eebec23911d",
+        "size": 102341995
+      },
+      "output": {
+        "sha256": "d1c09b4cdfcb698acf5d7c5766baf1eaba6f35d8f7eb29fc78a2ef8a58764078",
+        "size": 102341995
+      },
+      "accepted_at": "2026-10-30T17:29:09.778652756Z"
+    },
+    {
+      "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrkzvYJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmegECl4DGdlJ8jJG8kqyHXIFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAADRAQC5jUCZIOT378nESrH3zu6L2C9eSjJxmx0/gKktqOTLMQEA+pUj\nfNgBxd26CMF3U5/TqRNh9FDwcuuKDGRhoakjdQc=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_4_16",
+      "sequence": 15,
+      "contributor": "deanmlittle",
+      "parent": {
+        "sha256": "3ae8ad207d2fc2a4c9a2259f965d7e9c9f59bea4dfa6bdb7a4c78215a35cbcb0",
+        "size": 8225355
+      },
+      "output": {
+        "sha256": "c6f2125fd557045a107cb81de61c2ac2a2abfcdc9fe4801ab14c4fdddee0fcea",
+        "size": 8225355
+      },
+      "accepted_at": "2026-10-30T17:08:06.795910881Z"
+    },
+    {
+      "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrkzq8JEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmcm/GzieyJI2VFM5mM8MLVPFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAABLOAQDLkCin2k7MAicQ31YmI+ye+IyLl62cSy//x2qqjA38SwD+KUtW\ngkDcecY+XxX1lAn4a+ghu0A2WYTX2Z1YJHJsLgU=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_4_2",
+      "sequence": 15,
+      "contributor": "deanmlittle",
+      "parent": {
+        "sha256": "3b768b4f1b3e64150662693ef9f4ebe57122e2b013afb7a02b1ff07e52be8bb4",
+        "size": 7299979
+      },
+      "output": {
+        "sha256": "bc077e1506a617c8dfbda648ae09a8fdf58660aba054c88241fe0b9f9c303dc8",
+        "size": 7299979
+      },
+      "accepted_at": "2026-10-30T17:06:55.467122881Z"
+    },
+    {
+      "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrkzsIJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmdS6Q6xMBTolLeBxy9EwnuYFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAADtFAPsFCAnxVk92DU3kXtbGEwGqs27wdPbnImM+ic/0j8yUrQD/TOXg\ngBQAk/41IHEQffbW3KXDVNAbXALQImm3YnbNYAQ=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_4_4",
+      "sequence": 15,
+      "contributor": "deanmlittle",
+      "parent": {
+        "sha256": "881a377f9953e501a0b8365956775b55b40f02d25c4167b5e07a76b9eae31452",
+        "size": 7418571
+      },
+      "output": {
+        "sha256": "db177bb628eb9b100a3ba85e8be2b26e66f332f6f6fe4ff49a519de52b76570f",
+        "size": 7418571
+      },
+      "accepted_at": "2026-10-30T17:07:14.803757745Z"
+    },
+    {
+      "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrkztAJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcme+03XlBV+xpsx5Fb1It6YNFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAA0KAQDZ7Ena7G8rACos6bINr9YJgdoEeSAL2xgvcL+oBwHQ8wEAhT7f\nDVLferKA0WzZWPFzzyLt/A5gtC4OD88MSc5a9AA=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_4_8",
+      "sequence": 15,
+      "contributor": "deanmlittle",
+      "parent": {
+        "sha256": "538edec97ab853ad4024885d01037f4a39f44ee36f6e615e8fbba592ba4568de",
+        "size": 7695691
+      },
+      "output": {
+        "sha256": "4b4015f6620e055a9ca721fc5ec75081ffde4f5d6bd3ad28743413dd52b8b127",
+        "size": 7695691
+      },
+      "accepted_at": "2026-10-30T17:07:28.975915977Z"
+    },
+    {
+      "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrkz0sJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmdSlyQXfXqVWu0NOURFk4oDFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAMtXAQCBAIJ5vNuIRxNwy/Azs1hWHe34qM48EPeZQOGrd/QWeAEAiGPw\nKlpAA3q3xOPyZ4XBMDDj/cXPyqrRN87OGLkCzAA=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_5_16",
+      "sequence": 15,
+      "contributor": "deanmlittle",
+      "parent": {
+        "sha256": "1f37b76c43468ea3a52de2e5d6c0177025fdf0ef9642054ee804e12d98854eda",
+        "size": 13146155
+      },
+      "output": {
+        "sha256": "d2ec31cae6c58c58b773eda808f299259380c60d7a52567df20695d00c7edb51",
+        "size": 13146155
+      },
+      "accepted_at": "2026-10-30T17:09:31.176772959Z"
+    },
+    {
+      "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrkztwJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmco+nVGdd+bR1SXzaxBsO2RFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAACVlAQC8ICWpTezliKB+b0Q5M+ItDQDPBXGiRO6bpnLmMSkX0gD/Vir+\nIrQpPV91IpWpI3Yx65pBDqNQJ3p3KjiyYjj4+gI=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_5_2",
+      "sequence": 15,
+      "contributor": "deanmlittle",
+      "parent": {
+        "sha256": "fc3539309608e83ecb06a191c8d7f2bd98a6fe7647b38d022e0b7614696ebcd5",
+        "size": 8022891
+      },
+      "output": {
+        "sha256": "9e96ac3fadd0c248bf366de0868da9e5a8c83162552098da5b5aebc7c03be901",
+        "size": 8022891
+      },
+      "accepted_at": "2026-10-30T17:07:40.494007369Z"
+    },
+    {
+      "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrkzugJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmcO8z4R7ekwe48fxr2COeNsFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAGFyAP4/+rEPPkQXXgMA+KoIO27cNpkVRZYj2UciiLqDPd4vngEA9OW0\nEopaPKNl5XGoFh51wigYwaJzmJJZ4rAApJEv/Qg=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_5_4",
+      "sequence": 15,
+      "contributor": "deanmlittle",
+      "parent": {
+        "sha256": "d084490ecec877d868cda15b1cd3249dfdb26f4ffba60ed8ada1d371cba8a83a",
+        "size": 8141995
+      },
+      "output": {
+        "sha256": "ebaf21d39a84b81fe8504b9ee378601cb9834ab2d386cc4d7d5f452b6eeb869e",
+        "size": 8141995
+      },
+      "accepted_at": "2026-10-30T17:07:52.387675503Z"
+    },
+    {
+      "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrkzxcJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmdW1jZZwoMTWrS2EgDeVE1GFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAABL2AQDcimKt0Ss7qQB42m3pSebk+DFbPmwC2kWZcLVTinbK6AD/fvkf\nwK3waAPbiP4nf74KdVLfjuOY0Oxv9flXhu3tTQM=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_5_8",
+      "sequence": 15,
+      "contributor": "deanmlittle",
+      "parent": {
+        "sha256": "acac2044ecee6e4c98f4b3ab3585584f8f5ac579d93b10b1226a1a45682c78c2",
+        "size": 12614443
+      },
+      "output": {
+        "sha256": "8f04a003d6e7f256d74f409fb13a3fbde32fc181da3c93736264f1259fc2186c",
+        "size": 12614443
+      },
+      "accepted_at": "2026-10-30T17:08:39.839642368Z"
+    },
+    {
+      "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrkzykJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmeF802uMwbUen56SxbQZR9xFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAANjQAQCv3lfjXl9+U2YF0+aj1Bu7pxGLPFdXsO32ujPcEb790wEA1PJL\nsKB0OpB7GxIOkgFGqquvVAsIaNRNXhmu2UUq4gg=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_6_2",
+      "sequence": 15,
+      "contributor": "deanmlittle",
+      "parent": {
+        "sha256": "6cfb295588e6e46be6022dd11d2e2ad1b8e87b70c4f173bb9dda4c2a3d52c2f3",
+        "size": 12922187
+      },
+      "output": {
+        "sha256": "219fcdfad5867916f6a948f4515dd2f5c3f1a4c8e4f15d533168b5b146bf8a64",
+        "size": 12922187
+      },
+      "accepted_at": "2026-10-30T17:08:57.087738295Z"
+    },
+    {
+      "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0FgmrkzzgJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmf1PL/QbO2MTgo3ElJN6ybSFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAG2FAQC+Ab4aoMSTdTEAyfD1s7gZehzmqbPKOXfDSiuMoYnThgD/Tf6h\nJ1ilCkzQHdupnpSmVY3ZvmPhKoPXWf7aKoH2cgg=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_6_4",
+      "sequence": 15,
+      "contributor": "deanmlittle",
+      "parent": {
+        "sha256": "f813d4d602b9832dbc33872948f8a8fe570ad08ac1196bcf61f7c87f50a4843c",
+        "size": 13041803
+      },
+      "output": {
+        "sha256": "f01e776a70bf5284a863ec793fccd7e915e2ec10c0cdd03e8108ed8b452d4023",
+        "size": 13041803
+      },
+      "accepted_at": "2026-10-30T17:09:12.901198619Z"
+    },
+    {
+      "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrkz1sJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmdnMVNw3UJia8bnhTjtVeOfFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAPM+AQC5jprt0cDgqqRtrJZEGBRqhtpsY4guy36fq/Ecve5OTQD/RdzB\nd2gLJ6g5xZnQiCxLF07kqRF8PKSTa8ocjRb1iw8=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_6_8",
+      "sequence": 15,
+      "contributor": "deanmlittle",
+      "parent": {
+        "sha256": "e4d255da7bd4cf96654562c21ab564521401070ba176f7b835aa0b15cf68308b",
+        "size": 13320971
+      },
+      "output": {
+        "sha256": "898722ef95f3055247f992a19338df1aacf7652610c21642c750046fe5d25f8b",
+        "size": 13320971
+      },
+      "accepted_at": "2026-10-30T17:09:47.729101125Z"
+    },
+    {
+      "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrkz7IJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmfiAW9hnSJwZcdVYCCTyz6xFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAACh8AQC7jilS+Y9gVZVBHZ9lj+SWa0SQ4BSRddsOJZYoV/4ilQEAsJ96\nRW4F8GzGW75l6iqn6t9AKNN4m2caXzzq5jPqpgM=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_8_16",
+      "sequence": 15,
+      "contributor": "deanmlittle",
+      "parent": {
+        "sha256": "71803f3e8ac1e68e826535ef8ae9b9405df97ede7f487beef94ec6e9a900e725",
+        "size": 15291851
+      },
+      "output": {
+        "sha256": "97875948c1fdfb21c3fd996a97bbeae3b1227c17523658aae9b87d7c747b487b",
+        "size": 15291851
+      },
+      "accepted_at": "2026-10-30T17:11:14.266725796Z"
+    },
+    {
+      "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrkz2wJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmdvxEGMMwBJ4yXpdAf+bXMrFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAEV5AP9Tv4f8Yncl1pHZsbsWi6Xhirwi4Q5O/tgvYd7AVYF0LwD/fbjE\n9vGFVVV9YbyYkwWk+GP9SO6BXjXnjR68MRJsTQw=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_8_2",
+      "sequence": 15,
+      "contributor": "deanmlittle",
+      "parent": {
+        "sha256": "06a847955a1ecdea64e7b7996ba9d676a377cabd4db9440456d4537a8f6167b1",
+        "size": 14352139
+      },
+      "output": {
+        "sha256": "d6803e5e0eab1ad46c3bfb5cd80855e6f5473eaa6f50225c517922a93979d083",
+        "size": 14352139
+      },
+      "accepted_at": "2026-10-30T17:10:04.903309397Z"
+    },
+    {
+      "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrkz4wJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmfUHSLMep8D6G9DjUxgmYFcFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAAGKSAQC9MgdFEity3PKFFNsBmjZJPRgNKC7c+3cWAlhPKP9vKgEAyxTZ\n6YJ3clG0rRYjWGi0cDykI7ANceQLE6YmnvAMCQ0=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_8_4",
+      "sequence": 15,
+      "contributor": "deanmlittle",
+      "parent": {
+        "sha256": "65ad79b6d627af31f7d2e984217a3c0a807c4e49583cfdca77bc2826f0d84f20",
+        "size": 14472779
+      },
+      "output": {
+        "sha256": "67682dfa84b69f03110f5be908bc4090cbc26d41eb5f0ad68366a19dd0d2fbc2",
+        "size": 14472779
+      },
+      "accepted_at": "2026-10-30T17:10:36.140488533Z"
+    },
+    {
+      "invitation_id": "e8f52a213faf37a4049b07ced71966e893c2122ce64594e8bd6ad6d0b8164226",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwqsEABYIAF0Fgmrkz6AJEHVC94AZRML6NRQAAAAAABwAEHNhbHRAbm90YXRpb25z\nLm9wZW5wZ3Bqcy5vcmfgtbQ/JBnyZDax9oVJWJxJFiEEltkwiemNdWltwBvMdUL3\ngBlEwvoAANm3AP9ihotBLIx2BXg1v9oAM6lNhCeNWyS2v7yiBbU8qPpDzgEA2e6C\nBG4SpqOiMmsxtxUcHxv/Gx4nhkguILm2570v2gk=\n-----END PGP SIGNATURE-----",
+      "circuit": "transfer_confidential_8_8",
+      "sequence": 15,
+      "contributor": "deanmlittle",
+      "parent": {
+        "sha256": "ea847185c85d20422e4bff617f5d1caf7927a7a8092e197a0115786c81fe229e",
+        "size": 14753995
+      },
+      "output": {
+        "sha256": "bf3f0c5fb13e0009f91542094eac6793d821849f6a6308b7ccdba57f45afa758",
+        "size": 14753995
+      },
+      "accepted_at": "2026-10-30T17:10:56.347366259Z"
+    }
+  ]
+}
