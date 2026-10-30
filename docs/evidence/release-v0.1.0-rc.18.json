@@ -1,0 +1,65 @@
+{
+  "checked_at": "2026-10-30T17:25:25.300291+00:00",
+  "release": "https://github.com/helius-labs/spr-ceremony/releases/tag/v0.1.0-rc.18",
+  "source_revision": "e15634b594dd510c993b54d100e7ea8e7beba888",
+  "check_workflow": 41096838079,
+  "release_workflow": 41097360044,
+  "release_result": "success on all four native platforms",
+  "downloaded_assets_checksums_and_provenance_verified": true,
+  "sha256": {
+    "build.json": "d0678d04f62f4e9b3b53ce94a2bca1d2bd19670ed94029ace057e9246d9ea4e1",
+    "join.sh": "df6044f22c6f4689728ffec21d8fa773cd7674b90c83a1c3b1c8ef8ca43722c7",
+    "spr-ceremony-darwin-amd64": "6423380833c4decbd28bc8838d8c0657859c9c9c9243405b4d2b7b2fa27a39d5",
+    "spr-ceremony-darwin-arm64": "7398b1a3df6f29ffa87d3d5c4da2823ce6878aef578a24721d01eac163f3e38b",
+    "spr-ceremony-linux-amd64": "77c6b71e73da6a24ff8f0fe1b94a197b7e6d53f045d9c9d50f2cbc889eff7801",
+    "spr-ceremony-linux-arm64": "addf2ee7b9d0c4023f04878b9c2ed21b4f9e552412b439603ad6db5570b0d499",
+    "browser-e15634b594dd510c993b54d100e7ea8e7beba888.tar.gz": "c642f85a4c8ca063d2eec6a51e723ac61d3746fc553020df5cbebaab2454c316"
+  },
+  "validation": [
+    "Simulated-time tests verify future-dated signed receipts after waiting, then continue to the next circuit without reuploading or overriding the verifier clock.",
+    "Tampered signatures fail immediately; no unverified receipt is saved.",
+    "Time-window retry is bounded to ten seconds and respects cancellation.",
+    "Released Linux client verified 14 completed records and nine signed GitHub links from the live campaign."
+  ],
+  "aws": {
+    "deployed": true,
+    "deployment_ssm_command": "7f82b86b-12fe-46d9-8b18-f6d0d67d1039",
+    "drain_ssm_command": "2c48e080-db35-491c-984a-5f571f1def2a",
+    "runtime_ssm_command": "79cef0b8-84f7-498e-a80b-9e0fc56ff067",
+    "new_claims_held_while_active_work_finished": true,
+    "reservations_before_restart": 0,
+    "queue_hold_removed_and_rollback_timer_stopped": true,
+    "services_active": true,
+    "native_binary_hash_verified": true,
+    "oauth_configuration_permissions": "0600, spr",
+    "hosted_assets_verified": [
+      "join.sh",
+      "spr-ceremony-darwin-arm64",
+      "spr-ceremony-linux-amd64"
+    ],
+    "before_checkpoint": {
+      "sha256": "cf6a515b0e84424a4062cb25526b7a34a8992e0adc7d4a568d57bc06ef5efb9d",
+      "size": 9095
+    },
+    "after_checkpoint": {
+      "sha256": "d57353e423d0379c59eaf125fa480bb526dc621131498d9296752f31401a76ab",
+      "size": 9095
+    },
+    "previous_accepted_contributions_preserved": 605,
+    "new_contributions_after_restart": 1,
+    "checkpoint_descendant_distance": 1,
+    "manifest_and_beacon_unchanged": true,
+    "ceremony_phase": "open"
+  },
+  "incident_checks": {
+    "coordinator_ntp_synchronized": true,
+    "coordinator_offset_seconds": -2.126e-06,
+    "dean_receipt_signatures_verified": 9
+  },
+  "limits": [
+    "Dean's failing client build and local clock offset were not independently measured; his original generic error does not establish its precise cause.",
+    "This release retries only signature time-window failures, never invalid cryptographic signatures.",
+    "The contributor must download the updated binary; an already running client does not update itself.",
+    "Receipt signature and checkpoint preservation checks are not a full MPC transcript audit."
+  ]
+}

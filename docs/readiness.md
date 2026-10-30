@@ -460,4 +460,18 @@ malformed invitation links and signature time-window failures. Strict validation
 is unchanged. CI and all four native platform checks passed; downloaded release
 assets passed checksum and provenance verification. The released Linux client
 verified all 533 signed receipts and eight GitHub links from the live campaign.
-This release has not been deployed to AWS; the hosted installer remains on rc.16.
+This release was superseded by rc.18 before AWS deployment.
+
+[v0.1.0-rc.18](evidence/release-v0.1.0-rc.18.json) was deployed on October 30.
+The native client waits up to ten seconds for a freshly uploaded receipt that
+fails only signature time-window validation, without repeating the upload or
+changing the verification clock. Invalid cryptographic signatures still stop
+immediately. Simulated-time tests cover continuation, bounded waiting,
+cancellation and rejection of tampered receipts; CI and all four native platform
+checks passed. Public installer and Mac ARM64/Linux AMD64 binaries match the
+attested release. New claims briefly waited during deployment; all reservations
+finished before restart, and normal scheduling was restored. The post-deployment
+checkpoint preserved all 605 prior contributions and included one new acceptance.
+Manifest, beacon plan and open phase were unchanged. Dean's nine checked receipt
+signatures verified, and AWS NTP was synchronized; the precise cause of his older
+client's generic error remains unconfirmed.
