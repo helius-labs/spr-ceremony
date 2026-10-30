@@ -1,0 +1,49 @@
+{
+  "checked_at": "2026-10-30T16:08:11.314120+00:00",
+  "release": "https://github.com/helius-labs/spr-ceremony/releases/tag/v0.1.0-rc.17",
+  "source_revision": "f5963bc10cf477ba1e4f82bb8e8d593f3e294aa7",
+  "check_workflow": 41085415395,
+  "release_workflow": 41086063618,
+  "release_result": "success on all four native platforms",
+  "changes": [
+    "Malformed invitation links explain how to copy the full private invitation.",
+    "OpenPGP signature time-window errors explain clock synchronization and retry; signature validation remains strict."
+  ],
+  "downloaded_release_immutability_verified": true,
+  "downloaded_asset_provenance_verified": true,
+  "provenance_assets": [
+    "build.json",
+    "join.sh",
+    "spr-ceremony-darwin-amd64",
+    "spr-ceremony-darwin-arm64",
+    "spr-ceremony-linux-amd64",
+    "spr-ceremony-linux-arm64",
+    "browser-f5963bc10cf477ba1e4f82bb8e8d593f3e294aa7.tar.gz",
+    "SHA256SUMS"
+  ],
+  "downloaded_binary_version_verified": true,
+  "downloaded_cli_invitation_recovery_message_verified": true,
+  "go_version": "go1.27.3",
+  "sha256": {
+    "build.json": "38c92fed83c2fe267c6d51707e46315aeabd7ebb13d408d6884088945e90e448",
+    "join.sh": "7287eef6aba9d5fd44b358aec3d9db0816cfe1fac0db7db8188c0601be4ea69d",
+    "spr-ceremony-darwin-amd64": "de31bc989d3615b29474d10b9b17efc5d1f94099b8f99485bc26fd5ce7615d11",
+    "spr-ceremony-darwin-arm64": "3235e1fc67c47ef1ac64adc177b48b6abd2b9aa36464b60ea96669eda626bfae",
+    "spr-ceremony-linux-amd64": "dc2bea39dea3417e5866c4106020890b44cf17276bc25255da98b30f90fcfcb1",
+    "spr-ceremony-linux-arm64": "92835967da5d773bdfb35729753a7db6f7633c03d87113deba0ca45873e73c2a",
+    "browser-f5963bc10cf477ba1e4f82bb8e8d593f3e294aa7.tar.gz": "835992585a6263d2f07f7274d0cadd6181fc50f2247d5f3e5955aef02069fafc"
+  },
+  "live_read_only_verification": {
+    "origin": "https://d3gz3drevfa8mb.cloudfront.net",
+    "manifest_sha256": "4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079",
+    "complete_records": 13,
+    "signed_receipts": 533,
+    "signed_github_links": 8
+  },
+  "aws_deployed": false,
+  "limits": [
+    "The hosted installer and coordinator remain on rc.16. Deploy during a coordinated maintenance window.",
+    "Public receipt/account signature verification is not a full cryptographic transcript audit.",
+    "No ceremony mutation, closure or finalization was performed."
+  ]
+}

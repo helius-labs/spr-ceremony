@@ -454,3 +454,10 @@ checkpoint in S3 and the public API. Both coordinator services remained active.
 The ceremony is open with quicknet round **33536464**, October 31 at
 **02:12:36 UTC**. This check establishes preservation across recovery, not a new
 cryptographic audit of every contribution. Invitation expiry times are unchanged.
+
+[v0.1.0-rc.17](evidence/release-v0.1.0-rc.17.json) adds recovery instructions for
+malformed invitation links and signature time-window failures. Strict validation
+is unchanged. CI and all four native platform checks passed; downloaded release
+assets passed checksum and provenance verification. The released Linux client
+verified all 533 signed receipts and eight GitHub links from the live campaign.
+This release has not been deployed to AWS; the hosted installer remains on rc.16.
