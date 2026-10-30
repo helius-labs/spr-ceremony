@@ -1,0 +1,49 @@
+{
+  "checked_at": "2026-10-30T15:52:43.474602+00:00",
+  "source_revision": "b5a04e2544a19657b33871cbaef2d5ad9c10ae1b",
+  "public_origin": "https://d3gz3drevfa8mb.cloudfront.net",
+  "manifest_sha256": "4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079",
+  "command": "spr-ceremony records --url https://d3gz3drevfa8mb.cloudfront.net --manifest-sha256 4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079 --out RECORDS --github-out IDENTITIES",
+  "completed_records_verified": 13,
+  "signed_acceptance_receipts_verified": 533,
+  "signed_github_identities_verified": 8,
+  "all_verified_identities_match_repository_archive": true,
+  "identities": [
+    {
+      "path": "contributions/github/4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079/4a8dd7290378125a8f38f2ddf6f8566e37bf039bc1f0e6e21300dba10fd6f7c3.json",
+      "sha256": "675bba9eb8b8de15ac1dae49f5fa89301cd545b0fb529b7163b29e26eae6b83d"
+    },
+    {
+      "path": "contributions/github/4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079/86566164c10f79c2aacf7aef15ca372324183d50482fc1c15d59f50f5a907e17.json",
+      "sha256": "51ac34498d40f117e40294cc989d28bb0a5ff5ece73898be3c2c85b0d10ad2b6"
+    },
+    {
+      "path": "contributions/github/4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079/8d2da9912281e63b0b26c6411382f8dec4d7fbe29056c2962c641f81c04608cb.json",
+      "sha256": "f239468e1e1273d7199fc8fb00c922f2786817aaa926ad112e9ffe6651627699"
+    },
+    {
+      "path": "contributions/github/4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079/95c1746f13dfb6c37a82ffb0c3953f4e9b3b5473a82ba3f8cf3b83683c096769.json",
+      "sha256": "888063e3108f2445e9771781e7e02a876a76fc26937efae2d38a7ae33552fc45"
+    },
+    {
+      "path": "contributions/github/4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079/c032509d03e5f8354a971e3bb8a8ec0aea10508746fe0268ceef8e5bd3f59467.json",
+      "sha256": "d060f13c6b38ad6e36cc849e2972a51c3d95ddf42e1dd76fa0d72866f77788e0"
+    },
+    {
+      "path": "contributions/github/4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079/c95e5b9e8099d149cb458fa7a00f4dde1585651d410735abba9a4d6650b41df0.json",
+      "sha256": "ee182d77c541bd0e613021503d404c8a362cbf984120091c9c93fab8a9c002a9"
+    },
+    {
+      "path": "contributions/github/4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079/f9a8409c2e9c0e802d0250873e42a714e2a44d9b7878bf9ea7a85c47d151fc30.json",
+      "sha256": "a4db2e83e30b541da4ef6c9dfdaa051fe116acebc3e2f27f9f45f4eda6b7c1a3"
+    },
+    {
+      "path": "contributions/github/4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079/fc1444333a3d625512b8bc918220895b47cdb8cee9c28e545b68769441c3ac77.json",
+      "sha256": "4104b0dbef8d349b9c354842b861a957a9fd6488b3460474d6be2c276304d8f1"
+    }
+  ],
+  "limits": [
+    "Read-only verification of public coordinator-signed receipts and GitHub bindings, not a full MPC transcript audit.",
+    "Existing account links demonstrate completed linking and publication. This check did not initiate a new OAuth flow or inspect provider tokens."
+  ]
+}

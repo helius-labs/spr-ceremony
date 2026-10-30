@@ -422,8 +422,13 @@ and a 30-minute upload deadline. Ten concurrent clients completed and audited
 two fixture circuits each. All four native release platform checks passed.
 Deployed on October 28 with GitHub OAuth enabled. Runtime and hosted release
 hashes, service health and private configuration permissions passed checks. All
-181 accepted circuit contributions and the checkpoint remained unchanged. A real
-GitHub consent/callback/publication check remains pending. See [GitHub setup](github.md).
+181 accepted circuit contributions and the checkpoint remained unchanged.
+Subsequent [public-record verification](evidence/github-publication-2026-10-30.json)
+checked 533 signed acceptance receipts across 13 completed records and eight signed
+GitHub account links. Every account link matched its automatically published
+repository archive. These existing links demonstrate completed linking and
+publication; the verification did not initiate a new OAuth session or inspect
+provider tokens. See [GitHub setup](github.md).
 
 On October 28, Zolana `main` at
 `1ca1163a6aab4929eb5b2edea98d9fa3bac771c6` was recompiled with Go 1.27.3,
@@ -439,3 +444,13 @@ provide a copyable installer command that runs only account linking. Live
 Chromium and WebKit checks passed, along with runtime and hosted asset checks.
 All 531 accepted circuit contributions, the checkpoint and ceremony settings
 remained unchanged across deployment.
+
+The [announced 12-hour extension](evidence/beacon-extension-2026-10-30.json)
+completed on October 30 at 14:12:53 UTC. The
+[execution check](evidence/beacon-extension-2026-10-30-execution.json) verified the
+old/new checkpoint hashes, unchanged manifest and all 41 circuit-state references,
+the recorded recovery, successful AWS service exit, and byte-identical recovery
+checkpoint in S3 and the public API. Both coordinator services remained active.
+The ceremony is open with quicknet round **33536464**, October 31 at
+**02:12:36 UTC**. This check establishes preservation across recovery, not a new
+cryptographic audit of every contribution. Invitation expiry times are unchanged.

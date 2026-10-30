@@ -157,12 +157,13 @@ ports 8080/8081. AWS phase commands require the HTTPS operator endpoint.
 
 For the October 30 campaign, the operator requested an additional 12 hours
 before the original deadline. The [public announcement](evidence/beacon-extension-2026-10-30.json)
-pins quicknet round **33536464**, October 31 at **02:12:36 UTC**. The existing
-recovery protocol activates it after the old deadline; contributions briefly
-pause while recovery runs. Invitations retain their separate expiry times.
+pins quicknet round **33536464**, October 31 at **02:12:36 UTC**. Recovery
+[completed at 14:12:53 UTC on October 30](evidence/beacon-extension-2026-10-30-execution.json),
+preserving all 41 circuit states. The contribution window reopened after the
+original deadline pause. Invitations retain their separate expiry times.
 
-The AWS timer `spr-beacon-extension-33536464.timer` invokes
-`scripts/recover-beacon-scheduled.py` at October 30, 14:12:41 UTC. The helper
+The AWS timer `spr-beacon-extension-33536464.timer` invoked
+`scripts/recover-beacon-scheduled.py` on October 30 at 14:12:41 UTC. The helper
 checks the manifest, binary digest, old beacon, lifecycle and execution window,
 then calls the released CLI with the current checkpoint pin and S3 config. It
 never edits ceremony files directly. The CLI audits checkpoints, checks public
@@ -177,9 +178,6 @@ systemctl status spr-beacon-extension-33536464.timer
 journalctl -u spr-beacon-extension-33536464.service --no-pager
 ```
 
-Check `operator status` after the scheduled time to confirm the new round. This
-schedule does not close or finalize the ceremony. To cancel before it runs:
-
-```sh
-sudo systemctl disable --now spr-beacon-extension-33536464.timer
-```
+Use `operator status` to confirm the active round. The extension did not close or
+finalize the ceremony. To finish with this beacon, close and publish the closure
+checkpoint **before October 31, 02:12:36 UTC**, then finalize after that time.

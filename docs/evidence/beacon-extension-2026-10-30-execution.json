@@ -1,0 +1,35 @@
+{
+  "checked_at": "2026-10-30T15:52:43.474602+00:00",
+  "public_origin": "https://d3gz3drevfa8mb.cloudfront.net",
+  "manifest_sha256": "4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079",
+  "checkpoint": {
+    "sha256": "0d301b743339264487ef4a120390f7957de23d672429a14a47095030b8d8d098",
+    "size": 9095
+  },
+  "previous_checkpoint": {
+    "sha256": "7e49af0686ae0892fc1dcc2805cedbb7c27413fc20b4e9f2c5080b518b5888b4",
+    "size": 7106
+  },
+  "recovered_at": "2026-10-30T14:12:53.08585848Z",
+  "phase": "open",
+  "old_round": 33522064,
+  "new_round": 33536464,
+  "new_deadline": "2026-10-31T02:12:36Z",
+  "reason": "Operator requested 12 additional hours for contributions; announced before the original beacon deadline.",
+  "unchanged_circuit_states": 41,
+  "exports_unchanged": true,
+  "manifest_unchanged": true,
+  "s3_object": "s3://spr-ceremony-test-558215002830-artifacts/core/v1/objects/0d301b743339264487ef4a120390f7957de23d672429a14a47095030b8d8d098",
+  "s3_matches_public_checkpoint": true,
+  "ssm_command": "7ca077cc-3f5f-4f50-a45c-b29eb097b684",
+  "service_result": "success",
+  "service_exit_status": 0,
+  "service_started_at": "2026-10-30T14:12:41Z",
+  "service_finished_at": "2026-10-30T14:12:53Z",
+  "coordinator_and_admin_active": true,
+  "limits": [
+    "Checks recovery metadata and exact circuit-state preservation; does not repeat the cryptographic full-transcript audit.",
+    "The ceremony remains open; no closure or finalization was performed.",
+    "Invitation expiration times are separate and unchanged."
+  ]
+}
