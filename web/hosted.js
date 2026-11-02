@@ -1,7 +1,7 @@
 import { usesPublicPhase1, ENGINE, hex, require, request, deadline } from "./protocol.js";
 
 const $ = id => document.getElementById(id);
-let build, config, invitationLink, githubTicket, githubConfirmation;
+let build, config, invitationLink, githubTicket, githubConfirmation, ceremonyPhase;
 function status(text, error = false) {
   $("status").hidden = false;
   $("status").textContent = text;
@@ -13,7 +13,7 @@ function readInvitationLink() {
   invitationLink = undefined;
   githubTicket = githubConfirmation = undefined;
   $("github-panel").hidden = true;
-  $("native-panel").hidden = false;
+  $("native-panel").hidden = ceremonyPhase !== "open" && ceremonyPhase !== "prepared";
   $("github-retry").hidden = true;
   $("github-actions").hidden = false;
   $("github-begin").hidden = $("github-confirm").hidden = true;
@@ -56,6 +56,21 @@ function shellQuote(value) { return "'" + value.replaceAll("'", "'\\''") + "'"; 
 async function publicView() {
   const view = await request("/v1/ceremony");
   require(view.format === "spr-public-ceremony-v1" && hex(view.manifest?.sha256) && hex(view.checkpoint?.sha256) && Array.isArray(view.circuits) && view.circuits.length <= 41, "Invalid public ceremony metadata");
+  ceremonyPhase = view.phase;
+  const finished = view.phase === "finalized";
+  $("native-panel").hidden = !["open", "prepared"].includes(view.phase) || !$("github-panel").hidden;
+  $("completed-panel").hidden = !finished;
+  if (finished) {
+    require(view.circuits.every(c => Number.isSafeInteger(c.contributions) && c.contributions >= 0), "Invalid contribution count");
+    const count = view.circuits.reduce((sum, c) => sum + c.contributions, 0);
+    $("completed-summary").textContent = `${view.circuits.length} circuits · ${view.participants} contributors · ${count} accepted contributions`;
+    const verified = !view.insecure_test_setup && usesPublicPhase1(view.phase1) && view.circuits.length === 41 && count === 615 && view.manifest.sha256 === "4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079"
+      && view.checkpoint.sha256 === "5c525e4b1547516cf63678c4a235cb2fd05cd1f78a463a3faf44e2ef1cbc41d7"
+      && view.final_export?.sha256 === "ed506cb30158a722fcc9692d44960599e73a4028828b0e6dc6266ec597af8caa";
+    $("verification-status").textContent = verified ? "All 41 final keys independently reproduced and verified. November 2, 2026." : "Final keys published. Verify the transcript and keys before use.";
+    $("final-release-links").hidden = !verified;
+    $("contributions").open = true;
+  }
   $("public-summary").textContent = `${view.phase[0].toUpperCase() + view.phase.slice(1)} · ${view.circuits.length} circuits · ${view.participants} contributors`;
   $("keys-status").textContent = view.phase === "finalized" ? "Final keys. Verify before use." : "Final keys will appear after the ceremony is finalized.";
   if (view.insecure_test_setup && !usesPublicPhase1(view.phase1)) { $("notice").hidden = false; $("notice").textContent = "Locally generated parameters. Do not use these keys in production."; }

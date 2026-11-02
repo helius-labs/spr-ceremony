@@ -1,0 +1,25 @@
+{
+  "ceremony_source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6",
+  "application_base_revision": "af1d693f3eac8cb1d9eb8d4f41b3228b6609cbad",
+  "manifest_sha256": "4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079",
+  "checkpoint_sha256": "5c525e4b1547516cf63678c4a235cb2fd05cd1f78a463a3faf44e2ef1cbc41d7",
+  "export_sha256": "ed506cb30158a722fcc9692d44960599e73a4028828b0e6dc6266ec597af8caa",
+  "circuits": 41,
+  "checks": {
+    "recompiled_r1cs_hashes_match": 41,
+    "packaged_key_loader_and_gnark_proofs": 41,
+    "solana_host_verifier_accepts_proofs_and_rejects_changed_inputs": 41,
+    "application_verifier_constants_match_key_lock": true
+  },
+  "limitations": [
+    "Host verification does not execute a deployed Solana program.",
+    "Application deployment remains pending."
+  ],
+  "artifacts": {
+    "application-rust.log": "5620635cb403995b429044baf1f570f7aaa5b0cbf9fa6db44ef8e1a488eb6e12",
+    "go.log": "824c05bb8d4a01f0069b3657368ef0d01dbd5c64086fcedd93dfded3c6e392a7",
+    "package.json": "95fb176fb38bedfc132cd3107db15857e166b018ed2e58ef5e144849547c8dd6",
+    "solana-host.log": "1099bc09e843072c7299b86b9f753fd2c37a3de5548e9340cb2a5522f788e4d9",
+    "browser.json": "f2fbad285cfd5c577d1280d5348fa931b017745c3fd2bb69661d7f1ecc14b83d"
+  }
+}

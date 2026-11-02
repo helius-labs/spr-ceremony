@@ -1,0 +1,58 @@
+    Updating crates.io index
+    Updating git repository `https://github.com/helius-labs/zk-tools`
+From https://github.com/helius-labs/zk-tools
+ * [new ref]         a4ebd1699ffa04545e3739f16a51e764992d07d6 -> refs/commit/a4ebd1699ffa04545e3739f16a51e764992d07d6
+ Downloading crates ...
+  Downloaded ark-bn254 v0.6.0
+  Downloaded ark-serialize v0.6.0
+  Downloaded ark-ff-macros v0.6.0
+  Downloaded ark-serialize-derive v0.6.0
+  Downloaded ark-std v0.6.0
+  Downloaded light-poseidon v0.5.0
+  Downloaded ark-ff v0.6.0
+  Downloaded ark-ff-asm v0.6.0
+  Downloaded ark-poly v0.6.0
+  Downloaded ark-ec v0.6.0
+  Downloaded groth16-solana v0.3.1
+   Compiling thiserror v2.0.20
+   Compiling hashbrown v0.17.1
+   Compiling itertools v0.14.0
+   Compiling ark-serialize-derive v0.6.0
+   Compiling ark-ff-asm v0.6.0
+   Compiling ark-ff-macros v0.6.0
+   Compiling ark-std v0.6.0
+   Compiling ark-serialize v0.6.0
+   Compiling wincode v0.5.5
+   Compiling solana-bn254 v3.2.1
+   Compiling solana-address v2.6.1
+   Compiling spr-event v0.1.0 (/home/ubuntu/src/worktrees/zolana-core-ceremony/program-libs/event)
+   Compiling solana-pubkey v4.2.1
+   Compiling solana-sdk-ids v3.1.0
+   Compiling solana-instruction v3.4.1
+   Compiling solana-message v4.4.1
+   Compiling ark-ff v0.6.0
+   Compiling ark-poly v0.6.0
+   Compiling ark-ec v0.6.0
+   Compiling ark-bn254 v0.6.0
+   Compiling light-poseidon v0.5.0
+   Compiling groth16-solana v0.3.1
+   Compiling spr-hasher v0.1.1 (/home/ubuntu/src/worktrees/zolana-core-ceremony/program-libs/hasher)
+   Compiling spr-tree v0.1.0 (/home/ubuntu/src/worktrees/zolana-core-ceremony/program-libs/tree)
+   Compiling spr-interface v0.1.1 (/home/ubuntu/src/worktrees/zolana-core-ceremony/program-libs/interface)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 16.00s
+     Running tests/core_ceremony.rs (/home/ubuntu/src/zolana/target/debug/deps/core_ceremony-a4f006e4d7960bd0)
+
+running 1 test
+test final_core_keys_accept_real_proofs_and_reject_changed_public_inputs ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.95s
+
+     Running tests/vk_proving_key_lock.rs (/home/ubuntu/src/zolana/target/debug/deps/vk_proving_key_lock-de38e45711451c53)
+
+running 3 tests
+test every_locked_transfer_and_merge_key_has_a_verifying_key ... ok
+test proving_key_sha256s_match_lockfile ... ok
+test circuit_proving_key_sha256_matches_its_key_file ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
