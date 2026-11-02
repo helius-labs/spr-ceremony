@@ -3,12 +3,21 @@
 A trusted setup for **41 core circuits**. Signed invitations and receipts.
 Verified contributions. Public final keys.
 
+**Completed November 2, 2026.** All 41 circuits contain 15 accepted contributions
+each. Finalization and independent reproduction of all final keys passed.
+[Download final keys](https://github.com/helius-labs/spr-ceremony/releases/tag/core-keys-2026-11-02) ·
+[Verify and integrate](docs/final-keys.md) ·
+[Verification evidence](docs/evidence/core-finalization-2026-11-02/verification.json).
+
 [Participant site](https://d3gz3drevfa8mb.cloudfront.net) ·
 [Control panel](https://1q82ow4q4c.execute-api.eu-north-1.amazonaws.com) ·
 [CLI releases](https://github.com/helius-labs/spr-ceremony/releases) ·
 [Contributors](contributions/)
 
 ## Contribute
+
+This ceremony is finalized and no longer accepts contributions. The instructions
+below describe the contribution flow for an open ceremony.
 
 Get a private invitation link from the operator. Run this in your terminal:
 
@@ -79,7 +88,9 @@ default; use `--hours 72` to change that.
 
 Audit downloads and verifies the full transcript locally; parallel workers need
 additional RAM. Reissue preserves accepted work and invalidates previous access.
-Revoke also preserves accepted work. The current ceremony is already open.
+Revoke also preserves accepted work. The current ceremony is finalized; use
+`operator status` or `operator export --out final-keys --workers 4` to inspect it
+or download and independently verify its keys.
 
 **Finish:** close before the announced beacon time, finalize after it, then
 independently reproduce the published keys. Publish and independently witness

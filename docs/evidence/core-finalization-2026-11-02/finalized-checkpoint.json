@@ -1,0 +1,447 @@
+{
+  "format": "spr-ceremony-v1",
+  "manifest": {
+    "sha256": "4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079",
+    "size": 31586
+  },
+  "sequence": 620,
+  "previous": {
+    "sha256": "6ddc392b09d1a93b17bce65c08731d5b11616b851986454a5efe2a1554f7f61b",
+    "size": 17583
+  },
+  "states": {
+    "merge_24_1": {
+      "sha256": "14d79826f30ee0ce7be7bf3731ffd3be647b6b4f46a34f92e466fa4be4c17e59",
+      "size": 12815
+    },
+    "merge_52_1": {
+      "sha256": "f7ac3bf1d504ce7cb576c871c31350de290e037d08b1822c586c70a561a4a6df",
+      "size": 12845
+    },
+    "merge_8_1": {
+      "sha256": "e98914d09fb7fe78192a52012f75470ccfd1378dc92d68e5f018b20f513981a1",
+      "size": 12798
+    },
+    "transfer_confidential_12_2": {
+      "sha256": "673b16008b1ee783ae60661aeb49abbec56e0c08bbf32300c2c9dc63ff546240",
+      "size": 13071
+    },
+    "transfer_confidential_12_4": {
+      "sha256": "b1b171febeb8610e46264453e3a24c83f5b15893c6fbbc694d57996dcd752f0c",
+      "size": 13072
+    },
+    "transfer_confidential_12_8": {
+      "sha256": "71f1be7580b6caeedee8327b423d8f9298a1ee6f2fc4e40889d01c66718e79be",
+      "size": 13071
+    },
+    "transfer_confidential_16_2": {
+      "sha256": "41bfa786881b1616ac5f052fb1fee564a2c120ce33a96c16293219bd08a15071",
+      "size": 13071
+    },
+    "transfer_confidential_16_4": {
+      "sha256": "e5681333dfd03010ee96277ef23724afe75419608b516f2d756afd9ccc80c161",
+      "size": 13070
+    },
+    "transfer_confidential_16_8": {
+      "sha256": "7b486c7998435682ce7c94c7da8ae2b8a54cf0478f12f2d3136bf6b72f77d383",
+      "size": 13072
+    },
+    "transfer_confidential_1_16": {
+      "sha256": "4790ddd0c3ccb325795088fc8d16566bfaf11fb12e05044c639c50f55e3cc585",
+      "size": 13041
+    },
+    "transfer_confidential_1_2": {
+      "sha256": "637476c04c080db96f2a5da16065729fa8828faa2365b7b38123b924212e344d",
+      "size": 13022
+    },
+    "transfer_confidential_1_4": {
+      "sha256": "3cc0526affa438ec9ca1d9bb020528fc34670bd15d12c724b46bc027a4df9b88",
+      "size": 13024
+    },
+    "transfer_confidential_1_8": {
+      "sha256": "a9b2d6a1809f12b9601b78fd9f7360fefb127536c3053e9994512f8b09f45370",
+      "size": 13023
+    },
+    "transfer_confidential_24_2": {
+      "sha256": "44c56eba740dc78582403dab06048a4bf3b2d5b671dd7ed50e360e647644d10b",
+      "size": 13070
+    },
+    "transfer_confidential_24_4": {
+      "sha256": "caaca520e461f1babcf28b83d8d70f41d8dfcdf9f8f18219d034a2bb3561c0c7",
+      "size": 13072
+    },
+    "transfer_confidential_2_16": {
+      "sha256": "eef9499ec1de77b1916651342cfe459b669891b3c46135b8cf2c16cabfde06e5",
+      "size": 13040
+    },
+    "transfer_confidential_2_2": {
+      "sha256": "59ecdd958ed7fab9a8c5e7edc84992dbaaef32016b6bb78717a7fa7d569cd5bd",
+      "size": 13019
+    },
+    "transfer_confidential_2_4": {
+      "sha256": "d4e2faa4f5c88391c379da59efd48f4c22695c34fcfb1c0b8d64bca9191cd329",
+      "size": 13022
+    },
+    "transfer_confidential_2_8": {
+      "sha256": "2ddf4d6617ea35ba16fd88cf00092c12ea4969216f17b04eb714cc608c3da9ed",
+      "size": 13022
+    },
+    "transfer_confidential_32_2": {
+      "sha256": "9b6232f1c5a134228bb8143e3f836b5d189ce23ef063cf49da51a4a7b5e5308d",
+      "size": 13071
+    },
+    "transfer_confidential_3_2": {
+      "sha256": "200284d71cef0b7ca9e6accb620cff617bd640df963775463ee2d584347f908f",
+      "size": 13022
+    },
+    "transfer_confidential_3_4": {
+      "sha256": "a0bcdcaefd66ab2e72ef8af92e29a3c14536edccdb5f1c5eb02bc03e853b290b",
+      "size": 13024
+    },
+    "transfer_confidential_3_8": {
+      "sha256": "212068164baa1ae773d9757fff230d703cd64ec3cde1342d81aa5925df0172d4",
+      "size": 13023
+    },
+    "transfer_confidential_40_2": {
+      "sha256": "72623747504f83b7fb5935f79acc9277d70eb01f0945bd2980676713fafcd783",
+      "size": 13070
+    },
+    "transfer_confidential_48_2": {
+      "sha256": "ec962c8987198332f16a9fd6529a1e423ddfa47219a49e229a0fbba5b5afc2c2",
+      "size": 13103
+    },
+    "transfer_confidential_49_2": {
+      "sha256": "7b4ecd1e8d94bae313c24126361add9b9e44fbb8afd015cb4b517c2ed6b7d80b",
+      "size": 13101
+    },
+    "transfer_confidential_4_16": {
+      "sha256": "a3be7e7b43985609d4bdd3f5668dde4813ccd3d1eff3b18ad27ae35b2c87f8a7",
+      "size": 13038
+    },
+    "transfer_confidential_4_2": {
+      "sha256": "ff5aeaff17687fd1088f44f193ce67e5270861a82ea817b2ba3217f36096a19b",
+      "size": 13024
+    },
+    "transfer_confidential_4_4": {
+      "sha256": "1b05639652c5da2b8e477a3ebca7c1b21a7d3c26c09c92075f67a3a7dff8bffe",
+      "size": 13023
+    },
+    "transfer_confidential_4_8": {
+      "sha256": "19b1c0f8c032bb694be970ec0a28203ced8e9b4546c081e73faa5c983976af0d",
+      "size": 13024
+    },
+    "transfer_confidential_5_16": {
+      "sha256": "a70b70e343296708fde7c37e2c498894086a017baf6a2be70a0ca673cc0cd1cb",
+      "size": 13067
+    },
+    "transfer_confidential_5_2": {
+      "sha256": "cf3ebca85b66b8e9e08e91bc592fa00501d3ad55973171c407e95ff5155d4fe9",
+      "size": 13025
+    },
+    "transfer_confidential_5_4": {
+      "sha256": "fbd955551f17c515c79aba9387f1f7af29ba42977d884c3ce8cdecf74175782f",
+      "size": 13024
+    },
+    "transfer_confidential_5_8": {
+      "sha256": "ddc3d05ffed8d425f0b07c1a639f40057bd2fec2bc47851b04e6c38b64d56976",
+      "size": 13053
+    },
+    "transfer_confidential_6_2": {
+      "sha256": "47b1a1301f2b5bb8f755717454225c8e907221299b42a74c532428f26db32d08",
+      "size": 13053
+    },
+    "transfer_confidential_6_4": {
+      "sha256": "05ee2626ea341ce8a71765b894d592c522f794257e4823a9f3da73374ddfe5cd",
+      "size": 13055
+    },
+    "transfer_confidential_6_8": {
+      "sha256": "3ae7466c218403279d9136a3de30efa6219dee937bbc0882b031803b8f243712",
+      "size": 13055
+    },
+    "transfer_confidential_8_16": {
+      "sha256": "428f2723ae4bd20c54f75e10e0e487f21c5ace5e99518076eb63ea940f600515",
+      "size": 13069
+    },
+    "transfer_confidential_8_2": {
+      "sha256": "19dedb13367dc8ad9ae811f99004d15f4dc2de19ccd9ae924c5bc25e976006af",
+      "size": 13056
+    },
+    "transfer_confidential_8_4": {
+      "sha256": "01affd176ab87dcbb0e30f20ffeceeb47d1f5a84e1d5afdbf24b82f399b3a3ce",
+      "size": 13055
+    },
+    "transfer_confidential_8_8": {
+      "sha256": "1c928001481dc04a9d330048d7616e48927670aa390339eb5b0ce34b14a873a6",
+      "size": 13054
+    }
+  },
+  "lifecycle": {
+    "phase": "finalized",
+    "beacon": {
+      "chain_info": {
+        "public_key": "83cf0f2896adee7eb8b5f01fcad3912212c437e0073e911fb90022d3e760183c8c4b450b6a0a6c3ac6a5776a2d1064510d1fec758c921cc22b0e17e63aaf4bcb5ed66304de9cf809bd274ca73bab4af5a6e9c76a4bc09e76eae8991ef5ece45a",
+        "beacon_id": "quicknet",
+        "period": 3,
+        "scheme": "bls-unchained-g1-rfc9380",
+        "genesis_time": 1692803367,
+        "genesis_seed": "f477d5c89f21a17c863a7f937c6a6d15859414d2be09cd448d4279af331c5d3e",
+        "chain_hash": "52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971"
+      },
+      "chain_hash": "52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971",
+      "round": 33610948,
+      "round_time": "2026-11-02T16:16:48Z"
+    },
+    "opened_at": "2026-10-28T14:12:33.32079992Z",
+    "closed_at": "2026-11-02T14:37:43.215537345Z",
+    "closed_heads": {
+      "merge_24_1": {
+        "sha256": "e24dff3e2481dc17bc4feadeb02110b4f15a3763daa1e9a022af04dad60e3df2",
+        "size": 50125003
+      },
+      "merge_52_1": {
+        "sha256": "05677e0af9e31b8fa9508d6699be89570e131f8a0eca7d501139588cc1863a27",
+        "size": 102801483
+      },
+      "merge_8_1": {
+        "sha256": "86bdd97d87f60f0955f6cc0fc3a6877c5831f191ed9eb9f12fa245dce99f3f94",
+        "size": 14056139
+      },
+      "transfer_confidential_12_2": {
+        "sha256": "a999d80afa7e4e685aae8d3ef296e50619a7a222b93a19740877455778a057d7",
+        "size": 25588363
+      },
+      "transfer_confidential_12_4": {
+        "sha256": "e3ff5539cec2e3fc04a58c2a7552dced20f675c5b1acb9f89f29cc78a2001a5f",
+        "size": 25711051
+      },
+      "transfer_confidential_12_8": {
+        "sha256": "7fcb344aa521f604a80f5e57cd14601bbcaa8b15283d407f8ce8d72d0241af49",
+        "size": 25996363
+      },
+      "transfer_confidential_16_2": {
+        "sha256": "cb53a43bb8a8e19b4150f7f9ede5314858d2196501814efa2fed45815650656a",
+        "size": 28444171
+      },
+      "transfer_confidential_16_4": {
+        "sha256": "da87e57e9229a4598bcccf5fac4aa49db7bfaffd72bfbd2c9f9f46158b3efa92",
+        "size": 28568907
+      },
+      "transfer_confidential_16_8": {
+        "sha256": "ed08d594449a0ab07bac2fc8bb6d176fceef0a600e7eb9cbbec746cfd0fc0d61",
+        "size": 28858315
+      },
+      "transfer_confidential_1_16": {
+        "sha256": "dfe716a5f02264343f8580c0ab40f4f7f24dc1c3f9d0f769404e16a7d3e24aa8",
+        "size": 3988651
+      },
+      "transfer_confidential_1_2": {
+        "sha256": "35fb6125e3fee914b292203d7f22f8db2e47e74f6b772f2c1f57843215a2d7f4",
+        "size": 2025451
+      },
+      "transfer_confidential_1_4": {
+        "sha256": "43d26c15317c7970c0173871e1311d949b1c4b341874632dccc66f0db71a073e",
+        "size": 3191083
+      },
+      "transfer_confidential_1_8": {
+        "sha256": "71ef80831fcc90a0974b8a56d48771e9bacef27fc4b642fcd25496c49c7be053",
+        "size": 3465131
+      },
+      "transfer_confidential_24_2": {
+        "sha256": "0458454b12df59118482e7c286b69f146c7d36cb9dfe808ebc37e8545b910437",
+        "size": 50976011
+      },
+      "transfer_confidential_24_4": {
+        "sha256": "1fffb60caad37e6aeb6ca704ab0e7c9f3a4047a27dd2ea4887f2b418a76ba446",
+        "size": 51104843
+      },
+      "transfer_confidential_2_16": {
+        "sha256": "b1fa93ce2a505c9486054dba16ec4f0337c257d5d811442e402b2d4d27a81023",
+        "size": 6810763
+      },
+      "transfer_confidential_2_2": {
+        "sha256": "7f2210ba2c47e457d7698382dc5da9e0ee905395c2a66ef7bb6960968eb37821",
+        "size": 3795403
+      },
+      "transfer_confidential_2_4": {
+        "sha256": "5b9ba42c7a95508a27b8ac0118359d04a6789bdf0b8dfcf2a1ebf4e124d1b225",
+        "size": 3912971
+      },
+      "transfer_confidential_2_8": {
+        "sha256": "1567971ce823fcb4d0522b062cc5113c68168b033767f5bd9a2db40904628833",
+        "size": 6285195
+      },
+      "transfer_confidential_32_2": {
+        "sha256": "fd398c4bd37a150f4462ee699d1c325c780d3c1caf42cd685a11cf98e171fd3b",
+        "size": 56727947
+      },
+      "transfer_confidential_3_2": {
+        "sha256": "e4ce86109060ea20d2841fbc1952fd95d80b5092df673b253ef27696536bc756",
+        "size": 6596011
+      },
+      "transfer_confidential_3_4": {
+        "sha256": "9d4e1b90d2a2522e41e32ca31131e8d699f93ede2d283eb19d8b0e7752f8a0e7",
+        "size": 6714091
+      },
+      "transfer_confidential_3_8": {
+        "sha256": "d632123fc63ae71eb85b1bfaecf4c9e10813e20678ac373642797ce634e74edd",
+        "size": 6990187
+      },
+      "transfer_confidential_40_2": {
+        "sha256": "0620ea664dd175358d2cf6de2107e261c0463e2148c1108ff12bd3b6d9e9febb",
+        "size": 62382731
+      },
+      "transfer_confidential_48_2": {
+        "sha256": "28694c83dd9076722e78666137837e98bf562f38325ed5cb8b7d5aa48f4525bc",
+        "size": 101634955
+      },
+      "transfer_confidential_49_2": {
+        "sha256": "d1c09b4cdfcb698acf5d7c5766baf1eaba6f35d8f7eb29fc78a2ef8a58764078",
+        "size": 102341995
+      },
+      "transfer_confidential_4_16": {
+        "sha256": "c6f2125fd557045a107cb81de61c2ac2a2abfcdc9fe4801ab14c4fdddee0fcea",
+        "size": 8225355
+      },
+      "transfer_confidential_4_2": {
+        "sha256": "bc077e1506a617c8dfbda648ae09a8fdf58660aba054c88241fe0b9f9c303dc8",
+        "size": 7299979
+      },
+      "transfer_confidential_4_4": {
+        "sha256": "db177bb628eb9b100a3ba85e8be2b26e66f332f6f6fe4ff49a519de52b76570f",
+        "size": 7418571
+      },
+      "transfer_confidential_4_8": {
+        "sha256": "4b4015f6620e055a9ca721fc5ec75081ffde4f5d6bd3ad28743413dd52b8b127",
+        "size": 7695691
+      },
+      "transfer_confidential_5_16": {
+        "sha256": "d2ec31cae6c58c58b773eda808f299259380c60d7a52567df20695d00c7edb51",
+        "size": 13146155
+      },
+      "transfer_confidential_5_2": {
+        "sha256": "9e96ac3fadd0c248bf366de0868da9e5a8c83162552098da5b5aebc7c03be901",
+        "size": 8022891
+      },
+      "transfer_confidential_5_4": {
+        "sha256": "ebaf21d39a84b81fe8504b9ee378601cb9834ab2d386cc4d7d5f452b6eeb869e",
+        "size": 8141995
+      },
+      "transfer_confidential_5_8": {
+        "sha256": "8f04a003d6e7f256d74f409fb13a3fbde32fc181da3c93736264f1259fc2186c",
+        "size": 12614443
+      },
+      "transfer_confidential_6_2": {
+        "sha256": "219fcdfad5867916f6a948f4515dd2f5c3f1a4c8e4f15d533168b5b146bf8a64",
+        "size": 12922187
+      },
+      "transfer_confidential_6_4": {
+        "sha256": "f01e776a70bf5284a863ec793fccd7e915e2ec10c0cdd03e8108ed8b452d4023",
+        "size": 13041803
+      },
+      "transfer_confidential_6_8": {
+        "sha256": "898722ef95f3055247f992a19338df1aacf7652610c21642c750046fe5d25f8b",
+        "size": 13320971
+      },
+      "transfer_confidential_8_16": {
+        "sha256": "97875948c1fdfb21c3fd996a97bbeae3b1227c17523658aae9b87d7c747b487b",
+        "size": 15291851
+      },
+      "transfer_confidential_8_2": {
+        "sha256": "d6803e5e0eab1ad46c3bfb5cd80855e6f5473eaa6f50225c517922a93979d083",
+        "size": 14352139
+      },
+      "transfer_confidential_8_4": {
+        "sha256": "67682dfa84b69f03110f5be908bc4090cbc26d41eb5f0ad68366a19dd0d2fbc2",
+        "size": 14472779
+      },
+      "transfer_confidential_8_8": {
+        "sha256": "bf3f0c5fb13e0009f91542094eac6793d821849f6a6308b7ccdba57f45afa758",
+        "size": 14753995
+      }
+    },
+    "final_export": {
+      "sha256": "ed506cb30158a722fcc9692d44960599e73a4028828b0e6dc6266ec597af8caa",
+      "size": 52982
+    },
+    "beacon_recoveries": [
+      {
+        "previous_checkpoint": {
+          "sha256": "7e49af0686ae0892fc1dcc2805cedbb7c27413fc20b4e9f2c5080b518b5888b4",
+          "size": 7106
+        },
+        "previous": {
+          "chain_info": {
+            "public_key": "83cf0f2896adee7eb8b5f01fcad3912212c437e0073e911fb90022d3e760183c8c4b450b6a0a6c3ac6a5776a2d1064510d1fec758c921cc22b0e17e63aaf4bcb5ed66304de9cf809bd274ca73bab4af5a6e9c76a4bc09e76eae8991ef5ece45a",
+            "beacon_id": "quicknet",
+            "period": 3,
+            "scheme": "bls-unchained-g1-rfc9380",
+            "genesis_time": 1692803367,
+            "genesis_seed": "f477d5c89f21a17c863a7f937c6a6d15859414d2be09cd448d4279af331c5d3e",
+            "chain_hash": "52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971"
+          },
+          "chain_hash": "52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971",
+          "round": 33522064,
+          "round_time": "2026-10-30T14:12:36Z"
+        },
+        "next": {
+          "chain_info": {
+            "public_key": "83cf0f2896adee7eb8b5f01fcad3912212c437e0073e911fb90022d3e760183c8c4b450b6a0a6c3ac6a5776a2d1064510d1fec758c921cc22b0e17e63aaf4bcb5ed66304de9cf809bd274ca73bab4af5a6e9c76a4bc09e76eae8991ef5ece45a",
+            "beacon_id": "quicknet",
+            "period": 3,
+            "scheme": "bls-unchained-g1-rfc9380",
+            "genesis_time": 1692803367,
+            "genesis_seed": "f477d5c89f21a17c863a7f937c6a6d15859414d2be09cd448d4279af331c5d3e",
+            "chain_hash": "52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971"
+          },
+          "chain_hash": "52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971",
+          "round": 33536464,
+          "round_time": "2026-10-31T02:12:36Z"
+        },
+        "recovered_at": "2026-10-30T14:12:53.08585848Z",
+        "reason": "Operator requested 12 additional hours for contributions; announced before the original beacon deadline."
+      },
+      {
+        "previous_checkpoint": {
+          "sha256": "ac3c7624c8a19e8f0d56cc2e2e819330a91a7c69c54702eb1887f119507a3eb0",
+          "size": 9095
+        },
+        "previous": {
+          "chain_info": {
+            "public_key": "83cf0f2896adee7eb8b5f01fcad3912212c437e0073e911fb90022d3e760183c8c4b450b6a0a6c3ac6a5776a2d1064510d1fec758c921cc22b0e17e63aaf4bcb5ed66304de9cf809bd274ca73bab4af5a6e9c76a4bc09e76eae8991ef5ece45a",
+            "beacon_id": "quicknet",
+            "period": 3,
+            "scheme": "bls-unchained-g1-rfc9380",
+            "genesis_time": 1692803367,
+            "genesis_seed": "f477d5c89f21a17c863a7f937c6a6d15859414d2be09cd448d4279af331c5d3e",
+            "chain_hash": "52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971"
+          },
+          "chain_hash": "52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971",
+          "round": 33536464,
+          "round_time": "2026-10-31T02:12:36Z"
+        },
+        "next": {
+          "chain_info": {
+            "public_key": "83cf0f2896adee7eb8b5f01fcad3912212c437e0073e911fb90022d3e760183c8c4b450b6a0a6c3ac6a5776a2d1064510d1fec758c921cc22b0e17e63aaf4bcb5ed66304de9cf809bd274ca73bab4af5a6e9c76a4bc09e76eae8991ef5ece45a",
+            "beacon_id": "quicknet",
+            "period": 3,
+            "scheme": "bls-unchained-g1-rfc9380",
+            "genesis_time": 1692803367,
+            "genesis_seed": "f477d5c89f21a17c863a7f937c6a6d15859414d2be09cd448d4279af331c5d3e",
+            "chain_hash": "52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971"
+          },
+          "chain_hash": "52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971",
+          "round": 33610948,
+          "round_time": "2026-11-02T16:16:48Z"
+        },
+        "recovered_at": "2026-11-02T14:17:00.782583617Z",
+        "reason": "Operator authorized finalization after the October 31 closure deadline was missed; preserve all verified contributions and select an unrevealed quicknet round."
+      }
+    ]
+  },
+  "exports": [
+    {
+      "sha256": "ed506cb30158a722fcc9692d44960599e73a4028828b0e6dc6266ec597af8caa",
+      "size": 52982
+    }
+  ]
+}

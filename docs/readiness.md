@@ -1,8 +1,12 @@
 # Core launch gates and validation
 
-This repository implements the core ceremony workflow. The public-parameter
-campaign is open; accepted contributions are recorded below. These implementation
-checks do not replace independent security review or final-key verification.
+The core campaign was finalized on November 2, 2026 with 615 accepted contributions
+across 41 circuits. All final proving and verifying keys were independently
+reproduced and matched at 18:52 UTC. [Final keys and verification instructions](final-keys.md)
+link the frozen checkpoint, drand proof, closure witness and verification logs.
+Application proof tests with these final keys and the application key rotation
+remain separate integration steps; the historical fixture tests below do not
+claim to cover those final-key integration steps.
 Batch 4999 is deferred. Custom rings and batch 10 remain excluded.
 
 ## Implemented controls

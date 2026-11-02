@@ -1,0 +1,1796 @@
+{
+  "format": "spr-ceremony-v1",
+  "engine": "gnark-v0.16.4-bn254-mpcsetup",
+  "manifest_sha256": "4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079",
+  "track": "core",
+  "beacon": "2d11483621f4b9b0d2941e22e58c870a01c45328c62039c8e4caeb89db90222d",
+  "insecure_test_setup": false,
+  "circuits": [
+    {
+      "circuit": {
+        "spec": {
+          "id": "transfer_confidential_1_2",
+          "track": "core",
+          "family": "transfer-confidential",
+          "inputs": 1,
+          "outputs": 2
+        },
+        "r1cs": {
+          "sha256": "aca3fea69fe143e6235bfe73a48de65d1f666a074a1f5b66c7022e78173d449a",
+          "size": 3620361
+        },
+        "srs": {
+          "sha256": "d2c669a3b1b70f6da881934dc7e9510843e33de3efebe15cf29129f0fa215729",
+          "size": 6291400
+        },
+        "initial": {
+          "sha256": "6faf71314e6c8753b5131da5d3b34e0697dbfe47a83929be42c8020b789b0483",
+          "size": 2025419
+        },
+        "constraints": 30924,
+        "domain": 32768,
+        "shape": {
+          "private": 30521,
+          "z": 32767,
+          "commitments": null
+        }
+      },
+      "head": {
+        "sha256": "35fb6125e3fee914b292203d7f22f8db2e47e74f6b772f2c1f57843215a2d7f4",
+        "size": 2025451
+      },
+      "contributions": 15,
+      "pk": {
+        "sha256": "7b5bec4d70d89f29647815f4bd2d95024c1ed24174e5b774f012af1d52399192",
+        "size": 5647567
+      },
+      "vk": {
+        "sha256": "8db31b59224968de862e2519eb516af0e65fb0ac06fba74c335fd7417488f3d7",
+        "size": 364
+      }
+    },
+    {
+      "circuit": {
+        "spec": {
+          "id": "transfer_confidential_1_4",
+          "track": "core",
+          "family": "transfer-confidential",
+          "inputs": 1,
+          "outputs": 4
+        },
+        "r1cs": {
+          "sha256": "38fc44f826077ee162e5a246e3c6c359d42ddf188b4d08b68fbc05900a28cf43",
+          "size": 4080092
+        },
+        "srs": {
+          "sha256": "5c528d48a6269bff5b9fd59d62571314449e16069f77ef571ee3c8f6bfa4c17f",
+          "size": 12582856
+        },
+        "initial": {
+          "sha256": "53e60deb5a81ca4108f716b371dccc86c718f28c74f2db317448ea37b8538baa",
+          "size": 3191051
+        },
+        "constraints": 34590,
+        "domain": 65536,
+        "shape": {
+          "private": 34179,
+          "z": 65535,
+          "commitments": null
+        }
+      },
+      "head": {
+        "sha256": "43d26c15317c7970c0173871e1311d949b1c4b341874632dccc66f0db71a073e",
+        "size": 3191083
+      },
+      "contributions": 15,
+      "pk": {
+        "sha256": "caccf7b3daff8124d7e74ecb7a369cfc55a0582999b45aa413af098282a4aa7e",
+        "size": 7241123
+      },
+      "vk": {
+        "sha256": "7ebd86353b870320dc9f5737c115ddcdff94a6c981971bce41f1efee7c10728e",
+        "size": 364
+      }
+    },
+    {
+      "circuit": {
+        "spec": {
+          "id": "transfer_confidential_1_8",
+          "track": "core",
+          "family": "transfer-confidential",
+          "inputs": 1,
+          "outputs": 8
+        },
+        "r1cs": {
+          "sha256": "d1cb0709da5f859652b9eaede111a0df17e61ddbfd649f9ec0bba03355072cdb",
+          "size": 5179735
+        },
+        "srs": {
+          "sha256": "5c528d48a6269bff5b9fd59d62571314449e16069f77ef571ee3c8f6bfa4c17f",
+          "size": 12582856
+        },
+        "initial": {
+          "sha256": "20924d1837a7a3746faf96880f9c9b0a891649b85c2e41a24026126976c9975f",
+          "size": 3465099
+        },
+        "constraints": 43170,
+        "domain": 65536,
+        "shape": {
+          "private": 42743,
+          "z": 65535,
+          "commitments": null
+        }
+      },
+      "head": {
+        "sha256": "71ef80831fcc90a0974b8a56d48771e9bacef27fc4b642fcd25496c49c7be053",
+        "size": 3465131
+      },
+      "contributions": 15,
+      "pk": {
+        "sha256": "2dca437cea6378fd36f742d2ada71adbca712c7b577898c977951c75d5223a8d",
+        "size": 8516363
+      },
+      "vk": {
+        "sha256": "1a80e00cab03a8030dac54cc65e1c9a48919a4cd5335395362f2e5cb8f9f1de0",
+        "size": 364
+      }
+    },
+    {
+      "circuit": {
+        "spec": {
+          "id": "transfer_confidential_2_2",
+          "track": "core",
+          "family": "transfer-confidential",
+          "inputs": 2,
+          "outputs": 2
+        },
+        "r1cs": {
+          "sha256": "12270333ac9f8733d36bb6c08f05441c015bc0808fbaaa5ee035d1b793c3ce92",
+          "size": 6314652
+        },
+        "srs": {
+          "sha256": "5c528d48a6269bff5b9fd59d62571314449e16069f77ef571ee3c8f6bfa4c17f",
+          "size": 12582856
+        },
+        "initial": {
+          "sha256": "d03866478c47e5e594dce5e18e5d27574c3388e0906db6f8af99bee6f7cb371a",
+          "size": 3795371
+        },
+        "constraints": 53876,
+        "domain": 65536,
+        "shape": {
+          "private": 53064,
+          "z": 65535,
+          "commitments": null
+        }
+      },
+      "head": {
+        "sha256": "7f2210ba2c47e457d7698382dc5da9e0ee905395c2a66ef7bb6960968eb37821",
+        "size": 3795403
+      },
+      "contributions": 15,
+      "pk": {
+        "sha256": "5ac1fb546d72f6e4a947756a9851ba4c2e7bd6aa996c9efaba637225b06c10cc",
+        "size": 10092621
+      },
+      "vk": {
+        "sha256": "cb925893dbd4e164a5db715bca46aec13464b1d7c31c4adba7d71749db99eabf",
+        "size": 364
+      }
+    },
+    {
+      "circuit": {
+        "spec": {
+          "id": "transfer_confidential_2_4",
+          "track": "core",
+          "family": "transfer-confidential",
+          "inputs": 2,
+          "outputs": 4
+        },
+        "r1cs": {
+          "sha256": "cfd5512a669ea60f2b4f825dfa04e93c9dbd5ec9d8ee467fecaf6c091a14a855",
+          "size": 6777825
+        },
+        "srs": {
+          "sha256": "5c528d48a6269bff5b9fd59d62571314449e16069f77ef571ee3c8f6bfa4c17f",
+          "size": 12582856
+        },
+        "initial": {
+          "sha256": "f40b5b84dd5f7926b9619746227054290ceb3247bccf7b4df0f38f37ccecc7a1",
+          "size": 3912939
+        },
+        "constraints": 57558,
+        "domain": 65536,
+        "shape": {
+          "private": 56738,
+          "z": 65535,
+          "commitments": null
+        }
+      },
+      "head": {
+        "sha256": "5b9ba42c7a95508a27b8ac0118359d04a6789bdf0b8dfcf2a1ebf4e124d1b225",
+        "size": 3912971
+      },
+      "contributions": 15,
+      "pk": {
+        "sha256": "bc9b7260dddcb3024b94309de2c4c08503f575f5d77dc8822459c2408d9c78f6",
+        "size": 10639489
+      },
+      "vk": {
+        "sha256": "4f6c24a0a3cfeb4e74a16a9d29bcacc319c53c996d985a1942456670f111e5a4",
+        "size": 364
+      }
+    },
+    {
+      "circuit": {
+        "spec": {
+          "id": "transfer_confidential_1_16",
+          "track": "core",
+          "family": "transfer-confidential",
+          "inputs": 1,
+          "outputs": 16
+        },
+        "r1cs": {
+          "sha256": "f52b643b55c488cbf125a34bc942bc908a8e2e8a7e13d0705f56345e95e1bdc1",
+          "size": 7186128
+        },
+        "srs": {
+          "sha256": "5c528d48a6269bff5b9fd59d62571314449e16069f77ef571ee3c8f6bfa4c17f",
+          "size": 12582856
+        },
+        "initial": {
+          "sha256": "d401cc0daa3023945f7b4ea4f120522d233b8984423c2e758f3b5acbcfa64972",
+          "size": 3988619
+        },
+        "constraints": 59562,
+        "domain": 65536,
+        "shape": {
+          "private": 59103,
+          "z": 65535,
+          "commitments": null
+        }
+      },
+      "head": {
+        "sha256": "dfe716a5f02264343f8580c0ab40f4f7f24dc1c3f9d0f769404e16a7d3e24aa8",
+        "size": 3988651
+      },
+      "contributions": 15,
+      "pk": {
+        "sha256": "f8c89cf62cde375c2f03967b13cd7d814ab161c189d014eb1e28e3e33b271142",
+        "size": 10936283
+      },
+      "vk": {
+        "sha256": "3c5df2d6984489541e7d2ea4e332baed91372429c46f4099c980eb25fa196dbc",
+        "size": 364
+      }
+    },
+    {
+      "circuit": {
+        "spec": {
+          "id": "transfer_confidential_2_8",
+          "track": "core",
+          "family": "transfer-confidential",
+          "inputs": 2,
+          "outputs": 8
+        },
+        "r1cs": {
+          "sha256": "28b6b4f3f0d0a455e94a1672abf4eb5d0905b77b7a7f9bab5ff8e0fece9599a5",
+          "size": 7872687
+        },
+        "srs": {
+          "sha256": "51c73677b06cbfa15ab5753168c943f030f67131a61860831fb2e2b5911541c8",
+          "size": 25165768
+        },
+        "initial": {
+          "sha256": "364630801ea8822caf06d5bd0ada245ccd65643fe2f4118a3f02562f0ce1e317",
+          "size": 6285163
+        },
+        "constraints": 66170,
+        "domain": 131072,
+        "shape": {
+          "private": 65334,
+          "z": 131071,
+          "commitments": null
+        }
+      },
+      "head": {
+        "sha256": "1567971ce823fcb4d0522b062cc5113c68168b033767f5bd9a2db40904628833",
+        "size": 6285195
+      },
+      "contributions": 15,
+      "pk": {
+        "sha256": "0e877ed59d60ab05d38d0041c0c0b6098d296e9000adfde261bf360506c05953",
+        "size": 14015657
+      },
+      "vk": {
+        "sha256": "55d372c9d13e96801becfdbed318649e0910ebfe0bca618eaf802d2387ee1214",
+        "size": 364
+      }
+    },
+    {
+      "circuit": {
+        "spec": {
+          "id": "transfer_confidential_3_2",
+          "track": "core",
+          "family": "transfer-confidential",
+          "inputs": 3,
+          "outputs": 2
+        },
+        "r1cs": {
+          "sha256": "8c48e58a5572b6dcd0ce54a22a10427b14d285e628c2a926183b4d85f0b65420",
+          "size": 8923099
+        },
+        "srs": {
+          "sha256": "51c73677b06cbfa15ab5753168c943f030f67131a61860831fb2e2b5911541c8",
+          "size": 25165768
+        },
+        "initial": {
+          "sha256": "4cb3f52881d2611a03f868170180e04f25df44712d5bb9e1f2d144eb1fce5477",
+          "size": 6595979
+        },
+        "constraints": 76268,
+        "domain": 131072,
+        "shape": {
+          "private": 75047,
+          "z": 131071,
+          "commitments": null
+        }
+      },
+      "head": {
+        "sha256": "e4ce86109060ea20d2841fbc1952fd95d80b5092df673b253ef27696536bc756",
+        "size": 6596011
+      },
+      "contributions": 15,
+      "pk": {
+        "sha256": "33017dd32e43d60557bdfbd475b2c42af3c91597c8117984085a839b5bc1acde",
+        "size": 15501419
+      },
+      "vk": {
+        "sha256": "e3de8c9b8fd47d1ce8aaaa5d708e74317556be48963e6abc91e38c6b19fb9b27",
+        "size": 364
+      }
+    },
+    {
+      "circuit": {
+        "spec": {
+          "id": "transfer_confidential_3_4",
+          "track": "core",
+          "family": "transfer-confidential",
+          "inputs": 3,
+          "outputs": 4
+        },
+        "r1cs": {
+          "sha256": "d45c38dc079b9c617cc72bf7a826ca4e8ef302aa5131e5d81f2a0fd8d613517d",
+          "size": 9383986
+        },
+        "srs": {
+          "sha256": "51c73677b06cbfa15ab5753168c943f030f67131a61860831fb2e2b5911541c8",
+          "size": 25165768
+        },
+        "initial": {
+          "sha256": "91548158321dd2cf2bb4b813e57771b3f39105d157627735932d97fb667208d4",
+          "size": 6714059
+        },
+        "constraints": 79966,
+        "domain": 131072,
+        "shape": {
+          "private": 78737,
+          "z": 131071,
+          "commitments": null
+        }
+      },
+      "head": {
+        "sha256": "9d4e1b90d2a2522e41e32ca31131e8d699f93ede2d283eb19d8b0e7752f8a0e7",
+        "size": 6714091
+      },
+      "contributions": 15,
+      "pk": {
+        "sha256": "cc154f9b9258af46d5cf7e4683fcea3efe19e26d118c4c9225a31f09d3e6338f",
+        "size": 16050175
+      },
+      "vk": {
+        "sha256": "e70eede43cb2b8fc85df1fb32673f879316b4a177a5c758dcb06ac90b9cbc3db",
+        "size": 364
+      }
+    },
+    {
+      "circuit": {
+        "spec": {
+          "id": "transfer_confidential_2_16",
+          "track": "core",
+          "family": "transfer-confidential",
+          "inputs": 2,
+          "outputs": 16
+        },
+        "r1cs": {
+          "sha256": "8bd854bace7d6a71c99789f00d7986d60950c81b0377c3e20db76229907ef45e",
+          "size": 9886740
+        },
+        "srs": {
+          "sha256": "51c73677b06cbfa15ab5753168c943f030f67131a61860831fb2e2b5911541c8",
+          "size": 25165768
+        },
+        "initial": {
+          "sha256": "5977524c63b407ff99fddc876d164809afbd2bb72d9b6f458296a9e893a7c878",
+          "size": 6810731
+        },
+        "constraints": 82626,
+        "domain": 131072,
+        "shape": {
+          "private": 81758,
+          "z": 131071,
+          "commitments": null
+        }
+      },
+      "head": {
+        "sha256": "b1fa93ce2a505c9486054dba16ec4f0337c257d5d811442e402b2d4d27a81023",
+        "size": 6810763
+      },
+      "contributions": 15,
+      "pk": {
+        "sha256": "b4df78d1b484c7a3905d75d285e8bd5918f5edbf31c98fd12d3d6367d5b720dc",
+        "size": 16443129
+      },
+      "vk": {
+        "sha256": "b3501696e42956661aa1509d6b9b5abbf64b636f9d9bfbd70450beb0ec0bd281",
+        "size": 364
+      }
+    },
+    {
+      "circuit": {
+        "spec": {
+          "id": "transfer_confidential_3_8",
+          "track": "core",
+          "family": "transfer-confidential",
+          "inputs": 3,
+          "outputs": 8
+        },
+        "r1cs": {
+          "sha256": "457845019c218547f04858834668015046e58fe49c5234cc7af0a049a10cf4e5",
+          "size": 10472366
+        },
+        "srs": {
+          "sha256": "51c73677b06cbfa15ab5753168c943f030f67131a61860831fb2e2b5911541c8",
+          "size": 25165768
+        },
+        "initial": {
+          "sha256": "fd30ff26827bfb73b2ffa9de2eca8c22d48549e713e531c0c41ff1b94109e675",
+          "size": 6990155
+        },
+        "constraints": 88610,
+        "domain": 131072,
+        "shape": {
+          "private": 87365,
+          "z": 131071,
+          "commitments": null
+        }
+      },
+      "head": {
+        "sha256": "d632123fc63ae71eb85b1bfaecf4c9e10813e20678ac373642797ce634e74edd",
+        "size": 6990187
+      },
+      "contributions": 15,
+      "pk": {
+        "sha256": "83829cd974eb15bd95b257728371adc1d8390f1fa0a10ec33183dc10256dacce",
+        "size": 17332967
+      },
+      "vk": {
+        "sha256": "14e7f5224f233be19f43b99e7bc170f78c795d030e2bea3a72794445de37beb4",
+        "size": 364
+      }
+    },
+    {
+      "circuit": {
+        "spec": {
+          "id": "transfer_confidential_4_2",
+          "track": "core",
+          "family": "transfer-confidential",
+          "inputs": 4,
+          "outputs": 2
+        },
+        "r1cs": {
+          "sha256": "28d5f4e7935fc9d524f5e6bf4bb5451488dc80b81ce3334ca6c33d2a11a05881",
+          "size": 11531376
+        },
+        "srs": {
+          "sha256": "51c73677b06cbfa15ab5753168c943f030f67131a61860831fb2e2b5911541c8",
+          "size": 25165768
+        },
+        "initial": {
+          "sha256": "75169d98aada946350408f7ce7a82f2617fd5ab22baa77cd30eef8369758e2f1",
+          "size": 7299947
+        },
+        "constraints": 98676,
+        "domain": 131072,
+        "shape": {
+          "private": 97046,
+          "z": 131071,
+          "commitments": null
+        }
+      },
+      "head": {
+        "sha256": "bc077e1506a617c8dfbda648ae09a8fdf58660aba054c88241fe0b9f9c303dc8",
+        "size": 7299979
+      },
+      "contributions": 15,
+      "pk": {
+        "sha256": "4836ccc2bd46aef930fb5f3dc4017fa65f8368701b07dd2208d40065939fa555",
+        "size": 18814953
+      },
+      "vk": {
+        "sha256": "f1a180d7009284dca476bc7cb52512317035ec3c02eb211dc439c825d66a7721",
+        "size": 364
+      }
+    },
+    {
+      "circuit": {
+        "spec": {
+          "id": "transfer_confidential_4_4",
+          "track": "core",
+          "family": "transfer-confidential",
+          "inputs": 4,
+          "outputs": 4
+        },
+        "r1cs": {
+          "sha256": "2b8238cc7bce71e374970cb7580895b19b5f235a2b53023f17037ff67ed50b78",
+          "size": 11996238
+        },
+        "srs": {
+          "sha256": "51c73677b06cbfa15ab5753168c943f030f67131a61860831fb2e2b5911541c8",
+          "size": 25165768
+        },
+        "initial": {
+          "sha256": "74f88c3cfe29eeb430b5839219c308dbaaef26099b409e28ef4dcf47e4cdd84c",
+          "size": 7418539
+        },
+        "constraints": 102390,
+        "domain": 131072,
+        "shape": {
+          "private": 100752,
+          "z": 131071,
+          "commitments": null
+        }
+      },
+      "head": {
+        "sha256": "db177bb628eb9b100a3ba85e8be2b26e66f332f6f6fe4ff49a519de52b76570f",
+        "size": 7418571
+      },
+      "contributions": 15,
+      "pk": {
+        "sha256": "9ae3dda50c559dd564f083823ab2fbb4269981dd03347e5af9c273ea2b913a30",
+        "size": 19365597
+      },
+      "vk": {
+        "sha256": "e216cc1874b73b275bf2ad527a038d60fff51407abd572cd3ed25074fa649084",
+        "size": 364
+      }
+    },
+    {
+      "circuit": {
+        "spec": {
+          "id": "transfer_confidential_4_8",
+          "track": "core",
+          "family": "transfer-confidential",
+          "inputs": 4,
+          "outputs": 8
+        },
+        "r1cs": {
+          "sha256": "c61ab2f21430957048bc344b8262f13d570998e5a1d69422c0f986f945cbd69b",
+          "size": 13076738
+        },
+        "srs": {
+          "sha256": "51c73677b06cbfa15ab5753168c943f030f67131a61860831fb2e2b5911541c8",
+          "size": 25165768
+        },
+        "initial": {
+          "sha256": "00da27a9090974f83a435db8a980feb2e81477c01ce2f21e9c60b42a0d808817",
+          "size": 7695659
+        },
+        "constraints": 111066,
+        "domain": 131072,
+        "shape": {
+          "private": 109412,
+          "z": 131071,
+          "commitments": null
+        }
+      },
+      "head": {
+        "sha256": "4b4015f6620e055a9ca721fc5ec75081ffde4f5d6bd3ad28743413dd52b8b127",
+        "size": 7695691
+      },
+      "contributions": 15,
+      "pk": {
+        "sha256": "ad0e8fc584ed245c52cb61d5ace8392e0fb65062d1429dd9ef6ce5a8344f128f",
+        "size": 20652165
+      },
+      "vk": {
+        "sha256": "507d6a77346ef8a4012d861999a178e055b1f2271d221089a626b1bb6b41cf03",
+        "size": 364
+      }
+    },
+    {
+      "circuit": {
+        "spec": {
+          "id": "transfer_confidential_5_2",
+          "track": "core",
+          "family": "transfer-confidential",
+          "inputs": 5,
+          "outputs": 2
+        },
+        "r1cs": {
+          "sha256": "a1906b058a4c4a926dfbef50be91b3df6dfc091fe7b911073884a6c8dccd9f5d",
+          "size": 14232253
+        },
+        "srs": {
+          "sha256": "51c73677b06cbfa15ab5753168c943f030f67131a61860831fb2e2b5911541c8",
+          "size": 25165768
+        },
+        "initial": {
+          "sha256": "21b98c509e1fdb4965a96a580b900f1e97911a82bc73f56f34537ce36cc29d4f",
+          "size": 8022859
+        },
+        "constraints": 121676,
+        "domain": 131072,
+        "shape": {
+          "private": 119637,
+          "z": 131071,
+          "commitments": null
+        }
+      },
+      "head": {
+        "sha256": "9e96ac3fadd0c248bf366de0868da9e5a8c83162552098da5b5aebc7c03be901",
+        "size": 8022891
+      },
+      "contributions": 15,
+      "pk": {
+        "sha256": "02b8cec8568b266d195a541478894ef0e703dc32edc2b3ef6b6bec484bf1b909",
+        "size": 22217543
+      },
+      "vk": {
+        "sha256": "c64bf3f4ce96e05f1c5d7478ce96210d54a7bc7756d6d9091268bf1ba473b363",
+        "size": 364
+      }
+    },
+    {
+      "circuit": {
+        "spec": {
+          "id": "transfer_confidential_5_4",
+          "track": "core",
+          "family": "transfer-confidential",
+          "inputs": 5,
+          "outputs": 4
+        },
+        "r1cs": {
+          "sha256": "aae5767ccd9c89e2af6608d22af13cbeeaf22c57672f393815459473413e19f5",
+          "size": 14694743
+        },
+        "srs": {
+          "sha256": "51c73677b06cbfa15ab5753168c943f030f67131a61860831fb2e2b5911541c8",
+          "size": 25165768
+        },
+        "initial": {
+          "sha256": "b4591e41e9ba8af33a69242ddc6cf8f28b5bcd939224f5006a3d96d8b4b47778",
+          "size": 8141963
+        },
+        "constraints": 125406,
+        "domain": 131072,
+        "shape": {
+          "private": 123359,
+          "z": 131071,
+          "commitments": null
+        }
+      },
+      "head": {
+        "sha256": "ebaf21d39a84b81fe8504b9ee378601cb9834ab2d386cc4d7d5f452b6eeb869e",
+        "size": 8141995
+      },
+      "contributions": 15,
+      "pk": {
+        "sha256": "b8ebeb53b59f4f3f8f501175d3394bfdf98f1e9f0922afc749bba6915986ebbd",
+        "size": 22770075
+      },
+      "vk": {
+        "sha256": "2ba3d86cafa85f7e8f0360247c35beb2d10d91555e77f0ae12c8aaa382f7810c",
+        "size": 364
+      }
+    },
+    {
+      "circuit": {
+        "spec": {
+          "id": "transfer_confidential_4_16",
+          "track": "core",
+          "family": "transfer-confidential",
+          "inputs": 4,
+          "outputs": 16
+        },
+        "r1cs": {
+          "sha256": "46dc0c05c51b3f2ecd57d495a350154f9ce9118c3204db94ef4dfc40360012d6",
+          "size": 15111512
+        },
+        "srs": {
+          "sha256": "51c73677b06cbfa15ab5753168c943f030f67131a61860831fb2e2b5911541c8",
+          "size": 25165768
+        },
+        "initial": {
+          "sha256": "ec7bab2d1fca3e592a5911275a779c1a4989eee2ad751bc8a708fdda45403552",
+          "size": 8225323
+        },
+        "constraints": 127650,
+        "domain": 131072,
+        "shape": {
+          "private": 125964,
+          "z": 131071,
+          "commitments": null
+        }
+      },
+      "head": {
+        "sha256": "c6f2125fd557045a107cb81de61c2ac2a2abfcdc9fe4801ab14c4fdddee0fcea",
+        "size": 8225355
+      },
+      "contributions": 15,
+      "pk": {
+        "sha256": "36890b7a25c6271e923b47cb3113e09d31313f782ce420866718bbf729bb5911",
+        "size": 23094741
+      },
+      "vk": {
+        "sha256": "92d17df54798c16429b49d2c4dfad9b9e3b2be60167a28dafc3c785676ddc2c2",
+        "size": 364
+      }
+    },
+    {
+      "circuit": {
+        "spec": {
+          "id": "transfer_confidential_5_8",
+          "track": "core",
+          "family": "transfer-confidential",
+          "inputs": 5,
+          "outputs": 8
+        },
+        "r1cs": {
+          "sha256": "a2c6e55e55b6a4c19871fc0c4386586bc118ca39f985b655a8978a24e44dc2e6",
+          "size": 15772061
+        },
+        "srs": {
+          "sha256": "69d80bea3e170d5c3aea2af4bf293631ec161146fa34caca9d49c7e50f4ba7f8",
+          "size": 50331592
+        },
+        "initial": {
+          "sha256": "8c0c224646712abff643b6527f0bb947374b10d28d171036079ccc1f70a1b832",
+          "size": 12614411
+        },
+        "constraints": 134114,
+        "domain": 262144,
+        "shape": {
+          "private": 132051,
+          "z": 262143,
+          "commitments": null
+        }
+      },
+      "head": {
+        "sha256": "8f04a003d6e7f256d74f409fb13a3fbde32fc181da3c93736264f1259fc2186c",
+        "size": 12614443
+      },
+      "contributions": 15,
+      "pk": {
+        "sha256": "75915a5ae26aeac7bd77c4dcac29d41797c86ea6243d304817048f3fa33e17e2",
+        "size": 28254723
+      },
+      "vk": {
+        "sha256": "2eb98895d188dc90aeaa20d2d19f09a3b6443eec76f3c62b343301672f3204bc",
+        "size": 364
+      }
+    },
+    {
+      "circuit": {
+        "spec": {
+          "id": "transfer_confidential_6_2",
+          "track": "core",
+          "family": "transfer-confidential",
+          "inputs": 6,
+          "outputs": 2
+        },
+        "r1cs": {
+          "sha256": "54f07ea0b60cacd94edf19b5b6930d69ddab275851bda2d6a7cc5fa50229da36",
+          "size": 16842230
+        },
+        "srs": {
+          "sha256": "69d80bea3e170d5c3aea2af4bf293631ec161146fa34caca9d49c7e50f4ba7f8",
+          "size": 50331592
+        },
+        "initial": {
+          "sha256": "710c521d939c60621bb771b22611e9b543dc613d1fa70949a69ba82533aa8eda",
+          "size": 12922155
+        },
+        "constraints": 144116,
+        "domain": 262144,
+        "shape": {
+          "private": 141668,
+          "z": 262143,
+          "commitments": null
+        }
+      },
+      "head": {
+        "sha256": "219fcdfad5867916f6a948f4515dd2f5c3f1a4c8e4f15d533168b5b146bf8a64",
+        "size": 12922187
+      },
+      "contributions": 15,
+      "pk": {
+        "sha256": "69b57284a72d16cffc91ba9ce6a8996601f6b75a5db4b4789c0bffaeb3b9f9d9",
+        "size": 29729157
+      },
+      "vk": {
+        "sha256": "f723698b7e038ad2e4ba259d4ddb918f90902c3317329c95a0e2bfb43d81e9e4",
+        "size": 364
+      }
+    },
+    {
+      "circuit": {
+        "spec": {
+          "id": "transfer_confidential_6_4",
+          "track": "core",
+          "family": "transfer-confidential",
+          "inputs": 6,
+          "outputs": 4
+        },
+        "r1cs": {
+          "sha256": "0ef36ea5c9fd791100ae1307452c1b5992a1609b55a4908a680c0dbb2d9a2003",
+          "size": 17308366
+        },
+        "srs": {
+          "sha256": "69d80bea3e170d5c3aea2af4bf293631ec161146fa34caca9d49c7e50f4ba7f8",
+          "size": 50331592
+        },
+        "initial": {
+          "sha256": "6f3f6065dfb717b5342791bc8f8e14cb8edbf38a6aeb6c6c603416624da80382",
+          "size": 13041771
+        },
+        "constraints": 147862,
+        "domain": 262144,
+        "shape": {
+          "private": 145406,
+          "z": 262143,
+          "commitments": null
+        }
+      },
+      "head": {
+        "sha256": "f01e776a70bf5284a863ec793fccd7e915e2ec10c0cdd03e8108ed8b452d4023",
+        "size": 13041803
+      },
+      "contributions": 15,
+      "pk": {
+        "sha256": "efb34d5cfcb006e3d9e19eddd373eaa4413e210e1ac0560fc58cd4ec13a123d2",
+        "size": 30283577
+      },
+      "vk": {
+        "sha256": "2a25542209fcc0d06cda62ceec55abab5f9631fcf964e5a875038fd6bb95f734",
+        "size": 364
+      }
+    },
+    {
+      "circuit": {
+        "spec": {
+          "id": "transfer_confidential_5_16",
+          "track": "core",
+          "family": "transfer-confidential",
+          "inputs": 5,
+          "outputs": 16
+        },
+        "r1cs": {
+          "sha256": "8535595c1604db42942a3f468bedcea07fb2d96637c0acb7d83f88af7db5e658",
+          "size": 17817668
+        },
+        "srs": {
+          "sha256": "69d80bea3e170d5c3aea2af4bf293631ec161146fa34caca9d49c7e50f4ba7f8",
+          "size": 50331592
+        },
+        "initial": {
+          "sha256": "4b0a95572bd5330c6bc1cc20c4b179c56c9e86698f8b109215d67a8b23e1cb33",
+          "size": 13146123
+        },
+        "constraints": 150762,
+        "domain": 262144,
+        "shape": {
+          "private": 148667,
+          "z": 262143,
+          "commitments": null
+        }
+      },
+      "head": {
+        "sha256": "d2ec31cae6c58c58b773eda808f299259380c60d7a52567df20695d00c7edb51",
+        "size": 13146155
+      },
+      "contributions": 15,
+      "pk": {
+        "sha256": "010cde8aeeae6866f9880391d138f1eb3da5fbd364eeb6fb3b3adbdd8a4ad3db",
+        "size": 30704851
+      },
+      "vk": {
+        "sha256": "a5ac0a84b275f7d9b1ab21a2584e12eb335da37e1a6bd000c72b4157167ff32a",
+        "size": 364
+      }
+    },
+    {
+      "circuit": {
+        "spec": {
+          "id": "transfer_confidential_6_8",
+          "track": "core",
+          "family": "transfer-confidential",
+          "inputs": 6,
+          "outputs": 8
+        },
+        "r1cs": {
+          "sha256": "d268fe27ab271af7b41966c578dee6d2cc9db2a61f80139eb30c8f63474cd72c",
+          "size": 18380940
+        },
+        "srs": {
+          "sha256": "69d80bea3e170d5c3aea2af4bf293631ec161146fa34caca9d49c7e50f4ba7f8",
+          "size": 50331592
+        },
+        "initial": {
+          "sha256": "1d27a0742f7e806e84e94cb93a0fae6c3aae888de75957748948cf42cc2f077a",
+          "size": 13320939
+        },
+        "constraints": 156602,
+        "domain": 262144,
+        "shape": {
+          "private": 154130,
+          "z": 262143,
+          "commitments": null
+        }
+      },
+      "head": {
+        "sha256": "898722ef95f3055247f992a19338df1aacf7652610c21642c750046fe5d25f8b",
+        "size": 13320971
+      },
+      "contributions": 15,
+      "pk": {
+        "sha256": "b84c107a4b38c2bcc44b76a1746d69cd5539021eb88fb81f6528756c22c9a74a",
+        "size": 31577697
+      },
+      "vk": {
+        "sha256": "74e50abc5ec5f935d723037c6c3df38a7fbb5c671dd2e09d83668dae52252a1b",
+        "size": 364
+      }
+    },
+    {
+      "circuit": {
+        "spec": {
+          "id": "transfer_confidential_8_2",
+          "track": "core",
+          "family": "transfer-confidential",
+          "inputs": 8,
+          "outputs": 2
+        },
+        "r1cs": {
+          "sha256": "ecb9b082517807f4aa19a92e3712a063af4f54ef3214f15c556c4f3c944bed40",
+          "size": 22147508
+        },
+        "srs": {
+          "sha256": "69d80bea3e170d5c3aea2af4bf293631ec161146fa34caca9d49c7e50f4ba7f8",
+          "size": 50331592
+        },
+        "initial": {
+          "sha256": "cb4c8b69fffec542e7f0dbe2fd17f7ff2e21879e31696a95b33a92ed975e34ba",
+          "size": 14352107
+        },
+        "constraints": 189620,
+        "domain": 262144,
+        "shape": {
+          "private": 186354,
+          "z": 262143,
+          "commitments": null
+        }
+      },
+      "head": {
+        "sha256": "d6803e5e0eab1ad46c3bfb5cd80855e6f5473eaa6f50225c517922a93979d083",
+        "size": 14352139
+      },
+      "contributions": 15,
+      "pk": {
+        "sha256": "f555360f38f3818ed54e310f705c59f954fc9f88f003a5dd92b648e4e88d6c39",
+        "size": 36456609
+      },
+      "vk": {
+        "sha256": "5ad7f829c83e98261a7480ff8e470a632af69d66978a29ae0645938f7a623599",
+        "size": 364
+      }
+    },
+    {
+      "circuit": {
+        "spec": {
+          "id": "transfer_confidential_8_4",
+          "track": "core",
+          "family": "transfer-confidential",
+          "inputs": 8,
+          "outputs": 4
+        },
+        "r1cs": {
+          "sha256": "0601376b82bdcf9809c7ee2d8318b8920d1e457929267de9f45b9f96ad9a3ac4",
+          "size": 22602907
+        },
+        "srs": {
+          "sha256": "69d80bea3e170d5c3aea2af4bf293631ec161146fa34caca9d49c7e50f4ba7f8",
+          "size": 50331592
+        },
+        "initial": {
+          "sha256": "8aacf51305369869433eba1dcbaa1994fb99768905df17a73e5b7a736c33d6ae",
+          "size": 14472747
+        },
+        "constraints": 193398,
+        "domain": 262144,
+        "shape": {
+          "private": 190124,
+          "z": 262143,
+          "commitments": null
+        }
+      },
+      "head": {
+        "sha256": "67682dfa84b69f03110f5be908bc4090cbc26d41eb5f0ad68366a19dd0d2fbc2",
+        "size": 14472779
+      },
+      "contributions": 15,
+      "pk": {
+        "sha256": "e4319f560c41a52a0c8acb540bcf69d3670fbb32b6bdfb5c8b5e9a96af9a87a1",
+        "size": 37014805
+      },
+      "vk": {
+        "sha256": "2dabc446b3b95d4c09fecb077b84a8ed64059fa281b8396236996bcfe79befba",
+        "size": 364
+      }
+    },
+    {
+      "circuit": {
+        "spec": {
+          "id": "transfer_confidential_8_8",
+          "track": "core",
+          "family": "transfer-confidential",
+          "inputs": 8,
+          "outputs": 8
+        },
+        "r1cs": {
+          "sha256": "41ca1cc0f3074b40a1164e80c79720937fd6ef5e607be5f6cd4990b5964b1dc2",
+          "size": 23691485
+        },
+        "srs": {
+          "sha256": "69d80bea3e170d5c3aea2af4bf293631ec161146fa34caca9d49c7e50f4ba7f8",
+          "size": 50331592
+        },
+        "initial": {
+          "sha256": "66f84bceaaeffa941554173689386b43f841800c18ae49d34d315c5fa8437f22",
+          "size": 14753963
+        },
+        "constraints": 202202,
+        "domain": 262144,
+        "shape": {
+          "private": 198912,
+          "z": 262143,
+          "commitments": null
+        }
+      },
+      "head": {
+        "sha256": "bf3f0c5fb13e0009f91542094eac6793d821849f6a6308b7ccdba57f45afa758",
+        "size": 14753995
+      },
+      "contributions": 15,
+      "pk": {
+        "sha256": "3e622ff50576d7c83d7dd7354b6bd07d76b81a264f5e0e02552642dc0a7ca888",
+        "size": 38316477
+      },
+      "vk": {
+        "sha256": "73ea4a0cd3d2244e131d65ac17fab5d4c53b3028ef0157bff6388770f0e7d74c",
+        "size": 364
+      }
+    },
+    {
+      "circuit": {
+        "spec": {
+          "id": "transfer_confidential_8_16",
+          "track": "core",
+          "family": "transfer-confidential",
+          "inputs": 8,
+          "outputs": 16
+        },
+        "r1cs": {
+          "sha256": "77dd68856371da67dda039fcef52b2d846bed5a003ea1a20a2975dac4f2fcc11",
+          "size": 25749644
+        },
+        "srs": {
+          "sha256": "69d80bea3e170d5c3aea2af4bf293631ec161146fa34caca9d49c7e50f4ba7f8",
+          "size": 50331592
+        },
+        "initial": {
+          "sha256": "0e558f0408f4df01d4636e39db1c70da2881c7eec4fe7153f5e3bddf1238c720",
+          "size": 15291819
+        },
+        "constraints": 219042,
+        "domain": 262144,
+        "shape": {
+          "private": 215720,
+          "z": 262143,
+          "commitments": null
+        }
+      },
+      "head": {
+        "sha256": "97875948c1fdfb21c3fd996a97bbeae3b1227c17523658aae9b87d7c747b487b",
+        "size": 15291851
+      },
+      "contributions": 15,
+      "pk": {
+        "sha256": "8ac7ca8e523b43e330a9f42390c92f51b3c4d50093abd9561cebed7b94174ba8",
+        "size": 40789261
+      },
+      "vk": {
+        "sha256": "083f4e58cfd5ef8be7190651d3c29321eb4a01380f8058b8006a1a4eb58f06fb",
+        "size": 364
+      }
+    },
+    {
+      "circuit": {
+        "spec": {
+          "id": "transfer_confidential_12_2",
+          "track": "core",
+          "family": "transfer-confidential",
+          "inputs": 12,
+          "outputs": 2
+        },
+        "r1cs": {
+          "sha256": "c93586f5212fc83c4f9522bdd2cc1fa8b986803ab3b2d18bbfb5f1bd74da0244",
+          "size": 32658821
+        },
+        "srs": {
+          "sha256": "9cc3544f466bb4f3df079935d3986c7e46532ef82450176f419e3522d1e1a9ab",
+          "size": 100663240
+        },
+        "initial": {
+          "sha256": "7fb8e3ea3fa0fe18a8c39eab1ba9195639a3a41a7dd01a9ca5ee519f14c86074",
+          "size": 25588331
+        },
+        "constraints": 280244,
+        "domain": 524288,
+        "shape": {
+          "private": 275342,
+          "z": 524287,
+          "commitments": null
+        }
+      },
+      "head": {
+        "sha256": "a999d80afa7e4e685aae8d3ef296e50619a7a222b93a19740877455778a057d7",
+        "size": 25588363
+      },
+      "contributions": 15,
+      "pk": {
+        "sha256": "4dfb46f223b9ba01f3e88e7b7d18da2ba946682491f67a6856bcf6af9784a066",
+        "size": 58235609
+      },
+      "vk": {
+        "sha256": "46d541e3783fac59e4ba124f9859189dad4715209f8a0de391f9c9a85e7c5d3f",
+        "size": 364
+      }
+    },
+    {
+      "circuit": {
+        "spec": {
+          "id": "transfer_confidential_12_4",
+          "track": "core",
+          "family": "transfer-confidential",
+          "inputs": 12,
+          "outputs": 4
+        },
+        "r1cs": {
+          "sha256": "9308ba53795909672cca236803ff54ae734cc3512f33f7ee269856bf18b93222",
+          "size": 33131532
+        },
+        "srs": {
+          "sha256": "9cc3544f466bb4f3df079935d3986c7e46532ef82450176f419e3522d1e1a9ab",
+          "size": 100663240
+        },
+        "initial": {
+          "sha256": "6e10bdb499a2bfe7039b56c97bea091c86410c3703cdea5a660cee47debf3acb",
+          "size": 25711019
+        },
+        "constraints": 284086,
+        "domain": 524288,
+        "shape": {
+          "private": 279176,
+          "z": 524287,
+          "commitments": null
+        }
+      },
+      "head": {
+        "sha256": "e3ff5539cec2e3fc04a58c2a7552dced20f675c5b1acb9f89f29cc78a2001a5f",
+        "size": 25711051
+      },
+      "contributions": 15,
+      "pk": {
+        "sha256": "f773f58b023a7b6fc010528b4ba0e7299c0fed5e39f741959ffe5d1aecce6294",
+        "size": 58801357
+      },
+      "vk": {
+        "sha256": "c137a87f7e8442f18339ee21e17fb1aea032900fdc00b537ed29aa9fbcb0fddb",
+        "size": 364
+      }
+    },
+    {
+      "circuit": {
+        "spec": {
+          "id": "transfer_confidential_12_8",
+          "track": "core",
+          "family": "transfer-confidential",
+          "inputs": 12,
+          "outputs": 8
+        },
+        "r1cs": {
+          "sha256": "bf859551cb8b1f2393a90f84656de21b9abb06eb67c5e62df76d7a6cf57e357f",
+          "size": 34237992
+        },
+        "srs": {
+          "sha256": "9cc3544f466bb4f3df079935d3986c7e46532ef82450176f419e3522d1e1a9ab",
+          "size": 100663240
+        },
+        "initial": {
+          "sha256": "64a33407ea47b408f5a3224289ac49ae43082b6d0bd3a7780eb02bbbc5714bb7",
+          "size": 25996331
+        },
+        "constraints": 293018,
+        "domain": 524288,
+        "shape": {
+          "private": 288092,
+          "z": 524287,
+          "commitments": null
+        }
+      },
+      "head": {
+        "sha256": "7fcb344aa521f604a80f5e57cd14601bbcaa8b15283d407f8ce8d72d0241af49",
+        "size": 25996363
+      },
+      "contributions": 15,
+      "pk": {
+        "sha256": "de3a9c869d20523b7d457b3c3893899b254b8e4a41407024dd76c2879310b8ad",
+        "size": 60118133
+      },
+      "vk": {
+        "sha256": "782b34a9d625b5daf368328636a725e7535bf3c5b8ef61a26c96108bbf68a242",
+        "size": 364
+      }
+    },
+    {
+      "circuit": {
+        "spec": {
+          "id": "transfer_confidential_16_2",
+          "track": "core",
+          "family": "transfer-confidential",
+          "inputs": 16,
+          "outputs": 2
+        },
+        "r1cs": {
+          "sha256": "9d479d6ffdf1580b354d455a5c6c71b2f701815803ab84cfa850f8dbc7994e80",
+          "size": 43214491
+        },
+        "srs": {
+          "sha256": "9cc3544f466bb4f3df079935d3986c7e46532ef82450176f419e3522d1e1a9ab",
+          "size": 100663240
+        },
+        "initial": {
+          "sha256": "c51cf133209820271d3acb5bacabd7d732e1d8e8bbc3c4fabb025de312e27f36",
+          "size": 28444139
+        },
+        "constraints": 371124,
+        "domain": 524288,
+        "shape": {
+          "private": 364586,
+          "z": 524287,
+          "commitments": null
+        }
+      },
+      "head": {
+        "sha256": "cb53a43bb8a8e19b4150f7f9ede5314858d2196501814efa2fed45815650656a",
+        "size": 28444171
+      },
+      "contributions": 15,
+      "pk": {
+        "sha256": "cc6b4d3cab96e2464312cfd3c35bf66b6a419be1b6521372dcd9b297022db01d",
+        "size": 71656209
+      },
+      "vk": {
+        "sha256": "ff1e2e68d5b4c612f4859b1e0f14b33061e8eb533fc8282bbf9c49e67ed91845",
+        "size": 364
+      }
+    },
+    {
+      "circuit": {
+        "spec": {
+          "id": "transfer_confidential_16_4",
+          "track": "core",
+          "family": "transfer-confidential",
+          "inputs": 16,
+          "outputs": 4
+        },
+        "r1cs": {
+          "sha256": "c73fe486950214b7816772b9844067f796f5db236da31a87702abe791bad46f1",
+          "size": 43684328
+        },
+        "srs": {
+          "sha256": "9cc3544f466bb4f3df079935d3986c7e46532ef82450176f419e3522d1e1a9ab",
+          "size": 100663240
+        },
+        "initial": {
+          "sha256": "ca59ade391e0dd8c46df82797a71071e21e9875fbd6424e6dd298ce75f606090",
+          "size": 28568875
+        },
+        "constraints": 375030,
+        "domain": 524288,
+        "shape": {
+          "private": 368484,
+          "z": 524287,
+          "commitments": null
+        }
+      },
+      "head": {
+        "sha256": "da87e57e9229a4598bcccf5fac4aa49db7bfaffd72bfbd2c9f9f46158b3efa92",
+        "size": 28568907
+      },
+      "contributions": 15,
+      "pk": {
+        "sha256": "0c0b8aed7a35a0e995dbf91e6a34d81de5caa296b4b77b5af4e7886857496e37",
+        "size": 72229509
+      },
+      "vk": {
+        "sha256": "71ae185475ca8a2e23fe52dca72fb71263a1c51d0f48added86007c771b6338b",
+        "size": 364
+      }
+    },
+    {
+      "circuit": {
+        "spec": {
+          "id": "transfer_confidential_16_8",
+          "track": "core",
+          "family": "transfer-confidential",
+          "inputs": 16,
+          "outputs": 8
+        },
+        "r1cs": {
+          "sha256": "7bb995f1e00263f691306bac50f392bdb4a268f0b6cc37fb2b0e803917aa46b3",
+          "size": 44801100
+        },
+        "srs": {
+          "sha256": "9cc3544f466bb4f3df079935d3986c7e46532ef82450176f419e3522d1e1a9ab",
+          "size": 100663240
+        },
+        "initial": {
+          "sha256": "e7ac74981804c254b428469f5f554cd454facb8039aba2848a052ea4302b403a",
+          "size": 28858283
+        },
+        "constraints": 384090,
+        "domain": 524288,
+        "shape": {
+          "private": 377528,
+          "z": 524287,
+          "commitments": null
+        }
+      },
+      "head": {
+        "sha256": "ed08d594449a0ab07bac2fc8bb6d176fceef0a600e7eb9cbbec746cfd0fc0d61",
+        "size": 28858315
+      },
+      "contributions": 15,
+      "pk": {
+        "sha256": "40b4c03f3e1492609b2c72c5a1971d31781a4c4960827ba221984adf46a7d90f",
+        "size": 73561389
+      },
+      "vk": {
+        "sha256": "1fb49b38e4494097ccfa753deca82498896f839ddaca9954eacf396c0961d6d2",
+        "size": 364
+      }
+    },
+    {
+      "circuit": {
+        "spec": {
+          "id": "transfer_confidential_24_2",
+          "track": "core",
+          "family": "transfer-confidential",
+          "inputs": 24,
+          "outputs": 2
+        },
+        "r1cs": {
+          "sha256": "bbfd1ce1a123d9f5c31f73f3c82087758c3fb55f8a41d387fb6d85649d396de2",
+          "size": 64440006
+        },
+        "srs": {
+          "sha256": "78ce258c5fd238ba2bdeda9e5c42c9b2dbccc7ebf1573474bd9979ae0d6f18d8",
+          "size": 201326536
+        },
+        "initial": {
+          "sha256": "dc3eecfb4bfcd12330e104093270d0de6eed0e3a4fce1af366d6046ec84bb1f9",
+          "size": 50975979
+        },
+        "constraints": 554228,
+        "domain": 1048576,
+        "shape": {
+          "private": 544418,
+          "z": 1048575,
+          "commitments": null
+        }
+      },
+      "head": {
+        "sha256": "0458454b12df59118482e7c286b69f146c7d36cb9dfe808ebc37e8545b910437",
+        "size": 50976011
+      },
+      "contributions": 15,
+      "pk": {
+        "sha256": "ec43835f103aba3597330d90164caa2c524ceeada700a6de8c63f0dd7b2a28d8",
+        "size": 115452417
+      },
+      "vk": {
+        "sha256": "26c592eb84fd8d29d5f03a9c5d25e50b2da9681eb9244dfa60c7cdb74c350f06",
+        "size": 364
+      }
+    },
+    {
+      "circuit": {
+        "spec": {
+          "id": "transfer_confidential_24_4",
+          "track": "core",
+          "family": "transfer-confidential",
+          "inputs": 24,
+          "outputs": 4
+        },
+        "r1cs": {
+          "sha256": "110c6a4d6112222b438f9b152e8a914cf88b7a2091bba2ea81438387aa8370c5",
+          "size": 64915461
+        },
+        "srs": {
+          "sha256": "78ce258c5fd238ba2bdeda9e5c42c9b2dbccc7ebf1573474bd9979ae0d6f18d8",
+          "size": 201326536
+        },
+        "initial": {
+          "sha256": "bca3cf0e799c3d8ae135b460c56a7ee943fccc331575cf217dee863d381adcea",
+          "size": 51104811
+        },
+        "constraints": 558262,
+        "domain": 1048576,
+        "shape": {
+          "private": 548444,
+          "z": 1048575,
+          "commitments": null
+        }
+      },
+      "head": {
+        "sha256": "1fffb60caad37e6aeb6ca704ab0e7c9f3a4047a27dd2ea4887f2b418a76ba446",
+        "size": 51104843
+      },
+      "contributions": 15,
+      "pk": {
+        "sha256": "f843005ad24fccd00f117eb8fef26ec1414d5bb2d11399a5aede4590db6535a8",
+        "size": 116040821
+      },
+      "vk": {
+        "sha256": "e320ec125787aff213d399191d74a099a83a73130b41354c3fe951f79baa96ea",
+        "size": 364
+      }
+    },
+    {
+      "circuit": {
+        "spec": {
+          "id": "transfer_confidential_32_2",
+          "track": "core",
+          "family": "transfer-confidential",
+          "inputs": 32,
+          "outputs": 2
+        },
+        "r1cs": {
+          "sha256": "1e2090e6103ba77f9593e4400dc5342dc1b46dc2e4b45d3eb349417270307dbe",
+          "size": 85596385
+        },
+        "srs": {
+          "sha256": "78ce258c5fd238ba2bdeda9e5c42c9b2dbccc7ebf1573474bd9979ae0d6f18d8",
+          "size": 201326536
+        },
+        "initial": {
+          "sha256": "609453b5587d416b66090ccd3f0ed2db89b70a90bae4410af04ac2f388bf09f0",
+          "size": 56727915
+        },
+        "constraints": 737252,
+        "domain": 1048576,
+        "shape": {
+          "private": 724166,
+          "z": 1048575,
+          "commitments": null
+        }
+      },
+      "head": {
+        "sha256": "fd398c4bd37a150f4462ee699d1c325c780d3c1caf42cd685a11cf98e171fd3b",
+        "size": 56727947
+      },
+      "contributions": 15,
+      "pk": {
+        "sha256": "a9debeee2f54080faddcd68419e50b99990aa3cf8e427bc889eccfa283c5a853",
+        "size": 142427593
+      },
+      "vk": {
+        "sha256": "a9345ee9d1403145ae2cf842a42ed6ee56e6e2f859d20a69f1bdfd35b832fd5c",
+        "size": 364
+      }
+    },
+    {
+      "circuit": {
+        "spec": {
+          "id": "transfer_confidential_40_2",
+          "track": "core",
+          "family": "transfer-confidential",
+          "inputs": 40,
+          "outputs": 2
+        },
+        "r1cs": {
+          "sha256": "594cf584aedd5db382c99706447e1904fdccfdb14cfb54ab869167c399489962",
+          "size": 106272195
+        },
+        "srs": {
+          "sha256": "78ce258c5fd238ba2bdeda9e5c42c9b2dbccc7ebf1573474bd9979ae0d6f18d8",
+          "size": 201326536
+        },
+        "initial": {
+          "sha256": "8406c409da1947a07a1a724b789f6b1b3704288cf6911a57299bc1c5f571c729",
+          "size": 62382699
+        },
+        "constraints": 917252,
+        "domain": 1048576,
+        "shape": {
+          "private": 900878,
+          "z": 1048575,
+          "commitments": null
+        }
+      },
+      "head": {
+        "sha256": "0620ea664dd175358d2cf6de2107e261c0463e2148c1108ff12bd3b6d9e9febb",
+        "size": 62382731
+      },
+      "contributions": 15,
+      "pk": {
+        "sha256": "e5e35840d29125c8548bff3f401456b6e122b049373efc59d61e6dd36a71ce94",
+        "size": 168921689
+      },
+      "vk": {
+        "sha256": "c8ee2c7951f4f389e4e6377928386a09453eaac5a8662d9ffabf2c9db0240365",
+        "size": 364
+      }
+    },
+    {
+      "circuit": {
+        "spec": {
+          "id": "transfer_confidential_48_2",
+          "track": "core",
+          "family": "transfer-confidential",
+          "inputs": 48,
+          "outputs": 2
+        },
+        "r1cs": {
+          "sha256": "d6ee3c9fcc86bffea56cbb3c22a3ce06f749c664d7b4d7dd5cb0b3b89cb08f24",
+          "size": 127092685
+        },
+        "srs": {
+          "sha256": "f75bd40496b046942e62cdd2e0a2c3a580c68f789e705e97fa8e3a9db7c36780",
+          "size": 402653128
+        },
+        "initial": {
+          "sha256": "a977047522a700ffc9f8a35cd5c1358ca035c5f6328714f2e62ce0a1f3115b9f",
+          "size": 101634923
+        },
+        "constraints": 1098596,
+        "domain": 2097152,
+        "shape": {
+          "private": 1078934,
+          "z": 2097151,
+          "commitments": null
+        }
+      },
+      "head": {
+        "sha256": "28694c83dd9076722e78666137837e98bf562f38325ed5cb8b7d5aa48f4525bc",
+        "size": 101634955
+      },
+      "contributions": 15,
+      "pk": {
+        "sha256": "225e05dca798566a3d27fffe3e9132313b44ad12785b4fac386073168764ddd1",
+        "size": 229144937
+      },
+      "vk": {
+        "sha256": "e2a297b7b423554b03057ac08825cf6e1b25cf3f0d82c7fd5efcf31f98f2221f",
+        "size": 364
+      }
+    },
+    {
+      "circuit": {
+        "spec": {
+          "id": "transfer_confidential_49_2",
+          "track": "core",
+          "family": "transfer-confidential",
+          "inputs": 49,
+          "outputs": 2
+        },
+        "r1cs": {
+          "sha256": "9d5c39be3c12771be7e3864db882ce63cea1177f09892ac757b378ee8341141e",
+          "size": 129661970
+        },
+        "srs": {
+          "sha256": "f75bd40496b046942e62cdd2e0a2c3a580c68f789e705e97fa8e3a9db7c36780",
+          "size": 402653128
+        },
+        "initial": {
+          "sha256": "b75fde6e8babf5b7f7603dd58f24334f1241d4d6c6e7264a237747163a97a61c",
+          "size": 102341963
+        },
+        "constraints": 1121102,
+        "domain": 2097152,
+        "shape": {
+          "private": 1101029,
+          "z": 2097151,
+          "commitments": null
+        }
+      },
+      "head": {
+        "sha256": "d1c09b4cdfcb698acf5d7c5766baf1eaba6f35d8f7eb29fc78a2ef8a58764078",
+        "size": 102341995
+      },
+      "contributions": 15,
+      "pk": {
+        "sha256": "68edcc3bde40cd81e78f84f1967f464e7d55dacf19c924499a75e2c4dcb73583",
+        "size": 232452007
+      },
+      "vk": {
+        "sha256": "a512c968ff447b363f5939d61bfbac1e76bbfc3fdb2365b0c160d8eddf8ab5ad",
+        "size": 364
+      }
+    },
+    {
+      "circuit": {
+        "spec": {
+          "id": "merge_8_1",
+          "track": "core",
+          "family": "merge",
+          "inputs": 8,
+          "outputs": 1
+        },
+        "r1cs": {
+          "sha256": "acfff1a46f1978aad4817d3782b36cb25891f4abcc5e70b3996843115d2d96d9",
+          "size": 21166992
+        },
+        "srs": {
+          "sha256": "69d80bea3e170d5c3aea2af4bf293631ec161146fa34caca9d49c7e50f4ba7f8",
+          "size": 50331592
+        },
+        "initial": {
+          "sha256": "c01da2026860db74c510d17b0ffe8fc299b950582bcee196a31c95122f73a6e2",
+          "size": 14056107
+        },
+        "constraints": 180294,
+        "domain": 262144,
+        "shape": {
+          "private": 177104,
+          "z": 262143,
+          "commitments": null
+        }
+      },
+      "head": {
+        "sha256": "86bdd97d87f60f0955f6cc0fc3a6877c5831f191ed9eb9f12fa245dce99f3f94",
+        "size": 14056139
+      },
+      "contributions": 15,
+      "pk": {
+        "sha256": "321d1ae0d2405b4512c87c75c3e9137b3155a5451f5dee0220a52c01bbdcc397",
+        "size": 35094333
+      },
+      "vk": {
+        "sha256": "3fc215f54aa0e3cc8f19f86af76f6c01b7a3af570ea057aaded5392953acfb5a",
+        "size": 364
+      }
+    },
+    {
+      "circuit": {
+        "spec": {
+          "id": "merge_24_1",
+          "track": "core",
+          "family": "merge",
+          "inputs": 24,
+          "outputs": 1
+        },
+        "r1cs": {
+          "sha256": "3f0bf6b412669390857e73c16de0f07e9d8ef320706c7ad80028895d50e333f0",
+          "size": 61936587
+        },
+        "srs": {
+          "sha256": "78ce258c5fd238ba2bdeda9e5c42c9b2dbccc7ebf1573474bd9979ae0d6f18d8",
+          "size": 201326536
+        },
+        "initial": {
+          "sha256": "681a86c09698f8851e4b3343e64a600de403e95f0a618e1ca8a269d46bf76bde",
+          "size": 50124971
+        },
+        "constraints": 527430,
+        "domain": 1048576,
+        "shape": {
+          "private": 517824,
+          "z": 1048575,
+          "commitments": null
+        }
+      },
+      "head": {
+        "sha256": "e24dff3e2481dc17bc4feadeb02110b4f15a3763daa1e9a022af04dad60e3df2",
+        "size": 50125003
+      },
+      "contributions": 15,
+      "pk": {
+        "sha256": "2cdfcb84d165340487f8e955f3b1aeb250acaea6bfcb2c37df8c00b7427db470",
+        "size": 111610141
+      },
+      "vk": {
+        "sha256": "0187063e035140d4c59c4d5198bbe141ee6e1eb4af7968f772b93d71aa77ca8c",
+        "size": 364
+      }
+    },
+    {
+      "circuit": {
+        "spec": {
+          "id": "merge_52_1",
+          "track": "core",
+          "family": "merge",
+          "inputs": 52,
+          "outputs": 1
+        },
+        "r1cs": {
+          "sha256": "b32b08f35d866208989755e08fd64b0aed661a653f507e72f0c269a5e20544b2",
+          "size": 133412211
+        },
+        "srs": {
+          "sha256": "f75bd40496b046942e62cdd2e0a2c3a580c68f789e705e97fa8e3a9db7c36780",
+          "size": 402653128
+        },
+        "initial": {
+          "sha256": "6effdee72aebc5e5b5e6e4385f3fc01ce25a72cdea21c9817f251377ec3b6c3c",
+          "size": 102801451
+        },
+        "constraints": 1136222,
+        "domain": 2097152,
+        "shape": {
+          "private": 1115388,
+          "z": 2097151,
+          "commitments": null
+        }
+      },
+      "head": {
+        "sha256": "05677e0af9e31b8fa9508d6699be89570e131f8a0eca7d501139588cc1863a27",
+        "size": 102801483
+      },
+      "contributions": 15,
+      "pk": {
+        "sha256": "b1f7f847faab4f0f36bbc44300411312f69a330d20ccd1493a36f4f44d803be6",
+        "size": 235158677
+      },
+      "vk": {
+        "sha256": "6bd99fe6b1b0a8dea89704ec262b2ec9f469c5bc6ffb979180d704ed0f3920ef",
+        "size": 364
+      }
+    }
+  ],
+  "beacon_plan": {
+    "chain_info": {
+      "public_key": "83cf0f2896adee7eb8b5f01fcad3912212c437e0073e911fb90022d3e760183c8c4b450b6a0a6c3ac6a5776a2d1064510d1fec758c921cc22b0e17e63aaf4bcb5ed66304de9cf809bd274ca73bab4af5a6e9c76a4bc09e76eae8991ef5ece45a",
+      "beacon_id": "quicknet",
+      "period": 3,
+      "scheme": "bls-unchained-g1-rfc9380",
+      "genesis_time": 1692803367,
+      "genesis_seed": "f477d5c89f21a17c863a7f937c6a6d15859414d2be09cd448d4279af331c5d3e",
+      "chain_hash": "52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971"
+    },
+    "chain_hash": "52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971",
+    "round": 33610948,
+    "round_time": "2026-11-02T16:16:48Z"
+  },
+  "beacon_proof": {
+    "round": 33610948,
+    "signature": "b4e3435767fda74fadecb356b8d6ffeb5aa49b30e0365eea3c3391aa65db4b9724d00e114373f90880b66796bc94fdf9",
+    "randomness": "2d11483621f4b9b0d2941e22e58c870a01c45328c62039c8e4caeb89db90222d"
+  },
+  "closure": {
+    "sha256": "6ddc392b09d1a93b17bce65c08731d5b11616b851986454a5efe2a1554f7f61b",
+    "size": 17583
+  }
+}

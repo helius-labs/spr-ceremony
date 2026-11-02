@@ -1,0 +1,49 @@
+{
+  "manifest": {
+    "sha256": "4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079",
+    "size": 31586
+  },
+  "checkpoint": {
+    "sha256": "5c525e4b1547516cf63678c4a235cb2fd05cd1f78a463a3faf44e2ef1cbc41d7",
+    "size": 17855
+  },
+  "export": {
+    "sha256": "ed506cb30158a722fcc9692d44960599e73a4028828b0e6dc6266ec597af8caa",
+    "size": 52982
+  },
+  "source_revision": "ff04c625ceb43c688cd048549e00a5dabc0c6ee6",
+  "circuits": 41,
+  "contributions_per_circuit": 15,
+  "accepted_contributions": 615,
+  "beacon_round": 33610948,
+  "beacon_time": "2026-11-02T16:16:48Z",
+  "beacon_randomness": "2d11483621f4b9b0d2941e22e58c870a01c45328c62039c8e4caeb89db90222d",
+  "closure": {
+    "sha256": "6ddc392b09d1a93b17bce65c08731d5b11616b851986454a5efe2a1554f7f61b",
+    "size": 17583
+  },
+  "closure_witness": "https://github.com/helius-labs/spr-ceremony/releases/tag/core-closure-2026-11-02",
+  "finalization_completed_observed_at": "2026-11-02T17:34:05.941293Z",
+  "independent_key_verification_completed_at": "2026-11-02T18:52:19.632396+00:00",
+  "verifier_release": "v0.1.0-rc.18",
+  "verifier_binary_sha256": "77c6b71e73da6a24ff8f0fe1b94a197b7e6d53f045d9c9d50f2cbc889eff7801",
+  "independent_key_verification_workers": 12,
+  "independent_key_verification_gomaxprocs": 24,
+  "checks": {
+    "full_transcript_audit": true,
+    "final_key_reproduction": true,
+    "all_downloaded_key_hashes": true,
+    "final_key_application_proof_tests": false,
+    "application_key_rotation": false
+  },
+  "logs": {
+    "transcript-audit.log": {
+      "sha256": "dfc20ecaaf65d92c3c6d1ff3412f58d51ba07ae327f88eb3d66b936d8ab71b56",
+      "size": 6263
+    },
+    "final-key-verification.log": {
+      "sha256": "2453006a931517e1ec22cdba64681c0e2f41e3a6e043edd134815397ae07b38e",
+      "size": 5319
+    }
+  }
+}
