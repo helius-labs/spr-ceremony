@@ -60,19 +60,22 @@ async function publicView() {
   const finished = view.phase === "finalized";
   $("native-panel").hidden = !["open", "prepared"].includes(view.phase) || !$("github-panel").hidden;
   $("completed-panel").hidden = !finished;
+  $("ceremony-title").hidden = finished;
+  $("public-summary").hidden = finished;
+  $("how-it-works").hidden = finished;
   if (finished) {
     require(view.circuits.every(c => Number.isSafeInteger(c.contributions) && c.contributions >= 0), "Invalid contribution count");
     const count = view.circuits.reduce((sum, c) => sum + c.contributions, 0);
-    $("completed-summary").textContent = `${view.circuits.length} circuits · ${view.participants} contributors · ${count} accepted contributions`;
+    $("completed-summary").textContent = `${view.circuits.length} circuits · ${view.participants} contributors`;
     const verified = !view.insecure_test_setup && usesPublicPhase1(view.phase1) && view.circuits.length === 41 && count === 615 && view.manifest.sha256 === "4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079"
       && view.checkpoint.sha256 === "5c525e4b1547516cf63678c4a235cb2fd05cd1f78a463a3faf44e2ef1cbc41d7"
       && view.final_export?.sha256 === "ed506cb30158a722fcc9692d44960599e73a4028828b0e6dc6266ec597af8caa";
-    $("verification-status").textContent = verified ? "All 41 final keys independently reproduced and verified. November 2, 2026." : "Final keys published. Verify the transcript and keys before use.";
+    $("verification-status").textContent = verified ? "Final keys independently reproduced and verified." : "Final keys published. Verify the transcript and keys before use.";
     $("final-release-links").hidden = !verified;
     $("contributions").open = true;
   }
   $("public-summary").textContent = `${view.phase[0].toUpperCase() + view.phase.slice(1)} · ${view.circuits.length} circuits · ${view.participants} contributors`;
-  $("keys-status").textContent = view.phase === "finalized" ? "Final keys. Verify before use." : "Final keys will appear after the ceremony is finalized.";
+  $("keys-status").textContent = view.phase === "finalized" ? `${view.circuits.reduce((sum, c) => sum + c.contributions, 0)} accepted contributions. Final keys published.` : "Final keys will appear after the ceremony is finalized.";
   if (view.insecure_test_setup && !usesPublicPhase1(view.phase1)) { $("notice").hidden = false; $("notice").textContent = "Locally generated parameters. Do not use these keys in production."; }
   function link(parent, label, ref) {
     require(hex(ref?.sha256) && Number.isSafeInteger(ref.size) && ref.size > 0, "Invalid public artifact");
@@ -97,15 +100,18 @@ async function publicRecords() {
     const view = await request("/v1/records");
     require(hex(view.manifest?.sha256) && hex(view.checkpoint?.sha256) && Array.isArray(view.records), "Invalid contribution records");
     $("records").replaceChildren();
-    for (const record of view.records) {
+    $("identity-proof-links").replaceChildren();
+    $("identity-proofs").hidden = true;
+    for (const record of [...view.records].sort((a, b) => a.contributor.localeCompare(b.contributor))) {
       require(hex(record.invitation_id) && typeof record.contributor === "string" && record.status === "accepted" && Number.isInteger(record.total) && record.total > 0 && record.total <= 41, "Invalid contribution record");
       const row = document.createElement("div"); row.className = "key-row";
       const link = document.createElement("a"); link.href = `/v1/records/${record.invitation_id}`;
-      link.textContent = `${record.contributor} · ${record.total}/${record.total} accepted`;
+      link.textContent = record.contributor; link.title = `Signed receipts · ${record.total}/${record.total} accepted`;
+      link.setAttribute("aria-label", `${record.contributor}: signed contribution receipts`);
       row.append(link); $("records").append(row);
       void showGitHubIdentity(row, record, view.manifest);
     }
-    $("records-status").textContent = view.records.length ? "Download signed receipts:" : "Completed contributions appear here automatically.";
+    $("records-status").textContent = view.records.length ? "Each name links to signed contribution receipts." : "Completed contributions appear here automatically.";
   } catch { $("records-status").textContent = "Contribution records are temporarily unavailable."; }
 }
 async function initialize() {
@@ -210,16 +216,11 @@ async function showGitHubIdentity(row, record, manifest) {
   try {
     const identity = await request(`/v1/github/identities/${record.invitation_id}`);
     require(identity.format === "spr-github-identity-v1" && identity.invitation_id === record.invitation_id && identity.manifest?.sha256 === manifest.sha256 && Number.isSafeInteger(identity.github_id) && identity.github_id > 0 && /^[a-zA-Z0-9-]{1,39}$/.test(identity.github_login), "Invalid GitHub identity");
-    const profile = document.createElement("a"); profile.href = `https://github.com/${identity.github_login}`; profile.rel = "noopener noreferrer"; profile.textContent = `@${identity.github_login} · GitHub verified`; profile.title = `Account ID ${identity.github_id}; linked ${identity.linked_at}`;
-    const proof = document.createElement("a"); proof.href = `/v1/github/identities/${record.invitation_id}`; proof.textContent = "Account proof";
-    row.append(profile, proof);
-  } catch (error) {
-    if (error.status !== 404) return;
-    const button = document.createElement("button"); button.className = "secondary"; button.textContent = "Link GitHub";
-    button.addEventListener("click", () => {
-      showGitHubRecovery(`Link GitHub to ${record.contributor}. Use the invitation for this contribution.`);
-      $("github-panel").scrollIntoView({behavior: "smooth", block: "start"});
-    });
-    row.append(button);
-  }
+    if (!row.isConnected) return;
+    const profile = document.createElement("a"); profile.href = `https://github.com/${identity.github_login}`; profile.rel = "noopener noreferrer"; profile.textContent = `@${identity.github_login}`; profile.className = "github-profile"; profile.title = `Account ID ${identity.github_id}; linked ${identity.linked_at}`;
+    const proof = document.createElement("a"); proof.href = `/v1/github/identities/${record.invitation_id}`; proof.textContent = `${record.contributor} · @${identity.github_login}`;
+    row.append(profile);
+    $("identity-proof-links").append(proof);
+    $("identity-proofs").hidden = false;
+  } catch { /* Unlinked or unavailable identities leave the receipt visible. */ }
 }

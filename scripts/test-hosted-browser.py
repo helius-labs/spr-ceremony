@@ -121,7 +121,8 @@ async def main():
                         await page.goto(origin)
                         record = page.locator(f'#records a[href="/v1/records/{invitation["id"]}"]')
                         await record.wait_for(state='attached')
-                        assert '2/2 accepted' in await record.text_content()
+                        assert await record.text_content() == engine
+                        assert '2/2 accepted' in await record.get_attribute('title')
                         response = await context.request.get(origin + '/v1/records/' + invitation['id'])
                         published = await response.json()
                         assert len(published['receipts']) == 2 and invitation['token'] not in json.dumps(published)
@@ -137,21 +138,13 @@ async def main():
                         assert not await context.cookies()
                         assert await page.evaluate('() => localStorage.length + sessionStorage.length') == 0
                         checks.append(engine + ': HTTPS CLI-only page, private clipboard handoff, no browser engine/storage/auth requests, native contribution and idempotent rerun, signed records, mobile layout')
-                        # Completed unlinked records expose a private-invitation
-                        # handoff, never an unauthenticated ownership claim.
+                        # Public records keep signed receipts without account-link actions.
                         await page.goto(origin)
                         await page.locator('#join-command').wait_for(state='attached')
                         row = page.locator('#records .key-row').filter(has=page.locator(f'a[href="/v1/records/{invitation["id"]}"]'))
-                        await page.locator('#contributions > summary').click()
-                        await row.get_by_role('button', name='Link GitHub', exact=True).click()
-                        await page.wait_for_function("document.getElementById('github-retry-command').textContent.endsWith(' -s -- link-github')")
-                        await page.locator('#copy-github-command').click()
-                        retry = await page.evaluate('window.testClipboard')
-                        assert retry == command + ' -s -- link-github'
-                        assert invitation['token'] not in retry
-                        assert 'original private invitation' in await page.locator('#github-retry').inner_text()
-                        assert await page.locator('#native-panel').is_hidden()
-                        assert not any(method == 'POST' for method, _, _ in requests)
+                        await row.wait_for(state='attached')
+                        assert await row.get_by_role('button', name='Link GitHub', exact=True).count() == 0
+                        retry = command + ' -s -- link-github'
                         # Server outages must not label existing accounts unlinked.
                         async def identity_outage(route):
                             await route.fulfill(status=503, body='unavailable')
@@ -186,7 +179,7 @@ async def main():
                         assert await page.evaluate('() => document.documentElement.scrollWidth <= innerWidth')
                         for path in ['/v1/github/begin', '/v1/github/session']:
                             await page.unroute(origin + path, expired_github)
-                        checks.append(engine + ': unlinked record button, link-only command, expired OAuth recovery, private-token isolation and clipboard fallback')
+                        checks.append(engine + ': read-only contributor list, link-only command, expired OAuth recovery, private-token isolation and clipboard fallback')
                         # UI-only provider simulation. The Go HTTP tests verify
                         # cookies, PKCE/state, signatures, consent and S3 recovery.
                         github_ticket, confirmation = 'a' * 64, 'b' * 64

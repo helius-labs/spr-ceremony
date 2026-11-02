@@ -61,3 +61,34 @@ a { color: var(--orange); }
 [hidden] { display: none !important; }
 @media (max-width: 520px) { main { padding: 40px 20px; } h1 { margin-bottom: 32px; } section { padding: 22px; } .buttons > * { flex-grow: 1; text-align: center; } .footer-actions { justify-content: flex-start; } .footer-actions > * { flex-grow: 0; } }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* Public ceremony: result first, contributors next, evidence on demand. */
+.hosted { max-width: 860px; padding-top: 56px; }
+.hosted .eyebrow { margin: 0; }
+.hosted #completed-panel { padding: 0; background: none; border: 0; border-radius: 0; margin: 52px 0 56px; }
+.hosted #completed-title { font-size: clamp(38px, 6.5vw, 62px); margin: 0 0 20px; line-height: 1.08; }
+.hosted #completed-summary { font-size: 18px; color: #d4d4d4; margin: 0 0 8px; }
+.hosted #verification-status { margin: 0; }
+.hosted #final-release-links { align-items: center; gap: 24px; margin: 28px 0 0; }
+.hosted .verify-link { color: #d4d4d4; font-size: 14px; text-underline-offset: 4px; }
+.hosted #contributions { border-top: 1px solid #292929; padding-top: 24px; }
+.hosted #contributions > summary { font-size: 20px; color: #f5f5f5; font-weight: 550; letter-spacing: -.025em; }
+.hosted #records-status { margin: 8px 0 20px; }
+.hosted #records { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 36px; }
+.hosted #records .key-row { min-width: 0; padding: 14px 0; border-top: 1px solid #202020; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; }
+.hosted #records a { margin: 0; color: #eee; text-decoration: none; font-size: 14px; line-height: 1.7; }
+.hosted #records a.github-profile { color: var(--muted); font-size: 12px; }
+.hosted #records a:hover, .hosted .site-footer a:hover { color: var(--orange); text-decoration: underline; text-underline-offset: 3px; }
+.hosted #artifacts { border-top: 1px solid #292929; margin-top: 36px; padding-top: 18px; }
+.hosted #identity-proofs { margin: 24px 0; }
+.hosted #identity-proof-links { display: flex; flex-wrap: wrap; gap: 12px 24px; }
+.hosted .site-footer { margin-top: 32px; font-size: 12px; }
+.hosted .site-footer a { color: var(--muted); text-decoration: none; }
+@media (max-width: 520px) {
+  .hosted { padding: 32px 20px; }
+  .hosted #completed-panel { margin: 40px 0; }
+  .hosted #completed-summary { font-size: 16px; }
+  .hosted #records { gap: 0 20px; }
+  .hosted #final-release-links > * { flex-grow: 0; }
+}
+@media (max-width: 360px) { .hosted #records { grid-template-columns: 1fr; } }

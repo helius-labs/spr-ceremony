@@ -10,21 +10,20 @@
   <script type="module" src="hosted.js"></script>
 </head>
 <body>
-<main>
-  <p class="eyebrow"><span class="mark" aria-hidden="true"></span> TRUSTED SETUP</p>
-  <h1>Solana Privacy<br><span>Rings.</span></h1>
+<main class="hosted">
+  <p class="eyebrow"><span class="mark" aria-hidden="true"></span> SOLANA PRIVACY RINGS</p>
+  <h1 id="ceremony-title">Trusted setup.</h1>
   <noscript><p class="notice">Download the terminal client from the <a href="https://github.com/helius-labs/spr-ceremony/releases">releases page</a>.</p></noscript>
   <p id="public-summary" class="detail"></p>
   <p id="notice" class="notice" hidden></p>
   <section id="completed-panel" hidden aria-labelledby="completed-title">
-    <h2 id="completed-title">Ceremony complete.</h2>
+    <h1 id="completed-title">Ceremony complete.</h1>
     <p id="completed-summary"></p>
     <p id="verification-status" class="detail"></p>
     <div id="final-release-links" class="buttons" hidden>
-      <a href="https://github.com/helius-labs/spr-ceremony/releases/tag/core-keys-2026-11-02">Download keys</a>
-      <a href="https://github.com/helius-labs/spr-ceremony/blob/main/docs/final-keys.md">Verify</a>
+      <a href="https://github.com/helius-labs/spr-ceremony/releases/tag/core-keys-2026-11-02" class="button">Download keys</a>
+      <a href="https://github.com/helius-labs/spr-ceremony/blob/main/docs/final-keys.md" class="verify-link">Verify the ceremony</a>
     </div>
-    <p>Thank you to every contributor.</p>
   </section>
   <section id="github-panel" hidden aria-labelledby="github-title">
     <h2 id="github-title">Link GitHub.</h2>
@@ -67,15 +66,15 @@
       <a href="https://github.com/helius-labs/spr-ceremony" target="_blank" rel="noopener noreferrer">Source</a>
     </details>
   </section>
-  <details id="contributions"><summary>Contributors</summary><p id="records-status">Completed contributions appear here automatically.</p><div id="records"></div><p class="detail">Signed acceptance receipts. Full transcript audit is separate.</p></details>
-  <details id="artifacts"><summary>Parameters &amp; keys</summary><p id="keys-status"></p><div id="parameter-links"></div><p id="public-pins" class="detail"></p><div id="keys"></div><p class="detail">Authenticate the manifest and checkpoint hashes independently. Verify the full transcript and export before using final keys.</p></details>
-  <details>
+  <details id="contributions"><summary>Contributors</summary><p id="records-status">Completed contributions appear here automatically.</p><div id="records"></div></details>
+  <details id="artifacts"><summary>Verification details</summary><p id="keys-status"></p><div id="parameter-links"></div><p id="public-pins" class="detail"></p><div id="identity-proofs" hidden><h3>GitHub account proofs</h3><div id="identity-proof-links"></div></div><div id="keys"></div><p class="detail">Authenticate the manifest and checkpoint hashes independently. Verify the full transcript and export before using final keys.</p><p class="detail" id="build"></p></details>
+  <details id="how-it-works">
     <summary>How it works</summary>
     <p>The terminal client checks your invitation, adds fresh randomness and verifies the result. Only public contribution data is uploaded. The coordinator verifies it again before acceptance.</p>
     <p>The client handles the queue. Press Ctrl+C to stop; run the same command to resume. Accepted contributions are skipped.</p>
     <p>Public work and receipts stay in <code>~/.local/share/spr-ceremony/work</code>. Neither the client nor your operating system guarantees memory erasure.</p>
-    <p class="detail" id="build"></p>
   </details>
+  <footer class="site-footer"><a href="https://github.com/helius-labs/spr-ceremony">Source</a></footer>
 </main>
 </body>
 </html>
