@@ -72,7 +72,6 @@ async function publicView() {
       && view.final_export?.sha256 === "ed506cb30158a722fcc9692d44960599e73a4028828b0e6dc6266ec597af8caa";
     $("verification-status").textContent = verified ? "Final keys independently reproduced and verified." : "Final keys published. Verify the transcript and keys before use.";
     $("final-release-links").hidden = !verified;
-    $("contributions").open = true;
   }
   $("public-summary").textContent = `${view.phase[0].toUpperCase() + view.phase.slice(1)} · ${view.circuits.length} circuits · ${view.participants} contributors`;
   $("keys-status").textContent = view.phase === "finalized" ? `${view.circuits.reduce((sum, c) => sum + c.contributions, 0)} accepted contributions. Final keys published.` : "Final keys will appear after the ceremony is finalized.";
@@ -104,15 +103,16 @@ async function publicRecords() {
     $("identity-proofs").hidden = true;
     for (const record of [...view.records].sort((a, b) => a.contributor.localeCompare(b.contributor))) {
       require(hex(record.invitation_id) && typeof record.contributor === "string" && record.status === "accepted" && Number.isInteger(record.total) && record.total > 0 && record.total <= 41, "Invalid contribution record");
-      const row = document.createElement("div"); row.className = "key-row";
+      const row = document.createElement("div"); row.className = "key-row"; row.setAttribute("role", "listitem");
       const link = document.createElement("a"); link.href = `/v1/records/${record.invitation_id}`;
       link.textContent = record.contributor; link.title = `Signed receipts · ${record.total}/${record.total} accepted`;
       link.setAttribute("aria-label", `${record.contributor}: signed contribution receipts`);
       row.append(link); $("records").append(row);
       void showGitHubIdentity(row, record, view.manifest);
     }
-    $("records-status").textContent = view.records.length ? "Each name links to signed contribution receipts." : "Completed contributions appear here automatically.";
-  } catch { $("records-status").textContent = "Contribution records are temporarily unavailable."; }
+    $("records-status").hidden = view.records.length > 0;
+    $("records-status").textContent = "Completed contributions appear here automatically.";
+  } catch { $("records-status").hidden = false; $("records-status").textContent = "Contribution records are temporarily unavailable."; }
 }
 async function initialize() {
   build = JSON.parse(new TextDecoder().decode(await sprFetch("/build.json", 64 << 10, undefined, undefined, deadline())));
