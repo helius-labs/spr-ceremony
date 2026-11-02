@@ -1,0 +1,18 @@
+{
+  "checked_at": "2026-11-02T14:38:46.157276+00:00",
+  "manifest": {
+    "sha256": "4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079",
+    "size": 31586
+  },
+  "closed_checkpoint": {
+    "sha256": "6ddc392b09d1a93b17bce65c08731d5b11616b851986454a5efe2a1554f7f61b",
+    "size": 17583
+  },
+  "closed_at": "2026-11-02T14:37:43.215537345Z",
+  "quicknet_round": 33610948,
+  "beacon_time": "2026-11-02T16:16:48Z",
+  "circuits": 41,
+  "accepted_contributions": 615,
+  "circuit_states_unchanged_on_close": true,
+  "final_keys_published": false
+}
