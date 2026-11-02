@@ -1,0 +1,14 @@
+{
+  "release": "https://github.com/helius-labs/spr-ceremony/releases/tag/core-closure-2026-11-02",
+  "verified_timestamps": [
+    {
+      "type": "TimestampAuthority",
+      "uri": "timestamp.githubapp.com",
+      "timestamp": "2026-11-02T14:47:17Z"
+    }
+  ],
+  "closure_sha256": "6ddc392b09d1a93b17bce65c08731d5b11616b851986454a5efe2a1554f7f61b",
+  "beacon_time": "2026-11-02T16:16:48Z",
+  "verified_before_beacon": true,
+  "verification_command": "gh release verify core-closure-2026-11-02 --repo helius-labs/spr-ceremony --format json"
+}
