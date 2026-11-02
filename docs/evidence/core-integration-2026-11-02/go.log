@@ -1,0 +1,172 @@
+ok  	github.com/helius-labs/zolana/prover/server/circuits/spp_transaction/shared	15.109s
+ok  	github.com/helius-labs/zolana/prover/server/circuits/spp_merge	2.842s
+=== RUN   TestFinalizedCoreIntegration
+=== RUN   TestFinalizedCoreIntegration/circuits
+=== RUN   TestFinalizedCoreIntegration/circuits/transfer_confidential_1_2
+=== PAUSE TestFinalizedCoreIntegration/circuits/transfer_confidential_1_2
+=== RUN   TestFinalizedCoreIntegration/circuits/transfer_confidential_1_4
+=== PAUSE TestFinalizedCoreIntegration/circuits/transfer_confidential_1_4
+=== RUN   TestFinalizedCoreIntegration/circuits/transfer_confidential_1_8
+=== PAUSE TestFinalizedCoreIntegration/circuits/transfer_confidential_1_8
+=== RUN   TestFinalizedCoreIntegration/circuits/transfer_confidential_2_2
+=== PAUSE TestFinalizedCoreIntegration/circuits/transfer_confidential_2_2
+=== RUN   TestFinalizedCoreIntegration/circuits/transfer_confidential_2_4
+=== PAUSE TestFinalizedCoreIntegration/circuits/transfer_confidential_2_4
+=== RUN   TestFinalizedCoreIntegration/circuits/transfer_confidential_1_16
+=== PAUSE TestFinalizedCoreIntegration/circuits/transfer_confidential_1_16
+=== RUN   TestFinalizedCoreIntegration/circuits/transfer_confidential_2_8
+=== PAUSE TestFinalizedCoreIntegration/circuits/transfer_confidential_2_8
+=== RUN   TestFinalizedCoreIntegration/circuits/transfer_confidential_3_2
+=== PAUSE TestFinalizedCoreIntegration/circuits/transfer_confidential_3_2
+=== RUN   TestFinalizedCoreIntegration/circuits/transfer_confidential_3_4
+=== PAUSE TestFinalizedCoreIntegration/circuits/transfer_confidential_3_4
+=== RUN   TestFinalizedCoreIntegration/circuits/transfer_confidential_2_16
+=== PAUSE TestFinalizedCoreIntegration/circuits/transfer_confidential_2_16
+=== RUN   TestFinalizedCoreIntegration/circuits/transfer_confidential_3_8
+=== PAUSE TestFinalizedCoreIntegration/circuits/transfer_confidential_3_8
+=== RUN   TestFinalizedCoreIntegration/circuits/transfer_confidential_4_2
+=== PAUSE TestFinalizedCoreIntegration/circuits/transfer_confidential_4_2
+=== RUN   TestFinalizedCoreIntegration/circuits/transfer_confidential_4_4
+=== PAUSE TestFinalizedCoreIntegration/circuits/transfer_confidential_4_4
+=== RUN   TestFinalizedCoreIntegration/circuits/transfer_confidential_4_8
+=== PAUSE TestFinalizedCoreIntegration/circuits/transfer_confidential_4_8
+=== RUN   TestFinalizedCoreIntegration/circuits/transfer_confidential_5_2
+=== PAUSE TestFinalizedCoreIntegration/circuits/transfer_confidential_5_2
+=== RUN   TestFinalizedCoreIntegration/circuits/transfer_confidential_5_4
+=== PAUSE TestFinalizedCoreIntegration/circuits/transfer_confidential_5_4
+=== RUN   TestFinalizedCoreIntegration/circuits/transfer_confidential_4_16
+=== PAUSE TestFinalizedCoreIntegration/circuits/transfer_confidential_4_16
+=== RUN   TestFinalizedCoreIntegration/circuits/transfer_confidential_5_8
+=== PAUSE TestFinalizedCoreIntegration/circuits/transfer_confidential_5_8
+=== RUN   TestFinalizedCoreIntegration/circuits/transfer_confidential_6_2
+=== PAUSE TestFinalizedCoreIntegration/circuits/transfer_confidential_6_2
+=== RUN   TestFinalizedCoreIntegration/circuits/transfer_confidential_6_4
+=== PAUSE TestFinalizedCoreIntegration/circuits/transfer_confidential_6_4
+=== RUN   TestFinalizedCoreIntegration/circuits/transfer_confidential_5_16
+=== PAUSE TestFinalizedCoreIntegration/circuits/transfer_confidential_5_16
+=== RUN   TestFinalizedCoreIntegration/circuits/transfer_confidential_6_8
+=== PAUSE TestFinalizedCoreIntegration/circuits/transfer_confidential_6_8
+=== RUN   TestFinalizedCoreIntegration/circuits/transfer_confidential_8_2
+=== PAUSE TestFinalizedCoreIntegration/circuits/transfer_confidential_8_2
+=== RUN   TestFinalizedCoreIntegration/circuits/transfer_confidential_8_4
+=== PAUSE TestFinalizedCoreIntegration/circuits/transfer_confidential_8_4
+=== RUN   TestFinalizedCoreIntegration/circuits/transfer_confidential_8_8
+=== PAUSE TestFinalizedCoreIntegration/circuits/transfer_confidential_8_8
+=== RUN   TestFinalizedCoreIntegration/circuits/transfer_confidential_8_16
+=== PAUSE TestFinalizedCoreIntegration/circuits/transfer_confidential_8_16
+=== RUN   TestFinalizedCoreIntegration/circuits/transfer_confidential_12_2
+=== PAUSE TestFinalizedCoreIntegration/circuits/transfer_confidential_12_2
+=== RUN   TestFinalizedCoreIntegration/circuits/transfer_confidential_12_4
+=== PAUSE TestFinalizedCoreIntegration/circuits/transfer_confidential_12_4
+=== RUN   TestFinalizedCoreIntegration/circuits/transfer_confidential_12_8
+=== PAUSE TestFinalizedCoreIntegration/circuits/transfer_confidential_12_8
+=== RUN   TestFinalizedCoreIntegration/circuits/transfer_confidential_16_2
+=== PAUSE TestFinalizedCoreIntegration/circuits/transfer_confidential_16_2
+=== RUN   TestFinalizedCoreIntegration/circuits/transfer_confidential_16_4
+=== PAUSE TestFinalizedCoreIntegration/circuits/transfer_confidential_16_4
+=== RUN   TestFinalizedCoreIntegration/circuits/transfer_confidential_16_8
+=== PAUSE TestFinalizedCoreIntegration/circuits/transfer_confidential_16_8
+=== RUN   TestFinalizedCoreIntegration/circuits/transfer_confidential_24_2
+=== PAUSE TestFinalizedCoreIntegration/circuits/transfer_confidential_24_2
+=== RUN   TestFinalizedCoreIntegration/circuits/transfer_confidential_24_4
+=== PAUSE TestFinalizedCoreIntegration/circuits/transfer_confidential_24_4
+=== RUN   TestFinalizedCoreIntegration/circuits/transfer_confidential_32_2
+=== PAUSE TestFinalizedCoreIntegration/circuits/transfer_confidential_32_2
+=== RUN   TestFinalizedCoreIntegration/circuits/transfer_confidential_40_2
+=== PAUSE TestFinalizedCoreIntegration/circuits/transfer_confidential_40_2
+=== RUN   TestFinalizedCoreIntegration/circuits/transfer_confidential_48_2
+=== PAUSE TestFinalizedCoreIntegration/circuits/transfer_confidential_48_2
+=== RUN   TestFinalizedCoreIntegration/circuits/transfer_confidential_49_2
+=== PAUSE TestFinalizedCoreIntegration/circuits/transfer_confidential_49_2
+=== RUN   TestFinalizedCoreIntegration/circuits/merge_8_1
+=== PAUSE TestFinalizedCoreIntegration/circuits/merge_8_1
+=== RUN   TestFinalizedCoreIntegration/circuits/merge_24_1
+=== PAUSE TestFinalizedCoreIntegration/circuits/merge_24_1
+=== RUN   TestFinalizedCoreIntegration/circuits/merge_52_1
+=== PAUSE TestFinalizedCoreIntegration/circuits/merge_52_1
+=== CONT  TestFinalizedCoreIntegration/circuits/transfer_confidential_1_2
+=== CONT  TestFinalizedCoreIntegration/circuits/transfer_confidential_8_4
+=== CONT  TestFinalizedCoreIntegration/circuits/transfer_confidential_24_2
+=== CONT  TestFinalizedCoreIntegration/circuits/transfer_confidential_4_4
+=== CONT  TestFinalizedCoreIntegration/circuits/transfer_confidential_2_8
+=== CONT  TestFinalizedCoreIntegration/circuits/transfer_confidential_4_2
+=== CONT  TestFinalizedCoreIntegration/circuits/transfer_confidential_8_2
+=== CONT  TestFinalizedCoreIntegration/circuits/transfer_confidential_3_8
+=== CONT  TestFinalizedCoreIntegration/circuits/transfer_confidential_6_8
+=== CONT  TestFinalizedCoreIntegration/circuits/transfer_confidential_2_16
+=== CONT  TestFinalizedCoreIntegration/circuits/transfer_confidential_5_16
+=== CONT  TestFinalizedCoreIntegration/circuits/transfer_confidential_3_4
+=== CONT  TestFinalizedCoreIntegration/circuits/transfer_confidential_6_4
+=== CONT  TestFinalizedCoreIntegration/circuits/transfer_confidential_49_2
+=== CONT  TestFinalizedCoreIntegration/circuits/transfer_confidential_6_2
+=== CONT  TestFinalizedCoreIntegration/circuits/merge_52_1
+=== CONT  TestFinalizedCoreIntegration/circuits/transfer_confidential_5_8
+=== CONT  TestFinalizedCoreIntegration/circuits/merge_24_1
+=== CONT  TestFinalizedCoreIntegration/circuits/transfer_confidential_4_16
+=== CONT  TestFinalizedCoreIntegration/circuits/merge_8_1
+=== CONT  TestFinalizedCoreIntegration/circuits/transfer_confidential_2_2
+=== CONT  TestFinalizedCoreIntegration/circuits/transfer_confidential_1_16
+=== CONT  TestFinalizedCoreIntegration/circuits/transfer_confidential_2_4
+=== CONT  TestFinalizedCoreIntegration/circuits/transfer_confidential_5_4
+=== CONT  TestFinalizedCoreIntegration/circuits/transfer_confidential_40_2
+=== CONT  TestFinalizedCoreIntegration/circuits/transfer_confidential_48_2
+=== CONT  TestFinalizedCoreIntegration/circuits/transfer_confidential_12_8
+=== CONT  TestFinalizedCoreIntegration/circuits/transfer_confidential_16_4
+=== CONT  TestFinalizedCoreIntegration/circuits/transfer_confidential_5_2
+=== CONT  TestFinalizedCoreIntegration/circuits/transfer_confidential_16_8
+=== CONT  TestFinalizedCoreIntegration/circuits/transfer_confidential_3_2
+=== CONT  TestFinalizedCoreIntegration/circuits/transfer_confidential_12_4
+=== CONT  TestFinalizedCoreIntegration/circuits/transfer_confidential_4_8
+=== CONT  TestFinalizedCoreIntegration/circuits/transfer_confidential_16_2
+=== CONT  TestFinalizedCoreIntegration/circuits/transfer_confidential_8_16
+=== CONT  TestFinalizedCoreIntegration/circuits/transfer_confidential_12_2
+=== CONT  TestFinalizedCoreIntegration/circuits/transfer_confidential_8_8
+=== CONT  TestFinalizedCoreIntegration/circuits/transfer_confidential_32_2
+=== CONT  TestFinalizedCoreIntegration/circuits/transfer_confidential_24_4
+=== CONT  TestFinalizedCoreIntegration/circuits/transfer_confidential_1_8
+=== CONT  TestFinalizedCoreIntegration/circuits/transfer_confidential_1_4
+--- PASS: TestFinalizedCoreIntegration (68.36s)
+    --- PASS: TestFinalizedCoreIntegration/circuits (0.00s)
+        --- PASS: TestFinalizedCoreIntegration/circuits/transfer_confidential_1_2 (0.45s)
+        --- PASS: TestFinalizedCoreIntegration/circuits/transfer_confidential_4_4 (1.86s)
+        --- PASS: TestFinalizedCoreIntegration/circuits/transfer_confidential_2_8 (1.57s)
+        --- PASS: TestFinalizedCoreIntegration/circuits/transfer_confidential_8_4 (3.34s)
+        --- PASS: TestFinalizedCoreIntegration/circuits/transfer_confidential_4_2 (2.07s)
+        --- PASS: TestFinalizedCoreIntegration/circuits/transfer_confidential_3_8 (3.19s)
+        --- PASS: TestFinalizedCoreIntegration/circuits/transfer_confidential_8_2 (4.96s)
+        --- PASS: TestFinalizedCoreIntegration/circuits/transfer_confidential_6_8 (4.26s)
+        --- PASS: TestFinalizedCoreIntegration/circuits/transfer_confidential_2_16 (1.88s)
+        --- PASS: TestFinalizedCoreIntegration/circuits/transfer_confidential_24_2 (10.21s)
+        --- PASS: TestFinalizedCoreIntegration/circuits/transfer_confidential_3_4 (2.12s)
+        --- PASS: TestFinalizedCoreIntegration/circuits/transfer_confidential_5_16 (3.46s)
+        --- PASS: TestFinalizedCoreIntegration/circuits/transfer_confidential_6_4 (2.63s)
+        --- PASS: TestFinalizedCoreIntegration/circuits/transfer_confidential_6_2 (2.27s)
+        --- PASS: TestFinalizedCoreIntegration/circuits/transfer_confidential_5_8 (2.15s)
+        --- PASS: TestFinalizedCoreIntegration/circuits/transfer_confidential_4_16 (1.53s)
+        --- PASS: TestFinalizedCoreIntegration/circuits/merge_8_1 (9.75s)
+        --- PASS: TestFinalizedCoreIntegration/circuits/merge_24_1 (12.86s)
+        --- PASS: TestFinalizedCoreIntegration/circuits/transfer_confidential_2_2 (3.30s)
+        --- PASS: TestFinalizedCoreIntegration/circuits/transfer_confidential_1_16 (3.52s)
+        --- PASS: TestFinalizedCoreIntegration/circuits/transfer_confidential_2_4 (1.37s)
+        --- PASS: TestFinalizedCoreIntegration/circuits/transfer_confidential_49_2 (20.92s)
+        --- PASS: TestFinalizedCoreIntegration/circuits/transfer_confidential_5_4 (3.31s)
+        --- PASS: TestFinalizedCoreIntegration/circuits/merge_52_1 (21.93s)
+        --- PASS: TestFinalizedCoreIntegration/circuits/transfer_confidential_12_8 (7.05s)
+        --- PASS: TestFinalizedCoreIntegration/circuits/transfer_confidential_16_4 (11.85s)
+        --- PASS: TestFinalizedCoreIntegration/circuits/transfer_confidential_5_2 (5.15s)
+        --- PASS: TestFinalizedCoreIntegration/circuits/transfer_confidential_40_2 (17.22s)
+        --- PASS: TestFinalizedCoreIntegration/circuits/transfer_confidential_3_2 (2.43s)
+        --- PASS: TestFinalizedCoreIntegration/circuits/transfer_confidential_4_8 (3.96s)
+        --- PASS: TestFinalizedCoreIntegration/circuits/transfer_confidential_48_2 (21.43s)
+        --- PASS: TestFinalizedCoreIntegration/circuits/transfer_confidential_16_8 (8.41s)
+        --- PASS: TestFinalizedCoreIntegration/circuits/transfer_confidential_12_4 (6.56s)
+        --- PASS: TestFinalizedCoreIntegration/circuits/transfer_confidential_8_16 (5.47s)
+        --- PASS: TestFinalizedCoreIntegration/circuits/transfer_confidential_8_8 (5.38s)
+        --- PASS: TestFinalizedCoreIntegration/circuits/transfer_confidential_16_2 (7.88s)
+        --- PASS: TestFinalizedCoreIntegration/circuits/transfer_confidential_12_2 (6.29s)
+        --- PASS: TestFinalizedCoreIntegration/circuits/transfer_confidential_1_8 (0.71s)
+        --- PASS: TestFinalizedCoreIntegration/circuits/transfer_confidential_1_4 (0.68s)
+        --- PASS: TestFinalizedCoreIntegration/circuits/transfer_confidential_24_4 (8.91s)
+        --- PASS: TestFinalizedCoreIntegration/circuits/transfer_confidential_32_2 (10.33s)
+PASS
+ok  	github.com/helius-labs/spr-ceremony/adapters/zolana	68.424s

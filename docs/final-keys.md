@@ -82,10 +82,28 @@ The ceremony is complete. Application integration is next:
    pins and on-chain verifier together.
 
 Use the existing [packaging and staging commands](operations.md#stage-the-zolana-release).
-These final-key application proof tests and deployments have not yet been run.
+All 41 final keys now pass real-witness proof generation, gnark verification,
+and the Solana host verifier, including rejection of changed public inputs.
+Current-main compilation also reproduces every frozen R1CS hash.
+[Integration evidence](evidence/core-integration-2026-11-02/report.json).
+Application deployment remains pending.
 Do not reinitialize the ceremony or generate another local trusted setup.
 Custom rings, batch 10 and batch 4999 remain outside this ceremony.
 
 The full transcript and final keys also remain archived under
 `s3://spr-ceremony-test-558215002830-artifacts/core/v1/`.
 The historical bucket name does not change the setup parameters or key provenance.
+
+To reproduce the final-key packaging and host proof checks against a clean
+application checkout (Go and Rust required):
+
+```sh
+bash scripts/test-final-keys.sh /path/to/clean/zolana /path/to/final-keys /new/packaged-core
+./spr-ceremony catalog --track core > core-catalog.json
+cargo run --locked --manifest-path adapters/solana/Cargo.toml --bin spr-solana-rehearsal -- \
+  /new/packaged-core/vectors core-catalog.json
+```
+
+The test authenticates the immutable final export by its pinned digest and
+checks every input file. It reuses the already verified release and does not
+repeat the transcript audit or generate setup randomness.

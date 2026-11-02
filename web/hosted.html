@@ -16,6 +16,16 @@
   <noscript><p class="notice">Download the terminal client from the <a href="https://github.com/helius-labs/spr-ceremony/releases">releases page</a>.</p></noscript>
   <p id="public-summary" class="detail"></p>
   <p id="notice" class="notice" hidden></p>
+  <section id="completed-panel" hidden aria-labelledby="completed-title">
+    <h2 id="completed-title">Ceremony complete.</h2>
+    <p id="completed-summary"></p>
+    <p id="verification-status" class="detail"></p>
+    <div id="final-release-links" class="buttons" hidden>
+      <a href="https://github.com/helius-labs/spr-ceremony/releases/tag/core-keys-2026-11-02">Download keys</a>
+      <a href="https://github.com/helius-labs/spr-ceremony/blob/main/docs/final-keys.md">Verify</a>
+    </div>
+    <p>Thank you to every contributor.</p>
+  </section>
   <section id="github-panel" hidden aria-labelledby="github-title">
     <h2 id="github-title">Link GitHub.</h2>
     <p id="github-status" role="status" aria-live="polite">Optional. Publish your GitHub profile alongside your accepted contribution.</p>
@@ -31,7 +41,7 @@
     <div id="github-proof"></div>
     <p class="detail">Public profile only. No repository or email access. The coordinator signs this account link.</p>
   </section>
-  <section id="native-panel" aria-labelledby="native-title">
+  <section id="native-panel" hidden aria-labelledby="native-title">
     <h2 id="native-title">Contribute in your terminal.</h2>
     <p>Mac or Linux. No compilation.</p>
     <div id="one-liner" hidden>
@@ -57,7 +67,7 @@
       <a href="https://github.com/helius-labs/spr-ceremony" target="_blank" rel="noopener noreferrer">Source</a>
     </details>
   </section>
-  <details><summary>Contributions</summary><p id="records-status">Completed contributions appear here automatically.</p><div id="records"></div><p class="detail">Signed acceptance receipts. Full transcript audit is separate.</p></details>
+  <details id="contributions"><summary>Contributors</summary><p id="records-status">Completed contributions appear here automatically.</p><div id="records"></div><p class="detail">Signed acceptance receipts. Full transcript audit is separate.</p></details>
   <details id="artifacts"><summary>Parameters &amp; keys</summary><p id="keys-status"></p><div id="parameter-links"></div><p id="public-pins" class="detail"></p><div id="keys"></div><p class="detail">Authenticate the manifest and checkpoint hashes independently. Verify the full transcript and export before using final keys.</p></details>
   <details>
     <summary>How it works</summary>

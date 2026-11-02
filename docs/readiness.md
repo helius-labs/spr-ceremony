@@ -4,9 +4,10 @@ The core campaign was finalized on November 2, 2026 with 615 accepted contributi
 across 41 circuits. All final proving and verifying keys were independently
 reproduced and matched at 18:52 UTC. [Final keys and verification instructions](final-keys.md)
 link the frozen checkpoint, drand proof, closure witness and verification logs.
-Application proof tests with these final keys and the application key rotation
-remain separate integration steps; the historical fixture tests below do not
-claim to cover those final-key integration steps.
+All 41 final keys also pass current-main R1CS compilation, real-witness proof
+generation, gnark verification and the Solana host verifier.
+[Final-key integration evidence](evidence/core-integration-2026-11-02/report.json).
+Application deployment remains pending.
 Batch 4999 is deferred. Custom rings and batch 10 remain excluded.
 
 ## Implemented controls

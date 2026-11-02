@@ -142,7 +142,7 @@ async def main():
                         await page.goto(origin)
                         await page.locator('#join-command').wait_for(state='attached')
                         row = page.locator('#records .key-row').filter(has=page.locator(f'a[href="/v1/records/{invitation["id"]}"]'))
-                        await page.locator('summary', has_text='Contributions').click()
+                        await page.locator('#contributions > summary').click()
                         await row.get_by_role('button', name='Link GitHub', exact=True).click()
                         await page.wait_for_function("document.getElementById('github-retry-command').textContent.endsWith(' -s -- link-github')")
                         await page.locator('#copy-github-command').click()
@@ -228,6 +228,33 @@ async def main():
                         assert not errors, errors
                         await page.screenshot(path=out / (engine + '-github.png'), full_page=True)
                         checks.append(engine + ': optional GitHub link, fragment removal, account preview, explicit consent and public account proof (mock OAuth provider)')
+                        public_view = await (await context.request.get(origin + '/v1/ceremony')).json()
+                        public_view.update(phase='finalized', participants=15, insecure_test_setup=False,
+                            phase1={'sha256':'f75bd40496b046942e62cdd2e0a2c3a580c68f789e705e97fa8e3a9db7c36780','size':402653128},
+                            manifest={'sha256': '4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079', 'size':31586},
+                            checkpoint={'sha256':'5c525e4b1547516cf63678c4a235cb2fd05cd1f78a463a3faf44e2ef1cbc41d7','size':17855},
+                            final_export={'sha256':'ed506cb30158a722fcc9692d44960599e73a4028828b0e6dc6266ec597af8caa','size':52000})
+                        final_export = json.loads((Path(__file__).resolve().parent.parent / 'docs/evidence/core-finalization-2026-11-02/export.json').read_text())
+                        public_view['circuits'] = [dict(id=c['circuit']['spec']['id'], r1cs=c['circuit']['r1cs'], head=c['head'], pk=c['pk'], vk=c['vk'], contributions=c['contributions']) for c in final_export['circuits']]
+                        async def finalized_view(route): await route.fulfill(json=public_view)
+                        await page.route(origin + '/v1/ceremony', finalized_view)
+                        await page.goto(origin)
+                        await page.locator('#completed-panel').wait_for(state='visible')
+                        assert await page.locator('#native-panel').is_hidden()
+                        assert await page.locator('#final-release-links').is_visible()
+                        assert 'independently reproduced' in await page.locator('#verification-status').inner_text()
+                        await page.evaluate("location.hash = '#token=' + 'a'.repeat(64) + '&manifest=' + 'b'.repeat(64)")
+                        await page.wait_for_function('location.hash === ""')
+                        assert await page.locator('#native-panel').is_hidden()
+                        await page.screenshot(path=out / (engine + '-finalized.png'), full_page=True)
+                        public_view['checkpoint']['sha256'] = 'c' * 64
+                        await page.reload()
+                        await page.locator('#completed-panel').wait_for(state='visible')
+                        assert await page.locator('#final-release-links').is_hidden()
+                        assert 'independently reproduced' not in await page.locator('#verification-status').inner_text()
+                        assert await page.locator('#native-panel').is_hidden()
+                        assert not errors, errors
+                        checks.append(engine + ': finalized page hides contributions and binds verification claim to exact release pins')
                         await context.close(); await browser.close()
             finally:
                 server.terminate(); server.wait(timeout=15); proxy.close()

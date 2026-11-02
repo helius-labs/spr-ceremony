@@ -1,0 +1,12 @@
+{
+  "passed": [
+    "chromium: HTTPS CLI-only page, private clipboard handoff, no browser engine/storage/auth requests, native contribution and idempotent rerun, signed records, mobile layout",
+    "chromium: unlinked record button, link-only command, expired OAuth recovery, private-token isolation and clipboard fallback",
+    "chromium: optional GitHub link, fragment removal, account preview, explicit consent and public account proof (mock OAuth provider)",
+    "chromium: finalized page hides contributions and binds verification claim to exact release pins",
+    "webkit: HTTPS CLI-only page, private clipboard handoff, no browser engine/storage/auth requests, native contribution and idempotent rerun, signed records, mobile layout",
+    "webkit: unlinked record button, link-only command, expired OAuth recovery, private-token isolation and clipboard fallback",
+    "webkit: optional GitHub link, fragment removal, account preview, explicit consent and public account proof (mock OAuth provider)",
+    "webkit: finalized page hides contributions and binds verification claim to exact release pins"
+  ]
+}
