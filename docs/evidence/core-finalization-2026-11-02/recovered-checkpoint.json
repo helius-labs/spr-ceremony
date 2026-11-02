@@ -1,0 +1,270 @@
+{
+  "format": "spr-ceremony-v1",
+  "manifest": {
+    "sha256": "4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079",
+    "size": 31586
+  },
+  "sequence": 618,
+  "previous": {
+    "sha256": "ac3c7624c8a19e8f0d56cc2e2e819330a91a7c69c54702eb1887f119507a3eb0",
+    "size": 9095
+  },
+  "states": {
+    "merge_24_1": {
+      "sha256": "14d79826f30ee0ce7be7bf3731ffd3be647b6b4f46a34f92e466fa4be4c17e59",
+      "size": 12815
+    },
+    "merge_52_1": {
+      "sha256": "f7ac3bf1d504ce7cb576c871c31350de290e037d08b1822c586c70a561a4a6df",
+      "size": 12845
+    },
+    "merge_8_1": {
+      "sha256": "e98914d09fb7fe78192a52012f75470ccfd1378dc92d68e5f018b20f513981a1",
+      "size": 12798
+    },
+    "transfer_confidential_12_2": {
+      "sha256": "673b16008b1ee783ae60661aeb49abbec56e0c08bbf32300c2c9dc63ff546240",
+      "size": 13071
+    },
+    "transfer_confidential_12_4": {
+      "sha256": "b1b171febeb8610e46264453e3a24c83f5b15893c6fbbc694d57996dcd752f0c",
+      "size": 13072
+    },
+    "transfer_confidential_12_8": {
+      "sha256": "71f1be7580b6caeedee8327b423d8f9298a1ee6f2fc4e40889d01c66718e79be",
+      "size": 13071
+    },
+    "transfer_confidential_16_2": {
+      "sha256": "41bfa786881b1616ac5f052fb1fee564a2c120ce33a96c16293219bd08a15071",
+      "size": 13071
+    },
+    "transfer_confidential_16_4": {
+      "sha256": "e5681333dfd03010ee96277ef23724afe75419608b516f2d756afd9ccc80c161",
+      "size": 13070
+    },
+    "transfer_confidential_16_8": {
+      "sha256": "7b486c7998435682ce7c94c7da8ae2b8a54cf0478f12f2d3136bf6b72f77d383",
+      "size": 13072
+    },
+    "transfer_confidential_1_16": {
+      "sha256": "4790ddd0c3ccb325795088fc8d16566bfaf11fb12e05044c639c50f55e3cc585",
+      "size": 13041
+    },
+    "transfer_confidential_1_2": {
+      "sha256": "637476c04c080db96f2a5da16065729fa8828faa2365b7b38123b924212e344d",
+      "size": 13022
+    },
+    "transfer_confidential_1_4": {
+      "sha256": "3cc0526affa438ec9ca1d9bb020528fc34670bd15d12c724b46bc027a4df9b88",
+      "size": 13024
+    },
+    "transfer_confidential_1_8": {
+      "sha256": "a9b2d6a1809f12b9601b78fd9f7360fefb127536c3053e9994512f8b09f45370",
+      "size": 13023
+    },
+    "transfer_confidential_24_2": {
+      "sha256": "44c56eba740dc78582403dab06048a4bf3b2d5b671dd7ed50e360e647644d10b",
+      "size": 13070
+    },
+    "transfer_confidential_24_4": {
+      "sha256": "caaca520e461f1babcf28b83d8d70f41d8dfcdf9f8f18219d034a2bb3561c0c7",
+      "size": 13072
+    },
+    "transfer_confidential_2_16": {
+      "sha256": "eef9499ec1de77b1916651342cfe459b669891b3c46135b8cf2c16cabfde06e5",
+      "size": 13040
+    },
+    "transfer_confidential_2_2": {
+      "sha256": "59ecdd958ed7fab9a8c5e7edc84992dbaaef32016b6bb78717a7fa7d569cd5bd",
+      "size": 13019
+    },
+    "transfer_confidential_2_4": {
+      "sha256": "d4e2faa4f5c88391c379da59efd48f4c22695c34fcfb1c0b8d64bca9191cd329",
+      "size": 13022
+    },
+    "transfer_confidential_2_8": {
+      "sha256": "2ddf4d6617ea35ba16fd88cf00092c12ea4969216f17b04eb714cc608c3da9ed",
+      "size": 13022
+    },
+    "transfer_confidential_32_2": {
+      "sha256": "9b6232f1c5a134228bb8143e3f836b5d189ce23ef063cf49da51a4a7b5e5308d",
+      "size": 13071
+    },
+    "transfer_confidential_3_2": {
+      "sha256": "200284d71cef0b7ca9e6accb620cff617bd640df963775463ee2d584347f908f",
+      "size": 13022
+    },
+    "transfer_confidential_3_4": {
+      "sha256": "a0bcdcaefd66ab2e72ef8af92e29a3c14536edccdb5f1c5eb02bc03e853b290b",
+      "size": 13024
+    },
+    "transfer_confidential_3_8": {
+      "sha256": "212068164baa1ae773d9757fff230d703cd64ec3cde1342d81aa5925df0172d4",
+      "size": 13023
+    },
+    "transfer_confidential_40_2": {
+      "sha256": "72623747504f83b7fb5935f79acc9277d70eb01f0945bd2980676713fafcd783",
+      "size": 13070
+    },
+    "transfer_confidential_48_2": {
+      "sha256": "ec962c8987198332f16a9fd6529a1e423ddfa47219a49e229a0fbba5b5afc2c2",
+      "size": 13103
+    },
+    "transfer_confidential_49_2": {
+      "sha256": "7b4ecd1e8d94bae313c24126361add9b9e44fbb8afd015cb4b517c2ed6b7d80b",
+      "size": 13101
+    },
+    "transfer_confidential_4_16": {
+      "sha256": "a3be7e7b43985609d4bdd3f5668dde4813ccd3d1eff3b18ad27ae35b2c87f8a7",
+      "size": 13038
+    },
+    "transfer_confidential_4_2": {
+      "sha256": "ff5aeaff17687fd1088f44f193ce67e5270861a82ea817b2ba3217f36096a19b",
+      "size": 13024
+    },
+    "transfer_confidential_4_4": {
+      "sha256": "1b05639652c5da2b8e477a3ebca7c1b21a7d3c26c09c92075f67a3a7dff8bffe",
+      "size": 13023
+    },
+    "transfer_confidential_4_8": {
+      "sha256": "19b1c0f8c032bb694be970ec0a28203ced8e9b4546c081e73faa5c983976af0d",
+      "size": 13024
+    },
+    "transfer_confidential_5_16": {
+      "sha256": "a70b70e343296708fde7c37e2c498894086a017baf6a2be70a0ca673cc0cd1cb",
+      "size": 13067
+    },
+    "transfer_confidential_5_2": {
+      "sha256": "cf3ebca85b66b8e9e08e91bc592fa00501d3ad55973171c407e95ff5155d4fe9",
+      "size": 13025
+    },
+    "transfer_confidential_5_4": {
+      "sha256": "fbd955551f17c515c79aba9387f1f7af29ba42977d884c3ce8cdecf74175782f",
+      "size": 13024
+    },
+    "transfer_confidential_5_8": {
+      "sha256": "ddc3d05ffed8d425f0b07c1a639f40057bd2fec2bc47851b04e6c38b64d56976",
+      "size": 13053
+    },
+    "transfer_confidential_6_2": {
+      "sha256": "47b1a1301f2b5bb8f755717454225c8e907221299b42a74c532428f26db32d08",
+      "size": 13053
+    },
+    "transfer_confidential_6_4": {
+      "sha256": "05ee2626ea341ce8a71765b894d592c522f794257e4823a9f3da73374ddfe5cd",
+      "size": 13055
+    },
+    "transfer_confidential_6_8": {
+      "sha256": "3ae7466c218403279d9136a3de30efa6219dee937bbc0882b031803b8f243712",
+      "size": 13055
+    },
+    "transfer_confidential_8_16": {
+      "sha256": "428f2723ae4bd20c54f75e10e0e487f21c5ace5e99518076eb63ea940f600515",
+      "size": 13069
+    },
+    "transfer_confidential_8_2": {
+      "sha256": "19dedb13367dc8ad9ae811f99004d15f4dc2de19ccd9ae924c5bc25e976006af",
+      "size": 13056
+    },
+    "transfer_confidential_8_4": {
+      "sha256": "01affd176ab87dcbb0e30f20ffeceeb47d1f5a84e1d5afdbf24b82f399b3a3ce",
+      "size": 13055
+    },
+    "transfer_confidential_8_8": {
+      "sha256": "1c928001481dc04a9d330048d7616e48927670aa390339eb5b0ce34b14a873a6",
+      "size": 13054
+    }
+  },
+  "lifecycle": {
+    "phase": "open",
+    "beacon": {
+      "chain_info": {
+        "public_key": "83cf0f2896adee7eb8b5f01fcad3912212c437e0073e911fb90022d3e760183c8c4b450b6a0a6c3ac6a5776a2d1064510d1fec758c921cc22b0e17e63aaf4bcb5ed66304de9cf809bd274ca73bab4af5a6e9c76a4bc09e76eae8991ef5ece45a",
+        "beacon_id": "quicknet",
+        "period": 3,
+        "scheme": "bls-unchained-g1-rfc9380",
+        "genesis_time": 1692803367,
+        "genesis_seed": "f477d5c89f21a17c863a7f937c6a6d15859414d2be09cd448d4279af331c5d3e",
+        "chain_hash": "52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971"
+      },
+      "chain_hash": "52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971",
+      "round": 33610948,
+      "round_time": "2026-11-02T16:16:48Z"
+    },
+    "opened_at": "2026-10-28T14:12:33.32079992Z",
+    "beacon_recoveries": [
+      {
+        "previous_checkpoint": {
+          "sha256": "7e49af0686ae0892fc1dcc2805cedbb7c27413fc20b4e9f2c5080b518b5888b4",
+          "size": 7106
+        },
+        "previous": {
+          "chain_info": {
+            "public_key": "83cf0f2896adee7eb8b5f01fcad3912212c437e0073e911fb90022d3e760183c8c4b450b6a0a6c3ac6a5776a2d1064510d1fec758c921cc22b0e17e63aaf4bcb5ed66304de9cf809bd274ca73bab4af5a6e9c76a4bc09e76eae8991ef5ece45a",
+            "beacon_id": "quicknet",
+            "period": 3,
+            "scheme": "bls-unchained-g1-rfc9380",
+            "genesis_time": 1692803367,
+            "genesis_seed": "f477d5c89f21a17c863a7f937c6a6d15859414d2be09cd448d4279af331c5d3e",
+            "chain_hash": "52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971"
+          },
+          "chain_hash": "52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971",
+          "round": 33522064,
+          "round_time": "2026-10-30T14:12:36Z"
+        },
+        "next": {
+          "chain_info": {
+            "public_key": "83cf0f2896adee7eb8b5f01fcad3912212c437e0073e911fb90022d3e760183c8c4b450b6a0a6c3ac6a5776a2d1064510d1fec758c921cc22b0e17e63aaf4bcb5ed66304de9cf809bd274ca73bab4af5a6e9c76a4bc09e76eae8991ef5ece45a",
+            "beacon_id": "quicknet",
+            "period": 3,
+            "scheme": "bls-unchained-g1-rfc9380",
+            "genesis_time": 1692803367,
+            "genesis_seed": "f477d5c89f21a17c863a7f937c6a6d15859414d2be09cd448d4279af331c5d3e",
+            "chain_hash": "52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971"
+          },
+          "chain_hash": "52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971",
+          "round": 33536464,
+          "round_time": "2026-10-31T02:12:36Z"
+        },
+        "recovered_at": "2026-10-30T14:12:53.08585848Z",
+        "reason": "Operator requested 12 additional hours for contributions; announced before the original beacon deadline."
+      },
+      {
+        "previous_checkpoint": {
+          "sha256": "ac3c7624c8a19e8f0d56cc2e2e819330a91a7c69c54702eb1887f119507a3eb0",
+          "size": 9095
+        },
+        "previous": {
+          "chain_info": {
+            "public_key": "83cf0f2896adee7eb8b5f01fcad3912212c437e0073e911fb90022d3e760183c8c4b450b6a0a6c3ac6a5776a2d1064510d1fec758c921cc22b0e17e63aaf4bcb5ed66304de9cf809bd274ca73bab4af5a6e9c76a4bc09e76eae8991ef5ece45a",
+            "beacon_id": "quicknet",
+            "period": 3,
+            "scheme": "bls-unchained-g1-rfc9380",
+            "genesis_time": 1692803367,
+            "genesis_seed": "f477d5c89f21a17c863a7f937c6a6d15859414d2be09cd448d4279af331c5d3e",
+            "chain_hash": "52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971"
+          },
+          "chain_hash": "52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971",
+          "round": 33536464,
+          "round_time": "2026-10-31T02:12:36Z"
+        },
+        "next": {
+          "chain_info": {
+            "public_key": "83cf0f2896adee7eb8b5f01fcad3912212c437e0073e911fb90022d3e760183c8c4b450b6a0a6c3ac6a5776a2d1064510d1fec758c921cc22b0e17e63aaf4bcb5ed66304de9cf809bd274ca73bab4af5a6e9c76a4bc09e76eae8991ef5ece45a",
+            "beacon_id": "quicknet",
+            "period": 3,
+            "scheme": "bls-unchained-g1-rfc9380",
+            "genesis_time": 1692803367,
+            "genesis_seed": "f477d5c89f21a17c863a7f937c6a6d15859414d2be09cd448d4279af331c5d3e",
+            "chain_hash": "52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971"
+          },
+          "chain_hash": "52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971",
+          "round": 33610948,
+          "round_time": "2026-11-02T16:16:48Z"
+        },
+        "recovered_at": "2026-11-02T14:17:00.782583617Z",
+        "reason": "Operator authorized finalization after the October 31 closure deadline was missed; preserve all verified contributions and select an unrevealed quicknet round."
+      }
+    ]
+  }
+}

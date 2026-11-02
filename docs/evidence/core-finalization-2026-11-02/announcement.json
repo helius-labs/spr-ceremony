@@ -1,0 +1,27 @@
+{
+  "recorded_at": "2026-11-02T14:37:16.073097+00:00",
+  "manifest": {
+    "sha256": "4b2b4465b79b5670d896e18dfb6fb86d02023033e9aeeb43e7a14911cb402079",
+    "size": 31586
+  },
+  "checkpoint": {
+    "sha256": "d250c281f1fb5919b02e5cc8684bcb984e781d2d4b335d847b266a0e6d23f9be",
+    "size": 11107
+  },
+  "previous_checkpoint": {
+    "sha256": "ac3c7624c8a19e8f0d56cc2e2e819330a91a7c69c54702eb1887f119507a3eb0",
+    "size": 9095
+  },
+  "quicknet_chain_hash": "52db9ba70e0cc0f6eaf7803dd07447a1f5477735fd3f661792ba94600c84e971",
+  "beacon_round": 33610948,
+  "beacon_time": "2026-11-02T16:16:48Z",
+  "circuits": 41,
+  "contributions": 615,
+  "completed_participants": 15,
+  "reason": "Operator authorized finalization after the October 31 closure deadline was missed; preserve all verified contributions and select an unrevealed quicknet round.",
+  "planned_next_actions": [
+    "Close and publish the closure checkpoint before the announced beacon.",
+    "Finalize with the exact planned quicknet proof after it is available.",
+    "Independently reproduce and verify the published proving and verifying keys."
+  ]
+}
